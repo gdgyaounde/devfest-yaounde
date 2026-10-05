@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import { loadSettings } from "@/lib/content/settings";
 import { EVENT, formatEventDates } from "@/lib/event";
 
 /**
@@ -60,8 +61,8 @@ export const runtime = "nodejs";
  * `locale` picks the language the CARD is in. Uppercased here rather than
  * with `text-transform`, which satori does not implement.
  */
-function eyebrow(locale: "fr" | "en"): string {
-  const dates = formatEventDates(locale);
+function eyebrow(locale: "fr" | "en", eventDate: string): string {
+  const dates = formatEventDates(locale, [eventDate]);
   /*
     WHEN and WHERE — not the event's name, which is the headline directly
     below it in type three times the size. Repeating it there cost a line:
@@ -219,6 +220,7 @@ const CONFETTI: {
 ];
 
 export async function GET(request: NextRequest) {
+  const settings = await loadSettings();
   const { searchParams } = new URL(request.url);
   // Clamped: a long description pasted in would otherwise overflow the card.
   const title = (searchParams.get("title") ?? "DevFest Yaoundé").slice(0, 90);
@@ -324,7 +326,7 @@ export async function GET(request: NextRequest) {
             opacity: 0.72,
           }}
         >
-          {eyebrow(locale)}
+          {eyebrow(locale, settings.eventDate)}
         </div>
         <div
           style={{

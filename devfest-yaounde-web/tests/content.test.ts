@@ -112,6 +112,26 @@ describe("editorial schemas", () => {
     assert.equal(collectionSchemas.speakers.safeParse(copy).success, false);
   });
 
+  it("accepts a single event date and refuses impossible dates", () => {
+    assert.equal(
+      settingsSchema.safeParse({ eventDate: "2026-11-21" }).success,
+      true,
+    );
+    for (const eventDate of [
+      "",
+      "2026-02-30",
+      "21/11/2026",
+      "2026-11-21T09:00:00Z",
+    ]) {
+      assert.equal(settingsSchema.safeParse({ eventDate }).success, false);
+    }
+    assert.equal(settingsSchema.safeParse({ eventDate: null }).success, true);
+    assert.equal(
+      settingsSchema.safeParse({ hero: { imageUrl: "" } }).success,
+      true,
+    );
+  });
+
   it("accepts a well-formed percent code, including a string value", () => {
     const parsed = discountWriteSchema.safeParse({
       code: "test10",

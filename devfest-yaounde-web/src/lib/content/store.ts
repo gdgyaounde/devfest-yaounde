@@ -12,6 +12,8 @@
  */
 import "server-only";
 import { cache } from "react";
+import { loadSettings } from "./settings";
+import { formatEventDates } from "@/lib/event";
 import speakersJson from "@/data/speakers.json";
 import teamJson from "@/data/team.json";
 import sessionsJson from "@/data/sessions.json";
@@ -159,7 +161,29 @@ export const getAllSpeakers = () => loadCollection<Speaker[]>("speakers");
 export const getAllTeam = () => loadCollection<TeamMember[]>("team");
 export const getSessions = () => loadCollection<Session[]>("sessions");
 export const getSponsors = () => loadCollection<Sponsor[]>("sponsors");
-export const getFaqs = () => loadCollection<FaqItem[]>("faqs");
+export const getFaqs = async () => {
+  const [faqs, settings] = await Promise.all([
+    loadCollection<FaqItem[]>("faqs"),
+    loadSettings(),
+  ]);
+  // Replace the old date sentence even when the FAQ is stored in the database.
+  // Keep the organiser's venue/schedule details after that sentence.
+  return faqs.map((faq) => {
+    if (faq.id !== "faq-when-where") return faq;
+    const dates = [settings.eventDate];
+    const remainder = (text: string) => {
+      const end = text.indexOf(". ");
+      return end < 0 ? "" : text.slice(end + 2);
+    };
+    return {
+      ...faq,
+      answer: {
+        fr: `DevFest Yaoundé se déroule le ${formatEventDates("fr", dates)}, à Yaoundé, au Cameroun. ${remainder(faq.answer.fr)}`.trim(),
+        en: `DevFest Yaoundé takes place on ${formatEventDates("en", dates)}, in Yaoundé, Cameroon. ${remainder(faq.answer.en)}`.trim(),
+      },
+    };
+  });
+};
 /**
  * Products, as the public SHOP should see them — hidden and ticket-only
  * removed. This is also what checkout prices against, so a ticket-only

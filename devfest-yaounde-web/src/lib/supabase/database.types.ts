@@ -77,6 +77,35 @@ export type Database = {
         }
         Relationships: []
       }
+      dp_card_reports: {
+        Row: {
+          card_id: string
+          created_at: string
+          id: string
+          reporter_ip: unknown
+        }
+        Insert: {
+          card_id: string
+          created_at?: string
+          id?: string
+          reporter_ip?: unknown
+        }
+        Update: {
+          card_id?: string
+          created_at?: string
+          id?: string
+          reporter_ip?: unknown
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_card_reports_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "dp_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dp_cards: {
         Row: {
           consent: boolean
@@ -131,35 +160,6 @@ export type Database = {
         }
         Relationships: []
       }
-      dp_card_reports: {
-        Row: {
-          card_id: string
-          created_at: string
-          id: string
-          reporter_ip: unknown
-        }
-        Insert: {
-          card_id: string
-          created_at?: string
-          id?: string
-          reporter_ip?: unknown
-        }
-        Update: {
-          card_id?: string
-          created_at?: string
-          id?: string
-          reporter_ip?: unknown
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dp_card_reports_card_id_fkey"
-            columns: ["card_id"]
-            isOneToOne: false
-            referencedRelation: "dp_cards"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       editorial_documents: {
         Row: {
           id: string
@@ -178,6 +178,27 @@ export type Database = {
           payload?: Json
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      editorial_migration_backup: {
+        Row: {
+          document_id: string
+          migration: string
+          payload: Json
+          taken_at: string
+        }
+        Insert: {
+          document_id: string
+          migration: string
+          payload: Json
+          taken_at?: string
+        }
+        Update: {
+          document_id?: string
+          migration?: string
+          payload?: Json
+          taken_at?: string
         }
         Relationships: []
       }
@@ -465,9 +486,10 @@ export type Database = {
         Row: {
           announcement: Json | null
           bevy_url: string | null
-          hero: Json | null
-          cfs: Json | null
           capacity: Json | null
+          cfs: Json | null
+          event_date: string | null
+          hero: Json | null
           id: string
           legal: Json | null
           memory_lane: Json | null
@@ -479,9 +501,10 @@ export type Database = {
         Insert: {
           announcement?: Json | null
           bevy_url?: string | null
-          hero?: Json | null
-          cfs?: Json | null
           capacity?: Json | null
+          cfs?: Json | null
+          event_date?: string | null
+          hero?: Json | null
           id?: string
           legal?: Json | null
           memory_lane?: Json | null
@@ -493,9 +516,10 @@ export type Database = {
         Update: {
           announcement?: Json | null
           bevy_url?: string | null
-          hero?: Json | null
-          cfs?: Json | null
           capacity?: Json | null
+          cfs?: Json | null
+          event_date?: string | null
+          hero?: Json | null
           id?: string
           legal?: Json | null
           memory_lane?: Json | null
@@ -612,6 +636,7 @@ export type Database = {
         Returns: number
       }
       get_vault_secret: { Args: { p_name: string }; Returns: string }
+      invoke_cleanup_sweep: { Args: never; Returns: number }
       is_organiser: { Args: { p_user_id?: string }; Returns: boolean }
       set_organiser_role: {
         Args: {

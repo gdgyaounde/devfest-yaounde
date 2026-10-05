@@ -200,14 +200,14 @@
       "cta": "D'autres questions ?",
       "toggleHint": "Touche une question"
     },
-    "metaDesc": "DevFest Yaoundé, la conférence tech du GDG Yaoundé — deux jours de talks, d'ateliers et d'une communauté qui se serre les coudes."
+    "metaDesc": "DevFest Yaoundé, la conférence tech du GDG Yaoundé — une journée de talks, d'ateliers et d'une communauté qui se serre les coudes."
   },
   "pages": {
     "schedule": {
       "title": "Programme",
       "placeholder": "Le programme mijote encore — revenez bientôt 👀",
-      "lead": "Deux jours, une salle pleine de gens qui n'auraient voulu être nulle part ailleurs.",
-      "metaDesc": "Le programme complet de DevFest Yaoundé — conférences, ateliers, tables rondes et pauses sur les deux jours.",
+      "lead": "Une journée, une salle pleine de gens qui n'auraient voulu être nulle part ailleurs.",
+      "metaDesc": "Le programme complet de DevFest Yaoundé — conférences, ateliers, tables rondes et pauses sur la journée.",
       "addToCalendar": "Ajouter au calendrier",
       "google": "Google Agenda",
       "ics": "Apple / Outlook (.ics)"

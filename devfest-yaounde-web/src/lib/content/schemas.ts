@@ -132,7 +132,15 @@ export const sponsorSchema = z.object({
   name: z.string().trim().min(1).max(120),
   logoUrl: z.string().max(400),
   tier: z
-    .enum(["haikyu", "sonnet", "opus", "fable", "mythos", "community", "partner"])
+    .enum([
+      "haikyu",
+      "sonnet",
+      "opus",
+      "fable",
+      "mythos",
+      "community",
+      "partner",
+    ])
     .optional(),
   websiteUrl: z.string().max(400).optional(),
   /** Short line for the cursor-reveal popup. Optional, both languages. */
@@ -395,7 +403,10 @@ const navSchema = z
   })
   .strict();
 
+export const eventDateSchema = z.iso.date();
+
 export const settingsSchema = z.object({
+  eventDate: eventDateSchema.optional().nullable(),
   announcement: localized.optional().nullable(),
   bevyUrl: urlOrEmpty.optional().nullable(),
   hero: heroSchema.optional().nullable(),

@@ -16,6 +16,7 @@
  */
 import { NextRequest } from "next/server";
 import { z } from "zod";
+import { loadSettings } from "@/lib/content/settings";
 import { eventHasEnded } from "@/lib/event";
 import { logPaymentEvent } from "@/lib/payments/intents";
 import { verifyClaimToken } from "@/lib/security/claim-token";
@@ -64,7 +65,8 @@ export async function POST(request: NextRequest) {
   // the one date this project keeps in a single place. Checking in with
   // someone else's login is the entire reason to claim a ticket, and that
   // stops mattering once the event is over.
-  if (eventHasEnded()) {
+  const settings = await loadSettings();
+  if (eventHasEnded(new Date(), [settings.eventDate])) {
     await logPaymentEvent(null, "claim_expired", { ticketId });
     return fail("expired", 410);
   }

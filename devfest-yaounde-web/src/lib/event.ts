@@ -9,9 +9,8 @@ import { SITE_URL } from "./site-config";
  * confirmed — and nothing that can disagree with the calendar buttons about
  * when DevFest actually is.
  *
- * WHAT IS CONFIRMED: the dates. 21 and 28 November 2026, confirmed by the
- * organisers on 2026-09-08 — two Saturdays, not a range. They live in
- * `EVENT_DATES` in `calendar.ts`.
+ * The default date is 21 November 2026. Public consumers pass the admin
+ * date explicitly; `EVENT_DATES` in `calendar.ts` is the repository fallback.
  *
  * WHAT IS STILL UNCONFIRMED: the venue. `docs/setup/remaining-work.md` §1
  * tracks it; filled in, it turns the `Place` below from a city into an

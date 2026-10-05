@@ -178,6 +178,7 @@ export interface MemoryLaneSettings {
 import type { NavSettings } from "@/lib/nav-tabs";
 
 export interface AdminSettings {
+  eventDate: string;
   announcement: { fr: string; en: string } | null;
   bevyUrl: string;
   hero: HeroSettings;

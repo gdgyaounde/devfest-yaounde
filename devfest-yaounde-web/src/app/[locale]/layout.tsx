@@ -3,6 +3,7 @@ import { Google_Sans, Google_Sans_Code } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { EventDateProvider } from "@/components/global/EventDateProvider";
 import { CustomCursor } from "@/components/global/CustomCursor";
 import { FloatingScrollbar } from "@/components/global/FloatingScrollbar";
 import { Footer } from "@/components/global/Footer";
@@ -148,7 +149,8 @@ export default async function LocaleLayout({
       */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <NextIntlClientProvider>
-          {/*
+          <EventDateProvider date={settings.eventDate}>
+            {/*
             Every page's `<main id="main-content">` also carries
             `tabIndex={-1}` (PHASE22 §G a11y audit) — without it, jumping the
             URL hash here scrolls `<main>` into view but does NOT move
@@ -156,32 +158,33 @@ export default async function LocaleLayout({
             have resumed from the skip link itself rather than from inside
             the content the link exists to reach.
           */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-black02 focus:px-4 focus:py-2 focus:text-offwhite"
-          >
-            {t("skipToContent")}
-          </a>
-          {/* First paint, and only on a real load — the root layout does not
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-black02 focus:px-4 focus:py-2 focus:text-offwhite"
+            >
+              {t("skipToContent")}
+            </a>
+            {/* First paint, and only on a real load — the root layout does not
               remount on client navigation, so moving between pages never
               shows it again. */}
-          <Preloader />
-          <GlobalChrome
-            announcementMessage={announcementMessage}
-            announcementCta={announcementCta}
-            nav={settings.nav}
-          />
-          <FloatingScrollbar />
-          <CustomCursor />
-          <ServiceWorkerRegistration />
-          <OfflineIndicator />
-          {/*
+            <Preloader />
+            <GlobalChrome
+              announcementMessage={announcementMessage}
+              announcementCta={announcementCta}
+              nav={settings.nav}
+            />
+            <FloatingScrollbar />
+            <CustomCursor />
+            <ServiceWorkerRegistration />
+            <OfflineIndicator />
+            {/*
             The chrome is fixed-position, so page content needs its own top
             offset. Hero sections apply their own generous top padding
             (§7b spacing), so this only needs to clear the bar itself.
           */}
-          <div className="flex flex-1 flex-col">{children}</div>
-          <Footer />
+            <div className="flex flex-1 flex-col">{children}</div>
+            <Footer />
+          </EventDateProvider>
         </NextIntlClientProvider>
       </body>
     </html>

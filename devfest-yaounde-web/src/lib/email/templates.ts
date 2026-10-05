@@ -29,6 +29,7 @@
 import type { PaymentIntentRow } from "@/lib/payments/intents";
 import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL, SITE_URL } from "@/lib/site-config";
+import { EVENT_DATES } from "@/lib/calendar";
 import { formatEventDates } from "@/lib/event";
 
 /**
@@ -42,8 +43,8 @@ import { formatEventDates } from "@/lib/event";
  * The empty case falls back to the city alone rather than printing nothing
  * around a stray separator.
  */
-function eventDate(locale: "fr" | "en"): string {
-  return formatEventDates(locale) ?? "";
+function eventDate(locale: "fr" | "en", dates: readonly string[]): string {
+  return formatEventDates(locale, dates) ?? "";
 }
 
 export interface RenderedEmail {
@@ -365,6 +366,7 @@ export interface TicketForEmail {
 export function renderTicketReceipt(
   intent: PaymentIntentRow,
   tickets: TicketForEmail[],
+  dates: readonly string[] = EVENT_DATES,
 ): RenderedEmail {
   const l = locale(intent);
   const c = COPY[l];
@@ -443,7 +445,7 @@ ${cards}
 
 ${totalsHtml(intent, l)}
 
-<p style="margin:20px 0 0;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">${escapeHtml(eventDate(l))} &nbsp;·&nbsp; ${escapeHtml(c.venue)}</p>
+<p style="margin:20px 0 0;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">${escapeHtml(eventDate(l, dates))} &nbsp;·&nbsp; ${escapeHtml(c.venue)}</p>
 
 ${button(c.myTickets, `${SITE_URL}/${l}/account`)}
 
@@ -473,7 +475,7 @@ ${button(c.myTickets, `${SITE_URL}/${l}/account`)}
     }),
     ...totalsText(intent, l),
     "",
-    `${eventDate(l)} — ${c.venue}`,
+    `${eventDate(l, dates)} — ${c.venue}`,
     `${c.myTickets} : ${SITE_URL}/${l}/account`,
     "",
     `${c.ref} ${intent.deposit_id}`,

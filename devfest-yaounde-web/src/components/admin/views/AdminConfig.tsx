@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { AdminSettings, CfsOverride } from "@/lib/admin/shape";
 import { isoToWatLocal, watLocalToIso } from "@/lib/admin/form-helpers";
@@ -25,6 +26,8 @@ export function AdminConfig({
   /** Sum of every tier's `quantityAvailable`, for the capacity warning. */
   tierCapSum: number;
 }) {
+  const router = useRouter();
+  const [eventDate, setEventDate] = useState(settings.eventDate);
   const [announcementFr, setAnnouncementFr] = useState(
     settings.announcement?.fr ?? "",
   );
@@ -62,12 +65,17 @@ export function AdminConfig({
   const [error, setError] = useState<string | null>(null);
 
   async function save() {
+    if (!eventDate) {
+      setError("Choose an event date.");
+      return;
+    }
     setStatus("saving");
     setError(null);
     const res = await fetch("/api/admin/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        ...(eventDate !== settings.eventDate ? { eventDate } : {}),
         announcement: {
           fr: announcementFr,
           en: announcementEn,
@@ -110,10 +118,11 @@ export function AdminConfig({
     });
     if (!res.ok) {
       setStatus("error");
-      setError("Could not save. Check the URLs are https or empty.");
+      setError("Could not save. Check the date and URLs, then try again.");
       return;
     }
     setStatus("saved");
+    router.refresh();
   }
 
   /**
@@ -221,6 +230,20 @@ export function AdminConfig({
     >
       <div className="flex max-w-2xl flex-col gap-5">
         <label className="block text-body-m font-bold text-black02">
+          Event date
+          <input
+            type="date"
+            required
+            className={field}
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+          />
+          <span className="mt-1 block text-caption font-normal text-black02/65">
+            One day, in Yaoundé time. Updates the site, calendars and ticket
+            receipts.
+          </span>
+        </label>
+        <label className="block text-body-m font-bold text-black02">
           Announcement (fr)
           <textarea
             className={field}
@@ -295,10 +318,10 @@ export function AdminConfig({
             tierCapSum > Number(capacityTotal) && (
               <InfoBanner tone="warn">
                 Tier caps ({tierCapSum}) exceed this total ({capacityTotal}).
-                Sales are not blocked by this — each tier still enforces its
-                own cap — but the public counter can undercount how many
-                tickets could actually still sell. Raise the total or lower a
-                tier cap in Ticket tiers.
+                Sales are not blocked by this — each tier still enforces its own
+                cap — but the public counter can undercount how many tickets
+                could actually still sell. Raise the total or lower a tier cap
+                in Ticket tiers.
               </InfoBanner>
             )}
         </div>
@@ -341,10 +364,10 @@ export function AdminConfig({
               Gallery links
             </h3>
             <p className="mt-1 text-caption text-black02/70">
-              Shown in Memory Lane on the home page, each opening in a new
-              tab. The current edition&rsquo;s also takes over the
-              hero&rsquo;s ticket button once the event has passed — nobody
-              needs to buy a ticket to something that already happened.
+              Shown in Memory Lane on the home page, each opening in a new tab.
+              The current edition&rsquo;s also takes over the hero&rsquo;s
+              ticket button once the event has passed — nobody needs to buy a
+              ticket to something that already happened.
             </p>
           </div>
 
@@ -381,8 +404,8 @@ export function AdminConfig({
               This edition&rsquo;s photos — there is normally nothing to put
               here until after the event. Once the event has passed, leaving
               this empty shows a &ldquo;photo album coming soon&rdquo; button
-              instead of a broken link; filling it in later is enough to
-              switch that button live, no other change needed.
+              instead of a broken link; filling it in later is enough to switch
+              that button live, no other change needed.
             </span>
           </label>
         </div>
