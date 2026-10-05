@@ -9,6 +9,7 @@
  * a successful payment into a retried callback — the tickets already exist.
  */
 import "server-only";
+import { loadSettings } from "@/lib/content/settings";
 import {
   renderOrderReceipt,
   renderTicketClaim,
@@ -56,6 +57,7 @@ export async function sendReceipt(intent: PaymentIntentRow): Promise<void> {
       // its own tells the attendee nothing about what they bought.
       const l = intent.locale === "en" ? "en" : "fr";
       const tiers = await loadTiers();
+      const settings = await loadSettings();
 
       email = renderTicketReceipt(
         intent,
@@ -71,6 +73,7 @@ export async function sendReceipt(intent: PaymentIntentRow): Promise<void> {
             perks: tier?.perks?.map((perk) => perk.label[l] ?? perk.label.fr),
           };
         }),
+        [settings.eventDate],
       );
 
       // A ticket bought for someone else gets its OWN email, to the
@@ -92,9 +95,13 @@ export async function sendReceipt(intent: PaymentIntentRow): Promise<void> {
               claimUrl,
             });
             const outcome = await sendEmail(t.attendee_email, claimEmail);
-            await logPaymentEvent(intent.deposit_id, `claim_email_${outcome.status}`, {
-              ticketId: t.id,
-            });
+            await logPaymentEvent(
+              intent.deposit_id,
+              `claim_email_${outcome.status}`,
+              {
+                ticketId: t.id,
+              },
+            );
           }),
       );
     } else {

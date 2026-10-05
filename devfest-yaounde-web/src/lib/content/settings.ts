@@ -20,14 +20,16 @@ import {
 } from "@/lib/site-config";
 import { createAdminSupabase } from "@/lib/supabase/server";
 import { toJson } from "@/lib/supabase/json";
+import { EVENT_BASE_DATE } from "@/lib/calendar";
 import { DEFAULT_NAV } from "@/lib/nav-tabs";
-import { settingsSchema, type SettingsWrite } from "./schemas";
+import { eventDateSchema, settingsSchema, type SettingsWrite } from "./schemas";
 
 import type { AdminSettings } from "@/lib/admin/shape";
 
 export type SiteSettings = AdminSettings;
 
 const REPO_DEFAULTS: SiteSettings = {
+  eventDate: EVENT_BASE_DATE!,
   announcement: null,
   bevyUrl: BEVY_URL,
   /* No backdrop until somebody uploads one — the hero's themed ground is a
@@ -148,6 +150,9 @@ async function readSettings(): Promise<SiteSettings> {
         : null;
 
     return {
+      eventDate: eventDateSchema.safeParse(data.event_date).success
+        ? data.event_date!
+        : REPO_DEFAULTS.eventDate,
       announcement,
       bevyUrl: data.bevy_url || BEVY_URL,
       hero: merge(REPO_DEFAULTS.hero, data.hero),
@@ -191,6 +196,9 @@ export async function saveSettings(
   const db = createAdminSupabase();
   const { error } = await db.from("site_settings").upsert({
     id: "site",
+    ...(parsed.data.eventDate !== undefined
+      ? { event_date: parsed.data.eventDate }
+      : {}),
     // Only written when the caller sent them. A dashboard form that edits the
     // announcement must not blank the call for speakers by omission — nor
     // may a photo upload blank the announcement.

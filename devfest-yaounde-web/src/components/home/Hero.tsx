@@ -45,6 +45,7 @@ export async function Hero({
   locale,
   backdropUrl,
   currentGalleryUrl,
+  eventDate,
 }: {
   locale: string;
   /**
@@ -60,10 +61,11 @@ export async function Hero({
    * until an organiser adds it. See the CTA swap below (ADR 0058).
    */
   currentGalleryUrl: string;
+  eventDate: string;
 }) {
   const t = await getTranslations("home.hero");
   const lang = locale === "en" ? "en" : "fr";
-  const when = eventDateParts(lang);
+  const when = eventDateParts(lang, [eventDate]);
   /*
     Once the event is over, "Grab your ticket" is not a live offer any more
     — there is nothing left to buy a ticket TO. The one thing a returning
@@ -71,7 +73,7 @@ export async function Hero({
     slot becomes that instead of adding a competing third button to an
     already-tight cluster.
   */
-  const ended = eventHasEnded();
+  const ended = eventHasEnded(new Date(), [eventDate]);
   const gallery = currentGalleryUrl.trim();
   const hasGallery = Boolean(gallery) && !isPlaceholderUrl(gallery);
 
@@ -120,12 +122,7 @@ export async function Hero({
                   {t("ctaPrimary")}
                 </Button>
               ) : hasGallery ? (
-                <Button
-                  tone="primary"
-                  href={gallery}
-                  external
-                  size="lg"
-                >
+                <Button tone="primary" href={gallery} external size="lg">
                   {t("ctaGallery", { year: EVENT.year })}
                   <span className="sr-only">{t("ctaGalleryNewTab")}</span>
                 </Button>

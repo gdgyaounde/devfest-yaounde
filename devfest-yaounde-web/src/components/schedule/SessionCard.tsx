@@ -13,7 +13,8 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
 import { Link } from "@/i18n/navigation";
-import { EVENT_BASE_DATE, googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
+import { useEventDates } from "@/components/global/EventDateProvider";
+import { googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
 import type { Session, Speaker, SessionKind } from "@/data/types";
 
 export const KIND_ICON: Record<SessionKind, typeof Microphone> = {
@@ -65,6 +66,7 @@ export function SessionCard({
   showCalendar = false,
   speakers = [],
 }: SessionCardProps) {
+  const eventDate = useEventDates()[0];
   const t = useTranslations("home.schedule");
   const locale = useLocale() as "fr" | "en";
   const Icon = KIND_ICON[session.kind];
@@ -182,14 +184,14 @@ export function SessionCard({
               </dl>
             )}
 
-            {showCalendar && EVENT_BASE_DATE && session.kind !== "break" && (
+            {showCalendar && eventDate && session.kind !== "break" && (
               <div className="mt-5">
                 <p className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
                   {t("addToCalendar")}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <a
-                    href={googleCalendarUrl(session, locale, EVENT_BASE_DATE)}
+                    href={googleCalendarUrl(session, locale, eventDate)}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
@@ -198,7 +200,7 @@ export function SessionCard({
                     {t("google")}
                   </a>
                   <a
-                    href={icsDataUrl(session, locale, EVENT_BASE_DATE)}
+                    href={icsDataUrl(session, locale, eventDate)}
                     download={`${session.id}.ics`}
                     className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
                   >

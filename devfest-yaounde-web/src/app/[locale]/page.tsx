@@ -61,20 +61,15 @@ export default async function HomePage({
 
   return (
     <main id="main-content" tabIndex={-1} className="flex-1">
-      {/*
-        `Event` structured data, live since the dates were confirmed — 21 and
-        28 November 2026 (ADR 0038). It reads `EVENT_DATES` in calendar.ts,
-        the same list that reveals the add-to-calendar buttons, and returns
-        null if that list is ever emptied: `startDate` is REQUIRED by
-        schema.org, so a block without one is invalid data Search Console
-        reports, and inventing a date would publish a wrong one to every
-        crawler that read it.
-      */}
+      {/* Structured data uses the same admin date as the public hero. */}
       <JsonLd
-        data={eventJsonLd(locale === "en" ? "en" : "fr", t("metaDesc"))}
+        data={eventJsonLd(locale === "en" ? "en" : "fr", t("metaDesc"), [
+          settings.eventDate,
+        ])}
       />
       <Hero
         locale={locale}
+        eventDate={settings.eventDate}
         backdropUrl={settings.hero.imageUrl}
         currentGalleryUrl={settings.memoryLane.currentGalleryUrl}
       />

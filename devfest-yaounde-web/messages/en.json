@@ -200,13 +200,13 @@
       "cta": "More questions?",
       "toggleHint": "Tap a question"
     },
-    "metaDesc": "DevFest Yaoundé is GDG Yaoundé's flagship tech conference — two days of talks, workshops and the community that shows up for each other."
+    "metaDesc": "DevFest Yaoundé is GDG Yaoundé's flagship tech conference — a day of talks, workshops and the community that shows up for each other."
   },
   "pages": {
     "schedule": {
       "title": "Schedule",
       "placeholder": "Schedule's still cooking — check back soon 👀",
-      "lead": "Two days, one room full of people who'd rather be here than anywhere else.",
+      "lead": "One day, one room full of people who'd rather be here than anywhere else.",
       "metaDesc": "The full DevFest Yaoundé schedule — talks, workshops, panels and breaks across both days.",
       "addToCalendar": "Add to calendar",
       "google": "Google Calendar",

@@ -44,7 +44,7 @@ export async function MemoryLane() {
   // The whole point of a "current edition" album is that there IS one now —
   // showing its slot before the event has even happened would either link
   // nowhere or promise a "coming soon" for something a year away.
-  const ended = eventHasEnded();
+  const ended = eventHasEnded(new Date(), [settings.eventDate]);
 
   return (
     <SectionContainer background="offwhite" maxWidth="6xl">

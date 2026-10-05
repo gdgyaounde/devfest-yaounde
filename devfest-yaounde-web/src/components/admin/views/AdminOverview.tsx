@@ -2,6 +2,7 @@
 
 import type { AdminData } from "@/lib/admin/shape";
 import type { ContentCounts, ViewId } from "../AdminShell";
+import { useEventDates } from "@/components/global/EventDateProvider";
 import { EVENT, eventDates } from "@/lib/event";
 import { AdminChart } from "./AdminChart";
 import { InfoBanner, money } from "./shared";
@@ -51,15 +52,18 @@ function align(
   });
 }
 
-function countdownCopy(): { value: string; note: string } {
-  const dates = eventDates();
+function countdownCopy(configuredDates: readonly string[]): {
+  value: string;
+  note: string;
+} {
+  const dates = eventDates(configuredDates);
   if (!dates) {
     return {
       value: "TBA",
       note: `${EVENT.year} dates unconfirmed`,
     };
   }
-  const start = new Date(dates.start).getTime();
+  const start = new Date(`${dates.start}+01:00`).getTime();
   const days = Math.max(0, Math.ceil((start - Date.now()) / 86_400_000));
   return {
     value: String(days),
@@ -77,7 +81,7 @@ export function AdminOverview({
   onGo: (v: ViewId) => void;
 }) {
   const c = data.counts;
-  const dday = countdownCopy();
+  const dday = countdownCopy(useEventDates());
   const tickets = seriesByDay(data.tickets.rows);
   const revenue = seriesByDay(
     data.transactions.rows

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { EVENT_DATES } from "@/lib/calendar";
+import { useEventDates } from "@/components/global/EventDateProvider";
 import type { Speaker } from "@/data/types";
 import { slugify } from "@/lib/admin/form-helpers";
 import { EntityCrud } from "../forms/EntityCrud";
@@ -23,6 +23,7 @@ import { InfoBanner } from "./shared";
 const EMPTY = { fr: "", en: "" };
 
 export function AdminSpeakers({ rows }: { rows: Speaker[] }) {
+  const eventDates = useEventDates();
   const toast = useToast();
   const [uploading, setUploading] = useState(false);
   const photo = usePendingPhoto();
@@ -104,7 +105,7 @@ export function AdminSpeakers({ rows }: { rows: Speaker[] }) {
                 onChange: setDay,
                 options: [
                   { value: "all", label: "All days" },
-                  ...EVENT_DATES.map((_, i) => ({
+                  ...eventDates.map((_, i) => ({
                     value: String(i + 1),
                     label: `Day ${i + 1}`,
                   })),
@@ -242,7 +243,7 @@ export function AdminSpeakers({ rows }: { rows: Speaker[] }) {
               <Segmented
                 name="speaker-day"
                 value={String(draft.day)}
-                options={EVENT_DATES.map((date, i) => ({
+                options={eventDates.map((date, i) => ({
                   value: String(i + 1),
                   label: `Day ${i + 1} — ${new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
                 }))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { EVENT_DATES } from "@/lib/calendar";
+import { useEventDates } from "@/components/global/EventDateProvider";
 import type { Session, SessionKind } from "@/data/types";
 import { endsAt } from "@/lib/admin/form-helpers";
 import { EntityCrud } from "../forms/EntityCrud";
@@ -22,6 +22,7 @@ const KINDS: { value: SessionKind; label: string }[] = [
 ];
 
 export function AdminSchedule({ rows }: { rows: Session[] }) {
+  const eventDates = useEventDates();
   return (
     <div className="flex flex-col gap-5">
       <EntityCrud<Session>
@@ -75,7 +76,7 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
               <Segmented
                 name="session-day"
                 value={String(draft.day)}
-                options={EVENT_DATES.map((date, i) => ({
+                options={eventDates.map((date, i) => ({
                   value: String(i + 1),
                   label: `Day ${i + 1} — ${new Date(`${date}T12:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
                 }))}

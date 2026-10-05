@@ -851,19 +851,10 @@ describe("event structured data", () => {
     assert.equal((data as { subEvent?: unknown }).subEvent, undefined);
   });
 
-  it("puts day 2 on the real second Saturday, not the day after day 1", () => {
-    // The bug this pins: the old model derived day N as `base + (N - 1)`,
-    // which put every day-2 session on 22 November — six days early, in the
-    // .ics files people import. The days are a week apart and are listed,
-    // not counted.
+  it("uses only the confirmed November 21 date", () => {
     assert.equal(dateForDay(1), "2026-11-21");
-    assert.equal(dateForDay(2), "2026-11-28");
-    assert.equal(
-      dateForDay(3),
-      null,
-      "a day with no date must not be invented",
-    );
-    assert.equal(EVENT.days, 2, "the count follows the list");
+    assert.equal(dateForDay(2), null);
+    assert.equal(EVENT.days, 1);
   });
 
   it("always describes the organiser, since none of that is speculative", () => {
@@ -1616,6 +1607,15 @@ describe("receipt emails", () => {
       perks: ["Accès à toutes les conférences", "Le t-shirt de l'édition"],
     },
   ];
+
+  it("uses the admin date in both receipt formats", () => {
+    const email = renderTicketReceipt(ticketIntent({ locale: "en" }), tickets, [
+      "2026-11-14",
+    ]);
+    assert.match(email.html, /14 November 2026/);
+    assert.match(email.text, /14 November 2026/);
+    assert.doesNotMatch(email.text, /21 November|28 November/);
+  });
 
   it("carries every ticket detail the sales page promised", () => {
     const email = renderTicketReceipt(ticketIntent(), tickets);

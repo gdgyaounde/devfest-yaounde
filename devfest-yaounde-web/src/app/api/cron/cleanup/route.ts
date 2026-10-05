@@ -29,6 +29,7 @@ import { createAdminSupabase } from "@/lib/supabase/server";
 import { logPaymentEvent } from "@/lib/payments/intents";
 import { reconcilePendingDeposits } from "@/lib/payments/reconcile";
 import { purgeExpiredCards } from "@/lib/dp/gallery-retention";
+import { loadSettings } from "@/lib/content/settings";
 import { withinPostEventRevalidateWindow } from "@/lib/event";
 
 /** Comfortably past the reservation window, so nothing live is touched. */
@@ -81,7 +82,10 @@ export async function GET(request: NextRequest) {
   // Cheapest job here by far — this only marks a cache entry stale, it does
   // not touch the database — so it runs unconditionally inside the window
   // rather than trying to detect the exact tick the boundary was crossed.
-  const revalidatedHome = withinPostEventRevalidateWindow();
+  const settings = await loadSettings();
+  const revalidatedHome = withinPostEventRevalidateWindow(new Date(), [
+    settings.eventDate,
+  ]);
   if (revalidatedHome) revalidatePath("/", "layout");
 
   const result = {
