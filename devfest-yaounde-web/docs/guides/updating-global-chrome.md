@@ -4,7 +4,29 @@ These three pieces appear on every page of the site. This guide is for changing 
 
 ## Changing the announcement banner message
 
-The banner text lives in the translation files, not in any component code:
+### What the banner says, in order (ADR 0072)
+
+The banner shows the FIRST of these that applies:
+
+1. **Whatever is typed in Admin → Config → Announcement.** Always wins.
+2. **The ticket sales cutoff** — "Ticket sales close Wednesday 18 November at
+   23:59", with a "Get tickets" button. Built from Config → Ticket sales &
+   edits, so it always matches what checkout enforces. It disappears by
+   itself at the cutoff (the open page folds it away at the minute; the
+   static pages are rebuilt by the cron sweep shortly after).
+3. **The call for speakers**, while it is accepting submissions.
+4. **The fallback** below — or, once ticket sales have closed, "See you on
+   21 November 2026 — ticket sales are closed, the shop is still open"
+   (`announcement.afterSales`), because the fallback sells tickets.
+
+**Dismissing is per message.** A visitor who closes the banner only hides
+that exact text for their session; when the message changes (a new dashboard
+announcement, or the sales line giving way to the after-sales line), it shows
+again. Before November 2026 one close silenced every later message.
+
+### The fallback text
+
+The fallback lives in the translation files, not in any component code:
 
 - French: `messages/fr.json` → `announcement.message`
 - English: `messages/en.json` → `announcement.message`

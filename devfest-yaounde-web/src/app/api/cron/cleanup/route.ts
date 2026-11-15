@@ -10,7 +10,8 @@
  *      slowly makes a tier look sold out when it is not.
  *   3. Drop rate-limit counters whose window has long passed.
  *   4. Purge wall cards past their retention — 200 days (ADR 0026).
- *   5. Force the home page to rebuild once the event ends (ADR 0058). Every
+ *   5. Force the site to rebuild once the event ends (ADR 0058), and once
+ *      ticket sales close (ADR 0072). Every
  *      public page is static and only regenerates on an explicit
  *      `revalidatePath`, so without this the hero would keep selling
  *      tickets to a event that already happened until some unrelated admin
@@ -30,7 +31,10 @@ import { logPaymentEvent } from "@/lib/payments/intents";
 import { reconcilePendingDeposits } from "@/lib/payments/reconcile";
 import { purgeExpiredCards } from "@/lib/dp/gallery-retention";
 import { loadSettings } from "@/lib/content/settings";
-import { withinPostEventRevalidateWindow } from "@/lib/event";
+import {
+  withinPostEventRevalidateWindow,
+  withinSalesCloseRevalidateWindow,
+} from "@/lib/event";
 
 /** Comfortably past the reservation window, so nothing live is touched. */
 const STALE_INTENT_SECONDS = 3600;
@@ -83,9 +87,12 @@ export async function GET(request: NextRequest) {
   // not touch the database — so it runs unconditionally inside the window
   // rather than trying to detect the exact tick the boundary was crossed.
   const settings = await loadSettings();
-  const revalidatedHome = withinPostEventRevalidateWindow(new Date(), [
-    settings.eventDate,
-  ]);
+  const now = new Date();
+  // Either one-way switch: the event ending (ADR 0058) or ticket sales
+  // closing (ADR 0072) — both change what static pages must say.
+  const revalidatedHome =
+    withinPostEventRevalidateWindow(now, [settings.eventDate]) ||
+    withinSalesCloseRevalidateWindow(now, settings);
   if (revalidatedHome) revalidatePath("/", "layout");
 
   const result = {

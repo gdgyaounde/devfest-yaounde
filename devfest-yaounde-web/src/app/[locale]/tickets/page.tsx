@@ -9,6 +9,8 @@ import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
 import { getSwagProducts, getTiers } from "@/lib/content/store";
 import { getTicketCapacity } from "@/lib/payments/capacity";
+import { SalesCutoffNotice } from "@/components/tickets/SalesCutoffNotice";
+import { formatCutoff, formatEventDates, ticketSalesOpen } from "@/lib/event";
 
 export async function generateMetadata({
   params,
@@ -64,6 +66,18 @@ export default async function TicketsPage({
   );
   const swagProducts = products.filter((product) => referenced.has(product.id));
 
+  /*
+   * The sales cutoff (ADR 0072). `salesOpen` is only what was true when this
+   * HTML was rendered — the page is static — so the client components take
+   * the instant too and flip on their own at the minute. Checkout refuses a
+   * late purchase on the server whatever this page says.
+   */
+  const l = locale === "en" ? "en" : "fr";
+  const salesCloseAt = settings.ticketing.salesCloseAt;
+  const salesOpen = ticketSalesOpen(new Date(), settings);
+  const cutoff = formatCutoff(l, salesCloseAt);
+  const eventDateLabel = formatEventDates(l, [settings.eventDate]) ?? "";
+
   return (
     <main id="main-content" tabIndex={-1} className="flex-1 pt-32 sm:pt-28">
       <SectionContainer background="yellow-wash" maxWidth="6xl">
@@ -81,11 +95,21 @@ export default async function TicketsPage({
           </div>
         )}
 
+        <SalesCutoffNotice
+          salesCloseAt={salesCloseAt}
+          salesOpenAtRender={salesOpen}
+          closeDate={cutoff?.date ?? null}
+          closeTime={cutoff?.time ?? null}
+          eventDate={eventDateLabel}
+        />
+
         <div className="mt-16">
           <TicketCheckout
             tiers={tiers}
             swagProducts={swagProducts}
             bevyUrl={settings.bevyUrl}
+            salesCloseAt={salesCloseAt}
+            salesOpenAtRender={salesOpen}
           />
         </div>
       </SectionContainer>

@@ -5,6 +5,7 @@ import { HeroBackdrop } from "@/components/home/HeroBackdrop";
 import { HeroField } from "@/components/home/HeroField";
 import { HeroStickers } from "@/components/home/HeroStickers";
 import { HeroWordmark } from "@/components/home/HeroWordmark";
+import { TicketCta } from "@/components/tickets/TicketCta";
 import { EVENT, eventDateParts, eventHasEnded } from "@/lib/event";
 import { isPlaceholderUrl } from "@/lib/site-config";
 
@@ -46,6 +47,8 @@ export async function Hero({
   backdropUrl,
   currentGalleryUrl,
   eventDate,
+  salesCloseAt,
+  salesOpen,
 }: {
   locale: string;
   /**
@@ -62,6 +65,9 @@ export async function Hero({
    */
   currentGalleryUrl: string;
   eventDate: string;
+  /** The ticket sales cutoff (ADR 0072), and whether it was open at render. */
+  salesCloseAt: string | null;
+  salesOpen: boolean;
 }) {
   const t = await getTranslations("home.hero");
   const lang = locale === "en" ? "en" : "fr";
@@ -118,9 +124,16 @@ export async function Hero({
               style={{ ["--settle-delay" as string]: "340ms" }}
             >
               {!ended ? (
-                <Button tone="primary" href="/tickets" size="lg">
-                  {t("ctaPrimary")}
-                </Button>
+                /* Past the sales cutoff (ADR 0072) the slot SAYS so, as a
+                   disabled button, until the event ends and it becomes the
+                   album link below. */
+                <TicketCta
+                  salesCloseAt={salesCloseAt}
+                  salesOpenAtRender={salesOpen}
+                  label={t("ctaPrimary")}
+                  closedLabel={t("ctaSalesClosed")}
+                  closed="disabled"
+                />
               ) : hasGallery ? (
                 <Button tone="primary" href={gallery} external size="lg">
                   {t("ctaGallery", { year: EVENT.year })}

@@ -17,6 +17,8 @@ import {
   PRIVACY_POLICY_URL,
   SPONSOR_PROSPECTUS_URL,
   TERMS_URL,
+  TICKET_EDITS_CLOSE_AT,
+  TICKET_SALES_CLOSE_AT,
 } from "@/lib/site-config";
 import { createAdminSupabase } from "@/lib/supabase/server";
 import { toJson } from "@/lib/supabase/json";
@@ -50,6 +52,10 @@ const REPO_DEFAULTS: SiteSettings = {
     participationTermsUrl: PARTICIPATION_TERMS_URL,
     privacyUrl: PRIVACY_POLICY_URL,
     termsUrl: TERMS_URL,
+  },
+  ticketing: {
+    salesCloseAt: TICKET_SALES_CLOSE_AT,
+    editsCloseAt: TICKET_EDITS_CLOSE_AT,
   },
   /* No overall capacity until an admin sets one — `null` total means "don't
      show a public counter", not "zero tickets left". */
@@ -159,6 +165,12 @@ async function readSettings(): Promise<SiteSettings> {
       cfs: merge(REPO_DEFAULTS.cfs, data.cfs),
       sponsorCall: merge(REPO_DEFAULTS.sponsorCall, data.sponsor_call),
       legal: merge(REPO_DEFAULTS.legal, data.legal),
+      // Column added by 0029. Until it is applied `ticketing` is simply
+      // absent from the `*` row and the repo cutoff applies.
+      ticketing: merge(
+        REPO_DEFAULTS.ticketing,
+        (data as { ticketing?: unknown }).ticketing,
+      ),
       capacity: { total: capacityTotal },
       memoryLane: merge(REPO_DEFAULTS.memoryLane, data.memory_lane),
       // Key by key: a key missing from the stored blob is a tab that is SHOWN,
@@ -227,6 +239,13 @@ export async function saveSettings(
       : {}),
     ...(parsed.data.legal !== undefined
       ? { legal: parsed.data.legal ? toJson(parsed.data.legal) : null }
+      : {}),
+    ...(parsed.data.ticketing !== undefined
+      ? {
+          ticketing: parsed.data.ticketing
+            ? toJson(parsed.data.ticketing)
+            : null,
+        }
       : {}),
     ...(parsed.data.capacity !== undefined
       ? { capacity: parsed.data.capacity ? toJson(parsed.data.capacity) : null }

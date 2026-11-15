@@ -51,7 +51,10 @@
   "announcement": {
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
     "dismiss": "Dismiss announcement",
-    "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot."
+    "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot.",
+    "salesClose": "Ticket sales close {date} at {time} — grab yours before the doors shut.",
+    "salesCloseCta": "Get tickets",
+    "afterSales": "See you on {date} 🎉 Ticket sales are closed — the shop is still open."
   },
   "offline": {
     "banner": "You're offline — {pages} still work."
@@ -127,7 +130,8 @@
       "venueCaption": "Cameroon",
       "ctaGallery": "View the {year} gallery",
       "ctaGalleryComingSoon": "Photo album coming soon",
-      "ctaGalleryNewTab": "(opens in a new tab)"
+      "ctaGalleryNewTab": "(opens in a new tab)",
+      "ctaSalesClosed": "Ticket sales closed"
     },
     "sponsors": {
       "label": "Powered by good people",
@@ -323,7 +327,14 @@
       "refundBody": "Once a ticket is paid for it can't be refunded or cancelled — not for a change of plans, and not after the event. You can put someone else's name on it before the day.",
       "refundAck": "I understand tickets are non-refundable.",
       "metaDesc": "Pick your pass and pay with Mobile Money. Every tier, what's included, and how to get in.",
-      "myTicketsLink": "Already bought? See my tickets"
+      "myTicketsLink": "Already bought? See my tickets",
+      "salesNoticeTitle": "Ticket sales close {date} at {time}",
+      "salesNoticeBody": "Yaoundé time. After that the doors are shut for good — so if you're coming, now's the moment.",
+      "salesCountdown": "Sales close in",
+      "salesClosed": "Sales closed",
+      "salesClosedTitle": "Ticket sales are closed.",
+      "salesClosedBody": "Thank you to everyone who grabbed a pass — see you on {date}. The shop is still open if you want some merch.",
+      "salesClosedShop": "Visit the shop"
     },
     "shop": {
       "title": "Shop",
@@ -374,7 +385,7 @@
       "fulfilmentBody": "Tell us what suits you. The team follows up after the order to sort the details.",
       "returnsTitle": "Returns and exchanges",
       "returnsBody": "We don't refund a change of mind. But if something arrives damaged, faulty or simply isn't what you ordered, we'll replace it — and apparel can be exchanged for a different size while stock lasts. Just get in touch, or find us at the next event.",
-      "returnsAck": "I understand: no refunds for a change of mind, and exchanges are handled directly with the team.",
+      "returnsAck": "I understand: no refunds for a change of mind, exchanges are handled directly with the team, and items ordered now may not be ready by event day — the team will get them to me as soon as they're in.",
       "bagCount": "{count, plural, one {# item} other {# items}}",
       "emptyAll": "Empty bag",
       "emptyAllConfirm": "Clear the whole bag?",
@@ -385,7 +396,8 @@
       "fulfilmentShipping": "I'd rather have it delivered",
       "fulfilmentNoteLabel": "A landmark to help us (optional)",
       "fulfilmentNotePlaceholder": "Neighbourhood, landmark, when you're around…",
-      "myOrdersLink": "See my orders"
+      "myOrdersLink": "See my orders",
+      "lateNotice": "You can still order, but items ordered now may not be ready by event day ({date}). We'll get them to you as soon as they're in."
     },
     "dpGenerator": {
       "title": "DP Generator",
@@ -646,6 +658,7 @@
       "tier_not_on_sale": "That ticket isn't on sale any more. There are others — take a look.",
       "tier_rsvp_external": "This pass isn't taken here — it goes through the community page.",
       "tier_sold_out": "That one's sold out — it went fast. Try another tier.",
+      "ticket_sales_closed": "Ticket sales are closed — we're busy getting the room ready. The shop is still open, though.",
       "unknown_product": "That item is no longer in the catalog. Reload the shop.",
       "product_unavailable": "That item can't be ordered online right now.",
       "invalid_variant": "Pick an available size and colour before you carry on.",
@@ -715,5 +728,11 @@
     "bannerOpen": "The call for speakers is open — got something to share? Take the stage.",
     "bannerCta": "Submit",
     "banner": "The call for speakers is open — the DevFest Yaoundé 2026 stage is waiting for your talk."
+  },
+  "countdown": {
+    "days": "days",
+    "hours": "hrs",
+    "minutes": "min",
+    "seconds": "sec"
   }
 }

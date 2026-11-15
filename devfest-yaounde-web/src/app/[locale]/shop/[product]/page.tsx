@@ -8,6 +8,8 @@ import { feeInclusiveAmount } from "@/lib/payments/fees";
 import productsJson from "@/data/products.json";
 import { getProducts } from "@/lib/content/store";
 import type { Product } from "@/data/types";
+import { ShopLateNotice } from "@/components/shop/ShopLateNotice";
+import { shopLateNotice } from "@/lib/content/shop-notice";
 
 /** Seed from the repo file so a build without the database still prerenders. */
 export function generateStaticParams() {
@@ -79,6 +81,7 @@ export default async function ProductPage({
 
   const t = await getTranslations("pages.shop");
   const l = locale as "fr" | "en";
+  const lateNotice = await shopLateNotice(locale);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -116,6 +119,7 @@ export default async function ProductPage({
         <p className="mt-6 max-w-2xl text-body-l text-black02/80">
           {t("lead")}
         </p>
+        <ShopLateNotice text={lateNotice} className="mt-8" />
         <div className="mt-16">
           <ShopBrowser products={catalog} initialProductId={found.id} />
         </div>

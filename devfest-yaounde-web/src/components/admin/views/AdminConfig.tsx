@@ -6,7 +6,12 @@ import type { AdminSettings, CfsOverride } from "@/lib/admin/shape";
 import { isoToWatLocal, watLocalToIso } from "@/lib/admin/form-helpers";
 import { cfsView } from "@/lib/content/cfs";
 import { sponsorCallOpen, SPONSOR_SEATS } from "@/lib/content/sponsors";
-import { EVENT, PAST_GALLERY_YEAR } from "@/lib/event";
+import {
+  EVENT,
+  PAST_GALLERY_YEAR,
+  ticketEditsOpen,
+  ticketSalesOpen,
+} from "@/lib/event";
 import { ImageField, Segmented } from "../forms/fields";
 import { InfoBanner, Panel } from "./shared";
 
@@ -36,6 +41,13 @@ export function AdminConfig({
   );
   const [bevyUrl, setBevyUrl] = useState(settings.bevyUrl);
   const [legal, setLegal] = useState(settings.legal);
+  /* The ticketing cutoff (ADR 0072) — both instants, as Yaoundé wall time. */
+  const [salesCloseAt, setSalesCloseAt] = useState(
+    isoToWatLocal(settings.ticketing.salesCloseAt),
+  );
+  const [editsCloseAt, setEditsCloseAt] = useState(
+    isoToWatLocal(settings.ticketing.editsCloseAt),
+  );
   const [heroUrl, setHeroUrl] = useState(settings.hero.imageUrl);
   const [heroBusy, setHeroBusy] = useState(false);
   const [sponsorCall, setSponsorCall] = useState(settings.sponsorCall);
@@ -63,6 +75,20 @@ export function AdminConfig({
     "idle",
   );
   const [error, setError] = useState<string | null>(null);
+
+  const ticketingChanged =
+    salesCloseAt !== isoToWatLocal(settings.ticketing.salesCloseAt) ||
+    editsCloseAt !== isoToWatLocal(settings.ticketing.editsCloseAt);
+  /* What the public site would do with the form as it stands — the same
+     helpers checkout and the account page call. */
+  const draftTicketing = {
+    ticketing: {
+      salesCloseAt: watLocalToIso(salesCloseAt),
+      editsCloseAt: watLocalToIso(editsCloseAt),
+    },
+  };
+  const salesOpenNow = ticketSalesOpen(new Date(), draftTicketing);
+  const editsOpenNow = ticketEditsOpen(new Date(), draftTicketing);
 
   async function save() {
     if (!eventDate) {
@@ -106,6 +132,20 @@ export function AdminConfig({
           setting; sending a partial object would erase whichever field this
           form did not touch.
         */
+        /*
+          Sent only when it changed, and as the whole group — the same rule
+          as `memoryLane`: it lives in a newer column (migration 0029), and
+          an unconditional send would make every config save fail on a
+          database that has not had that migration yet.
+        */
+        ...(ticketingChanged
+          ? {
+              ticketing: {
+                salesCloseAt: watLocalToIso(salesCloseAt),
+                editsCloseAt: watLocalToIso(editsCloseAt),
+              },
+            }
+          : {}),
         ...(JSON.stringify(memoryLane) !== JSON.stringify(settings.memoryLane)
           ? {
               memoryLane: {
@@ -243,6 +283,55 @@ export function AdminConfig({
             receipts.
           </span>
         </label>
+
+        {/*
+          The ticketing cutoff (ADR 0072). Checkout refuses tickets after the
+          first; holders stop being able to change their ticket's details
+          after the second. The shop is never affected.
+        */}
+        <div className="flex flex-col gap-4 rounded-lg border border-black02/15 bg-pastel/40 p-4">
+          <div>
+            <h3 className="font-sans text-body-l font-bold text-black02">
+              Ticket sales &amp; edits
+            </h3>
+            <p className="mt-1 text-caption text-black02/70">
+              After &ldquo;Sales close&rdquo;, checkout refuses tickets (and the
+              swag that only comes with one), the tickets page shows
+              &ldquo;Sales closed&rdquo; and the banner&rsquo;s countdown line
+              goes away. The shop stays open. After &ldquo;Edits close&rdquo;,
+              holders can no longer change their ticket&rsquo;s name or T-shirt
+              size.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-body-m font-bold text-black02">
+              Sales close
+              <input
+                type="datetime-local"
+                className={field}
+                value={salesCloseAt}
+                onChange={(e) => setSalesCloseAt(e.target.value)}
+              />
+              <span className="mt-1 block text-caption font-normal text-black02/65">
+                Yaoundé time. Empty = no cutoff. Now:{" "}
+                <strong>{salesOpenNow ? "open" : "closed"}</strong>.
+              </span>
+            </label>
+            <label className="block text-body-m font-bold text-black02">
+              Edits close
+              <input
+                type="datetime-local"
+                className={field}
+                value={editsCloseAt}
+                onChange={(e) => setEditsCloseAt(e.target.value)}
+              />
+              <span className="mt-1 block text-caption font-normal text-black02/65">
+                Yaoundé time. Empty = no cutoff. Now:{" "}
+                <strong>{editsOpenNow ? "open" : "closed"}</strong>.
+              </span>
+            </label>
+          </div>
+        </div>
         <label className="block text-body-m font-bold text-black02">
           Announcement (fr)
           <textarea

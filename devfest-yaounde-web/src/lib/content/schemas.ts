@@ -355,6 +355,12 @@ export const sponsorCallSchema = z.object({
   closesAt: instantOrEmpty.optional().nullable(),
 });
 
+/** The ticketing cutoff (ADR 0072) — same instant rules as `cfs.closesAt`. */
+export const ticketingSchema = z.object({
+  salesCloseAt: instantOrEmpty.optional().nullable(),
+  editsCloseAt: instantOrEmpty.optional().nullable(),
+});
+
 export const heroSchema = z.object({
   imageUrl: urlOrEmpty.optional().nullable(),
 });
@@ -413,6 +419,7 @@ export const settingsSchema = z.object({
   cfs: cfsSchema.optional().nullable(),
   sponsorCall: sponsorCallSchema.optional().nullable(),
   legal: legalSchema.optional().nullable(),
+  ticketing: ticketingSchema.optional().nullable(),
   capacity: capacitySchema.optional().nullable(),
   memoryLane: memoryLaneSchema.optional().nullable(),
   nav: navSchema.optional().nullable(),

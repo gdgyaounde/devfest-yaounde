@@ -1,5 +1,6 @@
 import { EVENT_DATES } from "./calendar";
 import { SITE_URL } from "./site-config";
+import type { TicketingSettings } from "./admin/shape";
 
 /**
  * The event's own facts, in one place.
@@ -124,6 +125,52 @@ export function eventHasEnded(
 }
 
 /**
+ * A cutoff instant as true UTC milliseconds, or null for "no cutoff".
+ *
+ * Empty / unparseable is "no cutoff", the same reading `cfsView` gives an
+ * unset `closesAt`: clearing the field in the dashboard must reopen the
+ * door, never silently shut it. The schema refuses unparseable values on
+ * save, so in practice that branch only covers an empty field.
+ */
+function cutoffInstant(value: string | null | undefined): number | null {
+  if (!value) return null;
+  const ms = Date.parse(value);
+  return Number.isNaN(ms) ? null : ms;
+}
+
+/**
+ * Whether ticket sales are still open (ADR 0072).
+ *
+ * Closed FROM the cutoff instant on — `now >= salesCloseAt` is closed, the
+ * same boundary as `eventHasEnded` and the call for speakers. With the
+ * default `2026-11-18T23:59:00+01:00` that means 23:58:59 Yaoundé time is
+ * the last second a purchase goes through.
+ *
+ * The instant carries its own offset, so this is independent of the server's
+ * timezone. Pure, `now` an argument: checkout, the tickets page, the banner,
+ * the hero and the tests all ask this one function.
+ */
+export function ticketSalesOpen(
+  now: Date,
+  settings: { ticketing: Pick<TicketingSettings, "salesCloseAt"> },
+): boolean {
+  const end = cutoffInstant(settings.ticketing.salesCloseAt);
+  return end === null || now.getTime() < end;
+}
+
+/**
+ * Whether ticket holders can still edit their ticket's details (ADR 0072).
+ * Same boundary rule as `ticketSalesOpen`, against `editsCloseAt`.
+ */
+export function ticketEditsOpen(
+  now: Date,
+  settings: { ticketing: Pick<TicketingSettings, "editsCloseAt"> },
+): boolean {
+  const end = cutoffInstant(settings.ticketing.editsCloseAt);
+  return end === null || now.getTime() < end;
+}
+
+/**
  * The window, right after the event ends, during which the cron sweep
  * should force the home page to rebuild.
  *
@@ -149,6 +196,26 @@ export function withinPostEventRevalidateWindow(
   dates: readonly string[] = EVENT_DATES,
 ): boolean {
   const end = eventEndInstant(dates);
+  if (end === null) return false;
+  const elapsed = now.getTime() - end;
+  return elapsed >= 0 && elapsed < POST_EVENT_REVALIDATE_WINDOW_MS;
+}
+
+/**
+ * The same one-day window, after the ticket SALES cutoff (ADR 0072).
+ *
+ * The tickets page, the hero, the footer and the banner are all static HTML
+ * that says "sales close Wednesday at 23:59". Their client components flip at
+ * the minute on their own, but the HTML itself — what a crawler, a no-JS
+ * visitor or a link preview sees — only changes when something rebuilds it.
+ * This is that something: the cron sweep rebuilds the whole site while this
+ * is true. One-way switch, so over-checking costs nothing.
+ */
+export function withinSalesCloseRevalidateWindow(
+  now: Date,
+  settings: { ticketing: Pick<TicketingSettings, "salesCloseAt"> },
+): boolean {
+  const end = cutoffInstant(settings.ticketing.salesCloseAt);
   if (end === null) return false;
   const elapsed = now.getTime() - end;
   return elapsed >= 0 && elapsed < POST_EVENT_REVALIDATE_WINDOW_MS;
@@ -370,4 +437,45 @@ export function eventDateParts(
       : `${days.slice(0, -1).join(", ")} ${joiner} ${days[days.length - 1]}`;
 
   return { value, caption: `${month} ${last.y}` };
+}
+
+/**
+ * A cutoff instant as people read it, in YAOUNDÉ time whatever the server's
+ * or the visitor's timezone: `{ date: "mercredi 18 novembre", time: "23h59" }`
+ * / `{ date: "Wednesday 18 November", time: "23:59" }`, plus a `short` date
+ * ("mer. 18 nov." / "Wed 18 Nov") for tight spaces like the banner.
+ *
+ * Null for an empty or unparseable instant — the caller then says nothing
+ * rather than printing "Invalid Date".
+ */
+export function formatCutoff(
+  locale: "fr" | "en",
+  iso: string | null | undefined,
+): { date: string; short: string; time: string } | null {
+  if (!iso) return null;
+  const at = new Date(iso);
+  if (Number.isNaN(at.getTime())) return null;
+
+  const tag = locale === "fr" ? "fr-FR" : "en-GB";
+  const part = (
+    options: Intl.DateTimeFormatOptions,
+    type: Intl.DateTimeFormatPartTypes,
+  ) =>
+    new Intl.DateTimeFormat(tag, { ...options, timeZone: "Africa/Douala" })
+      .formatToParts(at)
+      .find((p) => p.type === type)?.value ?? "";
+
+  const weekday = part({ weekday: "long" }, "weekday");
+  const weekdayShort = part({ weekday: "short" }, "weekday");
+  const day = part({ day: "numeric" }, "day");
+  const month = part({ month: "long" }, "month");
+  const monthShort = part({ month: "short" }, "month");
+  const hh = part({ hour: "2-digit", hourCycle: "h23" }, "hour");
+  const mm = part({ minute: "2-digit" }, "minute").padStart(2, "0");
+
+  return {
+    date: `${weekday} ${day} ${month}`,
+    short: `${weekdayShort} ${day} ${monthShort}`,
+    time: locale === "fr" ? `${hh}h${mm}` : `${hh}:${mm}`,
+  };
 }

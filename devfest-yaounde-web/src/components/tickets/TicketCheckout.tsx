@@ -29,6 +29,7 @@ import {
 import { useDiscount } from "@/components/checkout/use-discount";
 import { feeInclusiveAmount } from "@/lib/payments/fees";
 import { signInWithGoogle, useSession } from "@/lib/use-session";
+import { useBeforeInstant } from "@/lib/use-before-instant";
 import type { Product, TicketTier } from "@/data/types";
 
 const APPAREL_SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
@@ -64,6 +65,8 @@ export function TicketCheckout({
   tiers,
   swagProducts,
   bevyUrl,
+  salesCloseAt,
+  salesOpenAtRender,
 }: {
   tiers: TicketTier[];
   /**
@@ -72,6 +75,9 @@ export function TicketCheckout({
    */
   swagProducts: Product[];
   bevyUrl: string;
+  /** The sales cutoff instant (ADR 0072) and what was true at render. */
+  salesCloseAt: string | null;
+  salesOpenAtRender: boolean;
 }) {
   const t = useTranslations("pages.tickets");
   const te = useTranslations("errors.checkout");
@@ -79,6 +85,14 @@ export function TicketCheckout({
   const { profile, loading: sessionLoading } = useSession();
 
   const onSale = useMemo(() => tiers.filter((tier) => tier.onSale), [tiers]);
+
+  /*
+   * Past the sales cutoff (ADR 0072) every PAID tier is closed — the same
+   * locked card as "Sold out", with its own label — and the flow is pinned to
+   * the tier list, so nobody fills in attendee details for an order the
+   * server will refuse. The free RSVP card is untouched: it lives on Bevy.
+   */
+  const salesOpen = useBeforeInstant(salesCloseAt, salesOpenAtRender);
 
   /*
    * Tier id -> the products it bundles, in the order the admin arranged
@@ -110,7 +124,8 @@ export function TicketCheckout({
     [onSale],
   );
 
-  const [step, setStep] = useState<Step>("select");
+  const [chosenStep, setStep] = useState<Step>("select");
+  const step: Step = salesOpen ? chosenStep : "select";
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [attendees, setAttendees] = useState<AttendeeDraft[]>([]);
 
@@ -278,7 +293,11 @@ export function TicketCheckout({
         // code; the verdict lands on the summary card, where the field is.
         discount.reject(e.code);
       }
-      if (e.code === "tier_sold_out" || e.code === "tier_not_on_sale")
+      if (
+        e.code === "tier_sold_out" ||
+        e.code === "tier_not_on_sale" ||
+        e.code === "ticket_sales_closed"
+      )
         setStep("select");
       setSubmitting(false);
     }
@@ -409,7 +428,7 @@ export function TicketCheckout({
 
             {paidTiers.map((tier) => {
               const count = counts[tier.id] ?? 0;
-              const soldOut = Boolean(tier.soldOut);
+              const soldOut = Boolean(tier.soldOut) || !salesOpen;
               return (
                 <article
                   key={tier.id}
@@ -440,7 +459,7 @@ export function TicketCheckout({
                         {soldOut && (
                           <span className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02/50 bg-offwhite px-3 py-1 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70">
                             <Prohibit size={14} weight="bold" aria-hidden />
-                            {t("soldOut")}
+                            {salesOpen ? t("soldOut") : t("salesClosed")}
                           </span>
                         )}
                       </div>
@@ -720,6 +739,7 @@ export function TicketCheckout({
               size="md"
               onClick={goNext}
               disabled={
+                !salesOpen ||
                 (step === "select" && total === 0) ||
                 (step === "details" && !detailsComplete)
               }

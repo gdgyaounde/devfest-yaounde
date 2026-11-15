@@ -1,0 +1,121 @@
+"use client";
+
+import { HourglassMedium, Prohibit, Storefront } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { Countdown } from "@/components/ui/Countdown";
+import { useBeforeInstant } from "@/lib/use-before-instant";
+
+/** The countdown only appears in the final stretch (ADR 0072). */
+const COUNTDOWN_WINDOW_MS = 48 * 60 * 60 * 1000;
+
+/**
+ * The ticket sales cutoff, stated where people buy (ADR 0072).
+ *
+ * Before the cutoff: a loud yellow notice — "Ticket sales close Wednesday
+ * 18 November at 23:59" — plus a live countdown once fewer than 48 hours are
+ * left. After it: a calm closed panel pointing at the shop, which stays open.
+ *
+ * Flips on its own at the cutoff (`useBeforeInstant`), so a tab left open
+ * across 23:59 changes without a reload. The server refuses a late purchase
+ * either way; this is so nobody fills in a form that cannot go through.
+ *
+ * `closeDate` / `closeTime` / `eventDate` arrive already formatted in Yaoundé
+ * time from the server (`formatCutoff`), so every visitor reads the same
+ * local deadline whatever their own timezone.
+ */
+export function SalesCutoffNotice({
+  salesCloseAt,
+  salesOpenAtRender,
+  closeDate,
+  closeTime,
+  eventDate,
+}: {
+  salesCloseAt: string | null;
+  salesOpenAtRender: boolean;
+  closeDate: string | null;
+  closeTime: string | null;
+  eventDate: string;
+}) {
+  const t = useTranslations("pages.tickets");
+  const tc = useTranslations("countdown");
+  const open = useBeforeInstant(salesCloseAt, salesOpenAtRender);
+
+  if (open) {
+    // No cutoff configured = nothing to announce.
+    if (!salesCloseAt || !closeDate || !closeTime) return null;
+    return (
+      <section
+        aria-labelledby="sales-cutoff-title"
+        className="mt-10 flex flex-col gap-6 rounded-lg border-2 border-black02 bg-primary p-6 shadow-[0_6px_0_0_var(--color-black02)] sm:flex-row sm:items-center sm:justify-between sm:p-8"
+      >
+        <div className="flex items-start gap-4">
+          <HourglassMedium
+            size={40}
+            weight="duotone"
+            aria-hidden
+            className="shrink-0 text-black02"
+          />
+          <div>
+            <h2
+              id="sales-cutoff-title"
+              className="font-sans text-heading-l font-bold leading-tight text-black02"
+            >
+              {t("salesNoticeTitle", { date: closeDate, time: closeTime })}
+            </h2>
+            <p className="mt-2 max-w-prose text-body-m text-black02/80">
+              {t("salesNoticeBody")}
+            </p>
+          </div>
+        </div>
+        <div className="shrink-0">
+          <Countdown
+            closesAt={salesCloseAt}
+            label={t("salesCountdown")}
+            visibleWithinMs={COUNTDOWN_WINDOW_MS}
+            units={{
+              days: tc("days"),
+              hours: tc("hours"),
+              minutes: tc("minutes"),
+              seconds: tc("seconds"),
+            }}
+          />
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      aria-labelledby="sales-closed-title"
+      className="mt-10 flex flex-col gap-5 rounded-lg border-2 border-black02 bg-offwhite p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+    >
+      <div className="flex items-start gap-4">
+        <Prohibit
+          size={40}
+          weight="duotone"
+          aria-hidden
+          className="shrink-0 text-black02"
+        />
+        <div>
+          <h2
+            id="sales-closed-title"
+            className="font-sans text-heading-l font-bold leading-tight text-black02"
+          >
+            {t("salesClosedTitle")}
+          </h2>
+          <p className="mt-2 max-w-prose text-body-m text-black02/80">
+            {t("salesClosedBody", { date: eventDate })}
+          </p>
+        </div>
+      </div>
+      <Link
+        href="/shop"
+        className="inline-flex shrink-0 items-center gap-2 self-start rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none sm:self-center"
+      >
+        <Storefront size={18} weight="bold" aria-hidden />
+        {t("salesClosedShop")}
+      </Link>
+    </section>
+  );
+}

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
+import { TicketCta } from "@/components/tickets/TicketCta";
+import { ticketSalesOpen } from "@/lib/event";
 
 /**
  * Pre-footer CTA (PHASE5 §7) — the page's final, loudest "star" moment.
@@ -15,7 +17,8 @@ import { loadSettings } from "@/lib/content/settings";
  */
 export async function CommunityCta() {
   const t = await getTranslations("home.community");
-  const { bevyUrl } = await loadSettings();
+  const settings = await loadSettings();
+  const { bevyUrl } = settings;
 
   return (
     <SectionContainer background="yellow" maxWidth="5xl">
@@ -35,14 +38,16 @@ export async function CommunityCta() {
             <Button tone="black02" href={bevyUrl} external size="lg">
               {t("cta")}
             </Button>
-            <Button
+            {/* Gone after the sales cutoff (ADR 0072) — the community
+                link beside it is still a real next step. */}
+            <TicketCta
+              salesCloseAt={settings.ticketing.salesCloseAt}
+              salesOpenAtRender={ticketSalesOpen(new Date(), settings)}
+              label={t("ticketsCta")}
+              closed="hide"
               tone="black02"
               variant="secondary"
-              href="/tickets"
-              size="lg"
-            >
-              {t("ticketsCta")}
-            </Button>
+            />
           </div>
         </Reveal>
       </div>

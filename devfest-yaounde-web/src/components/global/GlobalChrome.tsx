@@ -1,14 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { navSettle } from "@/lib/motion";
+import { announcementDismissKey } from "@/lib/announcement-key";
+import { useBeforeInstant } from "@/lib/use-before-instant";
 import { useSessionDismissed } from "@/lib/use-session-dismissed";
 import { AnnouncementBanner } from "./AnnouncementBanner";
 import type { NavSettings } from "@/lib/nav-tabs";
 import { Navbar } from "./Navbar";
-
-const DISMISS_KEY = "devfest-announcement-dismissed";
 
 /**
  * DESIGN.md §7c: the announcement banner and the navbar are ONE connected
@@ -26,14 +27,33 @@ const DISMISS_KEY = "devfest-announcement-dismissed";
 export function GlobalChrome({
   announcementMessage,
   announcementCta,
+  announcementExpiresAt,
   nav,
 }: {
   announcementMessage?: string;
-  announcementCta?: { href: string; label: string };
+  announcementCta?: { href: string; label: string; external?: boolean };
+  /**
+   * When a DERIVED announcement stops being true — the sales-close line
+   * (ADR 0072). Past it the banner folds away on the client, at the minute,
+   * rather than waiting for the cron sweep to rebuild the static layout.
+   */
+  announcementExpiresAt?: string | null;
   /** Which navbar tabs are shown — from the dashboard (PHASE24). */
   nav: NavSettings;
 }) {
-  const [dismissed, dismiss] = useSessionDismissed(DISMISS_KEY);
+  const tAnnouncement = useTranslations("announcement");
+  /*
+   * Dismissal is keyed by the MESSAGE, not by one fixed key. With a fixed
+   * key, closing the banner once silenced every message that came after it
+   * for the rest of the session — including the sales-close notice, which is
+   * exactly the one that must not be missed. Closing it now hides only that
+   * text; a new announcement shows again.
+   */
+  const shownText = announcementMessage ?? tAnnouncement("message");
+  const [dismissed, dismiss] = useSessionDismissed(
+    announcementDismissKey(shownText),
+  );
+  const current = useBeforeInstant(announcementExpiresAt, true);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -60,7 +80,7 @@ export function GlobalChrome({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const bannerOpen = onWall || !dismissed;
+  const bannerOpen = onWall || (!dismissed && current);
   /*
    * The shape morph is driven by the banner, not by scroll: with the banner
    * attached the unit is a tall card (radius-lg), and dismissing it morphs

@@ -92,6 +92,19 @@ export const CFS_OPENS_AT = "2026-09-05T01:00:00+01:00";
 export const CFS_CLOSES_AT = "2026-10-31T23:59:00+01:00";
 
 /**
+ * The ticketing cutoff (ADR 0072). Overridden by `site_settings.ticketing`.
+ *
+ * Wednesday 18 November 2026, 23:59 in Yaoundé (UTC+1, no DST). After
+ * `TICKET_SALES_CLOSE_AT` checkout refuses tickets and ticket-only products;
+ * after `TICKET_EDITS_CLOSE_AT` holders can no longer change their ticket's
+ * details. Two instants rather than one so they CAN diverge, but today they
+ * are the same minute. The offset is always written out: an offset-less
+ * string would be read in the server's timezone, not Yaoundé's.
+ */
+export const TICKET_SALES_CLOSE_AT = "2026-11-18T23:59:00+01:00";
+export const TICKET_EDITS_CLOSE_AT = "2026-11-18T23:59:00+01:00";
+
+/**
  * Last edition's full photo gallery, linked from Memory Lane. Overridden by
  * `site_settings.memory_lane` so next year's album is a dashboard edit, not a
  * deploy.

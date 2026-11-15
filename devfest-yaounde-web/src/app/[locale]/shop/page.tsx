@@ -7,6 +7,8 @@ import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { getProducts } from "@/lib/content/store";
 import type { Product } from "@/data/types";
+import { ShopLateNotice } from "@/components/shop/ShopLateNotice";
+import { shopLateNotice } from "@/lib/content/shop-notice";
 
 export async function generateMetadata({
   params,
@@ -41,7 +43,10 @@ export default async function ShopPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.shop");
-  const products: Product[] = await getProducts();
+  const [products, lateNotice] = await Promise.all([
+    getProducts() as Promise<Product[]>,
+    shopLateNotice(locale),
+  ]);
 
   return (
     <main id="main-content" tabIndex={-1} className="flex-1 pt-32 sm:pt-28">
@@ -53,6 +58,7 @@ export default async function ShopPage({
           {t("lead")}
         </p>
         <AccountLink label={t("myOrdersLink")} />
+        <ShopLateNotice text={lateNotice} className="mt-8" />
         <div className="mt-16">
           <ShopBrowser products={products} />
         </div>

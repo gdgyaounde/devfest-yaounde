@@ -9,13 +9,14 @@ import {
 import { getTranslations } from "next-intl/server";
 import { mailtoHref } from "@/lib/mailto";
 import { DevFestLogo } from "@/components/brand/DevFestLogo";
-import { Button } from "@/components/ui/Button";
 import { MaybeLink } from "@/components/ui/MaybeLink";
 import { Reveal } from "@/components/ui/Reveal";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { Link } from "@/i18n/navigation";
 import { loadSettings } from "@/lib/content/settings";
+import { TicketCta } from "@/components/tickets/TicketCta";
+import { ticketSalesOpen } from "@/lib/event";
 import {
   CHAPTER_EMAIL,
   isPlaceholderUrl,
@@ -269,9 +270,13 @@ export async function Footer() {
               </p>
             </div>
             {nav.tickets && (
-              <Button tone="primary" href="/tickets" size="lg">
-                {t("ticketsCta")}
-              </Button>
+              /* Hidden after the sales cutoff (ADR 0072), never a dead link. */
+              <TicketCta
+                salesCloseAt={settings.ticketing.salesCloseAt}
+                salesOpenAtRender={ticketSalesOpen(new Date(), settings)}
+                label={t("ticketsCta")}
+                closed="hide"
+              />
             )}
           </div>
         </Reveal>

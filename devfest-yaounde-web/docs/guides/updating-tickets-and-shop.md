@@ -23,6 +23,28 @@ rules as `updating-content.md` apply to what you type:
 
 ---
 
+## When ticket sales close (ADR 0072)
+
+Ticket sales close at the instant set in **Admin → Config → Ticket sales &
+edits** — for 2026, **Wednesday 18 November at 23:59 (Yaoundé time)**. From
+then on:
+
+- **Checkout refuses tickets on the server**, whatever a page or a stale tab
+  shows. A buyer who was already on the Mobile Money prompt before 23:59 still
+  gets their ticket.
+- The tickets page swaps its "Sales close Wednesday…" notice (with a
+  countdown in the final 48 hours) for "Ticket sales are closed", and every
+  paid tier shows "Sales closed". The free (Haikyu) card still links to Bevy.
+- **Ticket-only products close too** — they only ever come with a ticket.
+- **The shop stays open.** Every shop page (and each checkout step) says that
+  items ordered now may not be ready by event day; the consent line buyers
+  tick says the same thing, so it is part of what they accepted. That notice
+  disappears once the event is over.
+
+To move the cutoff, change the date in Config. Nothing else needs editing.
+
+---
+
 ## Ticket tiers — the "Ticket tiers" dashboard screen
 
 `src/data/ticket-tiers.json` is still there as the **seed/fallback** a fresh

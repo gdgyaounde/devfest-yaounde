@@ -16,6 +16,7 @@ import {
   type SummaryLine,
 } from "@/components/checkout/OrderSummary";
 import { PaymentStep } from "@/components/checkout/PaymentStep";
+import { ShopLateNotice } from "./ShopLateNotice";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
 import {
@@ -51,7 +52,18 @@ const STEPS = [
  * Fewer steps than tickets, deliberately: a bag needs no per-person details,
  * so inventing an equivalent middle step would be ceremony.
  */
-export function ShopCheckout({ products }: { products: Product[] }) {
+export function ShopCheckout({
+  products,
+  lateNotice = null,
+}: {
+  products: Product[];
+  /**
+   * "Items ordered now may not be ready by event day" (ADR 0072), resolved
+   * on the server. Shown above every step — bag AND payment — so it is in
+   * view when the buyer ticks the consent line that repeats it.
+   */
+  lateNotice?: string | null;
+}) {
   const t = useTranslations("pages.shop");
   const tt = useTranslations("pages.tickets");
   const te = useTranslations("errors.checkout");
@@ -191,6 +203,8 @@ export function ShopCheckout({ products }: { products: Product[] }) {
           current={STEPS.findIndex((s) => s.key === step)}
           label={(key) => t(`steps.${key}`)}
         />
+
+        <ShopLateNotice text={lateNotice} className="mb-8" />
 
         {error && (
           <div

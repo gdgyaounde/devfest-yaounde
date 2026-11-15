@@ -215,6 +215,25 @@ A few things worth knowing before you use them:
   real date beside each one, so a session cannot be scheduled onto a day that
   does not exist.
 
+### Ticket sales & edits (the Wednesday cutoff)
+
+**Configuration** has a "Ticket sales & edits" block under the event date
+(ADR 0072). Two dates, both **Yaoundé time**:
+
+- **Sales close** — from this minute on, checkout refuses tickets (and the
+  swag that only comes with a ticket). The tickets page shows "Sales closed",
+  the banner's "sales close Wednesday" line goes away, and the hero's ticket
+  button becomes "Ticket sales closed". **The shop is never affected.** For
+  2026: Wednesday 18 November, 23:59.
+- **Edits close** — from this minute on, ticket holders can no longer change
+  their ticket's name or T-shirt size from their account. Same default.
+
+Leave a box empty for "no cutoff". The line under each box says whether it is
+open or closed right now, computed by the same code checkout runs.
+
+If the boxes fail to save, migration `0029_ticketing_cutoff.sql` has not been
+applied yet — until it is, the site uses the Wednesday default anyway.
+
 ### The call for speakers
 
 **Configuration** in the sidebar has a call-for-speakers block under the

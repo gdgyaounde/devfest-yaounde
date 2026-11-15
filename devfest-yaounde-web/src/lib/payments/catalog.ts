@@ -14,6 +14,9 @@ import ticketTiersJson from "@/data/ticket-tiers.json";
 import productsJson from "@/data/products.json";
 import type { Product, ProductStatus, TicketTier } from "@/data/types";
 import { getProducts, getTiers } from "@/lib/content/store";
+import type { TicketingSettings } from "@/lib/admin/shape";
+import { ticketSalesOpen } from "@/lib/event";
+import { CHECKOUT_ERRORS, CheckoutError } from "./errors";
 
 export const CURRENCY = "XAF" as const;
 /** ISO-3166 alpha-3, required by PawaPay's Payment Page. */
@@ -59,6 +62,30 @@ const PURCHASABLE: ReadonlySet<ProductStatus> = new Set([
   "pre-order",
   "in-stock",
 ]);
+
+/**
+ * Refuses a ticket purchase after the sales cutoff (ADR 0072).
+ *
+ * Called from `quoteTierCounts`, which BOTH the price preview and the real
+ * ticket checkout go through — so a stale tab, a hand-written POST and the
+ * on-page button all hit the same wall, and the UI's "Sales closed" state is
+ * a courtesy on top of this rather than the enforcement.
+ *
+ * Only tickets. Ticket-only products ride along with a ticket and are never
+ * sold alone (`isPurchasable` below), so they close with it; the general shop
+ * deliberately stays open (`quoteCart` never calls this).
+ *
+ * Pure, `now` and `settings` arguments, so the boundary is unit-tested
+ * without a database.
+ */
+export function assertTicketSalesOpen(
+  now: Date,
+  settings: { ticketing: Pick<TicketingSettings, "salesCloseAt"> },
+): void {
+  if (!ticketSalesOpen(now, settings)) {
+    throw new CheckoutError(CHECKOUT_ERRORS.TICKET_SALES_CLOSED, 409);
+  }
+}
 
 export function isPurchasable(product: Product): boolean {
   // A ticket-only product is never sold alone, whatever its status says.

@@ -14,6 +14,7 @@ import type {
   PricedLine,
 } from "@/data/types";
 import {
+  assertTicketSalesOpen,
   CURRENCY,
   declaredStock,
   findProduct,
@@ -26,6 +27,7 @@ import {
 import { CHECKOUT_ERRORS, CheckoutError } from "./errors";
 import { transactionFeeAmount } from "./fees";
 import { createAdminSupabase } from "@/lib/supabase/server";
+import { loadSettings } from "@/lib/content/settings";
 
 /** Nobody needs 200 hoodies, and an unbounded quantity is a denial-of-wallet. */
 const MAX_QUANTITY_PER_LINE = 10;
@@ -196,6 +198,11 @@ export async function quoteTierCounts(
   if (total > MAX_TICKETS_PER_ORDER) {
     throw new CheckoutError(CHECKOUT_ERRORS.ATTENDEE_COUNT_MISMATCH);
   }
+
+  // The sales cutoff (ADR 0072), before anything else is looked up: after
+  // it, no tier is for sale, whatever its own flags say. Checked here and not
+  // in the route so the preview and the real checkout cannot disagree.
+  assertTicketSalesOpen(new Date(), await loadSettings());
 
   const tiers = await loadTiers();
   const lines: PricedLine[] = [];

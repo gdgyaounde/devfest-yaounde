@@ -51,7 +51,10 @@
   "announcement": {
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
     "dismiss": "Fermer l'annonce",
-    "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous."
+    "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous.",
+    "salesClose": "La vente de billets ferme le {date} à {time} — prends le tien avant la fermeture.",
+    "salesCloseCta": "Billets",
+    "afterSales": "On se voit le {date} 🎉 La vente de billets est close — la boutique, elle, reste ouverte."
   },
   "offline": {
     "banner": "Tu es hors ligne — {pages} restent disponibles."
@@ -127,7 +130,8 @@
       "venueCaption": "Cameroun",
       "ctaGallery": "Voir la galerie {year}",
       "ctaGalleryComingSoon": "Album photo bientôt disponible",
-      "ctaGalleryNewTab": "(s'ouvre dans un nouvel onglet)"
+      "ctaGalleryNewTab": "(s'ouvre dans un nouvel onglet)",
+      "ctaSalesClosed": "Vente de billets close"
     },
     "sponsors": {
       "label": "Portés par des gens bien",
@@ -323,7 +327,14 @@
       "refundBody": "Une fois payé, un billet ne peut être ni remboursé ni annulé — ni en cas de changement de programme, ni après l'événement. Tu peux en revanche y mettre le nom de quelqu'un d'autre avant le jour J.",
       "refundAck": "Je comprends que les billets ne sont pas remboursables.",
       "metaDesc": "Choisis ton pass et paie en Mobile Money. Tous les tarifs, ce qu'ils incluent, et comment entrer.",
-      "myTicketsLink": "Déjà commandé ? Voir mes billets"
+      "myTicketsLink": "Déjà commandé ? Voir mes billets",
+      "salesNoticeTitle": "La vente de billets ferme le {date} à {time}",
+      "salesNoticeBody": "Heure de Yaoundé. Après, c'est fermé pour de bon — si tu viens, c'est maintenant.",
+      "salesCountdown": "Fin des ventes dans",
+      "salesClosed": "Ventes closes",
+      "salesClosedTitle": "La vente de billets est close.",
+      "salesClosedBody": "Merci à toutes celles et ceux qui ont pris leur pass — on se voit le {date}. La boutique, elle, reste ouverte si tu veux du merch.",
+      "salesClosedShop": "Voir la boutique"
     },
     "shop": {
       "title": "Boutique",
@@ -374,7 +385,7 @@
       "fulfilmentBody": "Dis-nous ce qui t'arrange. L'équipe te recontacte après la commande pour caler les détails.",
       "returnsTitle": "Retours et échanges",
       "returnsBody": "On ne rembourse pas un changement d'avis. En revanche, si un article arrive abîmé, défectueux ou ne correspond pas à ta commande, on le remplace — et les vêtements peuvent être échangés contre une autre taille, dans la limite des stocks. Écris-nous, ou retrouve-nous au prochain événement.",
-      "returnsAck": "J'ai compris : pas de remboursement en cas de changement d'avis, et les échanges se règlent directement avec l'équipe.",
+      "returnsAck": "J'ai compris : pas de remboursement en cas de changement d'avis, les échanges se règlent directement avec l'équipe, et les articles commandés maintenant peuvent ne pas être prêts pour le jour J — l'équipe me les remettra dès qu'ils arrivent.",
       "bagCount": "{count, plural, one {# article} other {# articles}}",
       "emptyAll": "Vider le panier",
       "emptyAllConfirm": "Tout retirer du panier ?",
@@ -385,7 +396,8 @@
       "fulfilmentShipping": "Je préfère être livré",
       "fulfilmentNoteLabel": "Un repère pour nous aider (facultatif)",
       "fulfilmentNotePlaceholder": "Quartier, point de repère, quand tu es dispo…",
-      "myOrdersLink": "Voir mes commandes"
+      "myOrdersLink": "Voir mes commandes",
+      "lateNotice": "Tu peux toujours commander, mais les articles commandés maintenant risquent de ne pas être prêts pour le jour J ({date}). On te les remet dès qu'ils arrivent."
     },
     "dpGenerator": {
       "title": "Générateur de PP",
@@ -646,6 +658,7 @@
       "tier_not_on_sale": "Ce billet n'est plus en vente. Il en reste d'autres, jette un œil.",
       "tier_rsvp_external": "Ce pass ne se prend pas ici — il passe par la page de la communauté.",
       "tier_sold_out": "Plus de place sur ce billet — il est parti vite. Essaie une autre catégorie.",
+      "ticket_sales_closed": "La vente de billets est close — on est en train de préparer la salle. La boutique, elle, reste ouverte.",
       "unknown_product": "Cet article n'est plus au catalogue. Recharge la boutique.",
       "product_unavailable": "Cet article n'est pas commandable en ligne pour l'instant.",
       "invalid_variant": "Choisis une taille et une couleur disponibles avant de continuer.",
@@ -715,5 +728,11 @@
     "bannerOpen": "L'appel à orateurs est ouvert — tu as quelque chose à partager ? Monte sur scène.",
     "bannerCta": "Proposer",
     "banner": "L'appel à orateurs est ouvert — la scène de DevFest Yaoundé 2026 attend ton sujet."
+  },
+  "countdown": {
+    "days": "jours",
+    "hours": "h",
+    "minutes": "min",
+    "seconds": "sec"
   }
 }

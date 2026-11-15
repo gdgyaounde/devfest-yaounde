@@ -12,7 +12,12 @@ import { OfflineIndicator } from "@/components/global/OfflineIndicator";
 import { Preloader } from "@/components/global/Preloader";
 import { ServiceWorkerRegistration } from "@/components/global/ServiceWorkerRegistration";
 import { routing } from "@/i18n/routing";
-import { organizationJsonLd } from "@/lib/event";
+import {
+  formatCutoff,
+  formatEventDates,
+  organizationJsonLd,
+  ticketSalesOpen,
+} from "@/lib/event";
 import { JsonLd } from "@/lib/seo";
 import { loadSettings } from "@/lib/content/settings";
 import { cfsAcceptsSubmissions, cfsView } from "@/lib/content/cfs";
@@ -107,14 +112,57 @@ export default async function LocaleLayout({
     replacing it with our own — or hanging a "submit a talk" button off the
     side of an unrelated sentence — would be the site overruling them.
   */
+  const l = locale === "en" ? "en" : "fr";
+  const tAnnouncement = await getTranslations("announcement");
+
+  /*
+    SECOND in line, after the dashboard text: the ticket sales cutoff
+    (ADR 0072). Derived, not typed — "Ticket sales close Wednesday
+    18 November at 23:59" — so it cannot disagree with what checkout
+    enforces, and it disappears on its own once the cutoff passes: the cron
+    sweep rebuilds this layout shortly after, and `announcementExpiresAt`
+    makes the client hide it at the minute itself, before that rebuild lands.
+  */
+  const salesOpen = ticketSalesOpen(new Date(), settings);
+  const salesCutoff = salesOpen
+    ? formatCutoff(l, settings.ticketing.salesCloseAt)
+    : null;
+  const salesBanner = !custom && salesCutoff !== null && settings.nav.tickets;
+
   const cfs = cfsView(settings.cfs, speakers.length);
-  const cfsBanner = !custom && cfsAcceptsSubmissions(cfs);
+  const cfsBanner = !custom && !salesBanner && cfsAcceptsSubmissions(cfs);
   const tCfs = await getTranslations("cfs");
+
+  /*
+    The repo fallback ("Early bird tickets end soon — grab yours") sells
+    tickets, which is false once sales have closed. Past the cutoff the
+    fallback is a "see you on the day" line instead.
+  */
+  const fallback = salesOpen
+    ? undefined
+    : tAnnouncement("afterSales", {
+        date: formatEventDates(l, [settings.eventDate]) ?? "",
+      });
+
   const announcementMessage =
-    custom || (cfsBanner ? tCfs("banner") : undefined);
-  const announcementCta = cfsBanner
-    ? { href: cfs.url, label: tCfs("bannerCta") }
-    : undefined;
+    custom ||
+    (salesBanner
+      ? tAnnouncement("salesClose", {
+          date: salesCutoff!.date,
+          time: salesCutoff!.time,
+        })
+      : cfsBanner
+        ? tCfs("banner")
+        : fallback);
+  const announcementCta = salesBanner
+    ? {
+        href: `/${locale}/tickets`,
+        label: tAnnouncement("salesCloseCta"),
+        external: false,
+      }
+    : cfsBanner
+      ? { href: cfs.url, label: tCfs("bannerCta"), external: true }
+      : undefined;
 
   return (
     <html
@@ -171,6 +219,9 @@ export default async function LocaleLayout({
             <GlobalChrome
               announcementMessage={announcementMessage}
               announcementCta={announcementCta}
+              announcementExpiresAt={
+                salesBanner ? settings.ticketing.salesCloseAt : undefined
+              }
               nav={settings.nav}
             />
             <FloatingScrollbar />

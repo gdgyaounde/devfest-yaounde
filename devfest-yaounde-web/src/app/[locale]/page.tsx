@@ -20,7 +20,7 @@ import {
   getSpeakers,
   getSponsors,
 } from "@/lib/content/store";
-import { eventJsonLd } from "@/lib/event";
+import { eventJsonLd, ticketSalesOpen } from "@/lib/event";
 import { JsonLd, pageMetadata } from "@/lib/seo";
 
 // A "Tracks" section (PAGES.md §2.6) is intentionally skipped — tracks
@@ -72,6 +72,8 @@ export default async function HomePage({
         eventDate={settings.eventDate}
         backdropUrl={settings.hero.imageUrl}
         currentGalleryUrl={settings.memoryLane.currentGalleryUrl}
+        salesCloseAt={settings.ticketing.salesCloseAt}
+        salesOpen={ticketSalesOpen(new Date(), settings)}
       />
       {/*
         The sponsor strip used to be layer 4 INSIDE the hero. The redesign

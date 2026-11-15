@@ -1003,14 +1003,31 @@
   font-weight: 700;
   opacity: 0;
   pointer-events: none;
+  /*
+   * `display: none` at rest, not just `opacity: 0`. An invisible, nowrap,
+   * centred label still takes up layout width, and on a phone the ones on the
+   * right-hand items pushed the whole document ~70px wider than the screen —
+   * which dragged the fixed navbar (and its menu button) off the right edge
+   * of /tickets. `@starting-style` keeps the fade-in where it is supported.
+   */
+  display: none;
   transition:
     opacity 200ms var(--ease-out-devfest),
-    transform 200ms var(--ease-out-devfest);
+    transform 200ms var(--ease-out-devfest),
+    display 200ms allow-discrete;
 }
 .swag-cutout:hover .swag-pop,
 .swag-cutout:focus-within .swag-pop {
+  display: block;
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+@starting-style {
+  .swag-cutout:hover .swag-pop,
+  .swag-cutout:focus-within .swag-pop {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
 }
 
 .anim-push-in {

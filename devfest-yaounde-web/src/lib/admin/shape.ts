@@ -163,6 +163,15 @@ export interface HeroSettings {
   imageUrl: string;
 }
 
+/**
+ * The ticketing cutoff (ADR 0072). ISO instants with an explicit offset.
+ * Null / empty = no cutoff — sales / edits stay open.
+ */
+export interface TicketingSettings {
+  salesCloseAt: string | null;
+  editsCloseAt: string | null;
+}
+
 export interface CapacitySettings {
   /** Overall event capacity, for the public counter. Null = no public counter. */
   total: number | null;
@@ -185,6 +194,8 @@ export interface AdminSettings {
   cfs: CfsSettings;
   sponsorCall: SponsorCallSettings;
   legal: LegalSettings;
+  /** When ticket sales and ticket edits close (ADR 0072). */
+  ticketing: TicketingSettings;
   capacity: CapacitySettings;
   memoryLane: MemoryLaneSettings;
   /** Which navbar tabs are shown (PHASE24). */

@@ -495,6 +495,7 @@ export type Database = {
           memory_lane: Json | null
           nav: Json | null
           sponsor_call: Json | null
+          ticketing: Json | null
           updated_at: string
           updated_by: string | null
         }
@@ -510,6 +511,7 @@ export type Database = {
           memory_lane?: Json | null
           nav?: Json | null
           sponsor_call?: Json | null
+          ticketing?: Json | null
           updated_at?: string
           updated_by?: string | null
         }
@@ -525,6 +527,7 @@ export type Database = {
           memory_lane?: Json | null
           nav?: Json | null
           sponsor_call?: Json | null
+          ticketing?: Json | null
           updated_at?: string
           updated_by?: string | null
         }
