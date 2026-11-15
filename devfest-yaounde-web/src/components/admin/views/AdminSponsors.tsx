@@ -83,10 +83,9 @@ export function AdminSponsors({ rows }: { rows: Sponsor[] }) {
       )}
 
       <InfoBanner>
-        Logos with a transparent background now stay transparent — re-upload
-        any sponsor logo saved before today&rsquo;s fix if it still shows a
-        black box behind it (the Google logo does; that is the exact bug this
-        fixed).
+        Logos with a transparent background now stay transparent — re-upload any
+        sponsor logo saved before today&rsquo;s fix if it still shows a black
+        box behind it (the Google logo does; that is the exact bug this fixed).
       </InfoBanner>
 
       <EntityCrud<Sponsor>

@@ -105,7 +105,8 @@ export function ConfirmBulkDeleteModal({
               id="confirm-bulk-delete-title"
               className="font-sans text-body-l font-bold text-black02"
             >
-              Delete {deletable.length} record{deletable.length === 1 ? "" : "s"}?
+              Delete {deletable.length} record
+              {deletable.length === 1 ? "" : "s"}?
             </h3>
             <p className="mt-1 text-body-m text-black02/70">
               This cannot be undone.
@@ -125,9 +126,7 @@ export function ConfirmBulkDeleteModal({
 
         {blocked.length > 0 && (
           <div className="rounded-lg border-2 border-danger bg-danger-pastel px-4 py-3 text-body-m text-black02">
-            <p className="font-bold">
-              {blocked.length} kept, not deleted:
-            </p>
+            <p className="font-bold">{blocked.length} kept, not deleted:</p>
             <ul className="mt-1 flex flex-col gap-1">
               {blocked.map((i) => (
                 <li key={i.id} className="text-caption">

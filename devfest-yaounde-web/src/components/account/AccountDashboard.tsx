@@ -9,6 +9,7 @@ import {
   Ticket as TicketIcon,
 } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
+import { orderRef } from "@/lib/staff/rules";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
@@ -69,7 +70,8 @@ interface OrderItem {
   variant: Record<string, string> | null;
   quantity: number;
   unit_amount: number;
-  name_snapshot: string;
+  /** jsonb: the bilingual name at purchase time (a bare string on old rows). */
+  name_snapshot: { fr: string; en: string } | string;
 }
 
 interface Order {
@@ -448,9 +450,15 @@ export function AccountDashboard({
                   className="rounded-lg border-2 border-black02 bg-offwhite p-6"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <Badge tone="primary" variant="outline">
-                      {order.status}
-                    </Badge>
+                    <span className="flex flex-wrap items-center gap-2">
+                      {/* The number the merch table searches by (ADR 0079). */}
+                      <span className="font-mono text-body-m font-bold text-black02">
+                        {t("orderRef", { ref: orderRef(order.id) })}
+                      </span>
+                      <Badge tone="primary" variant="outline">
+                        {order.status}
+                      </Badge>
+                    </span>
                     <span className="font-mono text-body-m font-bold text-black02">
                       {money(order.total_amount)} {order.currency}
                     </span>
@@ -464,7 +472,12 @@ export function AccountDashboard({
                         {/* name_snapshot, not a catalog lookup: a past order
                             keeps reading correctly after the catalog changes. */}
                         <span className="text-body-m text-black02">
-                          {item.name_snapshot} × {item.quantity}
+                          {typeof item.name_snapshot === "string"
+                            ? item.name_snapshot
+                            : item.name_snapshot[
+                                locale === "en" ? "en" : "fr"
+                              ]}{" "}
+                          × {item.quantity}
                         </span>
                         <span className="font-mono text-body-m text-black02/70">
                           {money(item.unit_amount * item.quantity)}

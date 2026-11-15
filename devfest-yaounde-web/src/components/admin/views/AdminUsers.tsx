@@ -1,8 +1,13 @@
 "use client";
 
-import { ShieldCheck } from "@phosphor-icons/react";
+import { HandWaving, ShieldCheck } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { LIST_CAP, type AdminAdmin, type AdminData } from "@/lib/admin/shape";
+import {
+  LIST_CAP,
+  type AdminAdmin,
+  type AdminData,
+  type AdminVolunteer,
+} from "@/lib/admin/shape";
 import type { RoleAction } from "@/lib/admin/organiser-roles";
 import { Badge } from "@/components/ui/Badge";
 import { ConfirmRoleChangeModal } from "../forms/ConfirmRoleChangeModal";
@@ -59,6 +64,78 @@ export function AdminUsers({ data }: { data: AdminData }) {
   const [error, setError] = useState<string | null>(null);
 
   const adminIds = useMemo(() => new Set(admins.map((a) => a.id)), [admins]);
+  const [volunteers, setVolunteers] = useState<AdminVolunteer[]>(
+    data.volunteers,
+  );
+  const [volunteerBusy, setVolunteerBusy] = useState<string | null>(null);
+  // Snapshot of "now" for the active/expired split, taken once per mount —
+  // the list is reloaded with the page, and a render must stay pure.
+  const [now] = useState(() => Date.now());
+  const activeVolunteerIds = useMemo(
+    () =>
+      new Set(
+        volunteers
+          .filter((v) => Date.parse(v.expiresAt) > now)
+          .map((v) => v.id),
+      ),
+    [volunteers, now],
+  );
+
+  /**
+   * Add or remove a volunteer. No typed-email confirmation, unlike admin
+   * changes: a volunteer can only scan badges, hand out perks and hand over
+   * pickup orders, until the day after the event — and it is one click to
+   * undo. The audit row is written by the database either way.
+   */
+  async function changeVolunteer(
+    action: "add" | "remove",
+    id: string,
+    name: string,
+    email: string | null,
+  ) {
+    setVolunteerBusy(id);
+    try {
+      const response = await fetch("/api/admin/volunteers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: id, action }),
+      });
+      const body = (await response.json().catch(() => null)) as {
+        expiresAt?: string;
+        message?: string;
+      } | null;
+      if (!response.ok) {
+        toast.push(
+          "error",
+          body?.message ??
+            (response.status === 500
+              ? "Nothing changed — the volunteers migration (0032) may not be applied yet."
+              : `That did not go through (${response.status}).`),
+        );
+        return;
+      }
+      if (action === "add") {
+        setVolunteers((current) => [
+          ...current.filter((v) => v.id !== id),
+          {
+            id,
+            displayName: name,
+            email,
+            addedAt: new Date().toISOString(),
+            expiresAt: body?.expiresAt ?? new Date().toISOString(),
+          },
+        ]);
+        toast.push("ok", `${name} is now a volunteer.`);
+      } else {
+        setVolunteers((current) => current.filter((v) => v.id !== id));
+        toast.push("ok", `${name} is no longer a volunteer.`);
+      }
+    } catch {
+      toast.push("error", "Network error — nothing was changed. Try again.");
+    } finally {
+      setVolunteerBusy(null);
+    }
+  }
   const onlyOneAdmin = admins.length <= 1;
 
   const shownUsers = useMemo(() => {
@@ -235,10 +312,77 @@ export function AdminUsers({ data }: { data: AdminData }) {
       </Panel>
 
       <Panel
+        title={`Volunteers (${activeVolunteerIds.size})`}
+        subtitle="Day-of helpers. They can only use the day-of tools — door check-in, meal & swag, merch pickup — never this dashboard. Access ends by itself at 23:59 the day after the event."
+      >
+        {volunteers.length === 0 ? (
+          <p className="text-body-m text-black02/70">
+            No volunteers yet. Ask each one to sign in to the site once, then
+            use “Make volunteer” in the list below.
+          </p>
+        ) : (
+          <ul className="flex flex-col divide-y divide-black02/10">
+            {volunteers.map((volunteer) => {
+              const name = nameOf(
+                volunteer.id,
+                volunteer.displayName,
+                volunteer.email,
+              );
+              const active = activeVolunteerIds.has(volunteer.id);
+              return (
+                <li
+                  key={volunteer.id}
+                  className="flex flex-wrap items-center justify-between gap-3 py-3"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <HandWaving
+                      size={22}
+                      weight="duotone"
+                      aria-hidden
+                      className="shrink-0 text-black02"
+                    />
+                    <div className="min-w-0">
+                      <p className="flex flex-wrap items-center gap-2 font-sans text-body-m font-bold text-black02">
+                        {name}
+                        {!active && (
+                          <Badge tone="danger" variant="outline">
+                            Expired
+                          </Badge>
+                        )}
+                      </p>
+                      <p className="break-all font-mono text-caption text-black02/70">
+                        {volunteer.email ?? "no email on file"} ·{" "}
+                        {active ? "until" : "ended"} {when(volunteer.expiresAt)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={volunteerBusy === volunteer.id}
+                    onClick={() =>
+                      void changeVolunteer(
+                        "remove",
+                        volunteer.id,
+                        name,
+                        volunteer.email,
+                      )
+                    }
+                    className="rounded-pill border-2 border-danger px-4 py-1.5 font-sans text-caption font-bold text-danger-ink hover:bg-danger-pastel disabled:opacity-40"
+                  >
+                    Remove volunteer
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </Panel>
+
+      <Panel
         title="Users who have signed in"
         subtitle={`Showing ${shownUsers.length} of ${data.users.total}${
           data.users.total > LIST_CAP ? ` (first ${LIST_CAP} loaded)` : ""
-        }. To make somebody an admin they must have signed in once.`}
+        }. To make somebody an admin or a volunteer they must have signed in once.`}
         action={
           <input
             type="search"
@@ -283,14 +427,36 @@ export function AdminUsers({ data }: { data: AdminData }) {
                 Admin
               </Badge>
             ) : (
-              <button
-                key="a"
-                type="button"
-                onClick={() => open("promote", u.id, u.displayName, u.email)}
-                className="rounded-pill border-2 border-black02 px-4 py-1.5 font-sans text-caption font-bold text-black02 hover:bg-primary"
-              >
-                Make admin
-              </button>
+              <span key="a" className="flex flex-wrap gap-2">
+                {activeVolunteerIds.has(u.id) ? (
+                  <Badge tone="primary" variant="outline">
+                    Volunteer
+                  </Badge>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={volunteerBusy === u.id}
+                    onClick={() =>
+                      void changeVolunteer(
+                        "add",
+                        u.id,
+                        nameOf(u.id, u.displayName, u.email),
+                        u.email,
+                      )
+                    }
+                    className="rounded-pill border-2 border-black02 bg-primary px-4 py-1.5 font-sans text-caption font-bold text-black02 hover:bg-halftone disabled:opacity-40"
+                  >
+                    Make volunteer
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => open("promote", u.id, u.displayName, u.email)}
+                  className="rounded-pill border-2 border-black02 px-4 py-1.5 font-sans text-caption font-bold text-black02 hover:bg-primary"
+                >
+                  Make admin
+                </button>
+              </span>
             ),
           ])}
         />

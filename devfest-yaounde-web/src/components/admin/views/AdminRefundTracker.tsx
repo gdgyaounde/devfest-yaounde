@@ -98,9 +98,9 @@ export function AdminRefundTracker({ data }: { data: AdminData }) {
   return (
     <div className="flex flex-col gap-5">
       <InfoBanner>
-        This is a visibility tracker, not a refund tool — it records a
-        request and its status, nothing more. Tickets stay non-refundable;
-        shop exchanges stay handled off-platform. See{" "}
+        This is a visibility tracker, not a refund tool — it records a request
+        and its status, nothing more. Tickets stay non-refundable; shop
+        exchanges stay handled off-platform. See{" "}
         <span className="font-mono">docs/content/refund-policy.md</span>.
       </InfoBanner>
 
@@ -236,8 +236,8 @@ export function AdminRefundTracker({ data }: { data: AdminData }) {
       >
         {refreshed && (
           <p className="mb-4 rounded-lg border-2 border-black02 bg-primary px-4 py-2.5 text-body-m font-bold text-black02">
-            Saved. Reload the page to see the change — this view was
-            rendered once, and does not poll.
+            Saved. Reload the page to see the change — this view was rendered
+            once, and does not poll.
           </p>
         )}
         <DataTable
@@ -324,14 +324,11 @@ function RequestActions({
     setBusy(true);
     setError(null);
     try {
-      const response = await fetch(
-        `/api/admin/refund-requests/${request.id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status }),
-        },
-      );
+      const response = await fetch(`/api/admin/refund-requests/${request.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as {
           error?: string;

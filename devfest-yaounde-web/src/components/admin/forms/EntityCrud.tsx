@@ -451,46 +451,46 @@ export function EntityCrud<T extends EntityRow>({
     const isToggling = togglingIds.has(row.id);
     const isSelected = selected.has(row.id);
     return (
-          <li
-            key={row.id}
-            className="relative flex flex-wrap items-center gap-3 overflow-hidden rounded-lg border border-black02/15 bg-offwhite px-4 py-3"
-          >
-            {/*
+      <li
+        key={row.id}
+        className="relative flex flex-wrap items-center gap-3 overflow-hidden rounded-lg border border-black02/15 bg-offwhite px-4 py-3"
+      >
+        {/*
               The DP wall's busy veil, on the row that is waiting. Purely
               decorative — the toggle's own `aria-pressed` and the toast
               carry the state for anyone not looking at it.
             */}
-            {isToggling && <span aria-hidden className="admin-shimmer" />}
-            {/*
+        {isToggling && <span aria-hidden className="admin-shimmer" />}
+        {/*
               Bulk selection (PHASE22 §E) — every row, on every collection
               that uses this shell, with no per-view opt-in required.
             */}
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={(e) => {
-                const next = new Set(selected);
-                if (e.target.checked) next.add(row.id);
-                else next.delete(row.id);
-                setSelected(next);
-              }}
-              aria-label={`Select ${row.id}`}
-              className="h-4 w-4 shrink-0 accent-black02"
-            />
-            {/*
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={(e) => {
+            const next = new Set(selected);
+            if (e.target.checked) next.add(row.id);
+            else next.delete(row.id);
+            setSelected(next);
+          }}
+          aria-label={`Select ${row.id}`}
+          className="h-4 w-4 shrink-0 accent-black02"
+        />
+        {/*
               Faded, not struck through or greyed to unreadable: the record
               is intact and one press from being back, and it still has to
               be legible enough to find.
             */}
-            <div
-              className={`min-w-0 flex-1 ${
-                rowToggle && !rowToggle.value(row) ? "opacity-45" : ""
-              }`}
-            >
-              {renderRow(row)}
-            </div>
+        <div
+          className={`min-w-0 flex-1 ${
+            rowToggle && !rowToggle.value(row) ? "opacity-45" : ""
+          }`}
+        >
+          {renderRow(row)}
+        </div>
 
-            {/*
+        {/*
               REORDERING IS HIDDEN WHILE FILTERED, not disabled-looking.
 
               The arrows swap a row with its neighbour by index, and under a
@@ -499,75 +499,71 @@ export function EntityCrud<T extends EntityRow>({
               is hiding — a silent, wrong reorder. Clear the filter and they
               come back.
             */}
-            {reorderable && !filtered && (
-              <span className="flex items-center gap-0.5">
-                {/*
+        {reorderable && !filtered && (
+          <span className="flex items-center gap-0.5">
+            {/*
                   Buttons, not a drag handle. Dragging is the nicer gesture
                   and the worse control here: it is unusable from a
                   keyboard, awkward on a phone, and this list is edited on
                   both. Each press saves, so the order in the database is
                   always the order on screen.
                 */}
-                <button
-                  type="button"
-                  disabled={busy || index === 0}
-                  onClick={() => void move(index, -1)}
-                  aria-label={`Move ${row.id} up`}
-                  className="rounded-pill p-1.5 text-black02/65 hover:bg-pastel hover:text-black02 disabled:opacity-25"
-                >
-                  <ArrowsDownUp
-                    size={14}
-                    weight="bold"
-                    className="rotate-180"
-                  />
-                </button>
-                <button
-                  type="button"
-                  disabled={busy || index === rows.length - 1}
-                  onClick={() => void move(index, 1)}
-                  aria-label={`Move ${row.id} down`}
-                  className="rounded-pill p-1.5 text-black02/65 hover:bg-pastel hover:text-black02 disabled:opacity-25"
-                >
-                  <ArrowsDownUp size={14} weight="bold" />
-                </button>
-              </span>
-            )}
-
-            {rowToggle && (
-              <button
-                type="button"
-                disabled={busy || isToggling}
-                onClick={() => void flip(row)}
-                aria-pressed={rowToggle.value(row)}
-                aria-busy={isToggling}
-                className={`rounded-pill border-2 px-3 py-1 text-caption font-bold transition-colors disabled:opacity-50 ${
-                  rowToggle.value(row)
-                    ? "border-black02/25 text-black02/65 hover:bg-pastel hover:text-black02"
-                    : "border-success text-success-ink hover:bg-success-pastel"
-                }`}
-              >
-                {rowToggle.label(rowToggle.value(row))}
-              </button>
-            )}
-
             <button
               type="button"
-              onClick={() => open(row, false)}
-              aria-label={`Edit ${row.id}`}
-              className="rounded-pill border border-black02/20 p-2 text-black02 hover:bg-pastel"
+              disabled={busy || index === 0}
+              onClick={() => void move(index, -1)}
+              aria-label={`Move ${row.id} up`}
+              className="rounded-pill p-1.5 text-black02/65 hover:bg-pastel hover:text-black02 disabled:opacity-25"
             >
-              <PencilSimple size={14} weight="bold" />
+              <ArrowsDownUp size={14} weight="bold" className="rotate-180" />
             </button>
-
             <button
               type="button"
-              onClick={() => setConfirming(row.id)}
-              aria-label={`Delete ${row.id}`}
-              className="rounded-pill border border-black02/20 p-2 text-black02 hover:bg-danger-pastel hover:text-danger-ink"
+              disabled={busy || index === rows.length - 1}
+              onClick={() => void move(index, 1)}
+              aria-label={`Move ${row.id} down`}
+              className="rounded-pill p-1.5 text-black02/65 hover:bg-pastel hover:text-black02 disabled:opacity-25"
             >
-              <Trash size={14} weight="bold" />
+              <ArrowsDownUp size={14} weight="bold" />
             </button>
-          </li>
+          </span>
+        )}
+
+        {rowToggle && (
+          <button
+            type="button"
+            disabled={busy || isToggling}
+            onClick={() => void flip(row)}
+            aria-pressed={rowToggle.value(row)}
+            aria-busy={isToggling}
+            className={`rounded-pill border-2 px-3 py-1 text-caption font-bold transition-colors disabled:opacity-50 ${
+              rowToggle.value(row)
+                ? "border-black02/25 text-black02/65 hover:bg-pastel hover:text-black02"
+                : "border-success text-success-ink hover:bg-success-pastel"
+            }`}
+          >
+            {rowToggle.label(rowToggle.value(row))}
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => open(row, false)}
+          aria-label={`Edit ${row.id}`}
+          className="rounded-pill border border-black02/20 p-2 text-black02 hover:bg-pastel"
+        >
+          <PencilSimple size={14} weight="bold" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setConfirming(row.id)}
+          aria-label={`Delete ${row.id}`}
+          className="rounded-pill border border-black02/20 p-2 text-black02 hover:bg-danger-pastel hover:text-danger-ink"
+        >
+          <Trash size={14} weight="bold" />
+        </button>
+      </li>
     );
   }
 
@@ -604,8 +600,7 @@ export function EntityCrud<T extends EntityRow>({
             <input
               type="checkbox"
               checked={
-                selected.size > 0 &&
-                shown.every((row) => selected.has(row.id))
+                selected.size > 0 && shown.every((row) => selected.has(row.id))
               }
               ref={(el) => {
                 if (!el) return;
@@ -681,10 +676,7 @@ export function EntityCrud<T extends EntityRow>({
           an item that is not one.
         */
         <div className="flex flex-col gap-5">
-          {([
-            [grouped.on, onRows] as const,
-            [grouped.off, offRows] as const,
-          ])
+          {[[grouped.on, onRows] as const, [grouped.off, offRows] as const]
             .filter(([, group]) => group.length > 0)
             .map(([label, group]) => (
               <section key={label}>
@@ -736,8 +728,7 @@ export function EntityCrud<T extends EntityRow>({
               rows
                 .filter(
                   (row) =>
-                    selected.has(row.id) &&
-                    !describeImpact?.(row)?.blocked,
+                    selected.has(row.id) && !describeImpact?.(row)?.blocked,
                 )
                 .map((row) => row.id),
             );

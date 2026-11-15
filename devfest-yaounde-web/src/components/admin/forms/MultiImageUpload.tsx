@@ -116,7 +116,12 @@ export function MultiImageUpload({
       if (entry) send({ ...entry, status: "uploading", progress: 0 });
       return prev.map((s) =>
         s.localId === localId
-          ? { ...s, status: "uploading" as const, progress: 0, error: undefined }
+          ? {
+              ...s,
+              status: "uploading" as const,
+              progress: 0,
+              error: undefined,
+            }
           : s,
       );
     });
@@ -138,9 +143,7 @@ export function MultiImageUpload({
   function onFilesPicked(files: FileList | null) {
     if (!files) return;
     const room = Math.max(0, slotsLeft);
-    Array.from(files)
-      .slice(0, room)
-      .forEach(upload);
+    Array.from(files).slice(0, room).forEach(upload);
     if (inputRef.current) inputRef.current.value = "";
   }
 
@@ -153,11 +156,7 @@ export function MultiImageUpload({
             className="group relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 border-black02"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={url}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <img src={url} alt="" className="h-full w-full object-cover" />
             <button
               type="button"
               onClick={() => removeCommitted(url)}

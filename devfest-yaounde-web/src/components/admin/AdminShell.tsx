@@ -558,16 +558,17 @@ export function AdminShell({
               </Link>
 
               {/*
-                The door scanner is its own lightweight route (ADR 0078), so
-                it is a link out rather than a view — and the loudest item
-                here, because on the day it is the one people look for.
+                The day-of tools (door, meal & swag, merch pickup) are their
+                own lightweight routes that volunteers share (ADR 0078, 0079),
+                so this is a link out rather than a view — and the loudest
+                item here, because on the day it is the one people look for.
               */}
               <Link
-                href="/admin/check-in"
+                href="/volunteer"
                 className="mt-5 inline-flex items-center justify-center gap-2 rounded-pill border-2 border-black02 bg-primary px-4 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_3px_0_0_var(--color-black02)] transition-transform duration-150 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
               >
                 <QrCode size={20} weight="bold" aria-hidden />
-                Door check-in
+                Day-of tools
               </Link>
 
               {/*

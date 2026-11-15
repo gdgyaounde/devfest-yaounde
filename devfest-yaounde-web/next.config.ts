@@ -16,8 +16,8 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // No public page needs any of these. The door scanner gets the camera
-  // back on its own route only — see `headers()` below.
+  // No public page needs any of these. The day-of stations get the camera
+  // back on their own routes only — see `headers()` below.
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
@@ -112,14 +112,15 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       /*
-       * The ONE exception to `camera=()`: the door scanner (ADR 0078) reads
-       * badge QR codes through the phone camera. Scoped to that route and to
-       * this origin only (`self`), so every other page still cannot ask.
+       * The ONE exception to `camera=()`: the day-of stations (ADR 0078,
+       * 0079) read ticket QR codes through the phone camera. Scoped to the
+       * staff-only volunteer tree and to this origin (`self`), so every
+       * public page still cannot ask.
        * Later entries override earlier ones for the same key (Next's
        * headers docs), which is what makes this narrower rule win here.
        */
       {
-        source: "/:locale(fr|en)/admin/check-in",
+        source: "/:locale(fr|en)/volunteer/:path*",
         headers: [
           {
             key: "Permissions-Policy",

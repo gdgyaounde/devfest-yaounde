@@ -46,6 +46,16 @@ export const RATE_LIMITS = {
    */
   checkIn: { bucket: "check-in", limit: 300, windowSeconds: 300 },
   /**
+   * Day-of staff (ADR 0079), per user. Name searches are the tight one: a
+   * volunteer looks someone up a few times a minute, while a script walking
+   * the alphabet to list every attendee needs hundreds.
+   */
+  staffSearch: { bucket: "staff-search", limit: 60, windowSeconds: 300 },
+  staffPerk: { bucket: "staff-perk", limit: 300, windowSeconds: 300 },
+  staffOrder: { bucket: "staff-order", limit: 60, windowSeconds: 300 },
+  /** Organisers adding or removing volunteers. */
+  adminVolunteer: { bucket: "admin-volunteer", limit: 60, windowSeconds: 300 },
+  /**
    * Community wall submissions, by IP. There is no account to attribute them
    * to (ADR 0015), so the address is all there is. Five an hour is generous
    * for a person and tedious for a script.

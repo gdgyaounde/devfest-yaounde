@@ -206,6 +206,33 @@ export async function loadAdminData(): Promise<AdminData> {
     addedAt: row.added_at,
   }));
 
+  // Day-of volunteers (ADR 0079). Before migration 0032 the table does not
+  // exist; that reads as "none yet" rather than breaking the dashboard.
+  const { data: volunteerRows, error: volunteerError } = await db
+    .from("volunteers")
+    .select("user_id, added_at, expires_at")
+    .order("added_at", { ascending: true });
+  if (volunteerError) {
+    console.error("[admin] volunteers read failed", volunteerError.message);
+  }
+  const volunteerIds = (volunteerRows ?? []).map((row) => row.user_id);
+  const { data: volunteerProfiles } = volunteerIds.length
+    ? await db
+        .from("profiles")
+        .select("id, display_name, email")
+        .in("id", volunteerIds)
+    : { data: [] };
+  const volunteerProfile = new Map(
+    (volunteerProfiles ?? []).map((p) => [p.id, p]),
+  );
+  const volunteers = (volunteerRows ?? []).map((row) => ({
+    id: row.user_id,
+    displayName: volunteerProfile.get(row.user_id)?.display_name ?? null,
+    email: volunteerProfile.get(row.user_id)?.email ?? null,
+    addedAt: row.added_at,
+    expiresAt: row.expires_at,
+  }));
+
   const ticketRows = tickets.data ?? [];
   const intentRows = intents.data ?? [];
 
@@ -215,6 +242,7 @@ export async function loadAdminData(): Promise<AdminData> {
     organiserName: organiser.name,
     organiserId: organiser.userId,
     admins,
+    volunteers,
     counts: {
       paidTickets: tickets.count ?? ticketRows.length,
       checkedIn: ticketRows.filter((t) => t.checked_in_at).length,

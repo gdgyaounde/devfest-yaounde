@@ -1,33 +1,35 @@
 # Check-in and order management
 
-For the people running the door and the merch table. The door has a scanner
-screen (below); the merch table works from **Admin → Shop orders**. Both need
-the organiser permission.
+For the people running the door and the merch table. On the day, the door,
+the meal & swag tables and merch pickup all run from the **day-of tools**
+(`/volunteer`) — which volunteers can use without being admins. See
+[volunteers.md](volunteers.md) for adding them and for the meal/swag and merch
+stations; this guide covers the door and the order back office.
 
 ---
 
 ## Who is allowed
 
-Both actions require being an **organiser**, which is a row in the `organisers`
-table. Being signed in is not enough: these read and write other people's data.
+- **Volunteers** (ADR 0079) can use the day-of tools only: door check-in, meal
+  & swag, merch pickup. Add them from **Admin → Users → Make volunteer**; their
+  access ends by itself at 23:59 the day after the event. See
+  [volunteers.md](volunteers.md).
+- **Admins** (a row in `organisers`) can do all of that, plus the whole
+  dashboard. Don't make door helpers admins: an admin can read every ticket,
+  payment and refund, and change the site.
 
-To add someone (Supabase dashboard → Table editor → `organisers`):
-
-| Column    | Value                                                                   |
-| --------- | ----------------------------------------------------------------------- |
-| `user_id` | Their id from **Authentication → Users**. They must sign in once first. |
-| `note`    | Optional — "door team", "merch", so you know who is who later.          |
-
-Removing the row removes the access immediately. There is nothing to redeploy,
-which is the point: you can add a volunteer on the morning of the event.
+Being signed in is not enough for either: these read and write other
+people's data. Removing access takes effect immediately; there is nothing to
+redeploy.
 
 ---
 
-## The door scanner — `/admin/check-in` (ADR 0078)
+## The door scanner — `/volunteer/check-in` (ADR 0078, 0079)
 
-Open **Admin → Door check-in** (the yellow button at the top of the menu), or
-go straight to `devfest.gdgyaounde.com/fr/admin/check-in` on the phone. Add it
-to the home screen the day before so it is one tap away.
+Open `devfest.gdgyaounde.com/fr/volunteer` on the phone and tap **Accueil /
+Door check-in** (admins also have a **Day-of tools** button at the top of the
+dashboard menu). Add it to the home screen the day before so it is one tap
+away. The old `/admin/check-in` address still works and redirects here.
 
 **The first time**, tap **Start camera** and allow the camera. After that the
 camera starts by itself whenever the page opens.
@@ -47,6 +49,10 @@ what happened:
 The same badge held in front of the camera is only counted once: after a scan
 the camera ignores that badge for a few seconds.
 
+**No code at all?** Use **No code? Find them by name** under the code box:
+type at least three letters of the name on the ticket, then **Check in** next
+to the right person. Only names and passes are shown — never emails.
+
 **Typing a code:** when the QR will not scan (cracked screen, dead battery,
 printed copy), type the code into **Type the code instead**. Lower case,
 spaces and missing dashes are fine, and an O typed for a 0 (or an I or L for
@@ -57,6 +63,8 @@ a 1) is corrected for you.
 **"Recent scans on this phone"** and the counter at the top only cover this
 phone, and reset when the page is reloaded. The real record is in the
 database — **Admin → Tickets** shows who is checked in.
+
+The screen is in French by default; switch to English with `/en/volunteer`.
 
 ### When the Wi-Fi drops
 

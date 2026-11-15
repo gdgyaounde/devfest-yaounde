@@ -18,7 +18,7 @@ const SETTLE_MS = 2600;
 const SETTLE_CALM_MS = 600;
 
 /** Where it never appears: the dashboard, the terms page itself, the wall. */
-const EXCLUDED = /^\/[a-z]{2}\/(admin|terms|wall)(\/|$)/;
+const EXCLUDED = /^\/[a-z]{2}\/(admin|volunteer|terms|wall)(\/|$)/;
 
 /**
  * "Our participation terms have changed" — once per browser, per version

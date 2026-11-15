@@ -91,9 +91,7 @@ export function ClaimTicket({
         <h2 className="font-sans text-heading-l font-bold text-black02">
           {t("signInTitle")}
         </h2>
-        <p className="mt-3 text-body-m text-black02/80">
-          {t("signInPrompt")}
-        </p>
+        <p className="mt-3 text-body-m text-black02/80">{t("signInPrompt")}</p>
         <button
           type="button"
           onClick={() =>
@@ -145,12 +143,7 @@ export function ClaimTicket({
 
   return (
     <div className="max-w-md rounded-lg border-2 border-black02 bg-offwhite p-7">
-      <WarningCircle
-        size={32}
-        weight="fill"
-        aria-hidden
-        className="text-red"
-      />
+      <WarningCircle size={32} weight="fill" aria-hidden className="text-red" />
       <h2 className="mt-3 font-sans text-heading-l font-bold text-black02">
         {t(message.title)}
       </h2>

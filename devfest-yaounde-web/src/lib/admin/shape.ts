@@ -92,6 +92,15 @@ export interface AdminAdmin {
   addedAt: string;
 }
 
+/** A day-of volunteer (ADR 0079) — not an admin, no dashboard. */
+export interface AdminVolunteer {
+  id: string;
+  displayName: string | null;
+  email: string | null;
+  addedAt: string;
+  expiresAt: string;
+}
+
 export interface AdminDiscount {
   code: string;
   kind: string;
@@ -220,6 +229,8 @@ export interface AdminData {
   organiserId: string;
   /** Every current admin, oldest first. */
   admins: AdminAdmin[];
+  /** Day-of volunteers, active or expired, oldest first (ADR 0079). */
+  volunteers: AdminVolunteer[];
   counts: {
     paidTickets: number;
     checkedIn: number;

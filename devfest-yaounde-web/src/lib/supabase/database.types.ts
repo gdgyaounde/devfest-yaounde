@@ -545,6 +545,8 @@ export type Database = {
           deposit_id: string
           id: string
           is_self: boolean
+          meal_collected_at: string | null
+          swag_collected_at: string | null
           tier_id: string
           user_id: string
         }
@@ -559,6 +561,8 @@ export type Database = {
           deposit_id: string
           id?: string
           is_self?: boolean
+          meal_collected_at?: string | null
+          swag_collected_at?: string | null
           tier_id: string
           user_id: string
         }
@@ -573,6 +577,8 @@ export type Database = {
           deposit_id?: string
           id?: string
           is_self?: boolean
+          meal_collected_at?: string | null
+          swag_collected_at?: string | null
           tier_id?: string
           user_id?: string
         }
@@ -586,6 +592,30 @@ export type Database = {
           },
         ]
       }
+      volunteers: {
+        Row: {
+          added_at: string
+          added_by: string | null
+          expires_at: string
+          note: string | null
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by?: string | null
+          expires_at: string
+          note?: string | null
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string | null
+          expires_at?: string
+          note?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -594,6 +624,10 @@ export type Database = {
       apply_paid_deposit: {
         Args: { p_badge_codes?: string[]; p_deposit_id: string }
         Returns: string
+      }
+      collect_ticket_perk: {
+        Args: { p_perk: string; p_ticket_id: string }
+        Returns: Json
       }
       bump_rate_limit: {
         Args: {
@@ -646,6 +680,15 @@ export type Database = {
           p_action: string
           p_actor: string
           p_confirm_self?: boolean
+          p_target: string
+        }
+        Returns: string
+      }
+      set_volunteer: {
+        Args: {
+          p_action: string
+          p_actor: string
+          p_expires_at?: string
           p_target: string
         }
         Returns: string

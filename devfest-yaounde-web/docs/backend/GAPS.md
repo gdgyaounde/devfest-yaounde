@@ -117,8 +117,9 @@ refused at checkout — the screen keeps the basket and says why.
 
 ### G5 — Organiser tools are unbuilt (backend ready) — RESOLVED
 
-Resolved 2026-11-15: the door scanner is `/admin/check-in` (ADR 0078) and
-order status is managed from **Admin → Shop orders**. Kept below for history.
+Resolved 2026-11-15: the door scanner is `/volunteer/check-in` (ADR 0078,
+moved there by ADR 0079 so volunteers can use it) and order status is managed
+from **Admin → Shop orders**. Kept below for history.
 
 <!-- Deferred 2026-09-02 to a future phase. -->
 

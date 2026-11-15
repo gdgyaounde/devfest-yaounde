@@ -3,7 +3,13 @@
 import { useState } from "react";
 import type { PastEditionPhoto } from "@/data/types";
 import { EntityCrud } from "../forms/EntityCrud";
-import { Field, ImageField, LocalizedInput, TextInput, usePendingPhoto } from "../forms/fields";
+import {
+  Field,
+  ImageField,
+  LocalizedInput,
+  TextInput,
+  usePendingPhoto,
+} from "../forms/fields";
 import { useToast } from "../forms/Toast";
 import { InfoBanner } from "./shared";
 
@@ -49,11 +55,11 @@ export function AdminMemoryLane({ rows }: { rows: PastEditionPhoto[] }) {
   return (
     <div className="flex flex-col gap-5">
       <InfoBanner>
-        Four or five portrait photos read best — Memory Lane is a taste of
-        past editions, not a full album (the &ldquo;View the gallery&rdquo;
-        link under Settings is where the rest lives). With nothing uploaded,
-        the home page shows a &ldquo;coming soon&rdquo; placeholder instead
-        of an empty grid.
+        Four or five portrait photos read best — Memory Lane is a taste of past
+        editions, not a full album (the &ldquo;View the gallery&rdquo; link
+        under Settings is where the rest lives). With nothing uploaded, the home
+        page shows a &ldquo;coming soon&rdquo; placeholder instead of an empty
+        grid.
       </InfoBanner>
 
       <EntityCrud<PastEditionPhoto>
@@ -97,7 +103,10 @@ export function AdminMemoryLane({ rows }: { rows: PastEditionPhoto[] }) {
         )}
         renderForm={(draft, patch) => (
           <>
-            <Field label="Photo" hint="Portrait works best — this sits in a tall polaroid frame.">
+            <Field
+              label="Photo"
+              hint="Portrait works best — this sits in a tall polaroid frame."
+            >
               <ImageField
                 url={draft.imageUrl}
                 name={draft.alt.en || "Photo"}
@@ -123,7 +132,10 @@ export function AdminMemoryLane({ rows }: { rows: PastEditionPhoto[] }) {
                 value={draft.year?.toString() ?? ""}
                 onChange={(v) =>
                   patch({
-                    year: v.trim() === "" ? undefined : Math.max(2000, Number(v) || 0),
+                    year:
+                      v.trim() === ""
+                        ? undefined
+                        : Math.max(2000, Number(v) || 0),
                   })
                 }
               />
