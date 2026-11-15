@@ -16,7 +16,9 @@
  */
 import "server-only";
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
-import { createAdminSupabase } from "@/lib/supabase/server";
+import { createAdminSupabase, currentUser } from "@/lib/supabase/server";
+import { isCollectorFrameId } from "./frames";
+import { getPaidTicketEntitlement } from "@/lib/tickets/entitlement";
 
 /** Private on purpose: reads go through a signed URL that we mint per read. */
 export const GALLERY_BUCKET = "dp-cards";
@@ -44,7 +46,9 @@ export type SubmitRejection =
   | "too_big_dimensions"
   | "bad_nickname"
   | "bad_locale"
-  | "no_consent";
+  | "no_consent"
+  /** A collector frame (ADR 0077) from somebody not entitled to it. */
+  | "collector_locked";
 
 export class GalleryRejected extends Error {
   constructor(readonly reason: SubmitRejection) {
@@ -151,13 +155,34 @@ export function cleanLocale(raw: FormDataEntryValue | null): "fr" | "en" {
   return raw;
 }
 
-/** Frame id from the generator. Empty is allowed (older clients). */
+/**
+ * Frame id from the generator. Empty is allowed (older clients).
+ *
+ * Shape only — whether a COLLECTOR frame id is allowed depends on who is
+ * saving, so the route checks that separately (`requireCollectorEntitlement`).
+ */
 export function cleanTheme(raw: FormDataEntryValue | null): string {
   const value = typeof raw === "string" ? raw.trim().slice(0, 40) : "";
   if (value && !/^[a-z0-9-]+$/i.test(value)) {
     throw new GalleryRejected("bad_nickname");
   }
   return value;
+}
+
+/**
+ * A collector frame on the wall is a paid-pass perk (ADR 0077): refused
+ * unless the saver is signed in AND holds a paid pass of their own. Without
+ * this, anyone could post a card claiming the frame by sending its id — the
+ * id is public; only the definition is gated.
+ */
+export async function requireCollectorEntitlement(
+  theme: string,
+): Promise<void> {
+  if (!isCollectorFrameId(theme)) return;
+  const user = await currentUser().catch(() => null);
+  if (!user) throw new GalleryRejected("collector_locked");
+  const entitlement = await getPaidTicketEntitlement(user.id);
+  if (!entitlement.entitled) throw new GalleryRejected("collector_locked");
 }
 
 /**

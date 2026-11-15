@@ -22,6 +22,7 @@ import {
   cleanLocale,
   cleanNickname,
   cleanTheme,
+  requireCollectorEntitlement,
   mintDeletionToken,
   normaliseImage,
   removeCard,
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest) {
     nickname = cleanNickname(form.get("nickname"));
     locale = cleanLocale(form.get("locale"));
     theme = cleanTheme(form.get("theme"));
+    await requireCollectorEntitlement(theme);
 
     const image = form.get("image");
     if (!(image instanceof Blob)) throw new GalleryRejected("not_an_image");

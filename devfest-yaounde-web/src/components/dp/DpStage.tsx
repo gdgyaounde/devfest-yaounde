@@ -12,6 +12,7 @@ import {
 } from "@/lib/dp/compose";
 import { STICKER_BASE, type PlacedSticker } from "@/lib/dp/stickers";
 import { clampTransform, overshootOf, type Box } from "./pan";
+import type { DpFrame } from "@/lib/dp/frames";
 
 /**
  * Resolution the PREVIEW is drawn at — not the download, which is DP_SIZE or
@@ -34,6 +35,8 @@ const TILT_MAX = 9;
 export interface DpStageProps {
   photo: ImageBitmap;
   frameId: string;
+  /** A resolved collector frame (ADR 0077); overrides the catalog lookup. */
+  frame?: DpFrame;
   nickname: string;
   transform: DpTransform;
   onTransformChange: (next: DpTransform) => void;
@@ -78,6 +81,7 @@ export interface DpStageProps {
 export function DpStage({
   photo,
   frameId,
+  frame,
   nickname,
   transform,
   onTransformChange,
@@ -120,6 +124,7 @@ export function DpStage({
       renderDp(canvas, {
         photo,
         frameId,
+        frame,
         nickname,
         transform,
         effects,
@@ -145,6 +150,7 @@ export function DpStage({
   }, [
     photo,
     frameId,
+    frame,
     nickname,
     transform,
     effects,

@@ -102,6 +102,36 @@ background and starts being something the card is holding. Patterns made of
 loose pieces get it; a checkerboard spilling over a photograph would just look
 like a mistake.
 
+### Collector frames — paid pass holders only (ADR 0077)
+
+Two extra styles, **Gold foil** (`foil`: flat metallic-yellow art-deco line
+work on black) and **Ticket stub** (`stub`: a die-cut ticket with a
+perforated tear line and a serial strip showing the holder's tier — SONNET …
+MYTHOS), each with an "Édition collector · DevFest Yaoundé 2026" plate.
+
+They are **not** in `DP_FRAMES`. Their definitions live in
+`src/lib/dp/collector-frames.ts` (server-only) and are sent by
+`GET /api/dp/collector-frames` only to someone signed in who holds a paid
+ticket of their own — `is_self`, or claimed into their account — on a tier
+that costs money, with no granted refund. A buyer's unclaimed tickets for
+friends do not count. The rule is `getPaidTicketEntitlement()` in
+`src/lib/tickets/entitlement.ts`.
+
+- Everyone else sees two locked tiles ("For paid pass holders") linking to
+  `/tickets` while sales are open, to the ticket FAQs after. The generator
+  never waits on the check — it works signed out, exactly as before.
+- The first time a holder sees them, the two frames pop in with an
+  "Unlocked!" tag (once per browser).
+- The **wall refuses** a card in a collector frame unless the person posting
+  it is signed in and entitled — the frame ids are public, the definitions
+  are not.
+
+**To change them next year:** edit `collectorFrames()` in
+`collector-frames.ts` (colours, labels), and the `foil` / `stub` routines in
+`patterns.ts` for the drawing. Keep them flat and yellow-family, and check
+both a 1080 square and a 2160 tall export. To add a third, add its id to
+`COLLECTOR_FRAME_IDS` in `frames.ts` as well, so the wall recognises it.
+
 ## Effects
 
 **Looks** (one at a time): as shot, duotone, halftone, black & white,

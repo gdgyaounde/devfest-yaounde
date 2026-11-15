@@ -77,6 +77,11 @@ export const RATE_LIMITS = {
    * fixes a typo or two; twenty in five minutes is already generous.
    */
   ticketEdit: { bucket: "ticket-edit", limit: 20, windowSeconds: 300 },
+  /**
+   * The collector DP frames check (ADR 0077). Read-only and per person; the
+   * generator asks once per visit.
+   */
+  dpCollector: { bucket: "dp-collector", limit: 30, windowSeconds: 300 },
   /** Dashboard writes. Generous for a person, useless for a script. */
   adminWrite: { bucket: "admin-write", limit: 60, windowSeconds: 300 },
   /**

@@ -126,6 +126,12 @@ export const DEFAULT_EFFECTS: DpEffects = {
 export interface DpComposeInput {
   photo: ImageBitmap;
   frameId?: string;
+  /**
+   * A resolved style, used instead of looking `frameId` up in the public
+   * catalog — how the COLLECTOR frames (ADR 0077) are drawn: their
+   * definitions come from the entitlement API, never from `frames.ts`.
+   */
+  frame?: DpFrame;
   /** Free-form display name — no real-name requirement (PAGES.md §9). */
   nickname: string;
   transform?: DpTransform;
@@ -1038,6 +1044,89 @@ function drawPlate(
   }
 }
 
+/* --------------------------------------------------------------- collector */
+
+/**
+ * The collector frames' extras (ADR 0077).
+ *
+ * - An "édition collector · DevFest Yaoundé 2026" plate straddling the
+ *   photo's top edge, with an EMBOSSED look made only of flat offset layers
+ *   — ink below-right, accent above-left, then the plate — never a ramp.
+ * - On the ticket stub, a serial strip running up the right-hand margin
+ *   beside the tear line: tier · Nº · edition. The number is a stable hash
+ *   of the nickname, so the preview and the export agree, and two holders
+ *   rarely share one. It is decoration, not a credential.
+ */
+function drawCollectorDetails(
+  ctx: CanvasRenderingContext2D,
+  layout: CardLayout,
+  frame: DpFrame,
+  nickname: string,
+  locale: "fr" | "en",
+) {
+  const u = layout.unit;
+  const edition = `${EVENT.name.toUpperCase()} ${EVENT.year}`;
+  const label =
+    locale === "fr"
+      ? `ÉDITION COLLECTOR · ${edition}`
+      : `COLLECTOR EDITION · ${edition}`;
+
+  ctx.save();
+  ctx.translate(layout.photo.x + u * 0.04, layout.photo.y);
+  ctx.rotate(-0.035);
+  ctx.font = `700 ${Math.round(u * 0.024)}px "Google Sans Code", ui-monospace, monospace`;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  const padX = u * 0.026;
+  const w = ctx.measureText(label).width + padX * 2;
+  const h = u * 0.058;
+  const r = h * 0.3;
+  const y = -h / 2;
+  // Embossed: two flat offsets, then the face.
+  ctx.fillStyle = "#1E1E1E";
+  roundedRectPath(ctx, u * 0.006, y + u * 0.006, w, h, r);
+  ctx.fill();
+  ctx.fillStyle = frame.accent;
+  roundedRectPath(ctx, -u * 0.0025, y - u * 0.0025, w, h, r);
+  ctx.fill();
+  ctx.fillStyle = frame.plate;
+  ctx.strokeStyle = "#1E1E1E";
+  ctx.lineWidth = Math.max(2, u * 0.005);
+  roundedRectPath(ctx, 0, y, w, h, r);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = frame.foreground;
+  ctx.fillText(label, padX, u * 0.002);
+  ctx.restore();
+
+  if (frame.pattern === "stub") {
+    let hash = 2166136261;
+    for (const ch of nickname.trim().toLowerCase() || "devfest") {
+      hash ^= ch.codePointAt(0) ?? 0;
+      hash = Math.imul(hash, 16777619);
+    }
+    const serial = String((hash >>> 0) % 10000).padStart(4, "0");
+    const strip = `${frame.collector?.tierName ?? ""} · Nº ${serial} · ${edition}`;
+    ctx.save();
+    ctx.translate(layout.width - u * 0.022, layout.height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = "#1E1E1E";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    fitFont(
+      ctx,
+      strip,
+      layout.height - u * 0.24,
+      (px) =>
+        `700 ${Math.round(px)}px "Google Sans Code", ui-monospace, monospace`,
+      u * 0.022,
+      u * 0.012,
+    );
+    ctx.fillText(strip, 0, 0);
+    ctx.restore();
+  }
+}
+
 /* ------------------------------------------------------------------ render */
 
 /**
@@ -1051,7 +1140,7 @@ export function renderDp(
 ): void {
   const width = input.size ?? DP_SIZE;
   const ratio = input.ratio ?? "1:1";
-  const frame = findFrame(input.frameId ?? DEFAULT_FRAME_ID);
+  const frame = input.frame ?? findFrame(input.frameId ?? DEFAULT_FRAME_ID);
   if (!frame) throw new Error(`unknown frame: ${input.frameId}`);
 
   const layout = layoutCard(width, ratio, input.corners ?? "rounded");
@@ -1135,6 +1224,11 @@ export function renderDp(
   // 5. The plate: name, lockup, badge.
   const badge = findBadge(input.badgeId ?? DEFAULT_BADGE_ID);
   drawPlate(ctx, layout, frame, input.nickname, badge?.text[locale] ?? "");
+
+  // 5b. Collector frames only: their edition plate and the stub's serial.
+  if (frame.collector) {
+    drawCollectorDetails(ctx, layout, frame, input.nickname, locale);
+  }
 
   // 6. The card's own outline, last, so nothing sits on top of it.
   ctx.save();

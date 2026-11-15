@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { DpGenerator } from "@/components/dp/DpGenerator";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
+import { loadSettings } from "@/lib/content/settings";
 
 export async function generateMetadata({
   params,
@@ -35,6 +36,7 @@ export default async function DpGeneratorPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.dpGenerator");
+  const settings = await loadSettings();
 
   return (
     <main id="main-content" tabIndex={-1} className="flex-1 pt-32 sm:pt-28">
@@ -47,7 +49,9 @@ export default async function DpGeneratorPage({
         </p>
 
         <div className="mt-16">
-          <DpGenerator />
+          {/* The sales cutoff decides where the locked collector tiles
+              point: /tickets while sales are open, the FAQ after. */}
+          <DpGenerator salesCloseAt={settings.ticketing.salesCloseAt} />
         </div>
       </SectionContainer>
     </main>

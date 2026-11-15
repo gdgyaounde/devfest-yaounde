@@ -321,6 +321,111 @@ function tiles({ ctx, frame, w, h, u }: PatternArgs) {
   }
 }
 
+/* --------------------------------------------------- collector (ADR 0077) */
+/*
+ * These two routines ship in the public bundle, and that is fine: without a
+ * frame definition — which only `/api/dp/collector-frames` hands out, to
+ * paid pass holders — nothing ever selects them.
+ */
+
+/**
+ * GOLD FOIL. Deep black ground and flat metallic-yellow line work: art-deco
+ * fans of concentric arcs from each corner, and a double foil rule just
+ * inside the card edge. No ramp anywhere — the "metal" is two flat yellows
+ * alternating line by line.
+ */
+function foil({ ctx, frame, w, h, u }: PatternArgs) {
+  const palette = colours(frame);
+  const step = u * 0.022;
+  const line = Math.max(1, u * 0.0035);
+  const corners: [number, number, number][] = [
+    [0, 0, 0],
+    [w, 0, Math.PI / 2],
+    [w, h, Math.PI],
+    [0, h, (3 * Math.PI) / 2],
+  ];
+  ctx.lineWidth = line;
+  for (const [cx, cy, start] of corners) {
+    for (let i = 1; i <= 9; i++) {
+      ctx.strokeStyle = palette[i % palette.length];
+      ctx.beginPath();
+      ctx.arc(cx, cy, step * i * 1.6, start, start + Math.PI / 2);
+      ctx.stroke();
+    }
+    // Rays between the arcs — the fan's ribs.
+    for (let k = 1; k < 6; k++) {
+      const a = start + (k / 6) * (Math.PI / 2);
+      ctx.strokeStyle = palette[0];
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * step * 1.6, cy + Math.sin(a) * step * 1.6);
+      ctx.lineTo(
+        cx + Math.cos(a) * step * 14.4,
+        cy + Math.sin(a) * step * 14.4,
+      );
+      ctx.stroke();
+    }
+  }
+  // The double foil rule.
+  for (const [inset, colour] of [
+    [u * 0.022, palette[0]],
+    [u * 0.034, palette[palette.length - 1]],
+  ] as const) {
+    ctx.strokeStyle = colour;
+    roundedRectPath(ctx, inset, inset, w - inset * 2, h - inset * 2, u * 0.11);
+    ctx.stroke();
+  }
+  // Diamond studs on the edge midpoints.
+  ctx.fillStyle = palette[0];
+  for (const [x, y] of [
+    [w / 2, u * 0.028],
+    [w / 2, h - u * 0.028],
+    [u * 0.028, h / 2],
+    [w - u * 0.028, h / 2],
+  ]) {
+    const s = u * 0.012;
+    ctx.beginPath();
+    ctx.moveTo(x, y - s);
+    ctx.lineTo(x + s, y);
+    ctx.lineTo(x, y + s);
+    ctx.lineTo(x - s, y);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+/**
+ * TICKET STUB. The card IS the ticket: fine security pinstripes, and down
+ * the right-hand margin a perforated tear line with die-cut notches top and
+ * bottom. The serial strip printed beside it is drawn by the compositor
+ * (`drawCollectorDetails`), because it needs the holder's tier and name.
+ */
+function stub({ ctx, frame, w, h, u }: PatternArgs) {
+  const palette = colours(frame);
+  // Security print: hairline pinstripes, alternating weight.
+  ctx.strokeStyle = palette[0];
+  for (let y = u * 0.012, i = 0; y < h; y += u * 0.014, i++) {
+    ctx.lineWidth = Math.max(1, u * (i % 3 === 0 ? 0.0028 : 0.0012));
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.stroke();
+  }
+  const tearX = w - u * 0.05;
+  // A die-cut notch on the left edge, so the stub reads as punched, not
+  // just striped. (Not at the tear line's ends: those fall inside the card's
+  // rounded corners and were clipped away.)
+  ctx.fillStyle = "#1E1E1E";
+  ctx.beginPath();
+  ctx.arc(0, h * 0.5, u * 0.03, 0, Math.PI * 2);
+  ctx.fill();
+  // The perforation: a column of round holes.
+  for (let y = u * 0.06; y < h - u * 0.05; y += u * 0.026) {
+    ctx.beginPath();
+    ctx.arc(tearX, y, u * 0.0065, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
 const PATTERNS = {
   confetti,
   terrazzo,
@@ -330,6 +435,8 @@ const PATTERNS = {
   grid,
   rays,
   tiles,
+  foil,
+  stub,
 } as const;
 
 export function drawPattern(args: PatternArgs) {

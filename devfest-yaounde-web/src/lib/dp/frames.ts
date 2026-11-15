@@ -22,6 +22,9 @@
  * `grid`      — a drafting grid with heavier rules and corner ticks
  * `rays`      — flat wedges radiating from a corner, no colour ramp
  * `tiles`     — two-tone rounded tiling, quietly dense
+ * `foil`      — COLLECTOR: flat metallic-yellow art-deco line work on black
+ * `stub`      — COLLECTOR: a die-cut ticket stub — pinstripes, notches, a
+ *               perforated tear line
  */
 export type DpPattern =
   | "confetti"
@@ -31,7 +34,9 @@ export type DpPattern =
   | "waves"
   | "grid"
   | "rays"
-  | "tiles";
+  | "tiles"
+  | "foil"
+  | "stub";
 
 export interface DpFrame {
   id: string;
@@ -50,6 +55,26 @@ export interface DpFrame {
   palette?: string[];
   /** [shadow, highlight] for the duotone and halftone photo effects. */
   duotone?: [string, string];
+  /**
+   * Present on the COLLECTOR frames only (ADR 0077) — and those frames are
+   * never in this file: their definitions are served by
+   * `GET /api/dp/collector-frames` to entitled holders. `tierName` is the
+   * holder's tier (SONNET … MYTHOS), printed on the ticket-stub serial.
+   */
+  collector?: { tierName: string };
+}
+
+/**
+ * The collector frames' ids — public on purpose (the wall needs to recognise
+ * and refuse them), unlike their definitions. See ADR 0077.
+ */
+export const COLLECTOR_FRAME_IDS = [
+  "collector-foil",
+  "collector-stub",
+] as const;
+
+export function isCollectorFrameId(id: string): boolean {
+  return (COLLECTOR_FRAME_IDS as readonly string[]).includes(id);
 }
 
 const INK = "#1E1E1E";

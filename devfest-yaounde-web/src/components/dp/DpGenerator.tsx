@@ -5,7 +5,9 @@ import {
   Copy,
   DownloadSimple,
   ImageSquare,
+  LockSimple,
   ShareNetwork,
+  Sparkle,
   Trash,
   Warning,
 } from "@phosphor-icons/react";
@@ -37,7 +39,11 @@ import {
   DP_BADGES,
   DP_FRAMES,
   findFrame,
+  type DpFrame,
 } from "@/lib/dp/frames";
+import { bouncyPop } from "@/lib/motion";
+import { useBeforeInstant } from "@/lib/use-before-instant";
+import { useSeenOnce } from "@/lib/use-seen-once";
 import {
   SHAPE_STICKERS,
   stickerName,
@@ -118,7 +124,16 @@ type Notice =
  * freeze the live preview this sheet exists to sit beside. `FilterLayout`
  * makes the same call for the same reason.
  */
-export function DpGenerator() {
+/** The collector frames' state (ADR 0077): fetched lazily, never awaited. */
+type CollectorState =
+  { status: "loading" | "locked" } | { status: "unlocked"; frames: DpFrame[] };
+
+export function DpGenerator({
+  salesCloseAt = null,
+}: {
+  /** Where the locked collector tiles point: /tickets until this, the FAQ after. */
+  salesCloseAt?: string | null;
+}) {
   const t = useTranslations("pages.dpGenerator");
   const tError = useTranslations("errors.dp");
   const locale = useLocale();
@@ -128,6 +143,44 @@ export function DpGenerator() {
   const [nickname, setNickname] = useState("");
   const [photo, setPhoto] = useState<ImageBitmap | null>(null);
   const [frameId, setFrameId] = useState(DEFAULT_FRAME_ID);
+  const tc = useTranslations("pages.dpGenerator.collector");
+  const salesOpen = useBeforeInstant(salesCloseAt, true);
+  const [collector, setCollector] = useState<CollectorState>({
+    status: "loading",
+  });
+  /*
+   * COLLECTOR FRAMES (ADR 0077). Asked for once, in the background: the
+   * generator works the whole time, signed in or not (ADR 0015/0034), and
+   * only the two locked tiles wait on the answer. The definitions come from
+   * the server and only to entitled holders — they are not in this bundle.
+   */
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/dp/collector-frames", { cache: "no-store" })
+      .then(async (res) => {
+        const json = res.ok ? await res.json() : null;
+        if (cancelled) return;
+        setCollector(
+          json?.entitled && Array.isArray(json.frames)
+            ? { status: "unlocked", frames: json.frames as DpFrame[] }
+            : { status: "locked" },
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setCollector({ status: "locked" });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const collectorFrames =
+    collector.status === "unlocked" ? collector.frames : [];
+  /* The unlock moment: the first time an entitled holder opens the style
+     picker, the two frames pop in with an "Unlocked!" tag — once per
+     browser (useSeenOnce), bouncy, and still under reduced motion. */
+  const [unlockSeen, markUnlockSeen] = useSeenOnce(
+    collector.status === "unlocked" ? "devfest:collector-unlocked" : null,
+  );
   const [badgeId, setBadgeId] = useState(DEFAULT_BADGE_ID);
   const [ratio, setRatio] = useState<DpRatio>("1:1");
   const [corners, setCorners] = useState<DpCorners>("rounded");
@@ -180,7 +233,38 @@ export function DpGenerator() {
     [photo, transform, ratio],
   );
 
-  const frame = findFrame(frameId) ?? DP_FRAMES[0];
+  /* "Opens the picker" = the collector row actually comes into view: the
+     style group is always visible on desktop and behind a tab on phones,
+     so an observer is the one signal that means the same thing on both. */
+  const collectorRowRef = useRef<HTMLDivElement>(null);
+  const [collectorInView, setCollectorInView] = useState(false);
+  useEffect(() => {
+    const row = collectorRowRef.current;
+    if (!row || collector.status !== "unlocked" || unlockSeen) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setCollectorInView(true);
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(row);
+    return () => observer.disconnect();
+  }, [collector.status, unlockSeen, tab]);
+  const unlocking =
+    collector.status === "unlocked" && !unlockSeen && collectorInView;
+  useEffect(() => {
+    if (!unlocking) return;
+    const id = window.setTimeout(markUnlockSeen, 2400);
+    return () => window.clearTimeout(id);
+  }, [unlocking, markUnlockSeen]);
+
+  const frame =
+    collectorFrames.find((f) => f.id === frameId) ??
+    findFrame(frameId) ??
+    DP_FRAMES[0];
+  /* A collector id with no definition (signed out mid-session) falls back
+     to the default frame rather than rendering nothing. */
+  const effectiveFrameId = frame.id;
   const caption = shareCaption(lang);
   const selectedSticker = stickers.find((s) => s.key === selected) ?? null;
 
@@ -285,7 +369,8 @@ export function DpGenerator() {
     try {
       return await composeDp({
         photo,
-        frameId,
+        frameId: effectiveFrameId,
+        frame,
         nickname,
         transform: safeTransform,
         effects,
@@ -307,7 +392,7 @@ export function DpGenerator() {
       card: blob,
       nickname,
       locale: lang,
-      theme: frameId,
+      theme: effectiveFrameId,
     });
   }
 
@@ -399,7 +484,8 @@ export function DpGenerator() {
           {photo ? (
             <DpStage
               photo={photo}
-              frameId={frameId}
+              frameId={effectiveFrameId}
+              frame={frame}
               nickname={nickname}
               transform={safeTransform}
               onTransformChange={setTransform}
@@ -670,6 +756,75 @@ export function DpGenerator() {
                   title={t("groups.style")}
                   active={tab === "style"}
                 >
+                  {/* Collector frames FIRST (ADR 0077): the two real ones
+                      for paid holders, two locked teasers for everyone
+                      else — never hidden, because the point is that they
+                      exist. Nothing here blocks the rest of the picker. */}
+                  <Legend>{tc("legend")}</Legend>
+                  <div
+                    ref={collectorRowRef}
+                    className="mb-6 flex flex-wrap gap-2.5"
+                  >
+                    {collector.status === "unlocked"
+                      ? collector.frames.map((option) => (
+                          <span
+                            key={option.id}
+                            className={unlocking ? bouncyPop : ""}
+                          >
+                            <Choice
+                              name="dp-frame"
+                              value={option.id}
+                              checked={option.id === frameId}
+                              onChange={() => setFrameId(option.id)}
+                              label={option.label[lang]}
+                              tag={
+                                <span className="ml-1 inline-flex items-center gap-1 rounded-pill border-2 border-black02 bg-black02 px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide text-primary">
+                                  <Sparkle
+                                    size={11}
+                                    weight="fill"
+                                    aria-hidden
+                                  />
+                                  {unlocking ? tc("unlocked") : tc("badge")}
+                                </span>
+                              }
+                              swatch={
+                                <span
+                                  aria-hidden
+                                  className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-black02"
+                                  style={{ background: option.background }}
+                                >
+                                  <span
+                                    className="h-3 w-3 rounded-sm border-2"
+                                    style={{ borderColor: option.accent }}
+                                  />
+                                </span>
+                              }
+                            />
+                          </span>
+                        ))
+                      : [0, 1].map((i) => (
+                          <Link
+                            key={i}
+                            href={
+                              salesOpen
+                                ? "/tickets"
+                                : "/faqs#faq-section-tickets"
+                            }
+                            aria-label={tc("lockedLabel")}
+                            aria-busy={collector.status === "loading"}
+                            className="flex items-center gap-2 rounded-pill border-2 border-dashed border-black02/50 bg-offwhite/60 py-1.5 pl-1.5 pr-4 font-sans text-body-m text-black02/75 transition-colors hover:border-black02 hover:bg-pastel"
+                          >
+                            <span
+                              aria-hidden
+                              className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-black02 bg-black02 text-primary"
+                            >
+                              <LockSimple size={14} weight="bold" />
+                            </span>
+                            {tc("locked")}
+                          </Link>
+                        ))}
+                  </div>
+
                   <Legend>{t("frames.legend")}</Legend>
                   <div className="flex flex-wrap gap-2.5">
                     {DP_FRAMES.map((option) => (
@@ -1089,6 +1244,7 @@ function Choice({
   onChange,
   label,
   swatch,
+  tag,
 }: {
   name: string;
   value: string;
@@ -1096,6 +1252,8 @@ function Choice({
   onChange: () => void;
   label: string;
   swatch?: ReactNode;
+  /** A small marker after the label — the "Collector" tag (ADR 0077). */
+  tag?: ReactNode;
 }) {
   return (
     <label className="cursor-pointer">
@@ -1114,6 +1272,7 @@ function Choice({
       >
         {swatch}
         {label}
+        {tag}
       </span>
     </label>
   );

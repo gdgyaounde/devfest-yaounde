@@ -558,7 +558,14 @@
         "wall": "Your card's on the <wall>community wall</wall> — go have a look at the others?",
         "dismiss": "Dismiss"
       },
-      "metaDesc": "Build a DevFest Yaoundé profile picture in your browser — pick a style, crop it, sticker it, download it."
+      "metaDesc": "Build a DevFest Yaoundé profile picture in your browser — pick a style, crop it, sticker it, download it.",
+      "collector": {
+        "badge": "Collector",
+        "locked": "For paid pass holders",
+        "lockedLabel": "Locked collector frame — for paid pass holders",
+        "unlocked": "Unlocked!",
+        "legend": "Collector edition"
+      }
     },
     "paymentReturn": {
       "title": "Confirming your payment",

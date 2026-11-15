@@ -558,7 +558,14 @@
         "wall": "Ta carte est sur le <wall>mur de la communauté</wall> — tu vas voir les autres ?",
         "dismiss": "Fermer"
       },
-      "metaDesc": "Crée ta photo de profil DevFest Yaoundé dans ton navigateur — un style, un recadrage, des stickers, et tu télécharges."
+      "metaDesc": "Crée ta photo de profil DevFest Yaoundé dans ton navigateur — un style, un recadrage, des stickers, et tu télécharges.",
+      "collector": {
+        "badge": "Collector",
+        "locked": "Pour les pass payants",
+        "lockedLabel": "Cadre collector verrouillé — réservé aux pass payants",
+        "unlocked": "Débloqué !",
+        "legend": "Édition collector"
+      }
     },
     "paymentReturn": {
       "title": "Confirmation de ton paiement",
