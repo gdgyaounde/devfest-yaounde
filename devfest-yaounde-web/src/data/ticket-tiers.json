@@ -23,20 +23,14 @@
       },
       {
         "label": {
+          "fr": "Les ateliers, dans la limite des places",
+          "en": "Workshops, within each room's capacity"
+        }
+      },
+      {
+        "label": {
           "fr": "Accès aux stands des sponsors",
           "en": "Access to the sponsor stands"
-        }
-      },
-      {
-        "label": {
-          "fr": "Déjeuner et pauses café",
-          "en": "Lunch and coffee breaks"
-        }
-      },
-      {
-        "label": {
-          "fr": "Le badge de l'édition",
-          "en": "This edition's badge"
         }
       }
     ]
@@ -62,6 +56,20 @@
           "fr": "Tout ce que contient le pass gratuit",
           "en": "Everything in the free pass"
         }
+      },
+      {
+        "label": {
+          "fr": "Déjeuner et pauses café",
+          "en": "Lunch and coffee breaks"
+        },
+        "icon": "coffee"
+      },
+      {
+        "label": {
+          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
+          "en": "An event identifier (badge, lanyard, bracelet or similar)"
+        },
+        "icon": "ticket"
       },
       {
         "label": {
@@ -101,6 +109,20 @@
       },
       {
         "label": {
+          "fr": "Déjeuner et pauses café",
+          "en": "Lunch and coffee breaks"
+        },
+        "icon": "coffee"
+      },
+      {
+        "label": {
+          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
+          "en": "An event identifier (badge, lanyard, bracelet or similar)"
+        },
+        "icon": "ticket"
+      },
+      {
+        "label": {
           "fr": "Tote bag de l'édition",
           "en": "This edition's tote bag"
         }
@@ -137,6 +159,20 @@
       },
       {
         "label": {
+          "fr": "Déjeuner et pauses café",
+          "en": "Lunch and coffee breaks"
+        },
+        "icon": "coffee"
+      },
+      {
+        "label": {
+          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
+          "en": "An event identifier (badge, lanyard, bracelet or similar)"
+        },
+        "icon": "ticket"
+      },
+      {
+        "label": {
           "fr": "Bouteille isotherme",
           "en": "Insulated bottle"
         }
@@ -170,6 +206,20 @@
           "fr": "Tout ce que contient FABLE",
           "en": "Everything in FABLE"
         }
+      },
+      {
+        "label": {
+          "fr": "Déjeuner et pauses café",
+          "en": "Lunch and coffee breaks"
+        },
+        "icon": "coffee"
+      },
+      {
+        "label": {
+          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
+          "en": "An event identifier (badge, lanyard, bracelet or similar)"
+        },
+        "icon": "ticket"
       },
       {
         "label": {

@@ -12,6 +12,25 @@
     }
   },
   {
+    "id": "faq-is-devfest-free",
+    "category": "general",
+    "question": {
+      "fr": "DevFest Yaoundé, c'est gratuit ?",
+      "en": "Is DevFest free?"
+    },
+    "answer": {
+      "fr": "Oui ! DevFest Yaoundé est un événement communautaire gratuit. Avec le pass gratuit (Haikyu), tu assistes aux talks et aux ateliers (dans la limite des places), tu passes voir les stands des sponsors et tu repars avec un certificat de participation. Les pass payants ajoutent le repas, les boissons, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et du swag.",
+      "en": "Yes! DevFest Yaoundé is a free community event. With the free pass (Haikyu) you get the talks and the workshops (while there's room), the sponsor stands and a certificate of participation. Paid passes add food, drinks, an event identifier (badge, lanyard, bracelet or similar) and swag."
+    },
+    "cta": {
+      "label": {
+        "fr": "Voir ce que chaque pass comprend",
+        "en": "See what each pass includes"
+      },
+      "href": "/terms"
+    }
+  },
+  {
     "id": "faq-who-organizes",
     "category": "general",
     "question": {
@@ -89,15 +108,15 @@
       "en": "What ticket types are available?"
     },
     "answer": {
-      "fr": "Cinq paliers, nommés d'après les versions de Claude (oui, vraiment) : Haikyu (gratuit), Sonnet, Opus, Fable et Mythos — chaque palier au-dessus débloque plus de swag et d'avantages. Regarde la page Billets pour le détail de chacun.",
-      "en": "Five tiers, named after Claude model releases (yes, really): Haikyu (free), Sonnet, Opus, Fable, and Mythos — each higher tier unlocking more swag and perks. See the Tickets page for exactly what each includes."
+      "fr": "Cinq paliers, nommés d'après les versions de Claude (oui, vraiment). Haikyu est gratuit : il te fait entrer aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le repas et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier.",
+      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag."
     },
     "cta": {
       "label": {
-        "fr": "Voir les tarifs",
-        "en": "See ticket tiers"
+        "fr": "Voir ce que chaque pass comprend",
+        "en": "See what each pass includes"
       },
-      "href": "/tickets"
+      "href": "/terms"
     }
   },
   {
@@ -108,15 +127,15 @@
       "en": "How do I get the free ticket?"
     },
     "answer": {
-      "fr": "Le pass gratuit (Haikyu) se réserve sur notre page communautaire GDG Bevy plutôt que sur ce site — clique depuis la page Billets pour y aller. Une seule réservation gratuite par personne.",
-      "en": "The free pass (Haikyu) is handled through our GDG Bevy page rather than on this site — click through from the Tickets page and RSVP there. You can only claim one free RSVP per person."
+      "fr": "Le pass gratuit (Haikyu) se réserve sur notre page communautaire GDG Bevy, pas sur ce site — une seule réservation par personne. Il te donne accès aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, plus un certificat de participation. Le repas, les boissons, le swag et les identifiants (badge, lanyard, bracelet ou similaire) sont réservés aux pass payants.",
+      "en": "The free pass (Haikyu) is booked on our GDG Bevy community page, not on this site — one RSVP per person. It gets you into the talks, the workshops (while there's room) and the sponsor stands, plus a certificate of participation. Food, drinks, swag and event identifiers (badge, lanyard, bracelet or similar) are for paid passes."
     },
     "cta": {
       "label": {
-        "fr": "Voir les tarifs",
-        "en": "See ticket tiers"
+        "fr": "Lire les conditions de participation",
+        "en": "Read the participation terms"
       },
-      "href": "/tickets"
+      "href": "/terms"
     }
   },
   {
@@ -195,8 +214,34 @@
       "en": "I bought a ticket for a friend — can they manage it themselves?"
     },
     "answer": {
-      "fr": "Oui — si tu as acheté un billet pour quelqu'un d'autre, cette personne peut le récupérer sur son propre compte pour le gérer et se présenter à l'accueil avec.",
-      "en": "Yes — if you bought a ticket on someone else's behalf, they can claim it into their own account to manage and check in with it themselves."
+      "fr": "Oui — si tu as acheté un billet pour quelqu'un d'autre, cette personne peut le récupérer sur son propre compte pour le gérer et se présenter à l'accueil avec. Le billet garde tous les avantages de son palier (repas, identifiant, swag) : c'est le pass qui compte, pas qui l'a payé.",
+      "en": "Yes — if you bought a ticket on someone else's behalf, they can claim it into their own account to manage it and check in with it themselves. The ticket keeps every perk of its tier (food, identifier, swag): it's the pass that counts, not who paid for it."
+    },
+    "cta": {
+      "label": {
+        "fr": "Voir ce que chaque pass comprend",
+        "en": "See what each pass includes"
+      },
+      "href": "/terms"
+    }
+  },
+  {
+    "id": "faq-change-tshirt-size",
+    "category": "tickets",
+    "question": {
+      "fr": "Je peux changer ma taille de T-shirt ?",
+      "en": "Can I change my T-shirt size?"
+    },
+    "answer": {
+      "fr": "Oui — depuis ton compte, jusqu'au mercredi 18 novembre à 23h59 (heure de Yaoundé). Tu peux aussi y corriger le nom de la personne qui vient. Après, tout part à l'impression : écris-nous si quelque chose cloche.",
+      "en": "Yes — from your account, until Wednesday 18 November at 23:59 (Yaoundé time). You can fix the attendee's name there too. After that, everything goes to print — write to us if something's wrong."
+    },
+    "cta": {
+      "label": {
+        "fr": "Mon compte",
+        "en": "My account"
+      },
+      "href": "/account"
     }
   },
   {
@@ -231,15 +276,34 @@
       "en": "Will there be food?"
     },
     "answer": {
-      "fr": "Ça dépend de ton palier de billet — regarde la page Billets pour voir exactement ce qui est inclus dans chacun.",
-      "en": "Depends on your ticket tier — check the Tickets page for exactly what's included with each pass."
+      "fr": "Oui, pour les pass payants (Sonnet, Opus, Fable, Mythos) : le déjeuner et les pauses café sont compris. Le pass gratuit ne comprend ni repas ni boissons — même s'il en reste en fin de journée.",
+      "en": "Yes, for paid passes (Sonnet, Opus, Fable, Mythos): lunch and coffee breaks are included. The free pass doesn't include food or drinks — even if there's some left at the end of the day."
     },
     "cta": {
       "label": {
-        "fr": "Voir les tarifs",
-        "en": "See ticket tiers"
+        "fr": "Voir ce que chaque pass comprend",
+        "en": "See what each pass includes"
       },
-      "href": "/tickets"
+      "href": "/terms"
+    }
+  },
+  {
+    "id": "faq-free-pass-food",
+    "category": "venue",
+    "question": {
+      "fr": "Y aura-t-il à manger pour les pass gratuits ?",
+      "en": "Will there be food for free-pass holders?"
+    },
+    "answer": {
+      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 23h59.",
+      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes are on sale until Wednesday 18 November at 23:59."
+    },
+    "cta": {
+      "label": {
+        "fr": "Lire les conditions de participation",
+        "en": "Read the participation terms"
+      },
+      "href": "/terms"
     }
   },
   {
@@ -250,15 +314,15 @@
       "en": "Can I buy merch without buying a ticket?"
     },
     "answer": {
-      "fr": "Oui — la boutique est ouverte à tous, billet ou pas, avant, pendant et après l'événement.",
-      "en": "Yes — the shop is open to everyone, ticket or not, and stays open before, during, and after the event."
+      "fr": "Oui — la boutique est ouverte à toutes et à tous, billet ou pas, avant, pendant et après l'événement. Acheter du merch ne transforme pas un pass gratuit en pass payant, en revanche : le repas, les identifiants et le swag de palier restent liés aux billets payants.",
+      "en": "Yes — the shop is open to everyone, ticket or not, before, during and after the event. Buying merch doesn't turn a free pass into a paid one, though: food, event identifiers and tier swag stay with paid tickets."
     },
     "cta": {
       "label": {
-        "fr": "Voir la boutique",
-        "en": "Browse the shop"
+        "fr": "Lire les conditions de participation",
+        "en": "Read the participation terms"
       },
-      "href": "/shop"
+      "href": "/terms"
     }
   },
   {

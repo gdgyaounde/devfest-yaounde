@@ -407,10 +407,9 @@ export function TicketCheckout({
                     );
                   })}
                 </ul>
-                {/* The free pass can carry swag too (a certificate, a sticker
-                    pack) — it used to render only on the paid tiers' cards,
-                    so whatever an admin attached here never showed. */}
-                <SwagPreview items={swagFor(tier)} />
+                {/* No swag preview on the free pass (ADR 0074): swag, food
+                    and event identifiers are paid-pass perks, and showing
+                    a "what's in the box" row here said the opposite. */}
                 <a
                   href={bevyUrl}
                   target="_blank"
@@ -719,6 +718,10 @@ export function TicketCheckout({
               title: t("refundTitle"),
               body: t("refundBody"),
               ack: t("refundAck"),
+              link: {
+                href: `/${locale}/terms`,
+                label: t("termsLink"),
+              },
             }}
           />
         )}
