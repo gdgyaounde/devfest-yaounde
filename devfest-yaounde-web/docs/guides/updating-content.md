@@ -32,6 +32,22 @@ Two rules that apply to every file here:
 
 ## Adding a speaker — `src/data/speakers.json`
 
+> **2026 lineup (ADR 0073).** The 24 accepted speakers and their 24 sessions
+> come from the Sessionize export of 15 Nov 2026. Once migration
+> `0030_publish_lineup_2026.sql` is applied they live in the **database** —
+> edit them in **Admin → Speakers** and **Admin → Schedule**, not in these
+> files, which become the fallback for a fresh clone only.
+>
+> - **Photos** are committed as `public/speakers/<id>.webp` (converted from
+>   Sessionize's 400×400 image). To replace one, upload a new photo in
+>   Admin → Speakers.
+> - **Icebreakers a speaker left blank** are stored as `"—"`, which the site
+>   shows as nothing — no empty quote box. Type a real question and answer in
+>   the dashboard to make it appear.
+> - **The home page** shows a **daily spotlight**: 6 speakers that change at
+>   midnight Yaoundé time, rotating so everyone gets a turn every ~4 days.
+>   `featured: true` pins someone to the front of it every day.
+
 ```json
 {
   "id": "ama-nkeng",
@@ -78,15 +94,53 @@ Two rules that apply to every file here:
   existing track name exactly, or you'll create a new filter chip.
 - **`social`** — include only the networks they actually have. Leave the
   others out entirely; empty strings will render a dead icon.
-- **`featured: true`** puts them in the auto-advancing slider on the home
-  page. Four or five featured speakers is about right — the slider gets slow
-  to cycle beyond that. Everyone appears on `/speakers` regardless.
+- **`featured: true`** pins them to the front of the home page's daily
+  spotlight (6 slots; the rest rotate). Keep it to one or two, or the
+  rotation has no room left. Everyone appears on `/speakers` regardless.
 - **`sessionIds`** links them to sessions (below). It's what makes their name
   appear on a session card. Safe to leave as `[]` until the programme exists.
 
 ---
 
 ## Adding a session — `src/data/sessions.json`
+
+### Sessions without a time yet (ADR 0073)
+
+`time`, `durationMin` and `room` are **optional**. A session without a
+`time` is _accepted but not scheduled_: `/schedule` (and the home preview)
+list it under **"The programme — time slots coming soon"**, grouped
+workshops first, then lightning talks. Nothing is ever given an invented time.
+
+**To add the times later** (Admin → Schedule, one session at a time):
+
+1. Open the session and fill in **Starts** (and **Duration**).
+2. Fill in **Room** in both languages once rooms are known.
+3. Save. The session moves from the "coming soon" list onto the timeline;
+   once it has both a start and a duration it also gets add-to-calendar
+   links. Clearing **Starts** moves it back.
+
+Two sessions with the same start time and different rooms show as a
+parallel slot, as before.
+
+**Other session fields**, all optional and all editable in the dashboard:
+
+- `lightning: true` — shown as "⚡ Lightning talk" and grouped with them.
+- `online: true` — shows an "Online" marker (Hubert Nang's talk, 2026).
+- `level` — `introductory` · `intermediate` · `advanced` · `expert`.
+- `language` — `["fr"]`, `["en"]` or `["fr", "en"]`: what it is _given in_.
+- `originalLanguage` — the language the speaker _wrote_ the title and
+  description in. These are not machine-translated (both sides carry the
+  same text); the card says "original text in English" on the French page.
+
+### Re-importing from Sessionize
+
+Don't re-import the whole export over the live data: the dashboard holds
+edits (times, rooms, photos) the export doesn't, and the CSV importer caps
+bios at 600 characters, which cuts several 2026 bios. For a change to one
+speaker or session, edit it in the dashboard. For a whole new lineup (next
+year), a developer converts the export the way ADR 0073 describes — public
+columns only, never phone/email/residence/T-shirt size — and ships it as a
+guarded migration like `0030`.
 
 ```json
 {
