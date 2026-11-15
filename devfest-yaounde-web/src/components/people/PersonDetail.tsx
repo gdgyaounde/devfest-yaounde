@@ -9,8 +9,10 @@ import {
 } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { realSocials } from "@/lib/people-socials";
+import { hasText } from "@/lib/sessions";
 import { Badge } from "@/components/ui/Badge";
-import type { LocalizedString } from "@/data/types";
+import { SessionMeta } from "@/components/schedule/SessionMeta";
+import type { LocalizedString, Session } from "@/data/types";
 
 export interface PersonLike {
   id: string;
@@ -35,6 +37,11 @@ export interface PersonLike {
   expertise?: LocalizedString[];
   gdgSince?: number;
   social?: { x?: string; linkedin?: string; website?: string };
+  /**
+   * Speakers only: their sessions, resolved by the page from `sessionIds`
+   * (ADR 0073). Rendered on the full profile, not the home teaser.
+   */
+  talks?: Session[];
 }
 
 /** The person's real profile links, with the client-side icon for each. */
@@ -88,7 +95,12 @@ export function PersonDetail({
   const locale = useLocale() as "fr" | "en";
   const t = useTranslations("common.person");
   const socials = personSocials(person);
-  const blurb = person.bio ?? person.oneLiner;
+  const blurb = hasText(person.bio, locale)
+    ? person.bio
+    : hasText(person.oneLiner, locale)
+      ? person.oneLiner
+      : undefined;
+  const talks = personality ? (person.talks ?? []) : [];
 
   const dark = tone === "dark";
   const roomy = size === "roomy";
@@ -135,7 +147,7 @@ export function PersonDetail({
 
       {blurb && (
         <p
-          className={`person-bio leading-relaxed ${bodyCls} ${roomy ? "text-body-l" : "text-body-m"}`}
+          className={`person-bio whitespace-pre-line leading-relaxed ${bodyCls} ${roomy ? "text-body-l" : "text-body-m"}`}
         >
           {blurb[locale]}
         </p>
@@ -155,39 +167,83 @@ export function PersonDetail({
         </ul>
       )}
 
-      {/* Icebreaker — a quote moment, not a data row. Skipped entirely when
-          the person has not written one: an empty quote block with a stray
-          quotation mark reads as a rendering failure. */}
-      {personality && person.icebreakerQuestion && person.icebreakerAnswer && (
-        <div className={`person-icebreaker border-t-2 pt-5 ${ruleCls}`}>
+      {/* Their session (ADR 0073): title, format, level, language, tags, an
+          "Online" marker where it applies, and the description — the talk
+          is half of why someone opened this profile. */}
+      {talks.length > 0 && (
+        <div className={`person-talk border-t-2 pt-5 ${ruleCls}`}>
           <p
             className={`font-mono text-mono-tag font-bold uppercase tracking-wide ${labelCls}`}
           >
-            {t("icebreaker")}
+            {talks.length > 1 ? t("talks") : t("talk")}
           </p>
-          <p className={`mt-2 text-body-m ${bodyCls}`}>
-            {person.icebreakerQuestion[locale]}
-          </p>
-          <div className="mt-3 flex gap-2.5">
-            <Quotes
-              size={roomy ? 24 : 20}
-              weight="fill"
-              aria-hidden
-              className={`shrink-0 ${dark ? "text-primary" : "text-primary"}`}
-            />
-            {/* PHASE11 §5.3: the roomy answer was display-sized (heading-l) and
-              dominated the slide; heading-m still reads as the quote's
-              punchline without pushing the rest of the slide off. */}
-            <p
-              className={`font-sans font-bold leading-snug ${nameCls} ${roomy ? "text-heading-m" : "text-body-l"}`}
-            >
-              {person.icebreakerAnswer[locale]}
-            </p>
-          </div>
+          {talks.map((talk) => (
+            <div key={talk.id} className="mt-3 flex flex-col gap-3">
+              <p
+                className={`font-sans font-bold leading-snug ${nameCls} ${roomy ? "text-heading-m" : "text-body-l"}`}
+              >
+                {talk.title[locale]}
+              </p>
+              <SessionMeta session={talk} tone={dark ? "dark" : "light"} />
+              {talk.tags.length > 0 && (
+                <ul className="flex flex-wrap gap-2">
+                  {talk.tags.map((tag) => (
+                    <li key={`${tag.en}|${tag.fr}`}>
+                      <Badge tone="primary" variant="outline">
+                        {tag[locale]}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {hasText(talk.description, locale) && (
+                <p
+                  className={`whitespace-pre-line text-body-m leading-relaxed ${bodyCls}`}
+                >
+                  {talk.description[locale]}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
-      {personality && person.funnyMoment && (
+      {/* Icebreaker — a quote moment, not a data row. Skipped entirely when
+          the person has not written one: an empty quote block with a stray
+          quotation mark reads as a rendering failure. A "—" placeholder (the
+          CSV/Sessionize import's "not given") counts as not written. */}
+      {personality &&
+        hasText(person.icebreakerQuestion, locale) &&
+        hasText(person.icebreakerAnswer, locale) && (
+          <div className={`person-icebreaker border-t-2 pt-5 ${ruleCls}`}>
+            <p
+              className={`font-mono text-mono-tag font-bold uppercase tracking-wide ${labelCls}`}
+            >
+              {t("icebreaker")}
+            </p>
+            <p className={`mt-2 text-body-m ${bodyCls}`}>
+              {person.icebreakerQuestion![locale]}
+            </p>
+            <div className="mt-3 flex gap-2.5">
+              <Quotes
+                size={roomy ? 24 : 20}
+                weight="fill"
+                aria-hidden
+                className={`shrink-0 ${dark ? "text-primary" : "text-primary"}`}
+              />
+              {/* PHASE11 §5.3: the roomy answer was display-sized (heading-l) and
+              dominated the slide; heading-m still reads as the quote's
+              punchline without pushing the rest of the slide off. */}
+              <p
+                className={`font-sans font-bold leading-snug ${nameCls} ${roomy ? "text-heading-m" : "text-body-l"}`}
+              >
+                {person.icebreakerAnswer![locale]}
+              </p>
+            </div>
+          </div>
+        )}
+
+      {personality && hasText(person.funnyMoment, locale) && (
         <div
           className={`flex items-start gap-2.5 rounded-lg border-2 px-4 py-3 ${
             dark
@@ -208,7 +264,7 @@ export function PersonDetail({
               {t("funny")}
             </p>
             <p className={`mt-1 text-body-m ${bodyCls}`}>
-              {person.funnyMoment[locale]}
+              {person.funnyMoment![locale]}
             </p>
           </div>
         </div>

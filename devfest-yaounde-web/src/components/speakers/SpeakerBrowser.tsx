@@ -11,7 +11,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ViewToggle, type PersonView } from "@/components/ui/ViewToggle";
 import { chooseSide, type PopoverSide } from "@/lib/popover-anchor";
 import { SpeakerCard } from "./SpeakerCard";
-import type { Speaker } from "@/data/types";
+import type { SpeakerWithTalks } from "@/data/types";
 
 const TILT = [-2, 1.5, -1, 2];
 
@@ -27,7 +27,7 @@ const TILT = [-2, 1.5, -1, 2];
  * switch too: the grid's open card and the slider's index are kept in sync
  * through one `focusedId`, so you land on the person you were looking at.
  */
-export function SpeakerBrowser({ speakers }: { speakers: Speaker[] }) {
+export function SpeakerBrowser({ speakers }: { speakers: SpeakerWithTalks[] }) {
   const t = useTranslations("pages.speakers");
   const tf = useTranslations("common.filters");
   const locale = useLocale() as "fr" | "en";

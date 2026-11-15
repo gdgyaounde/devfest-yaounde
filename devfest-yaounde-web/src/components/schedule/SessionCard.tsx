@@ -1,35 +1,14 @@
 "use client";
 
-import {
-  CalendarPlus,
-  CaretDown,
-  Clock,
-  Coffee,
-  MapPin,
-  Microphone,
-  Rocket,
-  UsersThree,
-} from "@phosphor-icons/react";
+import { CalendarPlus, CaretDown, Clock, MapPin } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
 import { Link } from "@/i18n/navigation";
 import { useEventDates } from "@/components/global/EventDateProvider";
 import { googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
-import type { Session, Speaker, SessionKind } from "@/data/types";
-
-export const KIND_ICON: Record<SessionKind, typeof Microphone> = {
-  talk: Microphone,
-  workshop: Rocket,
-  panel: UsersThree,
-  break: Coffee,
-};
-
-const KIND_LABEL_KEY: Record<SessionKind, string> = {
-  talk: "kindTalk",
-  workshop: "kindWorkshop",
-  panel: "kindPanel",
-  break: "kindBreak",
-};
+import { hasCalendarSlot } from "@/lib/sessions";
+import { SessionMeta } from "./SessionMeta";
+import type { Session, Speaker } from "@/data/types";
 
 export interface SessionCardProps {
   session: Session;
@@ -69,7 +48,6 @@ export function SessionCard({
   const eventDate = useEventDates()[0];
   const t = useTranslations("home.schedule");
   const locale = useLocale() as "fr" | "en";
-  const Icon = KIND_ICON[session.kind];
   const speakerById = new Map(speakers.map((s) => [s.id, s]));
   const sessionSpeakers = session.speakerIds
     .map((id) => speakerById.get(id))
@@ -95,21 +73,24 @@ export function SessionCard({
         className="flex w-full items-start gap-4 px-6 py-5 text-left sm:px-7"
       >
         <div className="min-w-0 flex-1">
+          {/* Format, Online, level, language — the same chips the speaker
+              profile shows (SessionMeta). Duration and room only once they
+              exist: an unscheduled session (ADR 0073) has neither yet. */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3 py-1 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02">
-              <Icon size={14} weight="duotone" aria-hidden />
-              {/* Icon + text: kind is never conveyed by colour alone (§2.8) */}
-              {t(KIND_LABEL_KEY[session.kind])}
-            </span>
-            <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
-              <Clock size={14} weight="bold" aria-hidden />
-              {t("duration", { min: session.durationMin })}
-            </span>
-            <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
-              <MapPin size={14} weight="bold" aria-hidden />
-              <span className="sr-only">{t("room")}: </span>
-              {session.room[locale]}
-            </span>
+            <SessionMeta session={session} />
+            {session.durationMin !== undefined && (
+              <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
+                <Clock size={14} weight="bold" aria-hidden />
+                {t("duration", { min: session.durationMin })}
+              </span>
+            )}
+            {session.room?.[locale] && (
+              <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
+                <MapPin size={14} weight="bold" aria-hidden />
+                <span className="sr-only">{t("room")}: </span>
+                {session.room[locale]}
+              </span>
+            )}
           </div>
 
           <p className="mt-3 font-sans text-heading-m font-bold leading-tight text-black02">
@@ -145,7 +126,9 @@ export function SessionCard({
             aria-labelledby={`session-trigger-${session.id}`}
             className="border-t-2 border-black02/15 px-6 py-5 sm:px-7"
           >
-            <p className="text-body-m leading-relaxed text-black02/85">
+            {/* pre-line: speakers' descriptions carry their own paragraph
+                breaks and bullet lines, which a plain <p> would flatten. */}
+            <p className="whitespace-pre-line text-body-m leading-relaxed text-black02/85">
               {session.description[locale]}
             </p>
 
@@ -184,32 +167,35 @@ export function SessionCard({
               </dl>
             )}
 
-            {showCalendar && eventDate && session.kind !== "break" && (
-              <div className="mt-5">
-                <p className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
-                  {t("addToCalendar")}
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <a
-                    href={googleCalendarUrl(session, locale, eventDate)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
-                  >
-                    <CalendarPlus size={14} weight="bold" aria-hidden />
-                    {t("google")}
-                  </a>
-                  <a
-                    href={icsDataUrl(session, locale, eventDate)}
-                    download={`${session.id}.ics`}
-                    className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
-                  >
-                    <CalendarPlus size={14} weight="bold" aria-hidden />
-                    {t("ics")}
-                  </a>
+            {showCalendar &&
+              eventDate &&
+              session.kind !== "break" &&
+              hasCalendarSlot(session) && (
+                <div className="mt-5">
+                  <p className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
+                    {t("addToCalendar")}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <a
+                      href={googleCalendarUrl(session, locale, eventDate)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
+                    >
+                      <CalendarPlus size={14} weight="bold" aria-hidden />
+                      {t("google")}
+                    </a>
+                    <a
+                      href={icsDataUrl(session, locale, eventDate)}
+                      download={`${session.id}.ics`}
+                      className="inline-flex items-center gap-1.5 rounded-pill border-2 border-black02 bg-offwhite px-3.5 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary"
+                    >
+                      <CalendarPlus size={14} weight="bold" aria-hidden />
+                      {t("ics")}
+                    </a>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {sessionSpeakers.length > 0 && (
               <div className="mt-5">

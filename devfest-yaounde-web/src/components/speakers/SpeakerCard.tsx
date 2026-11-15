@@ -7,10 +7,10 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { MOBILE_QUERY, useMediaQuery } from "@/lib/use-media-query";
 import { MorphedImageFrame } from "@/components/ui/MorphedImageFrame";
 import type { PopoverSide } from "@/lib/popover-anchor";
-import type { Speaker } from "@/data/types";
+import type { SpeakerWithTalks } from "@/data/types";
 
 export interface SpeakerCardProps {
-  speaker: Speaker;
+  speaker: SpeakerWithTalks;
   open: boolean;
   /**
    * Receives the card's own root element so the grid can measure which way

@@ -24,7 +24,9 @@
       "funny": "True story",
       "contribution": "On the team",
       "gdgSince": "With GDG since {year}",
-      "expertise": "Expertise"
+      "expertise": "Expertise",
+      "talk": "Their session",
+      "talks": "Their sessions"
     },
     "theme": {
       "label": "Theme",
@@ -147,12 +149,14 @@
     },
     "speakers": {
       "title": "Meet this year's speakers",
-      "cta": "See the full lineup",
+      "cta": "See all speakers",
       "prev": "Previous speaker",
       "next": "Next speaker",
       "openDetail": "See details",
       "closeDetail": "Close details",
-      "hint": "Tap a card for the full story"
+      "hint": "Tap a card for the full story",
+      "spotlight": "Today's spotlight",
+      "spotlightHint": "A different handful every day — tap a card for the full story"
     },
     "schedule": {
       "title": "What's on",
@@ -178,7 +182,29 @@
       "kindBreak": "Break",
       "allTracks": "All",
       "allRooms": "All",
-      "parallel": "{count} sessions at the same time — pick one"
+      "parallel": "{count} sessions at the same time — pick one",
+      "lightning": "Lightning talk",
+      "online": "Online",
+      "onlineHint": "Given remotely — streamed into the room",
+      "levelLabel": "Level",
+      "level": {
+        "introductory": "Introductory",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "languageLabel": "Given in",
+      "languageName": {
+        "fr": "French",
+        "en": "English"
+      },
+      "originalLanguage": "Original text in {language, select, fr {French} en {English} other {its original language}}",
+      "programmeTitle": "The programme — time slots coming soon",
+      "programmeBody": "Every accepted session is right here. Times and rooms land in the coming days, so check back before Saturday.",
+      "groupWorkshop": "Workshops",
+      "groupLightning": "Lightning talks",
+      "groupOther": "Talks",
+      "groupMore": "{count, plural, one {+# more session} other {+# more sessions}} in the full programme"
     },
     "quotes": {
       "title": "What people are saying",

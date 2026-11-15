@@ -21,6 +21,15 @@ import {
   getSponsors,
 } from "@/lib/content/store";
 import { eventJsonLd, ticketSalesOpen } from "@/lib/event";
+import { pickSpotlight, spotlightDateKey } from "@/lib/spotlight";
+
+/*
+ * The speaker spotlight changes at Yaoundé midnight (ADR 0073), and this page
+ * is otherwise static — rebuilt only when content is saved. An hourly
+ * revalidation lets it pick up the new day without making the page dynamic:
+ * the reel flips within the first hour of the new date, on the next visit.
+ */
+export const revalidate = 3600;
 import { JsonLd, pageMetadata } from "@/lib/seo";
 
 // A "Tracks" section (PAGES.md §2.6) is intentionally skipped — tracks
@@ -89,7 +98,9 @@ export default async function HomePage({
         store, so the front page never shows an empty speaker reel.
       */}
       {cfs.state === "lineup" ? (
-        <SpeakerShowcase speakers={speakers} />
+        <SpeakerShowcase
+          speakers={pickSpotlight(speakers, spotlightDateKey(new Date()))}
+        />
       ) : (
         <SectionContainer background="yellow-wash" maxWidth="6xl">
           <CallForSpeakers view={cfs} compact />

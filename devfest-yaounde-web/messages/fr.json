@@ -24,7 +24,9 @@
       "funny": "Histoire vraie",
       "contribution": "Dans l'équipe",
       "gdgSince": "Au GDG depuis {year}",
-      "expertise": "Expertise"
+      "expertise": "Expertise",
+      "talk": "Sa session",
+      "talks": "Ses sessions"
     },
     "theme": {
       "label": "Thème",
@@ -152,7 +154,9 @@
       "next": "Intervenant suivant",
       "openDetail": "Voir les détails",
       "closeDetail": "Fermer les détails",
-      "hint": "Touche une carte pour tout savoir"
+      "hint": "Touche une carte pour tout savoir",
+      "spotlight": "À l'affiche aujourd'hui",
+      "spotlightHint": "Une poignée différente chaque jour — touche une carte pour tout savoir"
     },
     "schedule": {
       "title": "Au programme",
@@ -178,7 +182,29 @@
       "kindBreak": "Pause",
       "allTracks": "Toutes",
       "allRooms": "Toutes",
-      "parallel": "{count} sessions en parallèle — à toi de choisir"
+      "parallel": "{count} sessions en parallèle — à toi de choisir",
+      "lightning": "Lightning talk",
+      "online": "En ligne",
+      "onlineHint": "Donnée à distance — retransmise dans la salle",
+      "levelLabel": "Niveau",
+      "level": {
+        "introductory": "Initiation",
+        "intermediate": "Intermédiaire",
+        "advanced": "Avancé",
+        "expert": "Expert"
+      },
+      "languageLabel": "En",
+      "languageName": {
+        "fr": "français",
+        "en": "anglais"
+      },
+      "originalLanguage": "Texte original en {language, select, fr {français} en {anglais} other {langue d'origine}}",
+      "programmeTitle": "Le programme — les horaires arrivent bientôt",
+      "programmeBody": "Toutes les sessions retenues sont là. Les horaires et les salles tombent dans les prochains jours : repasse avant samedi.",
+      "groupWorkshop": "Ateliers",
+      "groupLightning": "Lightning talks",
+      "groupOther": "Conférences",
+      "groupMore": "{count, plural, one {+# autre session} other {+# autres sessions}} dans le programme complet"
     },
     "quotes": {
       "title": "Ce qu'on en dit",

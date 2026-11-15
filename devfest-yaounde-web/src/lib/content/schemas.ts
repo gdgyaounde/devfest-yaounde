@@ -88,20 +88,35 @@ export const teamSchema = z.object({
   years: z.string().max(40).optional(),
 });
 
+const sessionLanguage = z.enum(["fr", "en"]);
+
 export const sessionSchema = z.object({
   id: slug,
-  time: z.string().regex(/^\d{2}:\d{2}$/),
+  // Optional since ADR 0073: an accepted session can exist before it has a
+  // slot. Absent = "time slots coming soon", never an invented time.
+  time: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/)
+    .optional(),
   durationMin: z
     .number()
     .int()
     .min(1)
-    .max(24 * 60),
+    .max(24 * 60)
+    .optional(),
   day: z.number().int().min(1).max(14),
   kind: z.enum(["talk", "workshop", "panel", "break"]),
+  lightning: z.boolean().optional(),
+  online: z.boolean().optional(),
+  level: z
+    .enum(["introductory", "intermediate", "advanced", "expert"])
+    .optional(),
+  language: z.array(sessionLanguage).min(1).max(2).optional(),
+  originalLanguage: sessionLanguage.optional(),
   title: localizedRequired,
   description: localized,
   track: localizedRequired,
-  room: localizedRequired,
+  room: localizedRequired.optional(),
   tags: z.array(localized).max(20),
   bring: localized.optional(),
   provided: localized.optional(),

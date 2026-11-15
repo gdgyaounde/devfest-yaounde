@@ -7,8 +7,19 @@ import { FilterGroup } from "@/components/ui/FilterGroup";
 import { FilterLayout } from "@/components/ui/FilterLayout";
 import { Reveal } from "@/components/ui/Reveal";
 import { sessionIn, sessionStyle } from "@/lib/motion";
+import {
+  groupProgramme,
+  isScheduled,
+  type ProgrammeGroup,
+} from "@/lib/sessions";
 import { SessionCard } from "./SessionCard";
 import type { Session, Speaker } from "@/data/types";
+
+const GROUP_LABEL_KEY: Record<ProgrammeGroup, string> = {
+  workshop: "groupWorkshop",
+  lightning: "groupLightning",
+  other: "groupOther",
+};
 
 /** Slight per-card tilt so the timeline reads as pinned notes, not a table. */
 const CARD_TILT = [-0.8, 0.6, -0.5, 0.9, -0.7];
@@ -20,6 +31,13 @@ export interface ScheduleBoardProps {
   showFilters?: boolean;
   /** Full route offers add-to-calendar per session. */
   showCalendar?: boolean;
+  /**
+   * Caps each group of the UNSCHEDULED programme (ADR 0073). The home
+   * preview shows a taste; /schedule shows everything.
+   */
+  previewLimit?: number;
+  /** The programme heading's level — h3 under the home section's own h2. */
+  programmeHeading?: "h2" | "h3";
 }
 
 /**
@@ -38,6 +56,8 @@ export function ScheduleBoard({
   speakers = [],
   showFilters = false,
   showCalendar = false,
+  previewLimit,
+  programmeHeading = "h2",
 }: ScheduleBoardProps) {
   const t = useTranslations("home.schedule");
   const locale = useLocale() as "fr" | "en";
@@ -50,8 +70,17 @@ export function ScheduleBoard({
     () => [...new Set(sessions.map((s) => s.track[locale]))].sort(),
     [sessions, locale],
   );
+  // Only rooms that exist — an unscheduled session has none yet, and a
+  // room filter with no rooms in it is a control that does nothing.
   const rooms = useMemo(
-    () => [...new Set(sessions.map((s) => s.room[locale]))].sort(),
+    () =>
+      [
+        ...new Set(
+          sessions
+            .map((s) => s.room?.[locale] ?? "")
+            .filter((r) => r.trim() !== ""),
+        ),
+      ].sort(),
     [sessions, locale],
   );
 
@@ -61,11 +90,27 @@ export function ScheduleBoard({
   const [room, setRoom] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
 
+  /*
+   * Sessions WITH a time go on the timeline; sessions without one are
+   * accepted but not yet slotted (ADR 0073) and go in the programme list
+   * below it, grouped by format. Nothing gets an invented time.
+   */
   const visible = sessions
+    .filter(isScheduled)
     .filter((s) => s.day === activeDay)
     .filter((s) => !track || s.track[locale] === track)
-    .filter((s) => !room || s.room[locale] === room)
+    .filter((s) => !room || s.room?.[locale] === room)
     .sort((a, b) => a.time.localeCompare(b.time));
+
+  // A room filter can only ever match a slotted session.
+  const programme = groupProgramme(
+    sessions
+      .filter((s) => !isScheduled(s))
+      .filter((s) => !track || s.track[locale] === track)
+      .filter(() => !room),
+    previewLimit,
+  );
+  const ProgrammeHeading = programmeHeading;
 
   /**
    * PARALLEL TRACKS — PHASE10 §6. Sessions that start at the same time on the
@@ -90,7 +135,9 @@ export function ScheduleBoard({
     // Concurrent sessions sort by room so a given room keeps the same column
     // position down the day rather than hopping between slots.
     for (const bucket of byTime.values()) {
-      bucket.sort((a, b) => a.room[locale].localeCompare(b.room[locale]));
+      bucket.sort((a, b) =>
+        (a.room?.[locale] ?? "").localeCompare(b.room?.[locale] ?? ""),
+      );
     }
     return [...byTime.entries()];
     // `visible` is derived fresh each render; the deps that actually change it
@@ -117,16 +164,18 @@ export function ScheduleBoard({
           ...tracks.map((tr) => ({ value: tr, label: tr })),
         ]}
       />
-      <FilterGroup
-        label={t("room")}
-        selected={room}
-        onSelect={setRoom}
-        collapsible
-        options={[
-          { value: null, label: t("allRooms") },
-          ...rooms.map((rm) => ({ value: rm, label: rm })),
-        ]}
-      />
+      {rooms.length > 0 && (
+        <FilterGroup
+          label={t("room")}
+          selected={room}
+          onSelect={setRoom}
+          collapsible
+          options={[
+            { value: null, label: t("allRooms") },
+            ...rooms.map((rm) => ({ value: rm, label: rm })),
+          ]}
+        />
+      )}
     </>
   );
 
@@ -207,11 +256,11 @@ export function ScheduleBoard({
         key={`${activeDay}-${view}-${track ?? ""}-${room ?? ""}`}
         className="mt-12"
       >
-        {visible.length === 0 ? (
+        {visible.length === 0 && programme.length === 0 ? (
           <p className="rounded-lg border-2 border-dashed border-black02/30 px-7 py-12 text-center text-body-l text-black02/70">
             {t("empty")}
           </p>
-        ) : view === "structured" ? (
+        ) : visible.length === 0 ? null : view === "structured" ? (
           <ol className="relative flex flex-col gap-6 border-l-4 border-dashed border-black02/25 pl-6 sm:pl-10">
             {slots.map(([time, group], i) => (
               <li
@@ -305,6 +354,90 @@ export function ScheduleBoard({
               </li>
             ))}
           </ul>
+        )}
+
+        {/*
+          THE PROGRAMME — accepted sessions without a slot yet (ADR 0073).
+          Grouped by format (workshops, then lightning talks), never on the
+          timeline: a time the organisers have not set is not shown. Same
+          card, same view toggle, so a session looks identical before and
+          after it gets its time.
+        */}
+        {programme.length > 0 && (
+          <section
+            aria-labelledby="programme-title"
+            className={visible.length > 0 ? "mt-20" : ""}
+          >
+            <ProgrammeHeading
+              id="programme-title"
+              className="font-sans text-heading-l font-bold leading-tight text-black02"
+            >
+              {t("programmeTitle")}
+            </ProgrammeHeading>
+            <p className="mt-3 max-w-2xl text-body-m text-black02/75">
+              {t("programmeBody")}
+            </p>
+
+            {programme.map(({ group, sessions: list, total }, gi) => (
+              <div key={group} className="mt-12">
+                <p className="flex items-center gap-3 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
+                  {t(GROUP_LABEL_KEY[group] as "groupWorkshop")}
+                  <span className="rounded-pill border-2 border-black02/30 px-2.5 py-0.5 text-black02/70">
+                    {total}
+                  </span>
+                </p>
+                {view === "structured" ? (
+                  <ul className="mt-5 grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+                    {list.map((s, i) => (
+                      <li
+                        key={s.id}
+                        className={sessionIn}
+                        style={sessionStyle(i)}
+                      >
+                        <SessionCard
+                          session={s}
+                          speakers={speakers}
+                          open={openId === s.id}
+                          onToggle={() =>
+                            setOpenId(openId === s.id ? null : s.id)
+                          }
+                          variant="timeline"
+                          tilt={CARD_TILT[(gi + i) % CARD_TILT.length]}
+                          showCalendar={showCalendar}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="mt-5 flex flex-col divide-y-2 divide-black02/10 overflow-hidden rounded-lg border-2 border-black02">
+                    {list.map((s, i) => (
+                      <li
+                        key={s.id}
+                        className={sessionIn}
+                        style={sessionStyle(i)}
+                      >
+                        <SessionCard
+                          session={s}
+                          speakers={speakers}
+                          open={openId === s.id}
+                          onToggle={() =>
+                            setOpenId(openId === s.id ? null : s.id)
+                          }
+                          variant="list"
+                          showCalendar={showCalendar}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {list.length < total && (
+                  <p className="mt-4 font-mono text-caption text-black02/65">
+                    {t("groupMore", { count: total - list.length })}
+                  </p>
+                )}
+              </div>
+            ))}
+          </section>
         )}
       </div>
     </>

@@ -43,7 +43,15 @@ const AUTO_ADVANCE_MS = 3800;
  */
 export function SpeakerShowcase({ speakers }: { speakers: Speaker[] }) {
   const t = useTranslations("home.speakers");
-  const featured = speakers.filter((s) => s.featured);
+  /*
+   * TODAY'S SPOTLIGHT (ADR 0073). The page picks these on the server —
+   * featured speakers pinned first, the rest a fair daily rotation seeded by
+   * Yaoundé's date (`pickSpotlight`) — so this component just shows what it
+   * is given. It used to show `featured` speakers only and render nothing
+   * when none were flagged, which with a real lineup and no flags meant an
+   * empty front page.
+   */
+  const featured = speakers;
 
   const [focused, setFocused] = useState(0);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -200,11 +208,14 @@ export function SpeakerShowcase({ speakers }: { speakers: Speaker[] }) {
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <h2 className="font-sans text-display-xl font-bold text-black02">
+              <p className="inline-flex -rotate-2 items-center rounded-pill border-2 border-black02 bg-primary px-4 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 shadow-[0_3px_0_0_var(--color-black02)]">
+                {t("spotlight")}
+              </p>
+              <h2 className="mt-5 font-sans text-display-xl font-bold text-black02">
                 {t("title")}
               </h2>
               <p className="mt-4 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
-                {t("hint")}
+                {t("spotlightHint")}
               </p>
             </div>
             <div className="flex items-center gap-3">

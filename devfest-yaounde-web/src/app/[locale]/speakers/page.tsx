@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { SpeakerBrowser } from "@/components/speakers/SpeakerBrowser";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
-import { getSpeakers } from "@/lib/content/store";
+import { getSessions, getSpeakers } from "@/lib/content/store";
 import { loadSettings } from "@/lib/content/settings";
 import { cfsView } from "@/lib/content/cfs";
 import { CallForSpeakers } from "@/components/speakers/CallForSpeakers";
@@ -33,10 +33,23 @@ export default async function SpeakersPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.speakers");
-  const [allSpeakers, settings] = await Promise.all([
+  const [allSpeakers, settings, sessions] = await Promise.all([
     getSpeakers(),
     loadSettings(),
+    getSessions(),
   ]);
+  /*
+   * Every profile shows its talk (ADR 0073). Resolved here, on the server,
+   * from each speaker's `sessionIds`, so the client gets exactly the sessions
+   * it renders. An id that no longer resolves is skipped, never an error.
+   */
+  const sessionById = new Map(sessions.map((s) => [s.id, s]));
+  const withTalks = allSpeakers.map((speaker) => ({
+    ...speaker,
+    talks: speaker.sessionIds
+      .map((id) => sessionById.get(id))
+      .filter((s) => s !== undefined),
+  }));
   /*
    * Decided on the SERVER, from the store. Until somebody is announced this
    * page is an invitation rather than an empty grid with filters over it —
@@ -66,7 +79,7 @@ export default async function SpeakersPage({
               statically prerendered.
             */
             <Suspense fallback={null}>
-              <SpeakerBrowser speakers={allSpeakers} />
+              <SpeakerBrowser speakers={withTalks} />
             </Suspense>
           ) : (
             <CallForSpeakers view={cfs} />

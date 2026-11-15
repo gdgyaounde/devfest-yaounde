@@ -1,7 +1,12 @@
 "use client";
 
 import { useEventDates } from "@/components/global/EventDateProvider";
-import type { Session, SessionKind } from "@/data/types";
+import type {
+  Session,
+  SessionKind,
+  SessionLanguage,
+  SessionLevel,
+} from "@/data/types";
 import { endsAt } from "@/lib/admin/form-helpers";
 import { EntityCrud } from "../forms/EntityCrud";
 import {
@@ -10,9 +15,29 @@ import {
   LocalizedInput,
   Segmented,
   TextInput,
+  Toggle,
 } from "../forms/fields";
 
 const EMPTY = { fr: "", en: "" };
+
+const LEVELS: { value: SessionLevel | "none"; label: string }[] = [
+  { value: "none", label: "Not set" },
+  { value: "introductory", label: "Introductory" },
+  { value: "intermediate", label: "Intermediate" },
+  { value: "advanced", label: "Advanced" },
+  { value: "expert", label: "Expert" },
+];
+
+/** Stored as an ordered array; the form offers the four real choices. */
+const LANGUAGES: { value: string; label: string; langs?: SessionLanguage[] }[] =
+  [
+    { value: "none", label: "Not set" },
+    { value: "fr", label: "French", langs: ["fr"] },
+    { value: "en", label: "English", langs: ["en"] },
+    { value: "fr,en", label: "French + English", langs: ["fr", "en"] },
+  ];
+
+const DURATIONS = [15, 30, 45, 60, 90, 120];
 
 const KINDS: { value: SessionKind; label: string }[] = [
   { value: "talk", label: "Talk" },
@@ -31,16 +56,15 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
         addLabel="Add a session"
         emptyLabel="Nothing scheduled yet."
         reorderable
+        /* A new session starts UNSCHEDULED (ADR 0073): it shows under
+           "time slots coming soon" until somebody gives it a start time. */
         blank={() => ({
           id: "",
-          time: "09:00",
-          durationMin: 30,
           day: 1,
           kind: "talk",
           title: { ...EMPTY },
           description: { ...EMPTY },
           track: { ...EMPTY },
-          room: { ...EMPTY },
           tags: [],
           speakerIds: [],
         })}
@@ -48,12 +72,19 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
           <div className="min-w-0">
             <p className="truncate font-sans text-body-m font-bold text-black02">
               <span className="font-mono text-caption text-black02/65">
-                D{row.day} {row.time}
+                {row.time ? `D${row.day} ${row.time}` : "Unscheduled"}
               </span>{" "}
               {row.title.en || row.id}
             </p>
             <p className="truncate text-caption text-black02/65">
-              {row.kind} · {row.durationMin} min · {row.room.en}
+              {[
+                row.lightning ? "lightning talk" : row.kind,
+                row.durationMin ? `${row.durationMin} min` : null,
+                row.room?.en || null,
+                row.online ? "online" : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
             </p>
           </div>
         )}
@@ -90,30 +121,93 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
               subtract two clock times to enter it is how a 90-minute workshop
               becomes a 30-minute one. The computed end is shown, not stored.
             */}
+            {/*
+              EMPTY START TIME = UNSCHEDULED (ADR 0073). The session is listed
+              under "time slots coming soon" on the site; fill in a time and
+              it moves onto the timeline. Clearing the box takes it back off.
+              Add-to-calendar appears once BOTH a time and a duration exist.
+            */}
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Starts" htmlFor={`time-${draft.id}`}>
+              <Field
+                label="Starts"
+                htmlFor={`time-${draft.id}`}
+                hint={
+                  draft.time
+                    ? undefined
+                    : "Empty = not scheduled yet (shown as “time slots coming soon”)."
+                }
+              >
                 <TextInput
                   id={`time-${draft.id}`}
                   type="time"
-                  value={draft.time}
-                  onChange={(time) => patch({ time })}
+                  value={draft.time ?? ""}
+                  onChange={(time) => patch({ time: time || undefined })}
                 />
               </Field>
               <Field
                 label="Duration"
-                hint={`Ends at ${endsAt(draft.time, draft.durationMin)}`}
+                hint={
+                  draft.time && draft.durationMin
+                    ? `Ends at ${endsAt(draft.time, draft.durationMin)}`
+                    : undefined
+                }
               >
                 <Segmented
                   name="session-dur"
-                  value={String(draft.durationMin)}
-                  options={[15, 30, 45, 60, 90, 120].map((n) => ({
-                    value: String(n),
-                    label: `${n}m`,
-                  }))}
-                  onChange={(v) => patch({ durationMin: Number(v) })}
+                  value={draft.durationMin ? String(draft.durationMin) : "none"}
+                  options={[
+                    { value: "none", label: "Not set" },
+                    ...DURATIONS.map((n) => ({
+                      value: String(n),
+                      label: `${n}m`,
+                    })),
+                  ]}
+                  onChange={(v) =>
+                    patch({ durationMin: v === "none" ? undefined : Number(v) })
+                  }
                 />
               </Field>
             </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Toggle
+                label="Lightning talk"
+                hint="Shown as “Lightning talk” and grouped with them."
+                checked={draft.lightning === true}
+                onChange={(on) => patch({ lightning: on ? true : undefined })}
+              />
+              <Toggle
+                label="Online"
+                hint="Given remotely — shows an “Online” marker."
+                checked={draft.online === true}
+                onChange={(on) => patch({ online: on ? true : undefined })}
+              />
+            </div>
+
+            <Field label="Level">
+              <Segmented
+                name="session-level"
+                value={draft.level ?? "none"}
+                options={LEVELS}
+                onChange={(v) => patch({ level: v === "none" ? undefined : v })}
+              />
+            </Field>
+
+            <Field label="Given in">
+              <Segmented
+                name="session-language"
+                value={draft.language?.join(",") ?? "none"}
+                options={LANGUAGES.map(({ value, label }) => ({
+                  value,
+                  label,
+                }))}
+                onChange={(v) =>
+                  patch({
+                    language: LANGUAGES.find((o) => o.value === v)?.langs,
+                  })
+                }
+              />
+            </Field>
 
             <Field label="Title">
               <LocalizedInput
@@ -137,10 +231,14 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
                   onChange={(track) => patch({ track })}
                 />
               </Field>
-              <Field label="Room">
+              <Field label="Room" hint="Optional until the session is placed.">
                 <LocalizedInput
-                  value={draft.room}
-                  onChange={(room) => patch({ room })}
+                  value={draft.room ?? { ...EMPTY }}
+                  onChange={(room) =>
+                    patch({
+                      room: room.fr.trim() || room.en.trim() ? room : undefined,
+                    })
+                  }
                 />
               </Field>
             </div>

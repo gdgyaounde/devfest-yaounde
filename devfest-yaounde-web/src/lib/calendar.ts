@@ -1,4 +1,4 @@
-import type { Session } from "@/data/types";
+import type { CalendarSession } from "@/lib/sessions";
 
 /** Repository fallback. The admin can override the event's single date. */
 export const EVENT_DATES: readonly string[] = ["2026-11-21"];
@@ -30,7 +30,7 @@ function stamp(date: Date) {
 }
 
 /** All sessions occur on the configured single event date. */
-function sessionRange(session: Session, baseDate: string) {
+function sessionRange(session: CalendarSession, baseDate: string) {
   const dayDate = baseDate;
   const [y, m, d] = dayDate.split("-").map(Number);
   const [hh, mm] = session.time.split(":").map(Number);
@@ -40,7 +40,7 @@ function sessionRange(session: Session, baseDate: string) {
 }
 
 export function googleCalendarUrl(
-  session: Session,
+  session: CalendarSession,
   locale: "fr" | "en",
   baseDate: string,
 ) {
@@ -49,7 +49,7 @@ export function googleCalendarUrl(
     action: "TEMPLATE",
     text: session.title[locale],
     details: session.description[locale],
-    location: session.room[locale],
+    location: session.room?.[locale] ?? "",
     dates: `${stamp(start)}/${stamp(end)}`,
   });
   return `https://calendar.google.com/calendar/render?${params}`;
@@ -57,7 +57,7 @@ export function googleCalendarUrl(
 
 /** A minimal VEVENT, returned as a data URL for direct download. */
 export function icsDataUrl(
-  session: Session,
+  session: CalendarSession,
   locale: "fr" | "en",
   baseDate: string,
 ) {
@@ -75,7 +75,7 @@ export function icsDataUrl(
     `DTEND:${stamp(end)}`,
     `SUMMARY:${escape(session.title[locale])}`,
     `DESCRIPTION:${escape(session.description[locale])}`,
-    `LOCATION:${escape(session.room[locale])}`,
+    `LOCATION:${escape(session.room?.[locale] ?? "")}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ];

@@ -38,7 +38,14 @@ export async function ScheduleOverviewPreview() {
       </Reveal>
 
       <div className="mt-12">
-        <ScheduleBoard sessions={sessions} speakers={speakers} />
+        {/* A taste of the unscheduled programme — three per format — under
+            this section's own h2 (ADR 0073). */}
+        <ScheduleBoard
+          sessions={sessions}
+          speakers={speakers}
+          previewLimit={3}
+          programmeHeading="h3"
+        />
       </div>
 
       <Button

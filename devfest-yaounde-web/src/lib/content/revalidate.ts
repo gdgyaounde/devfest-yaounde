@@ -35,9 +35,16 @@ import type { CollectionId } from "./schemas";
  * speakers), quotes, FAQs, sponsors and past editions.
  */
 const PAGES: Record<CollectionId, string[]> = {
-  speakers: ["/", "/speakers"],
+  /*
+   * Speakers and sessions show on each other's pages (ADR 0073): a session
+   * card names its speakers, a speaker profile shows their session, and the
+   * home page carries both the spotlight and the programme preview. Saving
+   * either has to refresh all three, or a rename shows on one page and not
+   * the next.
+   */
+  speakers: ["/", "/speakers", "/schedule"],
   team: ["/team"],
-  sessions: ["/schedule"],
+  sessions: ["/schedule", "/", "/speakers"],
   sponsors: ["/"],
   faqs: ["/", "/faqs"],
   // `/tickets` too: tier cards render their swag FROM products (ADR 0054),
@@ -56,13 +63,16 @@ function localised(path: string): string[] {
   );
 }
 
-export function revalidateCollection(id: CollectionId): void {
+/** Every locale's path a save to this collection must refresh. */
+export function revalidationPaths(id: CollectionId): string[] {
   // No `?? []` — `PAGES` is keyed by `CollectionId`, so a new collection
   // fails to compile until somebody says where it is shown. That is the
   // point: a missing entry here is a page that silently never updates.
-  for (const path of PAGES[id]) {
-    for (const full of localised(path)) revalidatePath(full);
-  }
+  return PAGES[id].flatMap(localised);
+}
+
+export function revalidateCollection(id: CollectionId): void {
+  for (const full of revalidationPaths(id)) revalidatePath(full);
 }
 
 /**

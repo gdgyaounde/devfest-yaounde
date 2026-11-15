@@ -39,6 +39,13 @@ export interface Speaker {
   hidden?: boolean;
 }
 
+/**
+ * A speaker as the PROFILE renders it: the stored record plus their sessions,
+ * resolved on the server from `sessionIds` (ADR 0073). Display-only — never
+ * written back to the store.
+ */
+export type SpeakerWithTalks = Speaker & { talks?: Session[] };
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -171,18 +178,49 @@ export interface PastEditionPhoto {
  */
 export type SessionKind = "talk" | "workshop" | "panel" | "break";
 
+/** Sessionize's four levels, as stored. Rendered through i18n. */
+export type SessionLevel =
+  "introductory" | "intermediate" | "advanced" | "expert";
+
+/** A language a session is given in. */
+export type SessionLanguage = "fr" | "en";
+
 export interface Session {
   id: string;
-  /** "HH:mm" — local event time. */
-  time: string;
-  /** Minutes; drives the displayed duration. */
-  durationMin: number;
+  /**
+   * "HH:mm" — local event time. ABSENT = not scheduled yet (ADR 0073): the
+   * session is accepted and announced, but has no slot. The schedule lists
+   * it under "time slots coming soon" instead of inventing a time, and it
+   * gets no add-to-calendar links.
+   */
+  time?: string;
+  /** Minutes; drives the displayed duration. Absent until it is known. */
+  durationMin?: number;
   day: number;
   kind: SessionKind;
+  /**
+   * A short-format talk (Sessionize "Lightning talk"). `kind` stays "talk";
+   * this keeps "lightning" visible as its own chip and groups it on the
+   * unscheduled programme.
+   */
+  lightning?: boolean;
+  /** Given remotely (Sessionize "Online") — shown as an "Online" marker. */
+  online?: boolean;
+  level?: SessionLevel;
+  /** Languages the session is given in, in the speaker's order. */
+  language?: SessionLanguage[];
+  /**
+   * The language the speaker WROTE the title and description in, when they
+   * submitted only one. Those fields then carry the same text on both sides
+   * (they are not machine-translated — devfest-i18n), and the card says
+   * "original text in English" on the other locale's page.
+   */
+  originalLanguage?: SessionLanguage;
   title: LocalizedString;
   description: LocalizedString;
   track: LocalizedString;
-  room: LocalizedString;
+  /** Absent until the session is given a room. */
+  room?: LocalizedString;
   /** Free-form tags rendered as Badges. */
   tags: LocalizedString[];
   /** e.g. "bring a laptop" — only rendered when present. */
