@@ -42,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private exports (Sessionize etc.) — personal data, never commit
+/.private/
