@@ -10,6 +10,7 @@
  */
 import "server-only";
 import { loadSettings } from "@/lib/content/settings";
+import { formatCutoff, ticketEditsOpen } from "@/lib/event";
 import {
   renderOrderReceipt,
   renderTicketClaim,
@@ -74,6 +75,11 @@ export async function sendReceipt(intent: PaymentIntentRow): Promise<void> {
           };
         }),
         [settings.eventDate],
+        // ADR 0075: tell the buyer they can still fix name / size — only
+        // while that is true, in Yaoundé time.
+        ticketEditsOpen(new Date(), settings)
+          ? formatCutoff(l, settings.ticketing.editsCloseAt)
+          : null,
       );
 
       // A ticket bought for someone else gets its OWN email, to the

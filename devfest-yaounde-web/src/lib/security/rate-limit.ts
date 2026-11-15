@@ -72,6 +72,11 @@ export const RATE_LIMITS = {
    * fences, on top of the token itself already being unguessable.
    */
   ticketClaim: { bucket: "ticket-claim", limit: 10, windowSeconds: 300 },
+  /**
+   * A holder editing their own ticket's name / size (ADR 0075). A person
+   * fixes a typo or two; twenty in five minutes is already generous.
+   */
+  ticketEdit: { bucket: "ticket-edit", limit: 20, windowSeconds: 300 },
   /** Dashboard writes. Generous for a person, useless for a script. */
   adminWrite: { bucket: "admin-write", limit: 60, windowSeconds: 300 },
   /**

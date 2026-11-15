@@ -118,6 +118,9 @@ const COPY = {
     totalPaid: "Total payé",
     free: "Offert",
     myTickets: "Voir mes billets",
+    // ADR 0075 — {date} {time} already formatted in Yaoundé time.
+    editUntil: (date: string, time: string) =>
+      `Besoin de corriger le nom ou la taille de T-shirt ? Tu peux le faire depuis ton compte jusqu'au ${date} à ${time} (heure de Yaoundé).`,
     pickup: "À récupérer sur place",
     shipping: "Livraison souhaitée",
     fulfilmentNote: "Ta note",
@@ -161,6 +164,8 @@ const COPY = {
     totalPaid: "Total paid",
     free: "Free",
     myTickets: "See my tickets",
+    editUntil: (date: string, time: string) =>
+      `Need to fix the name or T-shirt size? You can do it from your account until ${date} at ${time} (Yaoundé time).`,
     pickup: "Collecting in person",
     shipping: "Delivery requested",
     fulfilmentNote: "Your note",
@@ -367,6 +372,11 @@ export function renderTicketReceipt(
   intent: PaymentIntentRow,
   tickets: TicketForEmail[],
   dates: readonly string[] = EVENT_DATES,
+  /**
+   * When holders can still edit name / size (ADR 0075), already formatted in
+   * Yaoundé time. Null — after the cutoff, or no cutoff — omits the line.
+   */
+  editsUntil: { date: string; time: string } | null = null,
 ): RenderedEmail {
   const l = locale(intent);
   const c = COPY[l];
@@ -446,6 +456,7 @@ ${cards}
 ${totalsHtml(intent, l)}
 
 <p style="margin:20px 0 0;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">${escapeHtml(eventDate(l, dates))} &nbsp;·&nbsp; ${escapeHtml(c.venue)}</p>
+${editsUntil ? `\n<p style="margin:16px 0 0;font-family:${FONT};font-size:14px;line-height:1.6;color:${BRAND.ink};">${escapeHtml(c.editUntil(editsUntil.date, editsUntil.time))}</p>` : ""}
 
 ${button(c.myTickets, `${SITE_URL}/${l}/account`)}
 
@@ -476,6 +487,7 @@ ${button(c.myTickets, `${SITE_URL}/${l}/account`)}
     ...totalsText(intent, l),
     "",
     `${eventDate(l, dates)} — ${c.venue}`,
+    ...(editsUntil ? ["", c.editUntil(editsUntil.date, editsUntil.time)] : []),
     `${c.myTickets} : ${SITE_URL}/${l}/account`,
     "",
     `${c.ref} ${intent.deposit_id}`,

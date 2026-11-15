@@ -30,12 +30,15 @@ export function SalesCutoffNotice({
   closeDate,
   closeTime,
   eventDate,
+  editsDeadline,
 }: {
   salesCloseAt: string | null;
   salesOpenAtRender: boolean;
   closeDate: string | null;
   closeTime: string | null;
   eventDate: string;
+  /** When holders stop being able to edit (ADR 0075); null = not shown. */
+  editsDeadline?: { date: string; time: string } | null;
 }) {
   const t = useTranslations("pages.tickets");
   const tc = useTranslations("countdown");
@@ -66,6 +69,17 @@ export function SalesCutoffNotice({
             <p className="mt-2 max-w-prose text-body-m text-black02/80">
               {t("salesNoticeBody")}
             </p>
+            {editsDeadline && (
+              <p className="mt-3 max-w-prose text-body-m font-bold text-black02">
+                {t("salesNoticeEdits", editsDeadline)}{" "}
+                <Link
+                  href="/account"
+                  className="underline decoration-2 underline-offset-4"
+                >
+                  {t("salesNoticeEditsCta")}
+                </Link>
+              </p>
+            )}
           </div>
         </div>
         <div className="shrink-0">

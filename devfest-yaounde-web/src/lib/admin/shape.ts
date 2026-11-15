@@ -230,6 +230,8 @@ export interface AdminData {
     users: number;
   };
   tickets: { rows: AdminTicket[]; total: number };
+  /** Apparel per tier × size, over EVERY ticket, not the loaded page (ADR 0075). */
+  apparel: import("@/lib/tickets/apparel-totals").ApparelTotals;
   orders: { rows: AdminOrder[]; total: number };
   transactions: { rows: AdminTransaction[]; total: number };
   users: { rows: AdminUser[]; total: number };

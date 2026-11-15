@@ -10,7 +10,12 @@ import { loadSettings } from "@/lib/content/settings";
 import { getSwagProducts, getTiers } from "@/lib/content/store";
 import { getTicketCapacity } from "@/lib/payments/capacity";
 import { SalesCutoffNotice } from "@/components/tickets/SalesCutoffNotice";
-import { formatCutoff, formatEventDates, ticketSalesOpen } from "@/lib/event";
+import {
+  formatCutoff,
+  formatEventDates,
+  ticketEditsOpen,
+  ticketSalesOpen,
+} from "@/lib/event";
 
 export async function generateMetadata({
   params,
@@ -101,6 +106,11 @@ export default async function TicketsPage({
           closeDate={cutoff?.date ?? null}
           closeTime={cutoff?.time ?? null}
           eventDate={eventDateLabel}
+          editsDeadline={
+            ticketEditsOpen(new Date(), settings)
+              ? formatCutoff(l, settings.ticketing.editsCloseAt)
+              : null
+          }
         />
 
         <div className="mt-16">

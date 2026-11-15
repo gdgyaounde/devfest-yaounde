@@ -28,11 +28,41 @@ async function gate() {
 export * from "./shape";
 import type { AdminData } from "./shape";
 import { LIST_CAP } from "./shape";
+import { apparelTotals } from "@/lib/tickets/apparel-totals";
+import { loadTiers } from "@/lib/payments/catalog";
+
+/**
+ * Every ticket's tier and size, paged. The list above is capped at LIST_CAP
+ * and PostgREST caps a single response at 1,000 rows, so the apparel totals
+ * — which organisers order shirts from — read their own complete column.
+ */
+async function allApparelRows(db: ReturnType<typeof createAdminSupabase>) {
+  const PAGE = 1000;
+  const rows: { tier_id: string; apparel_size: string | null }[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await db
+      .from("tickets")
+      .select("tier_id, apparel_size")
+      .order("id")
+      .range(from, from + PAGE - 1);
+    if (error) {
+      console.error("[admin] apparel totals read failed", error.message);
+      break;
+    }
+    rows.push(...(data ?? []));
+    if (!data || data.length < PAGE) break;
+  }
+  return rows;
+}
 
 export async function loadAdminData(): Promise<AdminData> {
   const organiser = await gate();
   const db = createAdminSupabase();
 
+  const [apparelRows, tiers] = await Promise.all([
+    allApparelRows(db),
+    loadTiers(),
+  ]);
   const [tickets, orders, intents, users, discounts, refundRequests] =
     await Promise.all([
       db
@@ -209,6 +239,10 @@ export async function loadAdminData(): Promise<AdminData> {
       wallApproved,
       users: users.count ?? 0,
     },
+    apparel: apparelTotals(
+      apparelRows,
+      tiers.filter((t) => t.includesApparel).map((t) => t.id),
+    ),
     tickets: {
       total: tickets.count ?? ticketRows.length,
       rows: ticketRows.map((t) => ({

@@ -86,6 +86,32 @@ courier reference, a pickup note — instead of a shape guessed in advance.
 
 ---
 
+## Holders editing their own tickets (ADR 0075)
+
+Until **Wednesday 18 November, 23:59** (Admin → Config → Ticket sales &
+edits → "Edits close"), anyone signed in can open **My tickets** on
+`/account` and change, on their own tickets:
+
+- the **attendee's name** (printed on the identifier), and
+- the **T-shirt size**, if the tier includes one.
+
+They cannot change the email, the tier, the badge code or anything about
+payment. Editing is refused once the ticket has been scanned at the door, and
+while a refund request for it is open or granted (matched on the ticket id,
+badge code or deposit id you typed in the refund request's "reference").
+Every edit is in the audit log as `ticket.self_edit`, with the before and
+after values.
+
+After the cutoff the button is gone and holders see "Edits closed — contact
+us"; fix anything else by hand.
+
+### Ordering the shirts
+
+**Admin → Tickets → Apparel sizes** counts every ticket on a tier that
+includes apparel, per tier and size (a Sonnet "M" and a Mythos "M" are
+different garments), plus how many still have no size. **Download the CSV
+after the edits cutoff** — sizes can still change until then.
+
 ## What is deliberately missing
 
 - **No interface.** These are endpoints; the scanning screen and the back

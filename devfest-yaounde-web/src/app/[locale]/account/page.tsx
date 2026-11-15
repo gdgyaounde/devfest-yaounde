@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AccountDashboard } from "@/components/account/AccountDashboard";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
+import { loadSettings } from "@/lib/content/settings";
+import { formatCutoff, ticketEditsOpen } from "@/lib/event";
 
 export async function generateMetadata({
   params,
@@ -30,6 +32,8 @@ export default async function AccountPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.account");
+  const settings = await loadSettings();
+  const l = locale === "en" ? "en" : "fr";
 
   return (
     <main id="main-content" tabIndex={-1} className="flex-1 pt-32 sm:pt-28">
@@ -38,7 +42,13 @@ export default async function AccountPage({
           <ScrambleText text={t("title")} />
         </h1>
         <div className="mt-14">
-          <AccountDashboard />
+          {/* The ticket-edit cutoff (ADR 0075), formatted in Yaoundé time
+              here so every visitor reads the same deadline. */}
+          <AccountDashboard
+            editsCloseAt={settings.ticketing.editsCloseAt}
+            editsOpenAtRender={ticketEditsOpen(new Date(), settings)}
+            editsDeadline={formatCutoff(l, settings.ticketing.editsCloseAt)}
+          />
         </div>
       </SectionContainer>
     </main>

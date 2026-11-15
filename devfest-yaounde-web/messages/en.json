@@ -54,7 +54,7 @@
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
     "dismiss": "Dismiss announcement",
     "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot.",
-    "salesClose": "Ticket sales close {date} at {time} — grab yours before the doors shut.",
+    "salesClose": "Ticket sales close {date} at {time} — grab yours before the doors shut. Already have one? You can update the name and T-shirt size from your account until then.",
     "salesCloseCta": "Get tickets",
     "afterSales": "See you on {date} 🎉 Ticket sales are closed — the shop is still open."
   },
@@ -361,7 +361,9 @@
       "salesClosedTitle": "Ticket sales are closed.",
       "salesClosedBody": "Thank you to everyone who grabbed a pass — see you on {date}. The shop is still open if you want some merch.",
       "salesClosedShop": "Visit the shop",
-      "termsLink": "Read the participation terms"
+      "termsLink": "Read the participation terms",
+      "salesNoticeEdits": "Already have a ticket? You can change its name and T-shirt size from your account until {date} at {time}.",
+      "salesNoticeEditsCta": "My tickets"
     },
     "shop": {
       "title": "Shop",
@@ -613,7 +615,36 @@
       "noOrdersTitle": "No orders yet",
       "noOrdersBody": "Anything you buy from the shop lands here, with where it is in the process.",
       "browseShop": "Browse the shop",
-      "metaDesc": "Your tickets, your orders, your badge codes."
+      "metaDesc": "Your tickets, your orders, your badge codes.",
+      "ticketEdit": {
+        "edit": "Edit",
+        "editTitle": "Edit your ticket",
+        "editHint": "You can change this until {date}, {time} (Yaoundé time).",
+        "nameLabel": "Name of the person coming",
+        "nameHint": "This is the name printed on the identifier.",
+        "sizeLabel": "T-shirt size",
+        "save": "Save",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "saved": "Saved — your ticket's up to date.",
+        "dismiss": "Dismiss",
+        "lockedClosed": "Edits closed on {date} — contact us if something is wrong.",
+        "lockedCheckedIn": "Already scanned at the door: these details are final.",
+        "lockedRefund": "A refund request is open for this ticket, so edits are paused.",
+        "contact": "Contact us",
+        "contactSubject": "Fix on my DevFest ticket",
+        "errors": {
+          "unauthenticated": "Your session expired — sign in again and retry.",
+          "rate_limited": "Easy there — too many tries at once. Give it a few minutes.",
+          "not_found": "We can't find this ticket on your account.",
+          "invalid_body": "Check the name (at least 2 characters) and the size, then try again.",
+          "edits_closed": "Edits are closed. Write to us if something's wrong.",
+          "checked_in": "This ticket has already been scanned at the door.",
+          "refund_pending": "A refund request is open for this ticket.",
+          "apparel_not_included": "This ticket doesn't include a T-shirt.",
+          "server_error": "Something glitched on our end — give it another shot?"
+        }
+      }
     },
     "claimTicket": {
       "title": "Claim your ticket",

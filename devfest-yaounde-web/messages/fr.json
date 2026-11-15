@@ -54,7 +54,7 @@
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
     "dismiss": "Fermer l'annonce",
     "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous.",
-    "salesClose": "La vente de billets ferme le {date} à {time} — prends le tien avant la fermeture.",
+    "salesClose": "La vente de billets ferme le {date} à {time} — prends le tien avant la fermeture. Déjà un billet ? Nom et taille de T-shirt modifiables depuis ton compte jusque-là.",
     "salesCloseCta": "Billets",
     "afterSales": "On se voit le {date} 🎉 La vente de billets est close — la boutique, elle, reste ouverte."
   },
@@ -361,7 +361,9 @@
       "salesClosedTitle": "La vente de billets est close.",
       "salesClosedBody": "Merci à toutes celles et ceux qui ont pris leur pass — on se voit le {date}. La boutique, elle, reste ouverte si tu veux du merch.",
       "salesClosedShop": "Voir la boutique",
-      "termsLink": "Lire les conditions de participation"
+      "termsLink": "Lire les conditions de participation",
+      "salesNoticeEdits": "Déjà un billet ? Tu peux changer son nom et sa taille de T-shirt depuis ton compte jusqu'au {date} à {time}.",
+      "salesNoticeEditsCta": "Mes billets"
     },
     "shop": {
       "title": "Boutique",
@@ -613,7 +615,36 @@
       "noOrdersTitle": "Pas encore de commande",
       "noOrdersBody": "Tout ce que tu achètes à la boutique arrive ici, avec son état d'avancement.",
       "browseShop": "Voir la boutique",
-      "metaDesc": "Tes billets, tes commandes, tes codes de badge."
+      "metaDesc": "Tes billets, tes commandes, tes codes de badge.",
+      "ticketEdit": {
+        "edit": "Modifier",
+        "editTitle": "Modifier ton billet",
+        "editHint": "Tu peux modifier ça jusqu'au {date}, {time} (heure de Yaoundé).",
+        "nameLabel": "Nom de la personne qui vient",
+        "nameHint": "C'est le nom imprimé sur l'identifiant.",
+        "sizeLabel": "Taille de T-shirt",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "cancel": "Annuler",
+        "saved": "C'est enregistré — ton billet est à jour.",
+        "dismiss": "Fermer",
+        "lockedClosed": "Les modifications sont closes depuis le {date} — écris-nous si quelque chose cloche.",
+        "lockedCheckedIn": "Billet déjà scanné à l'entrée : ses infos sont définitives.",
+        "lockedRefund": "Une demande de remboursement est en cours pour ce billet : les modifications sont en pause.",
+        "contact": "Nous écrire",
+        "contactSubject": "Correction sur mon billet DevFest",
+        "errors": {
+          "unauthenticated": "Ta session a expiré — reconnecte-toi et réessaie.",
+          "rate_limited": "Doucement — trop d'essais d'un coup. Réessaie dans quelques minutes.",
+          "not_found": "Ce billet est introuvable sur ton compte.",
+          "invalid_body": "Vérifie le nom (2 caractères minimum) et la taille, puis réessaie.",
+          "edits_closed": "Les modifications sont closes. Écris-nous si quelque chose cloche.",
+          "checked_in": "Ce billet a déjà été scanné à l'entrée.",
+          "refund_pending": "Une demande de remboursement est en cours pour ce billet.",
+          "apparel_not_included": "Ce billet ne comprend pas de T-shirt.",
+          "server_error": "Petit bug de notre côté — réessaie dans un instant ?"
+        }
+      }
     },
     "claimTicket": {
       "title": "Récupérer ton billet",

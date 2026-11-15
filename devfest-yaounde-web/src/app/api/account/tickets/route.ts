@@ -27,7 +27,17 @@
 import { findTier, loadTiers } from "@/lib/payments/catalog";
 import type { PricedLine } from "@/data/types";
 import { CHECKOUT_ERRORS, errorResponse } from "@/lib/payments/errors";
-import { createServerSupabase, currentUser } from "@/lib/supabase/server";
+import {
+  createAdminSupabase,
+  createServerSupabase,
+  currentUser,
+} from "@/lib/supabase/server";
+import { loadSettings } from "@/lib/content/settings";
+import {
+  BLOCKING_REFUND_STATUSES,
+  refundReferencesFor,
+  ticketLock,
+} from "@/lib/tickets/self-edit";
 
 interface IntentSummary {
   deposit_id: string;
@@ -63,7 +73,23 @@ export async function GET() {
   if (tickets.length === 0) return Response.json({ tickets: [] });
 
   const depositIds = [...new Set(tickets.map((t) => t.deposit_id))];
-  const [tiers, intents] = await Promise.all([
+  /*
+   * Which of these tickets are frozen by a refund request (ADR 0075), so the
+   * screen can say why "Edit" is not offered. `reference` is free text, so
+   * every identifier each ticket has is matched, case-insensitively.
+   */
+  const refundRefs = [
+    ...new Set(
+      tickets.flatMap((t) =>
+        refundReferencesFor(t).flatMap((r) => [
+          r,
+          r.toUpperCase(),
+          r.toLowerCase(),
+        ]),
+      ),
+    ),
+  ];
+  const [tiers, intents, settings, refunds] = await Promise.all([
     loadTiers(),
     supabase
       .from("payment_intents")
@@ -71,7 +97,18 @@ export async function GET() {
         "deposit_id, currency, discount_code, discount_amount, charged_amount, net_amount, line_items, activated_at, created_at",
       )
       .in("deposit_id", depositIds),
+    loadSettings(),
+    createAdminSupabase()
+      .from("refund_requests")
+      .select("reference")
+      .eq("kind", "tickets")
+      .in("status", [...BLOCKING_REFUND_STATUSES])
+      .in("reference", refundRefs),
   ]);
+  const frozenRefs = new Set(
+    (refunds.data ?? []).map((r) => r.reference.toLowerCase()),
+  );
+  const now = new Date();
 
   // A missing intent is not fatal. The ticket is real and its badge code is
   // what gets someone through the door — showing it without the price beats
@@ -103,6 +140,15 @@ export async function GET() {
         checkedInAt: ticket.checked_in_at,
         createdAt: ticket.created_at,
         isSelf: ticket.is_self,
+        /** Why it cannot be edited right now, or null (ADR 0075). */
+        lock: ticketLock({
+          now,
+          settings,
+          checkedInAt: ticket.checked_in_at,
+          hasBlockingRefund: refundReferencesFor(ticket).some((r) =>
+            frozenRefs.has(r.toLowerCase()),
+          ),
+        }),
         tier: {
           id: ticket.tier_id,
           // Falls back to the slug for a tier retired from the catalog. An

@@ -2,7 +2,9 @@
 
 import {
   Check,
+  LockSimple,
   Package,
+  PencilSimple,
   SignOut,
   Ticket as TicketIcon,
 } from "@phosphor-icons/react";
@@ -12,6 +14,11 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { BadgeCode } from "@/components/tickets/BadgeCode";
+import { Toast } from "@/components/ui/Toast";
+import { TicketEditor } from "@/components/account/TicketEditor";
+import { mailtoHref } from "@/lib/mailto";
+import { CHAPTER_EMAIL } from "@/lib/site-config";
+import { useBeforeInstant } from "@/lib/use-before-instant";
 import { signInWithGoogle, signOut, useSession } from "@/lib/use-session";
 
 interface LocalizedString {
@@ -34,6 +41,8 @@ interface Ticket {
   checkedInAt: string | null;
   createdAt: string;
   isSelf: boolean | null;
+  /** Why it cannot be edited right now, or null (ADR 0075). */
+  lock: "edits_closed" | "checked_in" | "refund_pending" | null;
   tier: {
     id: string;
     name: string;
@@ -75,8 +84,23 @@ interface Order {
 
 type Tab = "tickets" | "orders";
 
-export function AccountDashboard() {
+export function AccountDashboard({
+  editsCloseAt,
+  editsOpenAtRender,
+  editsDeadline,
+}: {
+  /** The edits cutoff (ADR 0075) and what was true when the page rendered. */
+  editsCloseAt: string | null;
+  editsOpenAtRender: boolean;
+  /** Formatted in Yaoundé time on the server; null = no cutoff. */
+  editsDeadline: { date: string; short: string; time: string } | null;
+}) {
   const t = useTranslations("pages.account");
+  const te = useTranslations("pages.account.ticketEdit");
+  // Flips at the minute, so an open tab cannot keep offering "Edit".
+  const editsOpen = useBeforeInstant(editsCloseAt, editsOpenAtRender);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [toast, setToast] = useState(false);
   const locale = useLocale();
   const router = useRouter();
   const { profile, loading } = useSession();
@@ -239,6 +263,65 @@ export function AccountDashboard() {
                     </p>
                   )}
 
+                  {/* Self-edit (ADR 0075): name + size until the cutoff. */}
+                  {(() => {
+                    // The server's verdict, plus the live clock: a tab left
+                    // open across the cutoff stops offering "Edit".
+                    const effective =
+                      ticket.lock ?? (editsOpen ? null : "edits_closed");
+                    if (effective === null) {
+                      return (
+                        <div className="mt-4 flex flex-wrap items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setEditingId(ticket.id)}
+                            className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-4 py-2 font-sans text-body-m font-bold text-black02 shadow-[0_3px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
+                          >
+                            <PencilSimple size={16} weight="bold" aria-hidden />
+                            {te("edit")}
+                          </button>
+                          {editsDeadline && (
+                            <span className="text-caption text-black02/70">
+                              {te("editHint", {
+                                date: editsDeadline.short,
+                                time: editsDeadline.time,
+                              })}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="mt-4 flex items-start gap-2 rounded-lg border-2 border-black02/20 bg-pastel/60 px-3.5 py-2.5">
+                        <LockSimple
+                          size={16}
+                          weight="bold"
+                          aria-hidden
+                          className="mt-1 shrink-0 text-black02"
+                        />
+                        <p className="text-body-m text-black02/80">
+                          {effective === "checked_in"
+                            ? te("lockedCheckedIn")
+                            : effective === "refund_pending"
+                              ? te("lockedRefund")
+                              : te("lockedClosed", {
+                                  date: editsDeadline?.short ?? "",
+                                })}{" "}
+                          {effective !== "checked_in" && (
+                            <a
+                              href={mailtoHref(CHAPTER_EMAIL, {
+                                subject: te("contactSubject"),
+                              })}
+                              className="font-bold underline decoration-2 underline-offset-4"
+                            >
+                              {te("contact")}
+                            </a>
+                          )}
+                        </p>
+                      </div>
+                    );
+                  })()}
+
                   {/* What the tier includes. The whole point of buying one
                       tier over another, and until now it lived only on the
                       sales page — where you cannot look it up afterwards. */}
@@ -394,6 +477,45 @@ export function AccountDashboard() {
             </ul>
           )}
         </div>
+      )}
+
+      {(() => {
+        const editing = tickets?.find((x) => x.id === editingId);
+        if (!editing) return null;
+        return (
+          <TicketEditor
+            key={editing.id}
+            open
+            ticket={{
+              id: editing.id,
+              attendeeName: editing.attendeeName,
+              apparelSize: editing.apparelSize,
+              includesApparel: editing.tier.includesApparel,
+            }}
+            deadline={
+              editsDeadline
+                ? { date: editsDeadline.date, time: editsDeadline.time }
+                : null
+            }
+            onClose={() => setEditingId(null)}
+            onSaved={(next) => {
+              setTickets(
+                (prev) =>
+                  prev?.map((x) =>
+                    x.id === editing.id ? { ...x, ...next } : x,
+                  ) ?? prev,
+              );
+              setEditingId(null);
+              setToast(true);
+            }}
+          />
+        );
+      })()}
+
+      {toast && (
+        <Toast onDismiss={() => setToast(false)} dismissLabel={te("dismiss")}>
+          {te("saved")}
+        </Toast>
       )}
     </div>
   );
