@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 import { isPlaceholderUrl } from "@/lib/site-config";
 
 /**
@@ -35,6 +36,19 @@ export function MaybeLink({
   if (isPlaceholderUrl(href)) {
     return (
       <span className={`${className} ${placeholderClassName}`}>{children}</span>
+    );
+  }
+  /*
+    An on-site path ("/terms" — the participation terms since ADR 0074) goes
+    through the locale-aware Link, so an English reader lands on /en/terms
+    rather than being bounced to the default locale, and it never opens a
+    new tab: `external` only ever applied to somebody else's documents.
+  */
+  if (href!.startsWith("/") && !href!.startsWith("//")) {
+    return (
+      <Link href={href!} className={className}>
+        {children}
+      </Link>
     );
   }
   return (

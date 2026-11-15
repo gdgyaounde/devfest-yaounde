@@ -35,6 +35,26 @@ Edit both — the site requires both languages before a change counts as "done."
 
 **To hide the banner entirely** for now, an organizer without dev help would need to ask a developer to remove it from `src/components/global/GlobalChrome.tsx` — there's no on/off toggle yet. Note that visitors can dismiss it themselves; the navbar then smoothly collapses the space and the whole bar morphs into a pill. If frequent on/off toggling turns out to be needed, that's worth a small follow-up feature (a `announcement.enabled` flag in the messages file or a config file), not something to hack in on the spot.
 
+## The "terms updated" pop-up (ADR 0074)
+
+When the participation terms change, every visitor sees a short pop-up once —
+"Our participation terms have changed", with "Got it" and "Read the terms".
+It is remembered per browser **per terms version**.
+
+**To show it again after changing the terms:**
+
+1. Edit the terms copy (`messages/{fr,en}.json` → `pages.terms`, and the
+   pop-up summary under `termsPopup` — both languages).
+2. In **Admin → Config → Legal links**, change **Terms version** (use the
+   date, e.g. `2026-12-01`) and set **Last updated** to the same day.
+3. Save. Everyone sees the pop-up once more on their next visit; people who
+   already dismissed the old version are asked again, which is the point.
+
+Changing only the copy, without a new version, updates `/terms` silently —
+nobody is shown the pop-up. The pop-up never appears on `/admin`, on `/terms`
+itself (reading the page counts as seen) or on the full-screen wall, and it
+waits for the loading screen and the hero animation before it opens.
+
 ## Changing nav links, Shop/Get Tickets button labels
 
 Labels: `messages/fr.json` and `messages/en.json` → `nav.*` keys.

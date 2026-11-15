@@ -351,7 +351,7 @@
       "discountConfirmedAtPayment": "Ce montant est confirmé au moment du paiement.",
       "refundTitle": "Les billets ne sont pas remboursables",
       "refundBody": "Une fois payé, un billet ne peut être ni remboursé ni annulé — ni en cas de changement de programme, ni après l'événement. Tu peux en revanche y mettre le nom de quelqu'un d'autre avant le jour J.",
-      "refundAck": "Je comprends que les billets ne sont pas remboursables.",
+      "refundAck": "Je comprends que les billets ne sont pas remboursables, et j'ai lu les conditions de participation : le repas, le swag et les identifiants de l'événement sont réservés aux pass payants, selon le palier.",
       "metaDesc": "Choisis ton pass et paie en Mobile Money. Tous les tarifs, ce qu'ils incluent, et comment entrer.",
       "myTicketsLink": "Déjà commandé ? Voir mes billets",
       "salesNoticeTitle": "La vente de billets ferme le {date} à {time}",
@@ -360,7 +360,8 @@
       "salesClosed": "Ventes closes",
       "salesClosedTitle": "La vente de billets est close.",
       "salesClosedBody": "Merci à toutes celles et ceux qui ont pris leur pass — on se voit le {date}. La boutique, elle, reste ouverte si tu veux du merch.",
-      "salesClosedShop": "Voir la boutique"
+      "salesClosedShop": "Voir la boutique",
+      "termsLink": "Lire les conditions de participation"
     },
     "shop": {
       "title": "Boutique",
@@ -673,6 +674,46 @@
       "removed": "C'est retiré.",
       "failed": "Ça n'a pas marché. Réessaie, ou écris au chapitre.",
       "termsLink": "Lire les conditions du mur"
+    },
+    "terms": {
+      "title": "Conditions de participation",
+      "metaDesc": "Ce que comprend chaque pass DevFest Yaoundé — gratuit ou payant —, l'entrée et les badges, les repas et le swag, les modifications de billet, les photos et le code de conduite.",
+      "version": "Version {version} · Dernière mise à jour le {date}",
+      "lead": "DevFest Yaoundé, c'est une journée entre amis qui construisent des choses. Voici, noir sur blanc et sans jargon, ce que chaque pass comprend — pour que personne n'ait de mauvaise surprise samedi.",
+      "toc": "Sur cette page",
+      "whatTitle": "C'est quoi, DevFest Yaoundé ?",
+      "whatBody": "Un événement communautaire et gratuit, organisé bénévolement par GDG Yaoundé (Google Developer Group). Les talks, les ateliers, les stands des sponsors et la communauté sont ouverts à toutes celles et ceux qui ont un pass — gratuit (Haikyu) ou payant.",
+      "passesTitle": "Pass gratuit ou payant : ce que chacun comprend",
+      "passesBody": "Tiré directement de nos formules de billets, donc toujours à jour. Les prix incluent les frais de transaction.",
+      "colPass": "Pass",
+      "colPrice": "Prix",
+      "colIncludes": "Ce qu'il comprend",
+      "free": "Gratuit",
+      "inTheBox": "Dans la boîte : {items}",
+      "rsvp": "Réservation sur Bevy",
+      "foodTitle": "Repas, boissons et swag",
+      "foodRule": "Le repas et les boissons, le swag (T-shirts, goodies, autocollants…), les identifiants de l'événement (badge, lanyard, bracelet ou similaire) et tous les autres avantages physiques sont réservés aux détenteurs d'un pass payant — Sonnet, Opus, Fable et Mythos — et uniquement pour ce que leur palier comprend. Un pass gratuit ne donne droit à aucun d'eux, y compris s'il en reste en fin de journée.",
+      "foodWhy": "Ce n'est pas une question de mérite : les pass payants financent exactement ces choses-là. Le pass gratuit, lui, te donne l'essentiel — le contenu et la communauté — et un certificat de participation.",
+      "entryTitle": "Entrée et badges",
+      "entryFree": "Un pass gratuit te fait entrer : les talks, les ateliers (dans la limite des places de chaque salle) et les stands des sponsors.",
+      "entryNoBadge": "Il ne garantit pas d'identifiant physique — ni badge, ni lanyard, ni bracelet ou similaire. L'équipe pourra en distribuer certains le jour J, mais avec un pass gratuit, mieux vaut ne pas compter dessus.",
+      "entryPaid": "Les pass payants reçoivent le leur : il fait partie du palier.",
+      "changesTitle": "Modifier ton billet",
+      "changesBody": "Tu peux changer le nom et la taille de T-shirt de ton billet depuis ton compte jusqu'au {date} à {time} (heure de Yaoundé). Après, tout part à l'impression : écris-nous si quelque chose cloche.",
+      "changesCta": "Mon compte",
+      "refundsTitle": "Remboursements",
+      "refundsBody": "Un billet payant n'est ni remboursable ni annulable, mais tu peux le mettre au nom de quelqu'un d'autre avant le jour J. Le pass gratuit n'est qu'une réservation sur Bevy : rien à rembourser — si tu ne viens plus, libère ta place pour quelqu'un d'autre.",
+      "refundsCta": "La politique de remboursement",
+      "photosTitle": "Photos et le mur des DP",
+      "photosBody": "On prend des photos et des vidéos pendant la journée pour la raconter ensuite. Les visuels créés avec le générateur de DP et partagés sur le mur de la communauté suivent leurs propres règles.",
+      "photosCta": "Les règles du mur",
+      "conductTitle": "Code de conduite",
+      "conductBody": "DevFest Yaoundé suit les conditions de participation et le code de conduite de la communauté Google Developer Groups. En venant, tu t'engages à les respecter : bienveillance, respect, zéro harcèlement. Toute personne qui ne les respecte pas peut être invitée à partir, quel que soit son pass.",
+      "conductCta": "Le code de conduite GDG",
+      "contactTitle": "Une question ?",
+      "contactBody": "Écris-nous, on répond vite — surtout cette semaine.",
+      "contactCta": "Nous écrire",
+      "contactSubject": "Question sur les conditions de participation"
     }
   },
   "errors": {
@@ -760,5 +801,11 @@
     "hours": "h",
     "minutes": "min",
     "seconds": "sec"
+  },
+  "termsPopup": {
+    "title": "Nos conditions de participation ont changé",
+    "body": "DevFest Yaoundé se tient désormais sur une seule journée, le {date}. Le repas, le swag et les identifiants (badge, lanyard, bracelet ou similaire) sont réservés aux pass payants ; le pass gratuit te fait entrer aux talks, aux ateliers et aux stands.",
+    "read": "Lire les conditions",
+    "ok": "C'est noté"
   }
 }

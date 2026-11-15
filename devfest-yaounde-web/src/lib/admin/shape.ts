@@ -152,6 +152,14 @@ export interface LegalSettings {
   participationTermsUrl: string;
   privacyUrl: string;
   termsUrl: string;
+  /**
+   * The participation terms' version (ADR 0074). Changing it shows every
+   * visitor the "terms updated" pop-up once more. Free text; a date reads
+   * best ("2026-11-15").
+   */
+  termsVersion: string;
+  /** "YYYY-MM-DD" — printed as "Last updated" on /terms. */
+  termsUpdatedAt: string;
 }
 
 export interface HeroSettings {

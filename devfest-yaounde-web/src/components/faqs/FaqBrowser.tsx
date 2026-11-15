@@ -1,5 +1,6 @@
 "use client";
 
+import { MaybeLink } from "@/components/ui/MaybeLink";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -222,14 +223,15 @@ export function FaqBrowser({
                           are the participation terms (ADR 0040). */}
                       {cat === "code-of-conduct" &&
                         !isPlaceholderUrl(participationTermsUrl) && (
-                          <a
+                          /* MaybeLink: "/terms" (ADR 0074) stays on-site and
+                             in-locale; an external URL still opens a tab. */
+                          <MaybeLink
                             href={participationTermsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            external
                             className="mt-4 inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
                           >
                             {t("readConduct")}
-                          </a>
+                          </MaybeLink>
                         )}
                     </FaqAccordion>
                   </Reveal>

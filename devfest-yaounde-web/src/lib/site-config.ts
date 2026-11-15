@@ -65,7 +65,8 @@ export const SOCIAL_LINKS = {
 export const RECAP_URL = "#";
 
 /**
- * The legal links, as published in the chapter's own Bevy footer.
+ * The legal links. Participation terms are on-site since ADR 0074 (/terms);
+ * privacy and terms of service are still Google's.
  *
  * These are the repo fallback. `site_settings.legal` overrides them once an
  * organiser edits them in the dashboard (ADR 0038), same rule as every other
@@ -74,8 +75,24 @@ export const RECAP_URL = "#";
  * They are Google's and GDG's pages rather than ours, which is correct — the
  * chapter runs under those terms and does not publish its own.
  */
-export const PARTICIPATION_TERMS_URL =
+export const PARTICIPATION_TERMS_URL = "/terms";
+
+/**
+ * GDG's own participation terms and code of conduct — still external, and
+ * still the conduct document the chapter runs under (ADR 0040). Linked from
+ * the on-site /terms page (ADR 0074), which covers what the GDG page cannot:
+ * what each DevFest pass includes.
+ */
+export const GDG_CODE_OF_CONDUCT_URL =
   "https://gdg.community.dev/participation-terms/";
+
+/**
+ * The participation terms' version (ADR 0074). Bumping it — here, or in
+ * Admin → Config → Legal — shows every visitor the "terms updated" pop-up
+ * once more. `TERMS_UPDATED_AT` is the date printed at the top of /terms.
+ */
+export const TERMS_VERSION = "2026-11-15";
+export const TERMS_UPDATED_AT = "2026-11-15";
 export const PRIVACY_POLICY_URL = "https://policies.google.com/privacy";
 export const TERMS_URL = "https://policies.google.com/terms";
 

@@ -601,9 +601,46 @@ export function AdminConfig({
               }
             />
             <span className="mt-1 block text-caption font-normal text-black02/65">
-              Also what the “rules of conduct” answer in the FAQ links to.
+              <code>/terms</code> is the on-site page (ADR 0074). Also what the
+              “rules of conduct” answer in the FAQ links to.
             </span>
           </label>
+
+          {/*
+            ADR 0074. Changing the version is what re-shows the "terms
+            updated" pop-up to every visitor, once each. The date is printed
+            at the top of /terms. Change both when the terms change.
+          */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-body-m font-bold text-black02">
+              Terms version
+              <input
+                className={field}
+                value={legal.termsVersion}
+                onChange={(e) =>
+                  setLegal({ ...legal, termsVersion: e.target.value.trim() })
+                }
+              />
+              <span className="mt-1 block text-caption font-normal text-black02/65">
+                Change it (e.g. to today&rsquo;s date) and every visitor sees
+                the &ldquo;terms updated&rdquo; pop-up once more.
+              </span>
+            </label>
+            <label className="block text-body-m font-bold text-black02">
+              Last updated
+              <input
+                type="date"
+                className={field}
+                value={legal.termsUpdatedAt}
+                onChange={(e) =>
+                  setLegal({ ...legal, termsUpdatedAt: e.target.value })
+                }
+              />
+              <span className="mt-1 block text-caption font-normal text-black02/65">
+                Shown at the top of the terms page.
+              </span>
+            </label>
+          </div>
 
           <label className="block text-body-m font-bold text-black02">
             Privacy policy

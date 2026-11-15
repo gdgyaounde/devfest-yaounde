@@ -45,8 +45,18 @@ export function PaymentStep({
   profile: Profile | null;
   sessionLoading: boolean;
   signInNext: string;
-  /** Per-surface refund wording — see the note above. */
-  terms: { title: string; body: string; ack: string };
+  /**
+   * Per-surface refund wording — see the note above. `link` is an optional
+   * on-site page the acknowledgment refers to (the participation terms on
+   * the ticket surface, ADR 0074), opened in a new tab so the half-filled
+   * checkout is not lost.
+   */
+  terms: {
+    title: string;
+    body: string;
+    ack: string;
+    link?: { href: string; label: string };
+  };
   /** Anything the surface adds. */
   extra?: ReactNode;
 }) {
@@ -88,6 +98,16 @@ export function PaymentStep({
           {terms.title}
         </p>
         <p className="mt-2 text-body-m text-black02/80">{terms.body}</p>
+        {terms.link && (
+          <a
+            href={terms.link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1.5 text-body-m font-bold text-black02 underline decoration-2 underline-offset-4 hover:decoration-primary"
+          >
+            {terms.link.label}
+          </a>
+        )}
         <label className="mt-4 flex items-start gap-3">
           <input
             type="checkbox"

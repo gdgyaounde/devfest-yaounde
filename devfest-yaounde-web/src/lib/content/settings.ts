@@ -17,6 +17,8 @@ import {
   PRIVACY_POLICY_URL,
   SPONSOR_PROSPECTUS_URL,
   TERMS_URL,
+  TERMS_UPDATED_AT,
+  TERMS_VERSION,
   TICKET_EDITS_CLOSE_AT,
   TICKET_SALES_CLOSE_AT,
 } from "@/lib/site-config";
@@ -52,6 +54,8 @@ const REPO_DEFAULTS: SiteSettings = {
     participationTermsUrl: PARTICIPATION_TERMS_URL,
     privacyUrl: PRIVACY_POLICY_URL,
     termsUrl: TERMS_URL,
+    termsVersion: TERMS_VERSION,
+    termsUpdatedAt: TERMS_UPDATED_AT,
   },
   ticketing: {
     salesCloseAt: TICKET_SALES_CLOSE_AT,

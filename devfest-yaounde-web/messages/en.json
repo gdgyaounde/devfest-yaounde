@@ -103,7 +103,7 @@
     "legal": {
       "title": "Legal",
       "privacy": "Privacy Policy",
-      "participationTerms": "Participation Terms",
+      "participationTerms": "Participation terms",
       "terms": "Terms of Service"
     },
     "followUs": "Follow us",
@@ -351,7 +351,7 @@
       "discountConfirmedAtPayment": "This total is confirmed when you pay.",
       "refundTitle": "Tickets are non-refundable",
       "refundBody": "Once a ticket is paid for it can't be refunded or cancelled — not for a change of plans, and not after the event. You can put someone else's name on it before the day.",
-      "refundAck": "I understand tickets are non-refundable.",
+      "refundAck": "I understand tickets are non-refundable, and I've read the participation terms: food, swag and event identifiers come with paid passes, as each tier lists.",
       "metaDesc": "Pick your pass and pay with Mobile Money. Every tier, what's included, and how to get in.",
       "myTicketsLink": "Already bought? See my tickets",
       "salesNoticeTitle": "Ticket sales close {date} at {time}",
@@ -360,7 +360,8 @@
       "salesClosed": "Sales closed",
       "salesClosedTitle": "Ticket sales are closed.",
       "salesClosedBody": "Thank you to everyone who grabbed a pass — see you on {date}. The shop is still open if you want some merch.",
-      "salesClosedShop": "Visit the shop"
+      "salesClosedShop": "Visit the shop",
+      "termsLink": "Read the participation terms"
     },
     "shop": {
       "title": "Shop",
@@ -673,6 +674,46 @@
       "removed": "It's gone.",
       "failed": "That didn't work. Try again, or write the chapter.",
       "termsLink": "Read the gallery terms"
+    },
+    "terms": {
+      "title": "Participation terms",
+      "metaDesc": "What each DevFest Yaoundé pass includes — free or paid —, entry and badges, food and swag, ticket changes, photos and the code of conduct.",
+      "version": "Version {version} · Last updated {date}",
+      "lead": "DevFest Yaoundé is a day out with friends who build things. Here's what each pass includes, in plain words — so nobody gets a surprise on Saturday.",
+      "toc": "On this page",
+      "whatTitle": "What DevFest Yaoundé is",
+      "whatBody": "A free community event, run by volunteers from GDG Yaoundé (Google Developer Group). The talks, the workshops, the sponsor stands and the community are open to everyone with a pass — free (Haikyu) or paid.",
+      "passesTitle": "Free vs paid passes: what each includes",
+      "passesBody": "Pulled straight from our ticket tiers, so it's always current. Prices include the transaction fee.",
+      "colPass": "Pass",
+      "colPrice": "Price",
+      "colIncludes": "What it includes",
+      "free": "Free",
+      "inTheBox": "In the box: {items}",
+      "rsvp": "RSVP on Bevy",
+      "foodTitle": "Food, drinks and swag",
+      "foodRule": "Food and drinks, swag (T-shirts, goodies, stickers…), event identifiers (badge, lanyard, bracelet or similar) and every other physical perk are for paid pass holders — Sonnet, Opus, Fable and Mythos — and only for what their tier includes. A free pass gives no claim to any of them, including if there's some left at the end of the day.",
+      "foodWhy": "It's not about who deserves what: paid passes are what pays for exactly these things. The free pass gets you the essentials — the content and the community — and a certificate of participation.",
+      "entryTitle": "Entry and badges",
+      "entryFree": "A free pass gets you in: the talks, the workshops (within each room's capacity) and the sponsor stands.",
+      "entryNoBadge": "It doesn't guarantee a physical identifier — no badge, lanyard, bracelet or similar. The team may hand some out on the day, but with a free pass, best not to count on one.",
+      "entryPaid": "Paid passes get theirs: it's part of the tier.",
+      "changesTitle": "Changing your ticket",
+      "changesBody": "You can change your ticket's name and T-shirt size from your account until {date} at {time} (Yaoundé time). After that, everything goes to print — write to us if something's wrong.",
+      "changesCta": "My account",
+      "refundsTitle": "Refunds",
+      "refundsBody": "A paid ticket can't be refunded or cancelled, but you can put it in someone else's name before the day. The free pass is just an RSVP on Bevy: nothing to refund — if you can't make it, free up your spot for someone else.",
+      "refundsCta": "The refund policy",
+      "photosTitle": "Photos and the DP wall",
+      "photosBody": "We take photos and video during the day to tell the story afterwards. Pictures made with the DP generator and shared on the community wall follow their own rules.",
+      "photosCta": "The wall's rules",
+      "conductTitle": "Code of conduct",
+      "conductBody": "DevFest Yaoundé follows the Google Developer Groups community's participation terms and code of conduct. By coming, you agree to them: kindness, respect, zero harassment. Anyone who doesn't may be asked to leave, whatever their pass.",
+      "conductCta": "The GDG code of conduct",
+      "contactTitle": "Got a question?",
+      "contactBody": "Write to us — we answer fast, especially this week.",
+      "contactCta": "Write to us",
+      "contactSubject": "Question about the participation terms"
     }
   },
   "errors": {
@@ -760,5 +801,11 @@
     "hours": "hrs",
     "minutes": "min",
     "seconds": "sec"
+  },
+  "termsPopup": {
+    "title": "Our participation terms have changed",
+    "body": "DevFest Yaoundé is now a single day, {date}. Food, swag and event identifiers (badge, lanyard, bracelet or similar) are for paid passes; the free pass gets you into the talks, workshops and stands.",
+    "read": "Read the terms",
+    "ok": "Got it"
   }
 }

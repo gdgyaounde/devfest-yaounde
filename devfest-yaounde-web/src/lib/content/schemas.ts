@@ -384,6 +384,15 @@ export const legalSchema = z.object({
   participationTermsUrl: urlOrEmpty.optional().nullable(),
   privacyUrl: urlOrEmpty.optional().nullable(),
   termsUrl: urlOrEmpty.optional().nullable(),
+  // ADR 0074. A short token — it ends up in a localStorage key.
+  termsVersion: z
+    .string()
+    .trim()
+    .min(1)
+    .max(40)
+    .regex(/^[A-Za-z0-9._-]+$/, "letters, digits, dot, dash or underscore")
+    .optional(),
+  termsUpdatedAt: z.iso.date().optional(),
 });
 
 /**

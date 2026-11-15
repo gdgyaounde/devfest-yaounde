@@ -11,6 +11,7 @@ import { GlobalChrome } from "@/components/global/GlobalChrome";
 import { OfflineIndicator } from "@/components/global/OfflineIndicator";
 import { Preloader } from "@/components/global/Preloader";
 import { ServiceWorkerRegistration } from "@/components/global/ServiceWorkerRegistration";
+import { TermsUpdatedPopup } from "@/components/global/TermsUpdatedPopup";
 import { routing } from "@/i18n/routing";
 import {
   formatCutoff,
@@ -223,6 +224,13 @@ export default async function LocaleLayout({
                 salesBanner ? settings.ticketing.salesCloseAt : undefined
               }
               nav={settings.nav}
+            />
+            {/* "Our participation terms have changed", once per browser per
+                `legal.termsVersion` (ADR 0074). Waits for the preloader and
+                the hero entrance before it opens. */}
+            <TermsUpdatedPopup
+              version={settings.legal.termsVersion}
+              eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
             />
             <FloatingScrollbar />
             <CustomCursor />

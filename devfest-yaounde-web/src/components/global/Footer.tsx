@@ -205,10 +205,11 @@ export async function Footer() {
               <div className="link-group">
                 <h2 className={GROUP_TITLE_CLASS}>{t("legal.title")}</h2>
                 {/*
-                  All three are somebody else's documents — Google's policies
-                  and GDG's participation terms — which is correct: the
-                  chapter runs under them and does not publish its own. They
-                  open in a new tab for that reason.
+                  Privacy and terms of service are Google's documents and
+                  open in a new tab. The participation terms are ON-SITE
+                  since ADR 0074 (/terms) — MaybeLink sends an internal path
+                  through the locale-aware Link, same tab — and that page
+                  links GDG's code of conduct in turn.
 
                   There is no separate "Code of Conduct" entry. The
                   participation terms ARE the conduct document the chapter

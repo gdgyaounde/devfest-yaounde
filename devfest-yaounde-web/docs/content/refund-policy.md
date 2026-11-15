@@ -36,6 +36,7 @@ Deliberately in several places, none of them small print:
 | -------------------------- | ------------------------------------------------------------------------------------- |
 | `/tickets`, payment step   | Body-sized text plus a **required** acknowledgment checkbox that gates the pay button |
 | `/faqs`, Tickets & Pricing | `faq-refunds` in `src/data/faqs.json`                                                 |
+| `/terms`, Refunds          | Summary in the participation terms (ADR 0074), linking back to the FAQ               |
 | This file                  | The policy itself                                                                     |
 
 The checkbox is unticked by default and payment cannot proceed without it. It

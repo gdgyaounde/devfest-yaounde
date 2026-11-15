@@ -28,6 +28,7 @@ const ROUTES = [
   "/shop",
   "/dp-generator",
   "/wall/terms",
+  "/terms",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
