@@ -16,7 +16,8 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // No feature on this site needs any of these.
+  // No public page needs any of these. The door scanner gets the camera
+  // back on its own route only — see `headers()` below.
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
@@ -108,7 +109,26 @@ const nextConfig: NextConfig = {
       process.env.NEXT_PUBLIC_DP_GALLERY === "0" ? "0" : "1",
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      /*
+       * The ONE exception to `camera=()`: the door scanner (ADR 0078) reads
+       * badge QR codes through the phone camera. Scoped to that route and to
+       * this origin only (`self`), so every other page still cannot ask.
+       * Later entries override earlier ones for the same key (Next's
+       * headers docs), which is what makes this narrower rule win here.
+       */
+      {
+        source: "/:locale(fr|en)/admin/check-in",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(self), microphone=(), geolocation=(), interest-cohort=()",
+          },
+        ],
+      },
+    ];
   },
 };
 

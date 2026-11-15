@@ -25,6 +25,7 @@ import {
   UsersThree,
   X,
   EnvelopeSimple,
+  QrCode,
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -121,7 +122,11 @@ const GROUPS: {
       { id: "shop", label: "Shop", Icon: Storefront },
       { id: "transactions", label: "Transactions", Icon: Receipt },
       { id: "orders", label: "Shop orders", Icon: Package },
-      { id: "refunds", label: "Refunds & exchanges", Icon: ArrowCounterClockwise },
+      {
+        id: "refunds",
+        label: "Refunds & exchanges",
+        Icon: ArrowCounterClockwise,
+      },
       { id: "discounts", label: "Discounts", Icon: Percent },
     ],
   },
@@ -553,6 +558,19 @@ export function AdminShell({
               </Link>
 
               {/*
+                The door scanner is its own lightweight route (ADR 0078), so
+                it is a link out rather than a view — and the loudest item
+                here, because on the day it is the one people look for.
+              */}
+              <Link
+                href="/admin/check-in"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-pill border-2 border-black02 bg-primary px-4 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_3px_0_0_var(--color-black02)] transition-transform duration-150 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
+              >
+                <QrCode size={20} weight="bold" aria-hidden />
+                Door check-in
+              </Link>
+
+              {/*
                 ACCORDION, not a long scroll. Thirteen views in five groups
                 is more than fits a laptop sidebar, and the old answer was to
                 let it scroll — which hides half the dashboard behind a
@@ -583,7 +601,9 @@ export function AdminShell({
                         item={item}
                         active={view === item.id}
                         onGo={go}
-                        badge={item.id === "shop" ? draftProductCount : undefined}
+                        badge={
+                          item.id === "shop" ? draftProductCount : undefined
+                        }
                       />
                     );
                   }

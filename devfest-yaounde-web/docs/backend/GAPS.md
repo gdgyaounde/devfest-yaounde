@@ -30,7 +30,7 @@ hold a ticket and does not is a problem at the door, not on the screen.
 | **Refunds / cancellation**  | **Absent**                | Not offered — see G2             |
 | **Email receipts**          | Code done, provider unset | Wire; degrades silently — G3     |
 | **Discount code preview**   | **Complete**              | Priced before payment — G4       |
-| Organiser check-in / orders | **Complete**              | Out of Phase 14's scope — G5     |
+| Organiser check-in / orders | **Complete**              | Screens built — G5 resolved      |
 
 **Most of this is buildable for real.** The gaps are narrow and specific.
 
@@ -66,8 +66,8 @@ wrong there.
 
 **2026-09-16 addendum:** the policy still stands — nothing above changed.
 What organisers gained is a place to LOG a manual refund/exchange request
-that comes in by email and track its status (*Commerce → Refunds &
-exchanges*). It does not move money, does not touch a ticket or order, and
+that comes in by email and track its status (_Commerce → Refunds &
+exchanges_). It does not move money, does not touch a ticket or order, and
 does not add a self-service request path for buyers. ADR 0064.
 
 ### G3 — Email provider not chosen — **CLOSED 2026-09-16**
@@ -115,7 +115,10 @@ A quote holds nothing. The redemption is still claimed at payment time, once,
 inside `create_payment_intent`, so a code accepted for a quote can still be
 refused at checkout — the screen keeps the basket and says why.
 
-### G5 — Organiser tools are unbuilt (backend ready)
+### G5 — Organiser tools are unbuilt (backend ready) — RESOLVED
+
+Resolved 2026-11-15: the door scanner is `/admin/check-in` (ADR 0078) and
+order status is managed from **Admin → Shop orders**. Kept below for history.
 
 <!-- Deferred 2026-09-02 to a future phase. -->
 
