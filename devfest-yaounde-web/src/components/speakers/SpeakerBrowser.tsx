@@ -166,18 +166,21 @@ export function SpeakerBrowser({ speakers }: { speakers: Speaker[] }) {
         ]}
       />
 
-      <FilterGroup
-        label={t("dayLabel")}
-        selected={day}
-        onSelect={setDay}
-        options={[
-          { value: null, label: t("allDays") },
-          ...days.map((d) => ({
-            value: String(d),
-            label: t("day", { day: d }),
-          })),
-        ]}
-      />
+      {/* A one-day edition (ADR 0071) has nothing to filter by day. */}
+      {days.length > 1 && (
+        <FilterGroup
+          label={t("dayLabel")}
+          selected={day}
+          onSelect={setDay}
+          options={[
+            { value: null, label: t("allDays") },
+            ...days.map((d) => ({
+              value: String(d),
+              label: t("day", { day: d }),
+            })),
+          ]}
+        />
+      )}
     </>
   );
 

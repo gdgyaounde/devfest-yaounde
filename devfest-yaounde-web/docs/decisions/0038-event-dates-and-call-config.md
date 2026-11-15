@@ -1,7 +1,8 @@
 # 0038 — Two dates a week apart, and the calls that run up to them
 
 Date: 2026-09-08
-Status: Accepted
+Status: Accepted — the **dates** section is superseded by ADR 0071 (2026 is one
+day, Saturday 21 November). The roster and call configuration stand.
 
 ## Context
 

@@ -196,8 +196,9 @@ export function organizationJsonLd() {
  * entry in `calendar.ts` — the same switch that reveals the add-to-calendar
  * buttons. One edit, both features.
  *
- * **`subEvent` is why this is not just a start and an end.** The two days are
- * a week apart, so `startDate: 21 Nov` with `endDate: 28 Nov` on its own
+ * **`subEvent` only appears for a multi-day edition.** 2026 is ONE day
+ * (21 Nov — ADR 0071), so today the block is a plain start and end. When an
+ * edition spans days that are not consecutive, `startDate` + `endDate` alone
  * tells a crawler this is one continuous eight-day event, which is wrong in
  * exactly the way a rich result would show: "Nov 21 – 28". The outer range
  * still spans the whole thing, because that IS when the event begins and
@@ -260,7 +261,8 @@ export function eventJsonLd(
 }
 
 /**
- * The dates as a person reads them: "21 & 28 November 2026".
+ * The dates as a person reads them: "21 November 2026" for the one-day 2026
+ * edition (ADR 0071), "21 & 28 November 2026" for a multi-day one.
  *
  * WHY THIS EXISTS. The hero and the ticket confirmation email both carried
  * the string "21–22 November 2026" — hand-typed, from the Bevy listing's

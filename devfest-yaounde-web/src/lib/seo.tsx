@@ -23,7 +23,7 @@ export function ogImageUrl(
 ): string {
   const params = new URLSearchParams({ title });
   if (subtitle) params.set("subtitle", subtitle);
-  // The card's own eyebrow ("DevFest Yaoundé 2026 · 21 & 28 November") is
+  // The card's own eyebrow ("21 NOVEMBER 2026 · YAOUNDÉ") is
   // written in this language, so a French page unfurls in French.
   if (locale === "en") params.set("locale", "en");
   return `${SITE_URL}/og?${params.toString()}`;

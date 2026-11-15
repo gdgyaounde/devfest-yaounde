@@ -275,7 +275,7 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
   schedule: {
     title: "Schedule",
     blurb:
-      "Sessions across both event days. Order here is the order on the timeline, and the day picker only offers days the event actually has.",
+      "Sessions across the event day. Order here is the order on the timeline, and the day picker only offers days the event actually has.",
   },
   sponsors: {
     title: "Sponsors & partners",

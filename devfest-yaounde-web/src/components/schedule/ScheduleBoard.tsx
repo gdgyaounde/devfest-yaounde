@@ -135,26 +135,34 @@ export function ScheduleBoard({
       {/* Day tabs + view toggle */}
       <Reveal>
         <div className="flex flex-wrap items-center justify-between gap-6">
-          <div className="flex flex-wrap gap-3">
-            {days.map((d) => (
-              <button
-                key={d}
-                type="button"
-                onClick={() => {
-                  setActiveDay(d);
-                  setOpenId(null);
-                }}
-                aria-pressed={d === activeDay}
-                className={`day-tab rounded-lg border-2 border-black02 px-6 py-3.5 font-sans text-body-l font-bold hover:-translate-y-0.5 motion-reduce:transform-none ${
-                  d === activeDay
-                    ? "bg-primary text-black02 shadow-[0_5px_0_0_var(--color-black02)]"
-                    : "bg-transparent text-black02/70 hover:bg-pastel"
-                }`}
-              >
-                {t("day", { day: d })}
-              </button>
-            ))}
-          </div>
+          {/* One day (2026 — ADR 0071) means no choice to make, so no tab
+              bar at all: a single pressed "Day 1" button reads as a control
+              that does nothing. The tabs come back on their own the moment a
+              session carries a second `day`. */}
+          {days.length > 1 ? (
+            <div className="flex flex-wrap gap-3">
+              {days.map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => {
+                    setActiveDay(d);
+                    setOpenId(null);
+                  }}
+                  aria-pressed={d === activeDay}
+                  className={`day-tab rounded-lg border-2 border-black02 px-6 py-3.5 font-sans text-body-l font-bold hover:-translate-y-0.5 motion-reduce:transform-none ${
+                    d === activeDay
+                      ? "bg-primary text-black02 shadow-[0_5px_0_0_var(--color-black02)]"
+                      : "bg-transparent text-black02/70 hover:bg-pastel"
+                  }`}
+                >
+                  {t("day", { day: d })}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <span aria-hidden />
+          )}
 
           <div className="flex items-center gap-3">
             <span
