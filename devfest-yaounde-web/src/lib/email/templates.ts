@@ -30,7 +30,7 @@ import type { PaymentIntentRow } from "@/lib/payments/intents";
 import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL, SITE_URL } from "@/lib/site-config";
 import { EVENT_DATES } from "@/lib/calendar";
-import { formatEventDates } from "@/lib/event";
+import { formatCutoff, formatEventDates } from "@/lib/event";
 
 /**
  * The dates, from the one list that holds them.
@@ -198,6 +198,15 @@ function layout(
   bodyHtml: string,
   /** The order/payment reference, when there is one — printed in the body too. */
   reference?: string,
+  /**
+   * Overrides for a message that is not a receipt (ADR 0076): the inbox
+   * preview line, and the footer's "why you got this" lines — one per
+   * language for a bilingual email. Absent = the receipt defaults.
+   */
+  opts: {
+    preheader?: string;
+    footer?: { contact: string; why: string; lang: Locale }[];
+  } = {},
 ): string {
   const c = COPY[l];
   // The support link arrives with a subject and a friendly opening already
@@ -224,7 +233,7 @@ function layout(
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(title)}</title></head>
 <body style="margin:0;padding:0;background:${BRAND.offwhite};">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(title)}</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(opts.preheader ?? title)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${BRAND.offwhite};padding:24px 12px;">
 <tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
@@ -261,11 +270,20 @@ ${bodyHtml}
   </td></tr>
 
   <tr><td style="background:${BRAND.paper};border-radius:0 0 16px 16px;border-top:1px solid ${BRAND.hairline};padding:22px 28px;">
-    <p style="margin:0 0 6px;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">${escapeHtml(c.contact)}</p>
+${(opts.footer ?? [{ contact: c.contact, why: c.why, lang: l }])
+  .map(
+    (
+      f,
+      i,
+    ) => `    <div lang="${f.lang}"${i > 0 ? ' style="margin-top:12px;"' : ""}>
+    <p style="margin:0 0 6px;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">${escapeHtml(f.contact)}</p>
     <p style="margin:0;font-family:${FONT};font-size:12px;line-height:1.6;color:${BRAND.muted};">
-      ${escapeHtml(c.why)} <a href="${SITE_URL}" style="color:${BRAND.ink};font-weight:600;">${escapeHtml(host)}</a>
+      ${escapeHtml(f.why)} <a href="${SITE_URL}" style="color:${BRAND.ink};font-weight:600;">${escapeHtml(host)}</a>
       &nbsp;·&nbsp; <a href="${escapeHtml(help)}" style="color:${BRAND.ink};">${escapeHtml(CHAPTER_EMAIL)}</a>
     </p>
+    </div>`,
+  )
+  .join("\n")}
   </td></tr>
 
 </table>
@@ -665,4 +683,338 @@ ${button(c.claimCta, input.claimUrl)}
   ].join("\n");
 
   return { subject: c.claimSubject, text, html };
+}
+
+/* ------------------------------------------------------------------------ */
+/*  "What's changing" — the launch-week update (ADR 0076)                    */
+/* ------------------------------------------------------------------------ */
+
+export type LaunchAudience = "paid" | "free";
+
+interface LaunchItem {
+  lead: string;
+  body: string;
+  links?: { label: string; path: string }[];
+  cta?: { label: string; path: string };
+}
+
+interface LaunchCopy {
+  title: string;
+  preheader: string;
+  intro: string;
+  items: LaunchItem[];
+  signoff: string;
+  team: string;
+  contact: string;
+  why: string;
+}
+
+/**
+ * The words, per audience and language. Dates are passed in already
+ * formatted (Yaoundé time), so the copy cannot disagree with the site.
+ */
+function launchCopy(
+  audience: LaunchAudience,
+  l: Locale,
+  d: {
+    event: string;
+    salesDate: string;
+    salesTime: string;
+    editsDate: string;
+    editsTime: string;
+  },
+): LaunchCopy {
+  const fr = l === "fr";
+  const oneDay: LaunchItem = fr
+    ? {
+        lead: "Une seule journée.",
+        body: `DevFest Yaoundé 2026, c'est le ${d.event}. Une journée, toute la communauté.`,
+      }
+    : {
+        lead: "One day.",
+        body: `DevFest Yaoundé 2026 is on ${d.event}. One day, the whole community.`,
+      };
+  const speakers: LaunchItem = fr
+    ? {
+        lead: "Les speakers sont annoncés !",
+        body: "24 talks et ateliers au programme — jette un œil au line-up. Et pour tous les détails, nos conditions de participation.",
+        links: [
+          { label: "Les speakers", path: "/speakers" },
+          { label: "Les conditions de participation", path: "/terms" },
+        ],
+      }
+    : {
+        lead: "The speakers are announced!",
+        body: "24 talks and workshops on the programme — have a look at the lineup. And for every detail, our participation terms.",
+        links: [
+          { label: "The speakers", path: "/speakers" },
+          { label: "The participation terms", path: "/terms" },
+        ],
+      };
+
+  if (audience === "paid") {
+    return fr
+      ? {
+          title: "Ce qui change avant samedi",
+          preheader:
+            "Une seule journée, ta taille de T-shirt jusqu'à mercredi, et des cadres DP rien que pour toi.",
+          intro:
+            "Salut ! Merci d'avoir pris ton pass pour DevFest Yaoundé 2026 — ça compte vraiment pour nous. Quelques nouvelles avant le grand jour :",
+          items: [
+            oneDay,
+            {
+              lead: `La vente de billets ferme le ${d.salesDate} à ${d.salesTime}`,
+              body: "(heure de Yaoundé). Si des amis hésitent encore, c'est le moment de leur faire signe.",
+            },
+            {
+              lead: "Ce que comprend ton pass.",
+              body: "En plus des talks, des ateliers et des stands, ton pass payant comprend le déjeuner et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de ton palier.",
+            },
+            {
+              lead: "Vérifie ta taille de T-shirt et ton nom.",
+              body: `Tu peux les modifier depuis ton compte jusqu'au ${d.editsDate} à ${d.editsTime}. Après, tout part à l'impression.`,
+              cta: { label: "Mettre à jour mon billet", path: "/account" },
+            },
+            {
+              lead: "Des cadres photo collector, rien que pour toi.",
+              body: "Le générateur de DP a deux cadres « édition collector », réservés aux détenteurs d'un pass payant. Connecte-toi avec le compte de ton billet : ils t'attendent.",
+              links: [{ label: "Le générateur de DP", path: "/dp-generator" }],
+            },
+            speakers,
+          ],
+          signoff: "À samedi !",
+          team: "L'équipe GDG Yaoundé",
+          contact: "Une question ? Réponds simplement à cet e-mail.",
+          why: "Tu reçois cet e-mail parce que tu as un billet DevFest Yaoundé 2026 sur",
+        }
+      : {
+          title: "What's changing before Saturday",
+          preheader:
+            "One day, your T-shirt size until Wednesday, and DP frames just for you.",
+          intro:
+            "Hi! Thank you for getting a pass to DevFest Yaoundé 2026 — it genuinely matters to us. A few updates before the big day:",
+          items: [
+            oneDay,
+            {
+              lead: `Ticket sales close on ${d.salesDate} at ${d.salesTime}`,
+              body: "(Yaoundé time). If friends are still on the fence, now's the time to nudge them.",
+            },
+            {
+              lead: "What your pass includes.",
+              body: "On top of the talks, workshops and stands, your paid pass includes lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and your tier's swag.",
+            },
+            {
+              lead: "Check your T-shirt size and name.",
+              body: `You can change them from your account until ${d.editsDate} at ${d.editsTime}. After that, everything goes to print.`,
+              cta: { label: "Update my ticket", path: "/account" },
+            },
+            {
+              lead: "Collector photo frames, just for you.",
+              body: "The DP generator has two “collector edition” frames for paid pass holders only. Sign in with the account your ticket is on and they're waiting for you.",
+              links: [{ label: "The DP generator", path: "/dp-generator" }],
+            },
+            speakers,
+          ],
+          signoff: "See you Saturday!",
+          team: "The GDG Yaoundé team",
+          contact: "A question? Just reply to this email.",
+          why: "You're getting this because you have a DevFest Yaoundé 2026 ticket on",
+        };
+  }
+
+  return fr
+    ? {
+        title: "Ce qui change avant samedi",
+        preheader:
+          "Une seule journée, l'entrée gratuite, et ce que comprend ton pass.",
+        intro:
+          "Salut ! Tu as réservé ta place gratuite pour DevFest Yaoundé 2026 — génial, on a hâte de te voir. Quelques nouvelles avant le jour J :",
+        items: [
+          oneDay,
+          {
+            lead: "L'entrée est gratuite.",
+            body: "Avec ton pass gratuit, tu as accès aux talks, aux ateliers (dans la limite des places de chaque salle) et aux stands des sponsors — et tu repars avec un certificat de participation.",
+          },
+          {
+            lead: "Ce qui est réservé aux pass payants.",
+            body: "Pour que tout soit clair dès maintenant : le repas, les boissons, le swag et les identifiants de l'événement (badge, lanyard, bracelet ou similaire) sont réservés aux pass payants, y compris s'il en reste en fin de journée. Ce n'est pas une question de mérite — c'est exactement ce que financent les pass payants. Pense donc à prévoir de quoi manger et boire.",
+          },
+          {
+            lead: "Envie du pack complet ?",
+            body: `Tu peux encore prendre un pass payant jusqu'au ${d.salesDate} à ${d.salesTime} (heure de Yaoundé).`,
+            cta: { label: "Voir les pass", path: "/tickets" },
+          },
+          speakers,
+          {
+            lead: "Quoi apporter ?",
+            body: "Toi-même, une pièce d'identité valide, un ordinateur si tu suis un atelier, et de quoi manger et boire.",
+          },
+        ],
+        signoff: "À samedi !",
+        team: "L'équipe GDG Yaoundé",
+        contact: "Une question ? Réponds simplement à cet e-mail.",
+        why: "Tu reçois cet e-mail parce que tu t'es inscrit·e à DevFest Yaoundé 2026 sur notre page communautaire. Tout est sur",
+      }
+    : {
+        title: "What's changing before Saturday",
+        preheader: "One day, free entry, and what your pass includes.",
+        intro:
+          "Hi! You've reserved your free spot for DevFest Yaoundé 2026 — brilliant, we can't wait to see you. A few updates before the day:",
+        items: [
+          oneDay,
+          {
+            lead: "Entry is free.",
+            body: "Your free pass gets you into the talks, the workshops (within each room's capacity) and the sponsor stands — and you leave with a certificate of participation.",
+          },
+          {
+            lead: "What's for paid passes.",
+            body: "So it's clear from now: food, drinks, swag and event identifiers (badge, lanyard, bracelet or similar) are for paid passes, including if there's some left at the end of the day. It isn't about who deserves what — it's exactly what paid passes pay for. So do plan something to eat and drink.",
+          },
+          {
+            lead: "Fancy the full package?",
+            body: `You can still get a paid pass until ${d.salesDate} at ${d.salesTime} (Yaoundé time).`,
+            cta: { label: "See the passes", path: "/tickets" },
+          },
+          speakers,
+          {
+            lead: "What to bring?",
+            body: "Yourself, a valid ID, a laptop if you're following a workshop, and something to eat and drink.",
+          },
+        ],
+        signoff: "See you Saturday!",
+        team: "The GDG Yaoundé team",
+        contact: "A question? Just reply to this email.",
+        why: "You're getting this because you RSVP'd to DevFest Yaoundé 2026 on our community page. It's all on",
+      };
+}
+
+export const LAUNCH_SUBJECT =
+  "DevFest Yaoundé — ce qui change avant samedi / what's changing before Saturday";
+
+function launchSectionHtml(l: Locale, c: LaunchCopy): string {
+  const url = (path: string) => `${SITE_URL}/${l}${path}`;
+  const items = c.items
+    .map((item, i) => {
+      const links = (item.links ?? [])
+        .map(
+          (link) =>
+            `<a href="${url(link.path)}" style="color:${BRAND.ink};font-weight:700;text-decoration:underline;">${escapeHtml(link.label)} &rarr;</a>`,
+        )
+        .join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+      return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px;"><tr>
+<td valign="top" width="34" style="padding-top:2px;"><span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:999px;background:${BRAND.yellow};border:2px solid ${BRAND.ink};font-family:${MONO};font-size:12px;font-weight:700;color:${BRAND.ink};">${i + 1}</span></td>
+<td valign="top">
+<p style="margin:0;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.ink};"><strong>${escapeHtml(item.lead)}</strong> ${escapeHtml(item.body)}</p>
+${links ? `<p style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:1.6;">${links}</p>` : ""}${item.cta ? button(item.cta.label, url(item.cta.path)) : ""}
+</td></tr></table>`;
+    })
+    .join("\n");
+  return `<div lang="${l}">
+<p style="margin:0 0 20px;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.ink};">${escapeHtml(c.intro)}</p>
+${items}
+<p style="margin:22px 0 0;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.ink};"><strong>${escapeHtml(c.signoff)}</strong><br>${escapeHtml(c.team)}</p>
+</div>`;
+}
+
+function launchSectionText(l: Locale, c: LaunchCopy): string[] {
+  const url = (path: string) => `${SITE_URL}/${l}${path}`;
+  const colon = l === "fr" ? " : " : ": ";
+  return [
+    c.title.toUpperCase(),
+    "",
+    c.intro,
+    "",
+    ...c.items.flatMap((item, i) => [
+      `${i + 1}. ${item.lead} ${item.body}`,
+      // French typography puts a space before the colon; English does not.
+      ...(item.links ?? []).map(
+        (link) => `   ${link.label}${colon}${url(link.path)}`,
+      ),
+      ...(item.cta
+        ? [`   ${item.cta.label}${colon}${url(item.cta.path)}`]
+        : []),
+      "",
+    ]),
+    c.signoff,
+    c.team,
+  ];
+}
+
+/**
+ * The launch-week update, as ONE self-contained bilingual email — French
+ * first, then English — for an organiser to send by hand (ADR 0076: there is
+ * no sending domain, so the site sends nothing).
+ *
+ * - `paid`: ticket buyers and holders (Gmail, BCC in batches).
+ * - `free`: free-pass RSVPs, sent through Bevy's attendee messaging.
+ *
+ * Email-client-safe: the shared `layout()` (tables, inline styles, 600px,
+ * web-safe font stacks), absolute https URLs for every link and image, no
+ * scripts, no external CSS, no `{placeholder}` left in the output — so the
+ * HTML can be pasted as is. Dates default to the repo's (ADR 0071/0072);
+ * the admin preview passes the live settings.
+ */
+export function renderLaunchUpdate({
+  audience,
+  eventDate = EVENT_DATES[0] ?? "2026-11-21",
+  salesCloseAt = "2026-11-18T23:59:00+01:00",
+  editsCloseAt = "2026-11-18T23:59:00+01:00",
+}: {
+  audience: LaunchAudience;
+  eventDate?: string;
+  salesCloseAt?: string | null;
+  editsCloseAt?: string | null;
+}): RenderedEmail {
+  const dates = (l: Locale) => {
+    const event = formatCutoff(l, `${eventDate}T12:00:00+01:00`);
+    const sales = formatCutoff(l, salesCloseAt ?? "2026-11-18T23:59:00+01:00");
+    const edits = formatCutoff(
+      l,
+      editsCloseAt ?? salesCloseAt ?? "2026-11-18T23:59:00+01:00",
+    );
+    return {
+      event: `${event?.date ?? ""} ${eventDate.slice(0, 4)}`.trim(),
+      salesDate: sales?.date ?? "",
+      salesTime: sales?.time ?? "",
+      editsDate: edits?.date ?? "",
+      editsTime: edits?.time ?? "",
+    };
+  };
+  const fr = launchCopy(audience, "fr", dates("fr"));
+  const en = launchCopy(audience, "en", dates("en"));
+
+  const divider = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:32px 0 28px;"><tr>
+<td style="border-top:2px dashed ${BRAND.hairline};font-size:0;line-height:0;">&nbsp;</td></tr>
+<tr><td style="padding-top:14px;font-family:${MONO};font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${BRAND.muted};">English version</td></tr></table>
+<h2 lang="en" style="margin:0 0 18px;font-family:${FONT};font-size:24px;line-height:1.2;font-weight:800;color:${BRAND.ink};">${escapeHtml(en.title)}</h2>`;
+
+  const html = layout(
+    "fr",
+    `${fr.title} · ${en.title}`,
+    `${launchSectionHtml("fr", fr)}\n${divider}\n${launchSectionHtml("en", en)}`,
+    undefined,
+    {
+      preheader: `${fr.preheader} · ${en.preheader}`,
+      footer: [
+        { contact: fr.contact, why: fr.why, lang: "fr" },
+        { contact: en.contact, why: en.why, lang: "en" },
+      ],
+    },
+  );
+
+  const text = [
+    "DevFest Yaoundé 2026 — GDG Yaoundé",
+    "",
+    ...launchSectionText("fr", fr),
+    "",
+    "----------------------------------------",
+    "",
+    ...launchSectionText("en", en),
+    "",
+    "----------------------------------------",
+    `${fr.contact} / ${en.contact}`,
+    `${SITE_URL} · ${CHAPTER_EMAIL}`,
+  ].join("\n");
+
+  return { subject: LAUNCH_SUBJECT, text, html };
 }

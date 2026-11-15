@@ -11,7 +11,8 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:browser": "node tests/browser/run.mjs"
+    "test:browser": "node tests/browser/run.mjs",
+    "emails:render": "tsx scripts/render-emails.ts"
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.1122.0",

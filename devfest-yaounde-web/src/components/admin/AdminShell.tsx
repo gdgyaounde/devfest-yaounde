@@ -24,6 +24,7 @@ import {
   Users,
   UsersThree,
   X,
+  EnvelopeSimple,
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -34,6 +35,7 @@ import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import type { AdminData, AdminSettings, MissingPhoto } from "@/lib/admin/shape";
 import { AdminOverview } from "./views/AdminOverview";
 import { AdminTickets } from "./views/AdminTickets";
+import { AdminEmails } from "./views/AdminEmails";
 import { AdminTicketTiers } from "./views/AdminTicketTiers";
 import { AdminShop } from "./views/AdminShop";
 import { AdminTransactions } from "./views/AdminTransactions";
@@ -89,6 +91,7 @@ export type ViewId =
   | "wall"
   | "testimonials"
   | "users"
+  | "emails"
   | "content"
   | "speakers"
   | "team"
@@ -128,6 +131,7 @@ const GROUPS: {
       { id: "wall", label: "DP wall", Icon: ImageIcon },
       { id: "testimonials", label: "Testimonials", Icon: ChatCircleText },
       { id: "users", label: "Users", Icon: Users },
+      { id: "emails", label: "Emails", Icon: EnvelopeSimple },
     ],
   },
   {
@@ -291,6 +295,11 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
     title: "Memory Lane",
     blurb:
       "The photo grid on the home page's Memory Lane section. Order here is the order they're shown in; with nothing here the section shows a \u201ccoming soon\u201d placeholder instead.",
+  },
+  emails: {
+    title: "Emails",
+    blurb:
+      "The launch-week update, ready to send by hand — preview, download, copy, and the paid audience's recipient list. Nothing here sends email (there is no sending domain yet).",
   },
   config: {
     title: "Info bar and policies",
@@ -708,6 +717,7 @@ export function AdminShell({
               <AdminTestimonials rows={collections.quotes} />
             )}
             {view === "users" && <AdminUsers data={data} />}
+            {view === "emails" && <AdminEmails settings={settings} />}
             {view === "speakers" && (
               <AdminSpeakers rows={collections.speakers} />
             )}

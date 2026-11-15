@@ -337,6 +337,36 @@ The up/down arrows disappear while a filter is on. They swap a row with its
 neighbour, and under a filter the row above on screen is not the row above in
 the list — clear the filter to reorder.
 
+### Sending the launch-week update (ADR 0076)
+
+There is no email domain yet, so **the site sends nothing** — you send it.
+Open **Community → Emails**.
+
+1. **Paid holders & site users** tab: check the preview, then **Download
+   .html** (or copy it). Click **Download recipients CSV**. The counts by
+   source show above it. The file is personal data: don't put it on a shared
+   drive, and delete it when you're done. Rows with `source = profile` are
+   site users without a ticket — remove them first if you only want ticket
+   people.
+2. Open the .html in a browser, select all, copy, paste into a new Gmail
+   message. Paste the subject with **Copy subject**. **Send a test to
+   yourself** and check it on a phone, in dark mode, and with images off.
+3. Send in batches: your own address in **To**, at most **90** addresses in
+   **BCC** per message — never To or CC. A personal Gmail account allows
+   about **500** recipients a day, Google Workspace about **2,000**.
+4. **Free passes** tab: send through **Bevy's attendee messaging** (the
+   free-pass addresses only exist on Bevy). Paste the HTML if Bevy's editor
+   takes it, the plain text if not.
+
+Send the paid one only once the collector DP frames (Part F) are live — the
+email announces them. The same files are in `docs/content/emails/`;
+regenerate them with `npm run emails:render` after changing the copy.
+
+**Receipts.** Ticket receipts and claim emails still go out automatically
+through Resend. If people say theirs never arrived, check the Resend
+dashboard: `EMAIL_FROM` must be on a domain verified there — the fallback
+`onboarding@resend.dev` only delivers to the Resend account owner.
+
 ### The DP wall
 
 Cards flip immediately when you hide or show one and wear a shimmer until the
