@@ -34,6 +34,7 @@ import {
   type DpFrame,
 } from "./frames";
 import {
+  SHAPE_GROW,
   cardHeight,
   layoutCard,
   type CardLayout,
@@ -56,7 +57,7 @@ import {
 } from "./stickers";
 
 export type { DpRatio, DpCorners } from "./geometry";
-export { photoBoxUnits, cardHeight, layoutCard } from "./geometry";
+export { photoBoxUnits, cardHeight, layoutCard, SHAPE_GROW } from "./geometry";
 
 /** Card WIDTH for the export. Height follows from the ratio. */
 export const DP_SIZE = 1080;
@@ -1200,8 +1201,20 @@ export function renderDp(
 
   // 2. The photo, already masked by its edge treatment. A shaped photo
   //    first gets the site's flat ink offset shadow, so it sits ON the card.
+  //
+  //    A shape's curves leave far more empty card than a rounded rectangle
+  //    does, so a shaped photo gets a bigger box: it grows into the padding,
+  //    stopping a thin margin short of the card's edge. Pan and zoom are
+  //    fractions of the box, so the framing carries over unchanged.
+  const grow = input.shape ? layout.unit * SHAPE_GROW : 0;
+  const photoBox: Rect = {
+    x: layout.photo.x - grow,
+    y: layout.photo.y - grow,
+    w: layout.photo.w + grow * 2,
+    h: layout.photo.h + grow * 2,
+  };
   const shapeBox = input.shape
-    ? fitShape(layout.photo.x, layout.photo.y, layout.photo.w, layout.photo.h)
+    ? fitShape(photoBox.x, photoBox.y, photoBox.w, photoBox.h)
     : null;
   if (input.shape && shapeBox) {
     const off = layout.unit * 0.014;
@@ -1217,17 +1230,17 @@ export function renderDp(
   ctx.drawImage(
     renderPhotoLayer(
       input.photo,
-      layout.photo,
+      photoBox,
       layout.radius.photo,
       transform,
       effects,
       frame,
       input.shape ?? null,
     ),
-    layout.photo.x,
-    layout.photo.y,
-    layout.photo.w,
-    layout.photo.h,
+    photoBox.x,
+    photoBox.y,
+    photoBox.w,
+    photoBox.h,
   );
 
   // A shaped photo gets its keyline along the shape.

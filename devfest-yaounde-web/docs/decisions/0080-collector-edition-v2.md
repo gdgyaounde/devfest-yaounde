@@ -32,7 +32,11 @@ photo-shape picker usable with any style.
    masks**. Five photo shapes; their recipes are server-only
    (`collector-shapes.ts`) and come with the collector frames from
    `GET /api/dp/collector-frames`. A shape replaces the edge treatment; it
-   gets an ink keyline and the flat offset shadow. In a portrait box a shape
+   gets an ink keyline and the flat offset shadow. Because a shape's curves
+   leave far more empty card than a rounded rectangle, a shaped photo's box
+   grows into the padding (`SHAPE_GROW`, 0.06 a side, leaving a 0.025 rim);
+   pan and zoom are fractions of the box, so the framing carries over, and
+   the pan limits use the same grown box. In a portrait box a shape
    stretches at most 18 %.
 
 4. **A typed badge** (≤ 22 characters, control characters stripped) for the

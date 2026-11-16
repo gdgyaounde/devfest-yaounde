@@ -132,6 +132,16 @@ export function layoutCard(
  * stops the box that moves the photo from drifting away from the box that
  * draws it.
  */
-export function photoBoxUnits(ratio: DpRatio): { w: number; h: number } {
-  return { w: 1 - 2 * PAD, h: RATIOS[ratio] - 2 * PAD };
+/**
+ * How far a SHAPED photo's box grows into the padding, per side, in card
+ * units (ADR 0080). A shape's curves leave far more empty card than a
+ * rounded rectangle, so it gets more room. PAD is 0.085: 0.06 leaves a rim.
+ */
+export const SHAPE_GROW = 0.06;
+
+export function photoBoxUnits(
+  ratio: DpRatio,
+  grow = 0,
+): { w: number; h: number } {
+  return { w: 1 - 2 * PAD + 2 * grow, h: RATIOS[ratio] - 2 * PAD + 2 * grow };
 }

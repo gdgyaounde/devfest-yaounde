@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
 import {
   photoBoxUnits,
+  SHAPE_GROW,
   renderDp,
   type DpCorners,
   type DpEffects,
@@ -177,7 +178,7 @@ export function DpStage({
   /** The photo box in CSS pixels, from the same constants the card is drawn with. */
   function boxOf(el: HTMLCanvasElement): Box {
     const cardW = el.getBoundingClientRect().width;
-    const units = photoBoxUnits(ratio);
+    const units = photoBoxUnits(ratio, shape ? SHAPE_GROW : 0);
     return { w: cardW * units.w, h: cardW * units.h };
   }
 

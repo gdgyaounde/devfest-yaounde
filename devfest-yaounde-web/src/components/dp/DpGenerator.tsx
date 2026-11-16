@@ -26,6 +26,7 @@ import {
   dpFileName,
   loadPhoto,
   photoBoxUnits,
+  SHAPE_GROW,
   type DpCorners,
   type DpEdge,
   type DpEffects,
@@ -252,12 +253,13 @@ export function DpGenerator({
      invariant true for every path that can reach it — and an effect that
      setStates is what this codebase's lint rightly refuses. Memoised because
      a fresh object on every render would redraw the canvas on every render. */
+  /* A shaped photo has a bigger box (ADR 0080); the pan limits follow it. */
+  const grow =
+    shapeId !== null && collector.status === "unlocked" ? SHAPE_GROW : 0;
+  const boxUnits = useMemo(() => photoBoxUnits(ratio, grow), [ratio, grow]);
   const safeTransform = useMemo(
-    () =>
-      photo
-        ? clampTransform(photo, transform, photoBoxUnits(ratio))
-        : transform,
-    [photo, transform, ratio],
+    () => (photo ? clampTransform(photo, transform, boxUnits) : transform),
+    [photo, transform, boxUnits],
   );
 
   /* "Opens the picker" = the collector row actually comes into view: the
@@ -805,7 +807,7 @@ export function DpGenerator({
                             ? clampTransform(
                                 photo,
                                 { ...current, scale: Number(e.target.value) },
-                                photoBoxUnits(ratio),
+                                boxUnits,
                               )
                             : current,
                         )
