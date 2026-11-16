@@ -576,6 +576,12 @@
         "customBadgePlaceholder": "ex. Fan de Flutter",
         "customBadgeHint": "{left, plural, =0 {Plus aucun caractère.} one {# caractère restant.} other {# caractères restants.}} Reste sympa — il peut finir sur le mur.",
         "edgesShapeNote": "Avec une forme, c'est la forme qui fait le bord — ces options ne s'appliquent qu'à la forme standard."
+      },
+      "nameCheck": {
+        "title": "Ta carte n'a pas encore de nom",
+        "body": "Ajoute le nom sous lequel on te connaît — il va sur la plaque de la carte, et c'est comme ça qu'on te retrouve sur le mur.",
+        "add": "Ajouter mon nom",
+        "skip": "Continuer sans nom"
       }
     },
     "paymentReturn": {

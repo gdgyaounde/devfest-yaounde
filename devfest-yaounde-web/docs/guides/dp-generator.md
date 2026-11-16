@@ -278,6 +278,17 @@ Download, share and copy **first save a smaller copy** of the composed card,
 then do the action. A failed save does not block the download (ADR 0034).
 The source photo never uploads.
 
+**One card per photo, per visit** (ADR 0081). Pressing Download, then Share,
+then Copy on the same card saves it once. Edit the card and save again, and
+the new version **replaces** the old one on the wall (taken down with the
+deletion token the browser kept). Upload a different photo and it is a new
+card — someone making cards for friends on one phone keeps them all.
+
+**The name check.** If the name is empty when someone downloads, shares or
+copies, a small dialog asks for it first — on a phone the name field is in
+another tab, and cards were going out with an empty plate. "Continue without
+a name" is respected for the rest of that photo.
+
 An upfront notice sits above the buttons, with a link to `/wall/terms`.
 Takedown is by email to gdgyaounde@gmail.com — there is no report button
 on the cards.

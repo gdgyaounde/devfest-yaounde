@@ -156,7 +156,13 @@ export function Modal({
 
     const panel = panelRef.current;
     const focusable = panel?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-    (focusable?.[0] ?? panel)?.focus();
+    // A field marked `data-autofocus` wins (a dialog whose whole point is
+    // one input); otherwise the first focusable, as before.
+    (
+      panel?.querySelector<HTMLElement>("[data-autofocus]") ??
+      focusable?.[0] ??
+      panel
+    )?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {

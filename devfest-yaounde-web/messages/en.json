@@ -576,6 +576,12 @@
         "customBadgePlaceholder": "e.g. Flutter fan",
         "customBadgeHint": "{left, plural, =0 {No characters left.} one {# character left.} other {# characters left.}} Keep it friendly — it may end up on the wall.",
         "edgesShapeNote": "With a photo shape, the shape is the edge — these apply to the standard shape only."
+      },
+      "nameCheck": {
+        "title": "Your card has no name yet",
+        "body": "Add the name you go by — it goes on the card's plate, and it's how people find you on the wall.",
+        "add": "Add my name",
+        "skip": "Continue without a name"
       }
     },
     "paymentReturn": {

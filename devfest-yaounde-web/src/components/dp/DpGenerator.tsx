@@ -56,7 +56,9 @@ import {
   TEXT_STICKERS,
   type PlacedSticker,
 } from "@/lib/dp/stickers";
-import { stashComposedCard } from "@/lib/dp/gallery";
+import { stashComposedCard, takeDownCard } from "@/lib/dp/gallery";
+import { planWallStash, type WallStash } from "@/lib/dp/wall-stash";
+import { Modal } from "@/components/ui/Modal";
 import {
   copyImage,
   copyCaption,
@@ -134,6 +136,9 @@ type Notice =
 type CollectorState =
   | { status: "loading" | "locked" }
   | { status: "unlocked"; frames: DpFrame[]; shapes: DpShape[] };
+
+/** The three ways a card leaves the page. */
+type SaveAction = "download" | "share" | "copy";
 
 /** Typed badges: short enough to sit on the plate's tag. */
 const CUSTOM_BADGE_MAX = 22;
@@ -221,6 +226,23 @@ export function DpGenerator({
   const [notice, setNotice] = useState<Notice | null>(null);
   const [busy, setBusy] = useState<"download" | "share" | null>(null);
   const [wallToast, setWallToast] = useState(false);
+
+  /*
+   * NAME CHECK (ADR 0081). People — on phones especially, where the name
+   * field sits in another tab — were exporting cards with an empty plate.
+   * Download / Share / Copy now ask first, in a dialog that works from any
+   * tab. "Continue without a name" is respected for the rest of that photo.
+   */
+  const [nameAsk, setNameAsk] = useState<SaveAction | null>(null);
+  const [draftName, setDraftName] = useState("");
+  const skipNameFor = useRef<number | null>(null);
+
+  /* Which upload this is, so the wall can tell a new photo from an edit. */
+  const [photoKey, setPhotoKey] = useState(0);
+  /* The card this visit last put on the wall (ADR 0081). */
+  const stashed = useRef<(WallStash & { id: string; token: string }) | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!wallToast) return;
@@ -328,6 +350,7 @@ export function DpGenerator({
     try {
       const bitmap = await loadPhoto(file);
       setPhoto(bitmap);
+      setPhotoKey((n) => n + 1);
       /* A new photo means a new subject: keeping the previous crop would
          frame someone else's shoulders. */
       setTransform(DEFAULT_TRANSFORM);
@@ -402,14 +425,14 @@ export function DpGenerator({
     );
   }
 
-  async function render(): Promise<Blob | null> {
+  async function render(name: string): Promise<Blob | null> {
     if (!photo) return null;
     try {
       return await composeDp({
         photo,
         frameId: effectiveFrameId,
         frame,
-        nickname,
+        nickname: name,
         transform: safeTransform,
         effects,
         badgeId,
@@ -427,53 +450,102 @@ export function DpGenerator({
     }
   }
 
-  async function stash(blob: Blob) {
-    await stashComposedCard({
+  /** Everything drawn on the card — two equal keys are the same card. */
+  function cardKey(name: string): string {
+    return JSON.stringify({
+      name: name.trim(),
+      frame: effectiveFrameId,
+      effects,
+      badgeId,
+      badgeText,
+      shape: shape?.id ?? null,
+      ratio,
+      corners,
+      stickers,
+      transform: safeTransform,
+      locale: lang,
+    });
+  }
+
+  /** One card per photo per visit on the wall (ADR 0081). */
+  async function stash(blob: Blob, name: string) {
+    const next = { key: cardKey(name), photoKey };
+    const plan = planWallStash(stashed.current, next);
+    if (plan === "skip") return;
+    const submission = await stashComposedCard({
       card: blob,
-      nickname,
+      nickname: name,
       locale: lang,
       theme: effectiveFrameId,
       shape: shape?.id,
       customBadge: usingCustomBadge,
     });
+    if (!submission) return;
+    const previous = stashed.current;
+    stashed.current = {
+      ...next,
+      id: submission.id,
+      token: submission.deletionToken,
+    };
+    // The edited version is up; the stale one comes down. Best effort — a
+    // failure leaves both, which is what used to happen every time.
+    if (plan === "replace" && previous) {
+      void takeDownCard(previous.id, previous.token).catch(() => undefined);
+    }
   }
 
-  async function onDownload() {
+  async function onDownload(name: string) {
     setBusy("download");
     setNotice(null);
-    const blob = await render();
+    const blob = await render(name);
     if (blob) {
-      await stash(blob);
-      downloadDp(blob, dpFileName(nickname));
+      await stash(blob, name);
+      downloadDp(blob, dpFileName(name));
       setNotice("downloaded");
       setWallToast(true);
     }
     setBusy(null);
   }
 
-  async function onShare() {
+  async function onShare(name: string) {
     setBusy("share");
     setNotice(null);
-    const blob = await render();
+    const blob = await render(name);
     if (blob) {
-      await stash(blob);
+      await stash(blob, name);
       setNotice(
-        await shareDp({ blob, fileName: dpFileName(nickname), locale: lang }),
+        await shareDp({ blob, fileName: dpFileName(name), locale: lang }),
       );
     }
     setBusy(null);
   }
 
   /** The card itself on the clipboard, for pasting straight into a post. */
-  async function onCopyImage() {
+  async function onCopyImage(name: string) {
     setBusy("share");
     setNotice(null);
-    const blob = await render();
+    const blob = await render(name);
     if (blob) {
-      await stash(blob);
+      await stash(blob, name);
       setNotice(await copyImage(blob));
     }
     setBusy(null);
+  }
+
+  function runSave(action: SaveAction, name: string) {
+    if (action === "download") void onDownload(name);
+    else if (action === "share") void onShare(name);
+    else void onCopyImage(name);
+  }
+
+  /** Ask for a name first, unless there is one or they already said no. */
+  function save(action: SaveAction) {
+    if (!nickname.trim() && skipNameFor.current !== photoKey) {
+      setDraftName("");
+      setNameAsk(action);
+      return;
+    }
+    runSave(action, nickname);
   }
 
   async function onCopyCaption() {
@@ -1207,7 +1279,7 @@ export function DpGenerator({
                   <div className="mt-3 flex flex-col gap-3 sm:max-w-sm">
                     <button
                       type="button"
-                      onClick={() => void onDownload()}
+                      onClick={() => save("download")}
                       disabled={!photo || busy !== null}
                       className="inline-flex items-center justify-center gap-2 rounded-pill border-2 border-black02 bg-primary px-7 py-3.5 font-sans text-body-l font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 motion-reduce:transform-none"
                     >
@@ -1219,7 +1291,7 @@ export function DpGenerator({
                     <div className="flex gap-3">
                       <button
                         type="button"
-                        onClick={() => void onShare()}
+                        onClick={() => save("share")}
                         disabled={!photo || busy !== null}
                         className="inline-flex flex-1 items-center justify-center gap-2 rounded-pill border-2 border-black02 px-7 py-3 font-sans text-body-m font-bold text-black02 hover:bg-halftone disabled:cursor-not-allowed disabled:opacity-40"
                       >
@@ -1234,7 +1306,7 @@ export function DpGenerator({
                           two together read as one pair of actions. */}
                       <button
                         type="button"
-                        onClick={() => void onCopyImage()}
+                        onClick={() => save("copy")}
                         disabled={!photo || busy !== null}
                         aria-label={t("actions.copyImage")}
                         title={t("actions.copyImage")}
@@ -1277,6 +1349,71 @@ export function DpGenerator({
           </div>
         </div>
       </div>
+      <Modal
+        open={nameAsk !== null}
+        onClose={() => setNameAsk(null)}
+        labelledBy="dp-name-check-title"
+        closeLabel={t("toast.dismiss")}
+      >
+        <form
+          className="flex flex-col gap-4 p-2 sm:p-4"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const name = draftName.trim().slice(0, MAX_NICKNAME);
+            if (!name || !nameAsk) return;
+            setNickname(name);
+            const action = nameAsk;
+            setNameAsk(null);
+            runSave(action, name);
+          }}
+        >
+          <h2
+            id="dp-name-check-title"
+            className="font-sans text-heading-l font-bold leading-tight text-black02"
+          >
+            {t("nameCheck.title")}
+          </h2>
+          <p className="text-body-m text-black02/80">{t("nameCheck.body")}</p>
+          <label className="flex flex-col gap-2">
+            <span className="font-sans text-body-m font-bold text-black02">
+              {t("nickname.label")}
+            </span>
+            <input
+              value={draftName}
+              onChange={(e) => setDraftName(e.target.value)}
+              maxLength={MAX_NICKNAME}
+              data-autofocus
+              autoComplete="nickname"
+              enterKeyHint="done"
+              placeholder={t("nickname.placeholder")}
+              className="w-full rounded-pill border-2 border-black02 bg-offwhite px-5 py-3 text-body-m text-black02 placeholder:text-black02/45"
+            />
+          </label>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              disabled={!draftName.trim()}
+              className="rounded-pill border-2 border-black02 bg-primary px-6 py-3 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] active:translate-y-0.5 active:shadow-none disabled:opacity-50 disabled:shadow-none motion-reduce:transform-none"
+            >
+              {t("nameCheck.add")}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (!nameAsk) return;
+                skipNameFor.current = photoKey;
+                const action = nameAsk;
+                setNameAsk(null);
+                runSave(action, "");
+              }}
+              className="rounded-pill px-4 py-3 font-sans text-body-m font-bold text-black02 underline decoration-2 underline-offset-4"
+            >
+              {t("nameCheck.skip")}
+            </button>
+          </div>
+        </form>
+      </Modal>
+
       {wallToast && (
         <Toast
           onDismiss={() => setWallToast(false)}

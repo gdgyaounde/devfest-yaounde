@@ -184,7 +184,11 @@ export async function submitToGallery(input: {
   };
 }
 
-/** Save-on-action: never blocks Download / Share / Copy. */
+/**
+ * Save-on-action: never blocks Download / Share / Copy. Hands back the
+ * submission (so the generator can replace it later — ADR 0081), or null
+ * when nothing was stored.
+ */
 export async function stashComposedCard(input: {
   card: Blob;
   nickname: string;
@@ -192,11 +196,12 @@ export async function stashComposedCard(input: {
   theme?: string;
   shape?: string;
   customBadge?: boolean;
-}): Promise<void> {
+}): Promise<GallerySubmission | null> {
   try {
-    await submitToGallery(input);
+    return await submitToGallery(input);
   } catch (err) {
     console.warn("[dp] wall stash skipped", err);
+    return null;
   }
 }
 
