@@ -3,7 +3,7 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PersonSlider } from "@/components/people/PersonSlider";
 import { FilterGroup } from "@/components/ui/FilterGroup";
 import { FilterLayout } from "@/components/ui/FilterLayout";
@@ -44,11 +44,58 @@ export function SpeakerBrowser({ speakers }: { speakers: SpeakerWithTalks[] }) {
    */
   const [side, setSide] = useState<PopoverSide>("right");
 
-  /** Deep link resolved once, in a lazy initializer (never an effect). */
-  const [focusedId, setFocusedId] = useState<string | null>(() => {
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+
+  /**
+   * Deep link (`?spk=<id>` — the home reel's "Full profile" links here).
+   *
+   * Resolved once, but OPENED after mount rather than in the initial state:
+   * the popover's side can only be measured once the card is laid out, and
+   * opening it straight from state put a last-column card's popover off the
+   * right edge of the screen. So, one frame after mount: measure the side,
+   * open the card, bring it to the middle of the screen and give it keyboard
+   * focus — arriving from a link should not mean hunting for the person.
+   * The state updates run in the frame callback, not the effect body.
+   *
+   * The scroll waits for the splash preloader to leave: it locks page scroll
+   * on a fresh visit, so scrolling under it was silently undone.
+   */
+  const deepLink = useRef<string | null>(null);
+  if (deepLink.current === null) {
     const spk = searchParams.get("spk");
-    return spk && speakers.some((s) => s.id === spk) ? spk : null;
-  });
+    deepLink.current = spk && speakers.some((s) => s.id === spk) ? spk : "";
+  }
+  useEffect(() => {
+    const id = deepLink.current;
+    if (!id) return;
+    let poll: number | undefined;
+    const frame = requestAnimationFrame(() => {
+      const card = document.querySelector<HTMLElement>(
+        `[data-card-grid] [data-speaker-id="${CSS.escape(id)}"]`,
+      );
+      setSide(chooseSide(card));
+      setFocusedId(id);
+      if (!card) return;
+      const bringIntoView = () => {
+        if (document.querySelector("[data-preloader]")) return;
+        window.clearInterval(poll);
+        const reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        card.scrollIntoView({
+          block: "center",
+          behavior: reduce ? "auto" : "smooth",
+        });
+        card.querySelector("button")?.focus({ preventScroll: true });
+      };
+      poll = window.setInterval(bringIntoView, 150);
+      bringIntoView();
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearInterval(poll);
+    };
+  }, []);
 
   const tracks = useMemo(
     () => [...new Set(speakers.map((s) => s.track[locale]))].sort(),
@@ -119,11 +166,24 @@ export function SpeakerBrowser({ speakers }: { speakers: SpeakerWithTalks[] }) {
       if (target.closest('[role="dialog"]')) return;
       if (!target.closest(".speaker-card.is-open")) closeCard();
     }
+    // The grid reflows on resize (columns come from available width), so a
+    // card that had room on its right may not any more: re-measure.
+    function onResize() {
+      setSide(
+        chooseSide(
+          document.querySelector(
+            `[data-card-grid] [data-speaker-id="${CSS.escape(focusedId!)}"]`,
+          ),
+        ),
+      );
+    }
+    window.addEventListener("resize", onResize);
     document.addEventListener("keydown", onKeyDown);
     // Capture phase: a card's own click handler would otherwise reopen it
     // in the same gesture that this closes.
     document.addEventListener("pointerdown", onPointerDown, true);
     return () => {
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown, true);
     };

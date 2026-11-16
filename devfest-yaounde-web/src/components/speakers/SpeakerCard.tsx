@@ -131,6 +131,7 @@ export function SpeakerCard({
 
   return (
     <article
+      data-speaker-id={speaker.id}
       className={`speaker-card relative ${focused ? "is-focused" : ""} ${
         open ? "is-open" : ""
       } ${popover ? "is-popover" : ""} ${
