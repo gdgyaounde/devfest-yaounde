@@ -2,7 +2,7 @@
 
 import { ListBullets, SquaresFour } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FilterGroup } from "@/components/ui/FilterGroup";
 import { FilterLayout } from "@/components/ui/FilterLayout";
 import { Reveal } from "@/components/ui/Reveal";
@@ -89,6 +89,31 @@ export function ScheduleBoard({
   const [track, setTrack] = useState<string | null>(null);
   const [room, setRoom] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
+
+  /*
+   * Deep links (`/schedule?session=<id>`), which the home preview's "Full
+   * details" links use. On the full page only: once mounted, open that
+   * session through its own toggle (a click, so no state is set from this
+   * effect) and bring it into view.
+   */
+  useEffect(() => {
+    if (previewLimit !== undefined) return;
+    const id = new URLSearchParams(window.location.search).get("session");
+    if (!id) return;
+    const timer = window.setTimeout(() => {
+      const trigger = document.getElementById(`session-trigger-${id}`);
+      if (!trigger) return;
+      if (trigger.getAttribute("aria-expanded") !== "true") trigger.click();
+      trigger.scrollIntoView({ block: "center" });
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [previewLimit]);
+
+  /** The home preview links each card to its full entry on /schedule. */
+  const detailsFor = (id: string) =>
+    previewLimit !== undefined
+      ? `/schedule?session=${encodeURIComponent(id)}`
+      : undefined;
 
   /*
    * Sessions WITH a time go on the timeline; sessions without one are
@@ -305,6 +330,7 @@ export function ScheduleBoard({
                         variant="timeline"
                         tilt={CARD_TILT[(i + j) % CARD_TILT.length]}
                         showCalendar={showCalendar}
+                        detailsHref={detailsFor(s.id)}
                       />
                     ))}
                   </div>
@@ -345,6 +371,7 @@ export function ScheduleBoard({
                             }
                             variant="list"
                             showCalendar={showCalendar}
+                            detailsHref={detailsFor(s.id)}
                           />
                         </li>
                       ))}
@@ -404,6 +431,7 @@ export function ScheduleBoard({
                           variant="timeline"
                           tilt={CARD_TILT[(gi + i) % CARD_TILT.length]}
                           showCalendar={showCalendar}
+                          detailsHref={detailsFor(s.id)}
                         />
                       </li>
                     ))}
@@ -425,6 +453,7 @@ export function ScheduleBoard({
                           }
                           variant="list"
                           showCalendar={showCalendar}
+                          detailsHref={detailsFor(s.id)}
                         />
                       </li>
                     ))}

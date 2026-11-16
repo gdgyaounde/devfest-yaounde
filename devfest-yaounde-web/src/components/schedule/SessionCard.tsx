@@ -1,6 +1,12 @@
 "use client";
 
-import { CalendarPlus, CaretDown, Clock, MapPin } from "@phosphor-icons/react";
+import {
+  ArrowRight,
+  CalendarPlus,
+  CaretDown,
+  Clock,
+  MapPin,
+} from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge";
 import { Link } from "@/i18n/navigation";
@@ -21,6 +27,12 @@ export interface SessionCardProps {
   /** Show add-to-calendar actions (full /schedule route only). */
   showCalendar?: boolean;
   speakers?: Speaker[];
+  /**
+   * Home teaser: the description is cut to four lines and a "Full details"
+   * link to this href follows, so a long abstract never turns the home
+   * preview into a wall of text. The whole description lives on /schedule.
+   */
+  detailsHref?: string;
 }
 
 /**
@@ -44,6 +56,7 @@ export function SessionCard({
   tilt = 0,
   showCalendar = false,
   speakers = [],
+  detailsHref,
 }: SessionCardProps) {
   const eventDate = useEventDates()[0];
   const t = useTranslations("home.schedule");
@@ -128,9 +141,21 @@ export function SessionCard({
           >
             {/* pre-line: speakers' descriptions carry their own paragraph
                 breaks and bullet lines, which a plain <p> would flatten. */}
-            <p className="whitespace-pre-line text-body-m leading-relaxed text-black02/85">
+            <p
+              className={`whitespace-pre-line text-body-m leading-relaxed text-black02/85 ${detailsHref ? "line-clamp-4" : ""}`}
+            >
               {session.description[locale]}
             </p>
+            {detailsHref && (
+              <Link
+                href={detailsHref}
+                tabIndex={open ? undefined : -1}
+                className="mt-3 inline-flex items-center gap-1.5 font-sans text-body-m font-bold text-black02 underline decoration-2 underline-offset-4 transition-colors hover:decoration-primary"
+              >
+                {t("fullDetails")}
+                <ArrowRight size={16} weight="bold" aria-hidden />
+              </Link>
+            )}
 
             {session.tags.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">

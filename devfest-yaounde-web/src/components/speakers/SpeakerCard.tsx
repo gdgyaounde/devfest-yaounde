@@ -32,6 +32,8 @@ export interface SpeakerCardProps {
   side?: PopoverSide;
   /** Off on the home teaser — see `PersonDetail.personality`. */
   personality?: boolean;
+  /** Home teaser: clamp the bio and link here — see `PersonDetail.profileHref`. */
+  profileHref?: string;
   className?: string;
 }
 
@@ -66,6 +68,7 @@ export function SpeakerCard({
   popover = false,
   side = "right",
   personality = true,
+  profileHref,
   className = "",
 }: SpeakerCardProps) {
   const locale = useLocale() as "fr" | "en";
@@ -85,6 +88,7 @@ export function SpeakerCard({
       tone={sheetMode ? "light" : "dark"}
       interactive={open}
       personality={personality}
+      profileHref={profileHref}
     />
   );
 
@@ -97,11 +101,16 @@ export function SpeakerCard({
        * rises from the card's lower edge and lands where the resting caption
        * was, so the eye stays put. Top-aligning it left the text floating
        * above a pool of empty scrim on shorter bios.
+       *
+       * Bottom-aligned with `mt-auto` on the content, NOT `justify-end`:
+       * `justify-end` on an overflowing scroll box puts the excess above the
+       * scroll origin, where it cannot be scrolled to — a long bio pushed the
+       * name and role out of reach.
        */
       className={
         popover
           ? "person-pop scroll-on-dark rounded-lg border-2 border-black02 bg-black02 px-6 py-6 text-left shadow-[0_8px_0_0_var(--color-black02)]"
-          : "speaker-detail scroll-on-dark absolute inset-0 flex flex-col justify-end overflow-y-auto bg-black02/92 px-6 py-6 text-left"
+          : "speaker-detail scroll-on-dark absolute inset-0 flex flex-col overflow-y-auto bg-black02/92 px-6 py-6 text-left"
       }
     >
       {popover && (
@@ -116,7 +125,7 @@ export function SpeakerCard({
           <X size={16} weight="bold" />
         </button>
       )}
-      {body}
+      {popover ? body : <div className="mt-auto">{body}</div>}
     </div>
   );
 

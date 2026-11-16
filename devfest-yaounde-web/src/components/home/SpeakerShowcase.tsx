@@ -279,6 +279,7 @@ export function SpeakerShowcase({ speakers }: { speakers: Speaker[] }) {
                  The icebreaker and funny moment live on /speakers, where
                  someone has actually asked for the detail (PHASE11 §7). */
               personality={false}
+              profileHref={`/speakers?spk=${encodeURIComponent(s.id)}`}
               className="w-72 shrink-0 sm:w-88"
             />
           ))}

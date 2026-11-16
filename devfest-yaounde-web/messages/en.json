@@ -26,7 +26,8 @@
       "gdgSince": "With GDG since {year}",
       "expertise": "Expertise",
       "talk": "Their session",
-      "talks": "Their sessions"
+      "talks": "Their sessions",
+      "fullProfile": "Full profile"
     },
     "theme": {
       "label": "Theme",
@@ -204,7 +205,8 @@
       "groupWorkshop": "Workshops",
       "groupLightning": "Lightning talks",
       "groupOther": "Talks",
-      "groupMore": "{count, plural, one {+# more session} other {+# more sessions}} in the full programme"
+      "groupMore": "{count, plural, one {+# more session} other {+# more sessions}} in the full programme",
+      "fullDetails": "Full details"
     },
     "quotes": {
       "title": "What people are saying",

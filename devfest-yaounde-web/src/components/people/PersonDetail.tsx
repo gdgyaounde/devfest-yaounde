@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowRight,
   GlobeSimple,
   LinkedinLogo,
   Quotes,
@@ -8,6 +9,7 @@ import {
   XLogo,
 } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { realSocials } from "@/lib/people-socials";
 import { hasText } from "@/lib/sessions";
 import { Badge } from "@/components/ui/Badge";
@@ -71,6 +73,12 @@ export interface PersonDetailProps {
    * /speakers, which is where someone has actually asked for it.
    */
   personality?: boolean;
+  /**
+   * Teaser mode (the home reel): the bio is cut to four lines and a "Full
+   * profile" link to this href follows, so a long bio can never push the
+   * name and role out of a fixed-height card. The whole bio lives there.
+   */
+  profileHref?: string;
 }
 
 /**
@@ -91,6 +99,7 @@ export function PersonDetail({
   size = "compact",
   interactive = true,
   personality = true,
+  profileHref,
 }: PersonDetailProps) {
   const locale = useLocale() as "fr" | "en";
   const t = useTranslations("common.person");
@@ -147,10 +156,22 @@ export function PersonDetail({
 
       {blurb && (
         <p
-          className={`person-bio whitespace-pre-line leading-relaxed ${bodyCls} ${roomy ? "text-body-l" : "text-body-m"}`}
+          className={`person-bio whitespace-pre-line leading-relaxed ${bodyCls} ${roomy ? "text-body-l" : "text-body-m"} ${profileHref ? "line-clamp-4" : ""}`}
         >
           {blurb[locale]}
         </p>
+      )}
+
+      {profileHref && (
+        <Link
+          href={profileHref}
+          tabIndex={interactive ? undefined : -1}
+          onClick={(e) => e.stopPropagation()}
+          className={`inline-flex items-center gap-1.5 self-start font-sans text-body-m font-bold underline decoration-2 underline-offset-4 transition-colors hover:decoration-primary ${nameCls}`}
+        >
+          {t("fullProfile")}
+          <ArrowRight size={16} weight="bold" aria-hidden />
+        </Link>
       )}
 
       {/* Expertise chips — the same Badge as the contribution chip, outlined

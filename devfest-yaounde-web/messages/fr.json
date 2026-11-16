@@ -26,7 +26,8 @@
       "gdgSince": "Au GDG depuis {year}",
       "expertise": "Expertise",
       "talk": "Sa session",
-      "talks": "Ses sessions"
+      "talks": "Ses sessions",
+      "fullProfile": "Voir le profil complet"
     },
     "theme": {
       "label": "Thème",
@@ -204,7 +205,8 @@
       "groupWorkshop": "Ateliers",
       "groupLightning": "Lightning talks",
       "groupOther": "Conférences",
-      "groupMore": "{count, plural, one {+# autre session} other {+# autres sessions}} dans le programme complet"
+      "groupMore": "{count, plural, one {+# autre session} other {+# autres sessions}} dans le programme complet",
+      "fullDetails": "Voir tous les détails"
     },
     "quotes": {
       "title": "Ce qu'on en dit",
