@@ -563,10 +563,19 @@
       "metaDesc": "Build a DevFest Yaoundé profile picture in your browser — pick a style, crop it, sticker it, download it.",
       "collector": {
         "badge": "Collector",
-        "locked": "For paid pass holders",
-        "lockedLabel": "Locked collector frame — for paid pass holders",
+        "locked": "For paid passes",
+        "lockedLabel": "Locked collector style — for paid pass holders",
         "unlocked": "Unlocked!",
-        "legend": "Collector edition"
+        "legend": "Collector edition",
+        "shapesLegend": "Photo shape",
+        "shapeStandard": "Standard",
+        "shapesLocked": "Sparkle, clover & more — paid passes",
+        "shapesLockedLabel": "Locked photo shapes — for paid pass holders",
+        "customBadge": "Your own",
+        "customBadgeLabel": "Your badge text",
+        "customBadgePlaceholder": "e.g. Flutter fan",
+        "customBadgeHint": "{left, plural, =0 {No characters left.} one {# character left.} other {# characters left.}} Keep it friendly — it may end up on the wall.",
+        "edgesShapeNote": "With a photo shape, the shape is the edge — these apply to the standard shape only."
       }
     },
     "paymentReturn": {

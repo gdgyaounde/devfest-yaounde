@@ -9,8 +9,9 @@ import type { DpFrame } from "./frames";
  * ever sent by `GET /api/dp/collector-frames`, after the entitlement check,
  * and `import "server-only"` makes a client import a build error.
  *
- * Their pattern routines (`foil`, `stub` in `patterns.ts`) do ship — they
- * are harmless without a definition to select them.
+ * Their pattern routines (`guilloche`, `constellation`, `shapes` in
+ * `patterns.ts`) do ship — they are harmless without a definition to select
+ * them. Redesigned in ADR 0080: premium, and nothing personal printed.
  *
  * Flat colours from DESIGN.md §2, yellow family only; no gradients.
  */
@@ -20,31 +21,44 @@ const YELLOW = "#F9AB00";
 const YELLOW_LIGHT = "#FFD427";
 const YELLOW_PASTEL = "#FFE7A5";
 
-export function collectorFrames(tierName: string): DpFrame[] {
+export function collectorFrames(): DpFrame[] {
   return [
     {
-      id: "collector-foil",
-      label: { fr: "Feuille d'or", en: "Gold foil" },
+      id: "collector-midnight",
+      label: { fr: "Minuit doré", en: "Midnight gold" },
       background: INK,
       accent: YELLOW,
-      foreground: INK,
-      plate: YELLOW_LIGHT,
-      pattern: "foil",
+      // A black plate with gold type: the premium one.
+      foreground: YELLOW_LIGHT,
+      plate: INK,
+      pattern: "guilloche",
       palette: [YELLOW, YELLOW_LIGHT],
       duotone: [INK, YELLOW_LIGHT],
-      collector: { tierName },
+      collector: true,
     },
     {
-      id: "collector-stub",
-      label: { fr: "Talon de billet", en: "Ticket stub" },
-      background: YELLOW_LIGHT,
+      id: "collector-constellation",
+      label: { fr: "Constellation", en: "Constellation" },
+      background: YELLOW_PASTEL,
       accent: YELLOW,
       foreground: INK,
       plate: PAPER,
-      pattern: "stub",
-      palette: [YELLOW, YELLOW_PASTEL],
+      pattern: "constellation",
+      palette: [YELLOW, YELLOW_LIGHT],
       duotone: [INK, YELLOW_PASTEL],
-      collector: { tierName },
+      collector: true,
+    },
+    {
+      id: "collector-shapes",
+      label: { fr: "Formes", en: "Shapes" },
+      background: YELLOW,
+      accent: INK,
+      foreground: INK,
+      plate: PAPER,
+      pattern: "shapes",
+      palette: [YELLOW_LIGHT, YELLOW_PASTEL, PAPER],
+      duotone: [INK, YELLOW_LIGHT],
+      collector: true,
     },
   ];
 }

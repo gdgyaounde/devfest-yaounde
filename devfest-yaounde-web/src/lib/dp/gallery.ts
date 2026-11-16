@@ -133,6 +133,10 @@ export async function submitToGallery(input: {
   nickname: string;
   locale: "fr" | "en";
   theme?: string;
+  /** A collector photo shape id (ADR 0080), if one was used. */
+  shape?: string;
+  /** Whether the badge text was typed rather than picked (ADR 0080). */
+  customBadge?: boolean;
 }): Promise<GallerySubmission> {
   if (!galleryEnabled()) throw new GallerySubmitError("gallery_disabled");
 
@@ -148,6 +152,8 @@ export async function submitToGallery(input: {
   body.set("consent", "true");
   body.set("consentAt", new Date().toISOString());
   if (input.theme) body.set("theme", input.theme);
+  if (input.shape) body.set("shape", input.shape);
+  if (input.customBadge) body.set("customBadge", "true");
 
   let response: Response;
   try {
@@ -184,6 +190,8 @@ export async function stashComposedCard(input: {
   nickname: string;
   locale: "fr" | "en";
   theme?: string;
+  shape?: string;
+  customBadge?: boolean;
 }): Promise<void> {
   try {
     await submitToGallery(input);

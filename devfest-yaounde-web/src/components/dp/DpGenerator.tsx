@@ -33,7 +33,9 @@ import {
   type DpRatio,
   type DpTransform,
 } from "@/lib/dp/compose";
+import { shapePath, type DpShape, type ShapeRecipe } from "@/lib/dp/shapes";
 import {
+  CUSTOM_BADGE_ID,
   DEFAULT_BADGE_ID,
   DEFAULT_FRAME_ID,
   DP_BADGES,
@@ -124,9 +126,24 @@ type Notice =
  * freeze the live preview this sheet exists to sit beside. `FilterLayout`
  * makes the same call for the same reason.
  */
-/** The collector frames' state (ADR 0077): fetched lazily, never awaited. */
+/**
+ * The collector perks' state (ADR 0077, 0080): frames and photo shapes,
+ * fetched lazily, never awaited. "unlocked" also unlocks the typed badge.
+ */
 type CollectorState =
-  { status: "loading" | "locked" } | { status: "unlocked"; frames: DpFrame[] };
+  | { status: "loading" | "locked" }
+  | { status: "unlocked"; frames: DpFrame[]; shapes: DpShape[] };
+
+/** Typed badges: short enough to sit on the plate's tag. */
+const CUSTOM_BADGE_MAX = 22;
+
+/** A typed badge, cleaned the way the plate will show it. */
+function cleanBadgeText(raw: string): string {
+  return raw
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .replace(/\s+/g, " ")
+    .slice(0, CUSTOM_BADGE_MAX);
+}
 
 export function DpGenerator({
   salesCloseAt = null,
@@ -162,7 +179,13 @@ export function DpGenerator({
         if (cancelled) return;
         setCollector(
           json?.entitled && Array.isArray(json.frames)
-            ? { status: "unlocked", frames: json.frames as DpFrame[] }
+            ? {
+                status: "unlocked",
+                frames: json.frames as DpFrame[],
+                shapes: Array.isArray(json.shapes)
+                  ? (json.shapes as DpShape[])
+                  : [],
+              }
             : { status: "locked" },
         );
       })
@@ -182,6 +205,10 @@ export function DpGenerator({
     collector.status === "unlocked" ? "devfest:collector-unlocked" : null,
   );
   const [badgeId, setBadgeId] = useState(DEFAULT_BADGE_ID);
+  /* Collector perks (ADR 0080): a typed badge and a photo shape. Both only
+     apply while the server says this person is entitled. */
+  const [customBadge, setCustomBadge] = useState("");
+  const [shapeId, setShapeId] = useState<string | null>(null);
   const [ratio, setRatio] = useState<DpRatio>("1:1");
   const [corners, setCorners] = useState<DpCorners>("rounded");
   const [effects, setEffects] = useState<DpEffects>(DEFAULT_EFFECTS);
@@ -257,6 +284,15 @@ export function DpGenerator({
     const id = window.setTimeout(markUnlockSeen, 2400);
     return () => window.clearTimeout(id);
   }, [unlocking, markUnlockSeen]);
+
+  const collectorShapes =
+    collector.status === "unlocked" ? collector.shapes : [];
+  const shape = collectorShapes.find((option) => option.id === shapeId) ?? null;
+  const usingCustomBadge =
+    collector.status === "unlocked" &&
+    badgeId === CUSTOM_BADGE_ID &&
+    customBadge.trim() !== "";
+  const badgeText = usingCustomBadge ? customBadge : undefined;
 
   const frame =
     collectorFrames.find((f) => f.id === frameId) ??
@@ -375,6 +411,8 @@ export function DpGenerator({
         transform: safeTransform,
         effects,
         badgeId,
+        badgeText,
+        shape: shape?.recipe ?? null,
         ratio,
         corners,
         stickers,
@@ -393,6 +431,8 @@ export function DpGenerator({
       nickname,
       locale: lang,
       theme: effectiveFrameId,
+      shape: shape?.id,
+      customBadge: usingCustomBadge,
     });
   }
 
@@ -491,6 +531,8 @@ export function DpGenerator({
               onTransformChange={setTransform}
               effects={effects}
               badgeId={badgeId}
+              badgeText={badgeText}
+              shape={shape?.recipe ?? null}
               ratio={ratio}
               corners={corners}
               stickers={stickers}
@@ -705,6 +747,44 @@ export function DpGenerator({
                     ))}
                   </div>
 
+                  {/* Photo shapes (ADR 0080): the Gemini / Material masks,
+                      for paid passes and admins. A locked teaser for
+                      everyone else, like the collector frames. */}
+                  <Legend className="mt-6">{tc("shapesLegend")}</Legend>
+                  <div className="flex flex-wrap gap-2.5">
+                    {collector.status === "unlocked" ? (
+                      <>
+                        <Choice
+                          name="dp-shape"
+                          value="standard"
+                          checked={shape === null}
+                          onChange={() => setShapeId(null)}
+                          label={tc("shapeStandard")}
+                        />
+                        {collectorShapes.map((option) => (
+                          <Choice
+                            key={option.id}
+                            name="dp-shape"
+                            value={option.id}
+                            checked={option.id === shape?.id}
+                            onChange={() => setShapeId(option.id)}
+                            label={option.label[lang]}
+                            swatch={<ShapeSwatch recipe={option.recipe} />}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <LockedTile
+                        href={
+                          salesOpen ? "/tickets" : "/faqs#faq-section-tickets"
+                        }
+                        label={tc("shapesLocked")}
+                        ariaLabel={tc("shapesLockedLabel")}
+                        busy={collector.status === "loading"}
+                      />
+                    )}
+                  </div>
+
                   <Legend className="mt-6">{t("adjust.zoom")}</Legend>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
                     <label htmlFor={zoomId} className="sr-only">
@@ -802,26 +882,18 @@ export function DpGenerator({
                             />
                           </span>
                         ))
-                      : [0, 1].map((i) => (
-                          <Link
+                      : [0, 1, 2].map((i) => (
+                          <LockedTile
                             key={i}
                             href={
                               salesOpen
                                 ? "/tickets"
                                 : "/faqs#faq-section-tickets"
                             }
-                            aria-label={tc("lockedLabel")}
-                            aria-busy={collector.status === "loading"}
-                            className="flex items-center gap-2 rounded-pill border-2 border-dashed border-black02/50 bg-offwhite/60 py-1.5 pl-1.5 pr-4 font-sans text-body-m text-black02/75 transition-colors hover:border-black02 hover:bg-pastel"
-                          >
-                            <span
-                              aria-hidden
-                              className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-black02 bg-black02 text-primary"
-                            >
-                              <LockSimple size={14} weight="bold" />
-                            </span>
-                            {tc("locked")}
-                          </Link>
+                            label={tc("locked")}
+                            ariaLabel={tc("lockedLabel")}
+                            busy={collector.status === "loading"}
+                          />
                         ))}
                   </div>
 
@@ -863,7 +935,54 @@ export function DpGenerator({
                         label={option.label[lang]}
                       />
                     ))}
+                    {/* A typed badge (ADR 0080) — paid passes and admins. */}
+                    {collector.status === "unlocked" && (
+                      <Choice
+                        name="dp-badge"
+                        value={CUSTOM_BADGE_ID}
+                        checked={badgeId === CUSTOM_BADGE_ID}
+                        onChange={() => setBadgeId(CUSTOM_BADGE_ID)}
+                        label={tc("customBadge")}
+                        tag={
+                          <span className="ml-1 inline-flex items-center gap-1 rounded-pill border-2 border-black02 bg-black02 px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide text-primary">
+                            <Sparkle size={11} weight="fill" aria-hidden />
+                            {tc("badge")}
+                          </span>
+                        }
+                      />
+                    )}
                   </div>
+                  {collector.status === "unlocked" &&
+                    badgeId === CUSTOM_BADGE_ID && (
+                      <div className="mt-3 max-w-sm">
+                        <label
+                          htmlFor="dp-custom-badge"
+                          className="font-sans text-body-m font-bold text-black02"
+                        >
+                          {tc("customBadgeLabel")}
+                        </label>
+                        <input
+                          id="dp-custom-badge"
+                          value={customBadge}
+                          onChange={(e) =>
+                            setCustomBadge(cleanBadgeText(e.target.value))
+                          }
+                          maxLength={CUSTOM_BADGE_MAX}
+                          autoComplete="off"
+                          placeholder={tc("customBadgePlaceholder")}
+                          aria-describedby="dp-custom-badge-hint"
+                          className="mt-2 w-full rounded-md border-2 border-black02 bg-offwhite px-3 py-2.5 font-mono text-body-m uppercase text-black02 placeholder:normal-case placeholder:text-black02/45"
+                        />
+                        <p
+                          id="dp-custom-badge-hint"
+                          className="mt-1 text-caption text-black02/70"
+                        >
+                          {tc("customBadgeHint", {
+                            left: CUSTOM_BADGE_MAX - customBadge.length,
+                          })}
+                        </p>
+                      </div>
+                    )}
                 </Group>
 
                 {/* ============ 03 — effects ============ */}
@@ -890,6 +1009,11 @@ export function DpGenerator({
                   </div>
 
                   <Legend className="mt-6">{t("edges.legend")}</Legend>
+                  {shape && (
+                    <p className="-mt-1 mb-2 text-caption text-black02/70">
+                      {tc("edgesShapeNote")}
+                    </p>
+                  )}
                   <div className="flex flex-wrap gap-2.5">
                     {EDGES.map((option) => (
                       <Choice
@@ -1276,4 +1400,61 @@ function Choice({
       </span>
     </label>
   );
+}
+
+/** A locked collector teaser: points at tickets, never hidden (ADR 0077). */
+function LockedTile({
+  href,
+  label,
+  ariaLabel,
+  busy,
+}: {
+  href: string;
+  label: string;
+  ariaLabel: string;
+  busy: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-label={ariaLabel}
+      aria-busy={busy}
+      className="flex items-center gap-2 rounded-pill border-2 border-dashed border-black02/50 bg-offwhite/60 py-1.5 pl-1.5 pr-4 font-sans text-body-m text-black02/75 transition-colors hover:border-black02 hover:bg-pastel"
+    >
+      <span
+        aria-hidden
+        className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-black02 bg-black02 text-primary"
+      >
+        <LockSimple size={14} weight="bold" />
+      </span>
+      {label}
+    </Link>
+  );
+}
+
+/** A photo shape's outline, drawn small for its picker chip (ADR 0080). */
+function ShapeSwatch({ recipe }: { recipe: ShapeRecipe }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    const size = 56;
+    canvas.width = size;
+    canvas.height = size;
+    ctx.clearRect(0, 0, size, size);
+    const path = shapePath(recipe, {
+      cx: size / 2,
+      cy: size / 2,
+      rx: size / 2 - 4,
+      ry: size / 2 - 4,
+    });
+    ctx.fillStyle = "#FFD427";
+    ctx.fill(path);
+    ctx.strokeStyle = "#1E1E1E";
+    ctx.lineWidth = 4;
+    ctx.lineJoin = "round";
+    ctx.stroke(path);
+  }, [recipe]);
+  return <canvas ref={ref} aria-hidden className="h-7 w-7 shrink-0" />;
 }

@@ -1,10 +1,12 @@
 /**
- * GET /api/dp/collector-frames — the collector DP frame definitions, for
- * paid pass holders only (ADR 0077).
+ * GET /api/dp/collector-frames — the collector DP perks, for paid pass
+ * holders and admins only (ADR 0077, 0080): the collector frame definitions
+ * and the photo shape recipes. (Typed badges need no definition; the client
+ * offers them on the same answer.)
  *
  *   signed out          → 401 { entitled: false }
  *   signed in, no paid  → 403 { entitled: false }
- *   paid pass holder    → 200 { entitled: true, tierName, frames }
+ *   paid pass / admin   → 200 { entitled: true, frames, shapes }
  *
  * The generator fetches this lazily and never waits on it (ADR 0015/0034:
  * the DP generator stays usable with no sign-in). Never cached — the answer
@@ -12,6 +14,7 @@
  */
 import { NextRequest } from "next/server";
 import { collectorFrames } from "@/lib/dp/collector-frames";
+import { collectorShapes } from "@/lib/dp/collector-shapes";
 import {
   RATE_LIMITS,
   rateLimit,
@@ -51,8 +54,8 @@ export async function GET(request: NextRequest) {
   return Response.json(
     {
       entitled: true,
-      tierName: entitlement.tierName,
-      frames: collectorFrames(entitlement.tierName ?? ""),
+      frames: collectorFrames(),
+      shapes: collectorShapes(),
     },
     { headers: NO_STORE },
   );

@@ -102,37 +102,58 @@ background and starts being something the card is holding. Patterns made of
 loose pieces get it; a checkerboard spilling over a photograph would just look
 like a mistake.
 
-### Collector frames — paid pass holders only (ADR 0077)
+### Collector edition — paid passes and admins only (ADR 0077, 0080)
 
-Two extra styles, **Gold foil** (`foil`: flat metallic-yellow art-deco line
-work on black) and **Ticket stub** (`stub`: a die-cut ticket with a
-perforated tear line and a serial strip showing the holder's tier — SONNET …
-MYTHOS), each with an "Édition collector · DevFest Yaoundé 2026" plate.
+Three perks, for anyone who holds a paid pass of their own **or is an admin**:
 
-They are **not** in `DP_FRAMES`. Their definitions live in
-`src/lib/dp/collector-frames.ts` (server-only) and are sent by
-`GET /api/dp/collector-frames` only to someone signed in who holds a paid
-ticket of their own — `is_self`, or claimed into their account — on a tier
-that costs money, with no granted refund. A buyer's unclaimed tickets for
-friends do not count. **Admins** (anyone in `organisers`) get them too,
-ticket or not; an admin without a paid pass sees **TEAM** on the strip
-instead of a tier. The rule is `getCollectorAccess()` in
-`src/lib/tickets/entitlement.ts`, built on `getPaidTicketEntitlement()`.
+1. **Three collector styles**, each stamped with the **collector seal** (a
+   gold scalloped medallion, "Édition collector · DevFest Yaoundé 2026"
+   around a sparkle). Nothing personal is printed — no tier, no number.
+   - **Minuit doré / Midnight gold** — banknote-style guilloché waves in two
+     golds round a black border, sparkle corners, a black plate with gold
+     type.
+   - **Constellation** — Gemini-style sparkles, wallpaper-scale, on pale
+     yellow.
+   - **Formes / Shapes** — big soft Material shapes (cookie, clover,
+     pentagon, burst) overlapping on bright yellow.
+2. **Photo shapes** (Layout → _Photo shape_): the photo can be cut to a
+   Gemini **sparkle**, a scalloped **cookie**, a **clover**, a **burst** or a
+   rounded **pentagon** instead of the standard rounded rectangle — with any
+   style, not only the collector ones. With a shape, the shape is the edge,
+   so the Edge effect (torn, brushed) applies to the standard shape only.
+3. **Your own badge** (Style → Badge → _Le mien / Your own_): up to 22
+   characters of their own text instead of a preset.
 
-- Everyone else sees two locked tiles ("For paid pass holders") linking to
-  `/tickets` while sales are open, to the ticket FAQs after. The generator
-  never waits on the check — it works signed out, exactly as before.
-- The first time a holder sees them, the two frames pop in with an
-  "Unlocked!" tag (once per browser).
-- The **wall refuses** a card in a collector frame unless the person posting
-  it is signed in and entitled — the frame ids are public, the definitions
-  are not.
+Everyone else sees locked tiles ("For paid passes") linking to `/tickets`
+while sales are open, to the ticket FAQs after. The generator never waits
+on the check — it works signed out, exactly as before.
 
-**To change them next year:** edit `collectorFrames()` in
-`collector-frames.ts` (colours, labels), and the `foil` / `stub` routines in
-`patterns.ts` for the drawing. Keep them flat and yellow-family, and check
-both a 1080 square and a 2160 tall export. To add a third, add its id to
-`COLLECTOR_FRAME_IDS` in `frames.ts` as well, so the wall recognises it.
+How it's gated:
+
+- The style definitions (`collector-frames.ts`) and the shape recipes
+  (`collector-shapes.ts`) are **server-only** and sent by
+  `GET /api/dp/collector-frames` only to entitled people. The drawing code
+  is public; without the definitions nothing selects it.
+- The rule is `getCollectorAccess()` in `src/lib/tickets/entitlement.ts`: a
+  paid ticket of their own (`is_self` or claimed, a tier that costs money,
+  no granted refund), else a row in `organisers`.
+- The **wall refuses** a card claiming a collector style, a collector shape
+  or a typed badge unless the person posting it is signed in and entitled.
+
+**To change them next year:**
+
+- Styles: `collectorFrames()` in `collector-frames.ts` (colours, labels)
+  and the `guilloche` / `constellation` / `shapes` routines in
+  `patterns.ts`. Add any new id to `COLLECTOR_FRAME_IDS` in `frames.ts`.
+- Shapes: `collectorShapes()` in `collector-shapes.ts` — each shape is a
+  small recipe (sparkle fullness, lobes and depth, or polygon sides and
+  rounding) drawn by `shapes.ts`. Add any new id to `COLLECTOR_SHAPE_IDS`.
+  Keep a face's worth of room in the middle (the tests check the polar
+  shapes keep 77 % of their radius).
+- The seal: `drawCollectorSeal()` in `compose.ts`.
+
+Keep everything flat and yellow-family, and check both a 1080 square and a
+2160 tall export.
 
 ## Effects
 

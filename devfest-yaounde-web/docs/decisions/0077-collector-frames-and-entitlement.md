@@ -77,3 +77,9 @@ Admins (rows in `organisers`) also get the collector frames, through
 a paid pass keeps their own tier on the strip; one who does not gets "TEAM".
 The wall check uses the same function. Volunteers (ADR 0079) are not
 included.
+
+## Amendment — 2026-11-16 (later)
+
+The two original frames (gold foil, ticket stub) and the tier/serial strip
+are replaced by three new collector styles, a collector seal, photo shapes
+and a typed badge — see ADR 0080. The gating described here is unchanged.

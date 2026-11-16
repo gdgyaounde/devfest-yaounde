@@ -19,6 +19,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { createAdminSupabase, currentUser } from "@/lib/supabase/server";
 import { isCollectorFrameId } from "./frames";
 import { getCollectorAccess } from "@/lib/tickets/entitlement";
+import { isCollectorShapeId } from "./shapes";
 
 /** Private on purpose: reads go through a signed URL that we mint per read. */
 export const GALLERY_BUCKET = "dp-cards";
@@ -170,16 +171,24 @@ export function cleanTheme(raw: FormDataEntryValue | null): string {
 }
 
 /**
- * A collector frame on the wall is a paid-pass perk (ADR 0077): refused
- * unless the saver is signed in AND holds a paid pass of their own (or is an
- * admin). Without
- * this, anyone could post a card claiming the frame by sending its id — the
- * id is public; only the definition is gated.
+ * Collector perks on the wall (ADR 0077, 0080): a collector frame, a
+ * collector photo shape, or a typed badge. Each is refused unless the saver
+ * is signed in AND holds a paid pass of their own, or is an admin. Without
+ * this, anyone could post a card claiming them by sending the ids — the ids
+ * are public; only the definitions are gated.
+ *
+ * The card itself is an image the client drew, so this checks what the
+ * submission CLAIMS, which is all a server can check about a picture.
  */
 export async function requireCollectorEntitlement(
   theme: string,
+  extras: { shape?: string; customBadge?: boolean } = {},
 ): Promise<void> {
-  if (!isCollectorFrameId(theme)) return;
+  const claimsPerk =
+    isCollectorFrameId(theme) ||
+    (extras.shape ? isCollectorShapeId(extras.shape) : false) ||
+    extras.customBadge === true;
+  if (!claimsPerk) return;
   const user = await currentUser().catch(() => null);
   if (!user) throw new GalleryRejected("collector_locked");
   const entitlement = await getCollectorAccess(user.id);

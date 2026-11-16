@@ -13,6 +13,7 @@ import {
 import { STICKER_BASE, type PlacedSticker } from "@/lib/dp/stickers";
 import { clampTransform, overshootOf, type Box } from "./pan";
 import type { DpFrame } from "@/lib/dp/frames";
+import type { ShapeRecipe } from "@/lib/dp/shapes";
 
 /**
  * Resolution the PREVIEW is drawn at — not the download, which is DP_SIZE or
@@ -42,6 +43,10 @@ export interface DpStageProps {
   onTransformChange: (next: DpTransform) => void;
   effects: DpEffects;
   badgeId: string;
+  /** A typed badge (ADR 0080): replaces the preset's text when set. */
+  badgeText?: string;
+  /** A collector photo shape (ADR 0080), or null for the standard one. */
+  shape?: ShapeRecipe | null;
   ratio: DpRatio;
   corners: DpCorners;
   stickers: PlacedSticker[];
@@ -87,6 +92,8 @@ export function DpStage({
   onTransformChange,
   effects,
   badgeId,
+  badgeText,
+  shape = null,
   ratio,
   corners,
   stickers,
@@ -129,6 +136,8 @@ export function DpStage({
         transform,
         effects,
         badgeId,
+        badgeText,
+        shape,
         ratio,
         corners,
         stickers,
@@ -155,6 +164,8 @@ export function DpStage({
     transform,
     effects,
     badgeId,
+    badgeText,
+    shape,
     ratio,
     corners,
     stickers,

@@ -10,6 +10,7 @@
  * which is wedges of solid colour rather than a radial sweep.
  */
 import type { DpFrame, DpPattern } from "./frames";
+import { traceShape, type ShapeBox, type ShapeRecipe } from "./shapes";
 
 /**
  * A tiny deterministic generator, seeded from the style id.
@@ -323,106 +324,219 @@ function tiles({ ctx, frame, w, h, u }: PatternArgs) {
 
 /* --------------------------------------------------- collector (ADR 0077) */
 /*
- * These two routines ship in the public bundle, and that is fine: without a
- * frame definition — which only `/api/dp/collector-frames` hands out, to
- * paid pass holders — nothing ever selects them.
+ * The collector routines (ADR 0080) ship in the public bundle, and that is
+ * fine: without a frame definition — which only `/api/dp/collector-frames`
+ * hands out, to paid pass holders and admins — nothing ever selects them.
+ *
+ * Premium comes from craft, not effects: fine engraved line work, big
+ * confident shapes, flat offset shadows. Still not one colour ramp.
  */
 
+const INK = "#1E1E1E";
+
 /**
- * GOLD FOIL. Deep black ground and flat metallic-yellow line work: art-deco
- * fans of concentric arcs from each corner, and a double foil rule just
- * inside the card edge. No ramp anywhere — the "metal" is two flat yellows
- * alternating line by line.
+ * MIDNIGHT GOLD. Banknote engraving on black: interlaced guilloché waves
+ * running round the border — four sine lines a quarter-phase apart, in two
+ * flat golds — between a heavy and a hairline rule, with a sparkle in each
+ * corner. Fine, even, quiet: the photo is the star, the border is the
+ * certificate it is printed on.
  */
-function foil({ ctx, frame, w, h, u }: PatternArgs) {
+function guilloche({ ctx, frame, w, h, u }: PatternArgs) {
   const palette = colours(frame);
-  const step = u * 0.022;
-  const line = Math.max(1, u * 0.0035);
-  const corners: [number, number, number][] = [
-    [0, 0, 0],
-    [w, 0, Math.PI / 2],
-    [w, h, Math.PI],
-    [0, h, (3 * Math.PI) / 2],
-  ];
-  ctx.lineWidth = line;
-  for (const [cx, cy, start] of corners) {
-    for (let i = 1; i <= 9; i++) {
-      ctx.strokeStyle = palette[i % palette.length];
+  const band = u * 0.046; // the band's centre line, from the edge
+  const amp = u * 0.011;
+  const period = u * 0.052;
+  const lines = 4;
+  ctx.lineWidth = Math.max(1, u * 0.0021);
+
+  // One side's waves, along a straight run from (x0,y0) to (x1,y1), with
+  // the band offset `band` inward along the normal (nx, ny).
+  const run = (
+    x0: number,
+    y0: number,
+    x1: number,
+    y1: number,
+    nx: number,
+    ny: number,
+  ) => {
+    const len = Math.hypot(x1 - x0, y1 - y0);
+    const dx = (x1 - x0) / len;
+    const dy = (y1 - y0) / len;
+    for (let j = 0; j < lines; j++) {
+      ctx.strokeStyle = palette[j % palette.length];
       ctx.beginPath();
-      ctx.arc(cx, cy, step * i * 1.6, start, start + Math.PI / 2);
+      for (let t = 0; t <= len; t += u * 0.003) {
+        const off =
+          band + amp * Math.sin((t / period) * Math.PI * 2 + (j * Math.PI) / 2);
+        const x = x0 + dx * t + nx * off;
+        const y = y0 + dy * t + ny * off;
+        if (t === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
       ctx.stroke();
     }
-    // Rays between the arcs — the fan's ribs.
-    for (let k = 1; k < 6; k++) {
-      const a = start + (k / 6) * (Math.PI / 2);
-      ctx.strokeStyle = palette[0];
-      ctx.beginPath();
-      ctx.moveTo(cx + Math.cos(a) * step * 1.6, cy + Math.sin(a) * step * 1.6);
-      ctx.lineTo(
-        cx + Math.cos(a) * step * 14.4,
-        cy + Math.sin(a) * step * 14.4,
-      );
-      ctx.stroke();
-    }
-  }
-  // The double foil rule.
-  for (const [inset, colour] of [
-    [u * 0.022, palette[0]],
-    [u * 0.034, palette[palette.length - 1]],
+  };
+  const c = u * 0.13; // keep clear of the rounded corners
+  run(c, 0, w - c, 0, 0, 1);
+  run(c, h, w - c, h, 0, -1);
+  run(0, c, 0, h - c, 1, 0);
+  run(w, c, w, h - c, -1, 0);
+
+  // The rules either side of the band.
+  for (const [inset, colour, weight] of [
+    [u * 0.02, palette[0], 0.004],
+    [u * 0.072, palette[palette.length - 1], 0.0016],
   ] as const) {
     ctx.strokeStyle = colour;
-    roundedRectPath(ctx, inset, inset, w - inset * 2, h - inset * 2, u * 0.11);
+    ctx.lineWidth = Math.max(1, u * weight);
+    roundedRectPath(
+      ctx,
+      inset,
+      inset,
+      w - inset * 2,
+      h - inset * 2,
+      u * 0.135 - inset,
+    );
     ctx.stroke();
   }
-  // Diamond studs on the edge midpoints.
+
+  // A sparkle in each corner, where the waves stop.
   ctx.fillStyle = palette[0];
   for (const [x, y] of [
-    [w / 2, u * 0.028],
-    [w / 2, h - u * 0.028],
-    [u * 0.028, h / 2],
-    [w - u * 0.028, h / 2],
+    [u * 0.07, u * 0.07],
+    [w - u * 0.07, u * 0.07],
+    [u * 0.07, h - u * 0.07],
+    [w - u * 0.07, h - u * 0.07],
   ]) {
-    const s = u * 0.012;
     ctx.beginPath();
-    ctx.moveTo(x, y - s);
-    ctx.lineTo(x + s, y);
-    ctx.lineTo(x, y + s);
-    ctx.lineTo(x - s, y);
-    ctx.closePath();
+    traceShape(
+      ctx,
+      { kind: "sparkle", fullness: 0.16 },
+      { cx: x, cy: y, rx: u * 0.03, ry: u * 0.03 },
+    );
+    ctx.fill();
+  }
+}
+
+/** A shape filled flat, with the site's flat ink offset shadow. */
+function solidShape(
+  ctx: CanvasRenderingContext2D,
+  recipe: ShapeRecipe,
+  box: ShapeBox,
+  fill: string,
+  u: number,
+  outline = true,
+) {
+  const shadow = u * 0.009;
+  ctx.fillStyle = INK;
+  ctx.beginPath();
+  traceShape(ctx, recipe, { ...box, cx: box.cx + shadow, cy: box.cy + shadow });
+  ctx.fill();
+  ctx.fillStyle = fill;
+  ctx.beginPath();
+  traceShape(ctx, recipe, box);
+  ctx.fill();
+  if (outline) {
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = Math.max(2, u * 0.005);
+    ctx.stroke();
+  }
+}
+
+/**
+ * CONSTELLATION. Gemini-style sparkles on a pale ground, like the
+ * wallpapers: one huge sparkle cropped by the corner, a few big ones, and a
+ * scatter of small ones in ink and gold — the small ones seeded, so the
+ * preview and the export agree.
+ */
+function constellation({ ctx, frame, w, h, u }: PatternArgs) {
+  const palette = colours(frame);
+  const sparkle = (fullness: number): ShapeRecipe => ({
+    kind: "sparkle",
+    fullness,
+  });
+  const big: [number, number, number, string][] = [
+    [w * 0.08, u * 0.1, u * 0.24, palette[0]],
+    [w * 0.97, h * 0.62, u * 0.3, palette[1] ?? palette[0]],
+    [w * 0.12, h * 0.9, u * 0.15, "#F0F0F0"],
+  ];
+  for (const [cx, cy, r, colour] of big) {
+    solidShape(ctx, sparkle(0.24), { cx, cy, rx: r, ry: r }, colour, u);
+  }
+  const rand = seeded(`${frame.id}-stars`);
+  for (let i = 0; i < 38; i++) {
+    const x = rand() * w;
+    const y = rand() * h;
+    const r = u * (0.006 + rand() * 0.018);
+    ctx.fillStyle = i % 3 === 0 ? INK : palette[i % palette.length];
+    ctx.beginPath();
+    traceShape(ctx, sparkle(0.12), { cx: x, cy: y, rx: r, ry: r });
     ctx.fill();
   }
 }
 
 /**
- * TICKET STUB. The card IS the ticket: fine security pinstripes, and down
- * the right-hand margin a perforated tear line with die-cut notches top and
- * bottom. The serial strip printed beside it is drawn by the compositor
- * (`drawCollectorDetails`), because it needs the holder's tier and name.
+ * SHAPES. A Material-style wallpaper: big soft shapes — cookie, clover,
+ * pentagon, burst, sparkle — overlapping and cropped by the card's edges,
+ * each with a flat ink shadow; one left as an ink outline for contrast.
  */
-function stub({ ctx, frame, w, h, u }: PatternArgs) {
+function shapes({ ctx, frame, w, h, u }: PatternArgs) {
   const palette = colours(frame);
-  // Security print: hairline pinstripes, alternating weight.
-  ctx.strokeStyle = palette[0];
-  for (let y = u * 0.012, i = 0; y < h; y += u * 0.014, i++) {
-    ctx.lineWidth = Math.max(1, u * (i % 3 === 0 ? 0.0028 : 0.0012));
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
-  }
-  const tearX = w - u * 0.05;
-  // A die-cut notch on the left edge, so the stub reads as punched, not
-  // just striped. (Not at the tear line's ends: those fall inside the card's
-  // rounded corners and were clipped away.)
-  ctx.fillStyle = "#1E1E1E";
-  ctx.beginPath();
-  ctx.arc(0, h * 0.5, u * 0.03, 0, Math.PI * 2);
-  ctx.fill();
-  // The perforation: a column of round holes.
-  for (let y = u * 0.06; y < h - u * 0.05; y += u * 0.026) {
-    ctx.beginPath();
-    ctx.arc(tearX, y, u * 0.0065, 0, Math.PI * 2);
-    ctx.fill();
+  const pieces: [ShapeRecipe, number, number, number, string | null][] = [
+    [
+      { kind: "polar", lobes: 9, depth: 0.08, sharpness: 0.9 },
+      w * 0.04,
+      u * 0.1,
+      u * 0.3,
+      palette[0],
+    ],
+    [
+      { kind: "polar", lobes: 4, depth: 0.24, sharpness: 0.55, rotation: 20 },
+      w * 0.98,
+      h * 0.3,
+      u * 0.24,
+      palette[1] ?? palette[0],
+    ],
+    [
+      { kind: "polygon", sides: 5, roundness: 0.3, rotation: 14 },
+      w * 0.9,
+      h * 0.98,
+      u * 0.26,
+      "#F0F0F0",
+    ],
+    [
+      { kind: "polar", lobes: 12, depth: 0.1, sharpness: 1.6, rotation: 7 },
+      w * 0.06,
+      h * 0.78,
+      u * 0.2,
+      palette[2] ?? palette[0],
+    ],
+    [
+      { kind: "sparkle", fullness: 0.22, rotation: 12 },
+      w * 0.62,
+      u * 0.02,
+      u * 0.13,
+      null,
+    ],
+    [
+      { kind: "polygon", sides: 6, roundness: 0.35 },
+      w * 0.4,
+      h * 1.02,
+      u * 0.12,
+      palette[0],
+    ],
+  ];
+  for (const [recipe, cx, cy, r, fill] of pieces) {
+    const box = { cx, cy, rx: r, ry: r };
+    if (fill) {
+      solidShape(ctx, recipe, box, fill, u);
+    } else {
+      ctx.strokeStyle = INK;
+      ctx.lineWidth = Math.max(2, u * 0.007);
+      ctx.beginPath();
+      traceShape(ctx, recipe, box);
+      ctx.stroke();
+    }
   }
 }
 
@@ -435,8 +549,9 @@ const PATTERNS = {
   grid,
   rays,
   tiles,
-  foil,
-  stub,
+  guilloche,
+  constellation,
+  shapes,
 } as const;
 
 export function drawPattern(args: PatternArgs) {

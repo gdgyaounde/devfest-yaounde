@@ -22,9 +22,9 @@
  * `grid`      — a drafting grid with heavier rules and corner ticks
  * `rays`      — flat wedges radiating from a corner, no colour ramp
  * `tiles`     — two-tone rounded tiling, quietly dense
- * `foil`      — COLLECTOR: flat metallic-yellow art-deco line work on black
- * `stub`      — COLLECTOR: a die-cut ticket stub — pinstripes, notches, a
- *               perforated tear line
+ * `guilloche` — COLLECTOR: engraved gold rosettes on black, banknote-style
+ * `constellation` — COLLECTOR: Gemini-style sparkles, wallpaper-scale
+ * `shapes`    — COLLECTOR: big soft Material shapes, overlapping and cropped
  */
 export type DpPattern =
   | "confetti"
@@ -35,8 +35,9 @@ export type DpPattern =
   | "grid"
   | "rays"
   | "tiles"
-  | "foil"
-  | "stub";
+  | "guilloche"
+  | "constellation"
+  | "shapes";
 
 export interface DpFrame {
   id: string;
@@ -56,12 +57,12 @@ export interface DpFrame {
   /** [shadow, highlight] for the duotone and halftone photo effects. */
   duotone?: [string, string];
   /**
-   * Present on the COLLECTOR frames only (ADR 0077) — and those frames are
-   * never in this file: their definitions are served by
-   * `GET /api/dp/collector-frames` to entitled holders. `tierName` is the
-   * holder's tier (SONNET … MYTHOS), printed on the ticket-stub serial.
+   * True on the COLLECTOR frames only (ADR 0077, 0080) — and those frames
+   * are never in this file: their definitions are served by
+   * `GET /api/dp/collector-frames` to paid pass holders and admins. It adds
+   * the collector seal. Nothing personal (no tier, no serial) is printed.
    */
-  collector?: { tierName: string };
+  collector?: boolean;
 }
 
 /**
@@ -69,8 +70,9 @@ export interface DpFrame {
  * and refuse them), unlike their definitions. See ADR 0077.
  */
 export const COLLECTOR_FRAME_IDS = [
-  "collector-foil",
-  "collector-stub",
+  "collector-midnight",
+  "collector-constellation",
+  "collector-shapes",
 ] as const;
 
 export function isCollectorFrameId(id: string): boolean {
@@ -237,6 +239,12 @@ export const DP_BADGES: DpBadge[] = [
 ];
 
 export const DEFAULT_BADGE_ID = DP_BADGES[0].id;
+
+/**
+ * The typed badge (ADR 0080) — paid passes and admins only. Not in
+ * `DP_BADGES`: it has no preset text, the person writes it.
+ */
+export const CUSTOM_BADGE_ID = "custom";
 
 export function findBadge(id: string): DpBadge | undefined {
   return DP_BADGES.find((badge) => badge.id === id);

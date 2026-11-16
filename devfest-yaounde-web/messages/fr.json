@@ -564,9 +564,18 @@
       "collector": {
         "badge": "Collector",
         "locked": "Pour les pass payants",
-        "lockedLabel": "Cadre collector verrouillé — réservé aux pass payants",
+        "lockedLabel": "Style collector verrouillé — pour les pass payants",
         "unlocked": "Débloqué !",
-        "legend": "Édition collector"
+        "legend": "Édition collector",
+        "shapesLegend": "Forme de la photo",
+        "shapeStandard": "Standard",
+        "shapesLocked": "Étincelle, trèfle et plus — pass payants",
+        "shapesLockedLabel": "Formes de photo verrouillées — pour les pass payants",
+        "customBadge": "Le mien",
+        "customBadgeLabel": "Le texte de ton badge",
+        "customBadgePlaceholder": "ex. Fan de Flutter",
+        "customBadgeHint": "{left, plural, =0 {Plus aucun caractère.} one {# caractère restant.} other {# caractères restants.}} Reste sympa — il peut finir sur le mur.",
+        "edgesShapeNote": "Avec une forme, c'est la forme qui fait le bord — ces options ne s'appliquent qu'à la forme standard."
       }
     },
     "paymentReturn": {

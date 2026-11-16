@@ -47,6 +47,7 @@ import {
   roundedRectPath,
   seeded,
 } from "./patterns";
+import { fitShape, shapePath, type ShapeRecipe } from "./shapes";
 import {
   findSticker,
   STICKER_BASE,
@@ -141,6 +142,17 @@ export interface DpComposeInput {
   corners?: DpCorners;
   effects?: DpEffects;
   badgeId?: string;
+  /**
+   * The badge's text, typed by the person — paid passes and admins only
+   * (ADR 0080). When set it replaces the preset badge's text.
+   */
+  badgeText?: string;
+  /**
+   * A photo shape from the collector shape picker (ADR 0080). When set the
+   * photo is cut to it instead of the rounded rectangle, and the edge
+   * treatment (torn, brush) does not apply.
+   */
+  shape?: ShapeRecipe | null;
   stickers?: PlacedSticker[];
   locale?: "fr" | "en";
 }
@@ -681,6 +693,7 @@ function renderPhotoLayer(
   transform: DpTransform,
   effects: DpEffects,
   frame: DpFrame,
+  shape: ShapeRecipe | null = null,
 ) {
   const w = Math.max(1, Math.round(box.w));
   const h = Math.max(1, Math.round(box.h));
@@ -700,7 +713,15 @@ function renderPhotoLayer(
   }
   if (effects.look === "mosaic") mosaicPhoto(ctx, w, h, frame.id);
   colourPass(ctx, w, h, effects, frame);
-  applyEdge(ctx, w, h, radius, effects.edge, frame.id);
+  if (shape) {
+    // The shape IS the edge: cut the photo to it, nothing frayed on top.
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.fillStyle = "#000";
+    ctx.fill(shapePath(shape, fitShape(0, 0, w, h)));
+    ctx.globalCompositeOperation = "source-over";
+  } else {
+    applyEdge(ctx, w, h, radius, effects.edge, frame.id);
+  }
   return canvas;
 }
 
@@ -909,7 +930,9 @@ function drawPlate(
   // The plate, with the radius the nesting rule gives it.
   ctx.save();
   ctx.fillStyle = frame.plate;
-  ctx.strokeStyle = "#1E1E1E";
+  // An ink plate (Midnight gold) gets a gold keyline — an ink one vanishes
+  // wherever the plate overhangs the black card.
+  ctx.strokeStyle = frame.plate === "#1E1E1E" ? frame.accent : "#1E1E1E";
   ctx.lineWidth = Math.max(2, u * 0.006);
   roundedRectPath(ctx, plate.x, plate.y, plate.w, plate.h, layout.radius.plate);
   ctx.fill();
@@ -1047,84 +1070,88 @@ function drawPlate(
 /* --------------------------------------------------------------- collector */
 
 /**
- * The collector frames' extras (ADR 0077).
+ * The collector seal (ADR 0080) — the mark free cards cannot carry.
  *
- * - An "édition collector · DevFest Yaoundé 2026" plate straddling the
- *   photo's top edge, with an EMBOSSED look made only of flat offset layers
- *   — ink below-right, accent above-left, then the plate — never a ramp.
- * - On the ticket stub, a serial strip running up the right-hand margin
- *   beside the tear line: tier · Nº · edition. The number is a stable hash
- *   of the nickname, so the preview and the export agree, and two holders
- *   rarely share one. It is decoration, not a credential.
+ * A scalloped medallion pinned over the photo's top-right corner: a flat ink
+ * offset shadow, a gold scalloped disc, an ink ring, the edition text set
+ * around the ring, and a Gemini-style sparkle at its heart. Built only from
+ * flat layers. Nothing personal on it — no tier, no serial, no name.
  */
-function drawCollectorDetails(
+function drawCollectorSeal(
   ctx: CanvasRenderingContext2D,
   layout: CardLayout,
   frame: DpFrame,
-  nickname: string,
   locale: "fr" | "en",
 ) {
   const u = layout.unit;
-  const edition = `${EVENT.name.toUpperCase()} ${EVENT.year}`;
-  const label =
-    locale === "fr"
-      ? `ÉDITION COLLECTOR · ${edition}`
-      : `COLLECTOR EDITION · ${edition}`;
+  const r = u * 0.092;
+  const cx = layout.photo.x + layout.photo.w - u * 0.035;
+  const cy = layout.photo.y + u * 0.035;
+  const ink = "#1E1E1E";
+  const gold = frame.accent === ink ? "#F9AB00" : frame.accent;
+  const scallop: ShapeRecipe = {
+    kind: "polar",
+    lobes: 16,
+    depth: 0.07,
+    sharpness: 0.8,
+  };
 
   ctx.save();
-  ctx.translate(layout.photo.x + u * 0.04, layout.photo.y);
-  ctx.rotate(-0.035);
-  ctx.font = `700 ${Math.round(u * 0.024)}px "Google Sans Code", ui-monospace, monospace`;
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
-  const padX = u * 0.026;
-  const w = ctx.measureText(label).width + padX * 2;
-  const h = u * 0.058;
-  const r = h * 0.3;
-  const y = -h / 2;
-  // Embossed: two flat offsets, then the face.
-  ctx.fillStyle = "#1E1E1E";
-  roundedRectPath(ctx, u * 0.006, y + u * 0.006, w, h, r);
-  ctx.fill();
-  ctx.fillStyle = frame.accent;
-  roundedRectPath(ctx, -u * 0.0025, y - u * 0.0025, w, h, r);
-  ctx.fill();
-  ctx.fillStyle = frame.plate;
-  ctx.strokeStyle = "#1E1E1E";
-  ctx.lineWidth = Math.max(2, u * 0.005);
-  roundedRectPath(ctx, 0, y, w, h, r);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = frame.foreground;
-  ctx.fillText(label, padX, u * 0.002);
-  ctx.restore();
+  ctx.translate(cx, cy);
+  ctx.rotate(-0.21);
 
-  if (frame.pattern === "stub") {
-    let hash = 2166136261;
-    for (const ch of nickname.trim().toLowerCase() || "devfest") {
-      hash ^= ch.codePointAt(0) ?? 0;
-      hash = Math.imul(hash, 16777619);
-    }
-    const serial = String((hash >>> 0) % 10000).padStart(4, "0");
-    const strip = `${frame.collector?.tierName ?? ""} · Nº ${serial} · ${edition}`;
-    ctx.save();
-    ctx.translate(layout.width - u * 0.022, layout.height / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = "#1E1E1E";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    fitFont(
-      ctx,
-      strip,
-      layout.height - u * 0.24,
-      (px) =>
-        `700 ${Math.round(px)}px "Google Sans Code", ui-monospace, monospace`,
-      u * 0.022,
-      u * 0.012,
-    );
-    ctx.fillText(strip, 0, 0);
-    ctx.restore();
+  // Shadow, then the scalloped disc with its outline.
+  ctx.fillStyle = ink;
+  ctx.fill(shapePath(scallop, { cx: u * 0.008, cy: u * 0.008, rx: r, ry: r }));
+  const disc = shapePath(scallop, { cx: 0, cy: 0, rx: r, ry: r });
+  ctx.fillStyle = gold;
+  ctx.fill(disc);
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = Math.max(2, u * 0.0045);
+  ctx.stroke(disc);
+
+  // Two rings: the text runs between them.
+  ctx.lineWidth = Math.max(1, u * 0.0024);
+  for (const ring of [0.8, 0.5]) {
+    ctx.beginPath();
+    ctx.arc(0, 0, r * ring, 0, Math.PI * 2);
+    ctx.stroke();
   }
+
+  // The edition, set around the ring, one character at a time.
+  const text = `${
+    locale === "fr" ? "ÉDITION COLLECTOR" : "COLLECTOR EDITION"
+  } · ${EVENT.name.toUpperCase()} ${EVENT.year} · `;
+  const chars = [...text];
+  const textR = r * 0.65;
+  ctx.fillStyle = ink;
+  ctx.font = `700 ${Math.round(u * 0.0135)}px "Google Sans Code", ui-monospace, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const step = (Math.PI * 2) / chars.length;
+  chars.forEach((ch, i) => {
+    ctx.save();
+    ctx.rotate(i * step - Math.PI / 2);
+    ctx.translate(textR, 0);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillText(ch, 0, 0);
+    ctx.restore();
+  });
+
+  // The heart: a sparkle with a smaller one beside it.
+  ctx.fill(
+    shapePath(
+      { kind: "sparkle", fullness: 0.18 },
+      { cx: 0, cy: 0, rx: r * 0.36, ry: r * 0.36 },
+    ),
+  );
+  ctx.fill(
+    shapePath(
+      { kind: "sparkle", fullness: 0.18 },
+      { cx: r * 0.27, cy: -r * 0.24, rx: r * 0.11, ry: r * 0.11 },
+    ),
+  );
+  ctx.restore();
 }
 
 /* ------------------------------------------------------------------ render */
@@ -1171,7 +1198,22 @@ export function renderDp(
   });
   ctx.restore();
 
-  // 2. The photo, already masked by its edge treatment.
+  // 2. The photo, already masked by its edge treatment. A shaped photo
+  //    first gets the site's flat ink offset shadow, so it sits ON the card.
+  const shapeBox = input.shape
+    ? fitShape(layout.photo.x, layout.photo.y, layout.photo.w, layout.photo.h)
+    : null;
+  if (input.shape && shapeBox) {
+    const off = layout.unit * 0.014;
+    ctx.fillStyle = "#1E1E1E";
+    ctx.fill(
+      shapePath(input.shape, {
+        ...shapeBox,
+        cx: shapeBox.cx + off,
+        cy: shapeBox.cy + off,
+      }),
+    );
+  }
   ctx.drawImage(
     renderPhotoLayer(
       input.photo,
@@ -1180,6 +1222,7 @@ export function renderDp(
       transform,
       effects,
       frame,
+      input.shape ?? null,
     ),
     layout.photo.x,
     layout.photo.y,
@@ -1187,9 +1230,18 @@ export function renderDp(
     layout.photo.h,
   );
 
+  // A shaped photo gets its keyline along the shape.
+  if (input.shape) {
+    ctx.save();
+    ctx.strokeStyle = "#1E1E1E";
+    ctx.lineWidth = Math.max(2, layout.unit * 0.006);
+    ctx.lineJoin = "round";
+    ctx.stroke(shapePath(input.shape, shapeBox!));
+    ctx.restore();
+  }
   // A clean edge gets an ink keyline; a torn or brushed one must not, or the
   // rectangle it was supposed to escape is drawn straight back on.
-  if (effects.edge === "clean") {
+  else if (effects.edge === "clean") {
     ctx.save();
     ctx.strokeStyle = "#1E1E1E";
     ctx.lineWidth = Math.max(2, layout.unit * 0.006);
@@ -1223,12 +1275,13 @@ export function renderDp(
 
   // 5. The plate: name, lockup, badge.
   const badge = findBadge(input.badgeId ?? DEFAULT_BADGE_ID);
-  drawPlate(ctx, layout, frame, input.nickname, badge?.text[locale] ?? "");
+  const badgeText = input.badgeText?.trim()
+    ? input.badgeText.trim().toUpperCase()
+    : (badge?.text[locale] ?? "");
+  drawPlate(ctx, layout, frame, input.nickname, badgeText);
 
-  // 5b. Collector frames only: their edition plate and the stub's serial.
-  if (frame.collector) {
-    drawCollectorDetails(ctx, layout, frame, input.nickname, locale);
-  }
+  // 5b. Collector frames only: the seal.
+  if (frame.collector) drawCollectorSeal(ctx, layout, frame, locale);
 
   // 6. The card's own outline, last, so nothing sits on top of it.
   ctx.save();

@@ -776,8 +776,8 @@ function launchCopy(
               cta: { label: "Mettre à jour mon billet", path: "/account" },
             },
             {
-              lead: "Des cadres photo collector, rien que pour toi.",
-              body: "Le générateur de DP a deux cadres « édition collector », réservés aux détenteurs d'un pass payant. Connecte-toi avec le compte de ton billet : ils t'attendent.",
+              lead: "Une édition collector, rien que pour toi.",
+              body: "Le générateur de DP a trois styles « édition collector » avec leur sceau, des formes de photo (étincelle, trèfle…) et un badge à ton propre texte, réservés aux pass payants. Connecte-toi avec le compte de ton billet : tout t'attend.",
               links: [{ label: "Le générateur de DP", path: "/dp-generator" }],
             },
             speakers,
@@ -809,8 +809,8 @@ function launchCopy(
               cta: { label: "Update my ticket", path: "/account" },
             },
             {
-              lead: "Collector photo frames, just for you.",
-              body: "The DP generator has two “collector edition” frames for paid pass holders only. Sign in with the account your ticket is on and they're waiting for you.",
+              lead: "A collector edition, just for you.",
+              body: "The DP generator has three “collector edition” styles with their own seal, photo shapes (sparkle, clover…) and a badge with your own text, for paid pass holders only. Sign in with the account your ticket is on and it's all waiting for you.",
               links: [{ label: "The DP generator", path: "/dp-generator" }],
             },
             speakers,

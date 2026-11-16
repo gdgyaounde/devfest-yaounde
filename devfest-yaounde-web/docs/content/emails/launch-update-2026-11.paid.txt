@@ -15,7 +15,7 @@ Salut ! Merci d'avoir pris ton pass pour DevFest Yaoundé 2026 — ça compte vr
 4. Vérifie ta taille de T-shirt et ton nom. Tu peux les modifier depuis ton compte jusqu'au mercredi 18 novembre à 23h59. Après, tout part à l'impression.
    Mettre à jour mon billet : https://devfest.gdgyaounde.com/fr/account
 
-5. Des cadres photo collector, rien que pour toi. Le générateur de DP a deux cadres « édition collector », réservés aux détenteurs d'un pass payant. Connecte-toi avec le compte de ton billet : ils t'attendent.
+5. Une édition collector, rien que pour toi. Le générateur de DP a trois styles « édition collector » avec leur sceau, des formes de photo (étincelle, trèfle…) et un badge à ton propre texte, réservés aux pass payants. Connecte-toi avec le compte de ton billet : tout t'attend.
    Le générateur de DP : https://devfest.gdgyaounde.com/fr/dp-generator
 
 6. Les speakers sont annoncés ! 24 talks et ateliers au programme — jette un œil au line-up. Et pour tous les détails, nos conditions de participation.
@@ -40,7 +40,7 @@ Hi! Thank you for getting a pass to DevFest Yaoundé 2026 — it genuinely matte
 4. Check your T-shirt size and name. You can change them from your account until Wednesday 18 November at 23:59. After that, everything goes to print.
    Update my ticket: https://devfest.gdgyaounde.com/en/account
 
-5. Collector photo frames, just for you. The DP generator has two “collector edition” frames for paid pass holders only. Sign in with the account your ticket is on and they're waiting for you.
+5. A collector edition, just for you. The DP generator has three “collector edition” styles with their own seal, photo shapes (sparkle, clover…) and a badge with your own text, for paid pass holders only. Sign in with the account your ticket is on and it's all waiting for you.
    The DP generator: https://devfest.gdgyaounde.com/en/dp-generator
 
 6. The speakers are announced! 24 talks and workshops on the programme — have a look at the lineup. And for every detail, our participation terms.
