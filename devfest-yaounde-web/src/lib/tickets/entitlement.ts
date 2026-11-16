@@ -62,3 +62,38 @@ export async function getPaidTicketEntitlement(
     return NOT_ENTITLED;
   }
 }
+
+/** What an admin's collector frames say on their strip when they hold no paid pass. */
+export const ORGANISER_COLLECTOR_LABEL = "TEAM";
+
+/**
+ * Who may use the collector DP frames (ADR 0077): a paid pass holder — or
+ * an admin (a row in `organisers`), who runs the event and gets them
+ * regardless of a ticket.
+ *
+ * The paid pass is checked first, so an admin who bought one still gets
+ * their own tier on the strip; an admin without one gets "TEAM". Volunteers
+ * are not included. Every failure answers "not entitled".
+ */
+export async function getCollectorAccess(
+  userId: string,
+): Promise<PaidEntitlement> {
+  const paid = await getPaidTicketEntitlement(userId);
+  if (paid.entitled) return paid;
+  try {
+    const { data, error } = await createAdminSupabase()
+      .from("organisers")
+      .select("user_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error || !data) return NOT_ENTITLED;
+    return {
+      ...NOT_ENTITLED,
+      entitled: true,
+      tierName: ORGANISER_COLLECTOR_LABEL,
+    };
+  } catch (err) {
+    console.error("[entitlement] organiser read failed", err);
+    return NOT_ENTITLED;
+  }
+}

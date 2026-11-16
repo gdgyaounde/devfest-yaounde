@@ -18,7 +18,7 @@ import {
   rateLimitIdentity,
 } from "@/lib/security/rate-limit";
 import { currentUser } from "@/lib/supabase/server";
-import { getPaidTicketEntitlement } from "@/lib/tickets/entitlement";
+import { getCollectorAccess } from "@/lib/tickets/entitlement";
 
 const NO_STORE = { "Cache-Control": "private, no-store" };
 
@@ -40,7 +40,8 @@ export async function GET(request: NextRequest) {
       { status: 429, headers: NO_STORE },
     );
   }
-  const entitlement = await getPaidTicketEntitlement(user.id);
+  // Paid pass holders, and admins (ADR 0077).
+  const entitlement = await getCollectorAccess(user.id);
   if (!entitlement.entitled) {
     return Response.json(
       { entitled: false },

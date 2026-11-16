@@ -18,7 +18,7 @@ import "server-only";
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { createAdminSupabase, currentUser } from "@/lib/supabase/server";
 import { isCollectorFrameId } from "./frames";
-import { getPaidTicketEntitlement } from "@/lib/tickets/entitlement";
+import { getCollectorAccess } from "@/lib/tickets/entitlement";
 
 /** Private on purpose: reads go through a signed URL that we mint per read. */
 export const GALLERY_BUCKET = "dp-cards";
@@ -171,7 +171,8 @@ export function cleanTheme(raw: FormDataEntryValue | null): string {
 
 /**
  * A collector frame on the wall is a paid-pass perk (ADR 0077): refused
- * unless the saver is signed in AND holds a paid pass of their own. Without
+ * unless the saver is signed in AND holds a paid pass of their own (or is an
+ * admin). Without
  * this, anyone could post a card claiming the frame by sending its id — the
  * id is public; only the definition is gated.
  */
@@ -181,7 +182,7 @@ export async function requireCollectorEntitlement(
   if (!isCollectorFrameId(theme)) return;
   const user = await currentUser().catch(() => null);
   if (!user) throw new GalleryRejected("collector_locked");
-  const entitlement = await getPaidTicketEntitlement(user.id);
+  const entitlement = await getCollectorAccess(user.id);
   if (!entitlement.entitled) throw new GalleryRejected("collector_locked");
 }
 

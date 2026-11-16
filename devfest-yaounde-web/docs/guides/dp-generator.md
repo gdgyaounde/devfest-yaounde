@@ -114,8 +114,10 @@ They are **not** in `DP_FRAMES`. Their definitions live in
 `GET /api/dp/collector-frames` only to someone signed in who holds a paid
 ticket of their own — `is_self`, or claimed into their account — on a tier
 that costs money, with no granted refund. A buyer's unclaimed tickets for
-friends do not count. The rule is `getPaidTicketEntitlement()` in
-`src/lib/tickets/entitlement.ts`.
+friends do not count. **Admins** (anyone in `organisers`) get them too,
+ticket or not; an admin without a paid pass sees **TEAM** on the strip
+instead of a tier. The rule is `getCollectorAccess()` in
+`src/lib/tickets/entitlement.ts`, built on `getPaidTicketEntitlement()`.
 
 - Everyone else sees two locked tiles ("For paid pass holders") linking to
   `/tickets` while sales are open, to the ticket FAQs after. The generator
@@ -149,7 +151,7 @@ magnifying glass on top of the card instead.
 
 **Mosaic** (Phase 23 §C) is deliberately not "pixel art with bigger blocks".
 Pixel art floods square blocks flush together, so it reads as a low-resolution
-picture; a mosaic reads as a picture *made of pieces* — each tile takes the
+picture; a mosaic reads as a picture _made of pieces_ — each tile takes the
 average colour under it, is inset so a seam of ink grout shows between tiles,
 and is nudged a few levels lighter or darker (seeded per style, so a photo
 always lays the same way). Everything is a fraction of the render — 34 columns,

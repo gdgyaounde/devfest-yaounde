@@ -69,3 +69,11 @@ once per browser, via `useSeenOnce` (ADR 0074).
 - A refund granted after someone downloaded a collector card does not
   recall the file — it only stops new ones and wall posts.
 - The Part E paid email announces these frames: send it after this ships.
+
+## Amendment — 2026-11-16
+
+Admins (rows in `organisers`) also get the collector frames, through
+`getCollectorAccess()`: the paid-pass check runs first, so an admin who holds
+a paid pass keeps their own tier on the strip; one who does not gets "TEAM".
+The wall check uses the same function. Volunteers (ADR 0079) are not
+included.
