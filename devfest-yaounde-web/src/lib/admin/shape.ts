@@ -241,6 +241,8 @@ export interface AdminData {
     users: number;
   };
   tickets: { rows: AdminTicket[]; total: number };
+  /** Tickets + shop sold, and the swag to account for (ADR 0083). */
+  commerce: import("@/lib/admin/commerce-recap").CommerceRecap;
   /** Apparel per tier × size, over EVERY ticket, not the loaded page (ADR 0075). */
   apparel: import("@/lib/tickets/apparel-totals").ApparelTotals;
   orders: { rows: AdminOrder[]; total: number };

@@ -84,10 +84,17 @@ export function DataTable({
   headers,
   rows,
   empty,
+  compact = false,
 }: {
   headers: string[];
   rows: ReactNode[][];
   empty: string;
+  /**
+   * For narrow tables of a few short columns (the commerce recap): no
+   * minimum width and tighter cells, so every column fits a phone instead of
+   * scrolling sideways. Other tables keep the wide layout.
+   */
+  compact?: boolean;
 }) {
   if (rows.length === 0) {
     return (
@@ -98,13 +105,17 @@ export function DataTable({
   }
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[42rem] border-collapse text-left">
+      <table
+        className={`w-full border-collapse text-left ${compact ? "" : "min-w-[42rem]"}`}
+      >
         <thead className="sticky top-0 z-10 bg-offwhite">
           <tr>
             {headers.map((h) => (
               <th
                 key={h}
-                className="whitespace-nowrap border-b border-black02/30 px-4 py-3 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70"
+                className={`border-b border-black02/30 py-3 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70 ${
+                  compact ? "px-2 sm:px-4" : "whitespace-nowrap px-4"
+                }`}
               >
                 {h}
               </th>
@@ -122,7 +133,9 @@ export function DataTable({
               {row.map((cell, j) => (
                 <td
                   key={j}
-                  className="px-4 py-3 align-middle text-body-m text-black02"
+                  className={`py-3 align-middle text-body-m text-black02 ${
+                    compact ? "px-2 sm:px-4" : "px-4"
+                  }`}
                 >
                   {cell}
                 </td>

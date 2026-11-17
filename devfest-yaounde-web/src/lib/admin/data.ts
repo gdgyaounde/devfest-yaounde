@@ -29,7 +29,12 @@ export * from "./shape";
 import type { AdminData } from "./shape";
 import { LIST_CAP } from "./shape";
 import { apparelTotals } from "@/lib/tickets/apparel-totals";
-import { loadTiers } from "@/lib/payments/catalog";
+import { loadProducts, loadTiers } from "@/lib/payments/catalog";
+import {
+  commerceRecap,
+  type RecapOrder,
+  type RecapTicket,
+} from "@/lib/admin/commerce-recap";
 
 /**
  * Every ticket's tier and size, paged. The list above is capped at LIST_CAP
@@ -55,13 +60,94 @@ async function allApparelRows(db: ReturnType<typeof createAdminSupabase>) {
   return rows;
 }
 
+/**
+ * Everything the commerce recap counts, read complete and paged — it feeds
+ * stock for the day, so a capped list would quietly under-count (ADR 0083).
+ * A failed read is logged and leaves that part empty rather than breaking
+ * the dashboard.
+ */
+async function loadCommerceInputs(
+  db: ReturnType<typeof createAdminSupabase>,
+): Promise<{
+  tickets: RecapTicket[];
+  orders: RecapOrder[];
+  refunded: Set<string>;
+}> {
+  const PAGE = 1000;
+  async function paged<T>(
+    what: string,
+    read: (
+      from: number,
+      to: number,
+    ) => PromiseLike<{
+      data: T[] | null;
+      error: { message: string } | null;
+    }>,
+  ): Promise<T[]> {
+    const out: T[] = [];
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await read(from, from + PAGE - 1);
+      if (error) {
+        console.error(`[admin] commerce ${what} read failed`, error.message);
+        break;
+      }
+      out.push(...(data ?? []));
+      if (!data || data.length < PAGE) break;
+    }
+    return out;
+  }
+  const [tickets, orders, refunds] = await Promise.all([
+    paged("tickets", (from, to) =>
+      db
+        .from("tickets")
+        .select("id, badge_code, deposit_id, tier_id")
+        .order("id")
+        .range(from, to),
+    ),
+    paged("orders", (from, to) =>
+      db
+        .from("orders")
+        .select(
+          "id, status, order_items(product_id, name_snapshot, quantity, unit_amount, variant)",
+        )
+        .order("id")
+        .range(from, to),
+    ),
+    paged("refunds", (from, to) =>
+      db
+        .from("refund_requests")
+        .select("reference")
+        .eq("status", "resolved")
+        .order("id")
+        .range(from, to),
+    ),
+  ]);
+  return {
+    tickets,
+    orders: orders.map((o) => ({
+      id: o.id,
+      status: o.status,
+      items: (o.order_items ?? []).map((i) => ({
+        productId: i.product_id,
+        name: i.name_snapshot as { fr: string; en: string } | string,
+        quantity: i.quantity,
+        unitAmount: i.unit_amount,
+        variant: i.variant,
+      })),
+    })),
+    refunded: new Set(refunds.map((r) => r.reference.toLowerCase())),
+  };
+}
+
 export async function loadAdminData(): Promise<AdminData> {
   const organiser = await gate();
   const db = createAdminSupabase();
 
-  const [apparelRows, tiers] = await Promise.all([
+  const [apparelRows, tiers, products, commerceInputs] = await Promise.all([
     allApparelRows(db),
     loadTiers(),
+    loadProducts(),
+    loadCommerceInputs(db),
   ]);
   const [tickets, orders, intents, users, discounts, refundRequests] =
     await Promise.all([
@@ -267,6 +353,7 @@ export async function loadAdminData(): Promise<AdminData> {
       wallApproved,
       users: users.count ?? 0,
     },
+    commerce: commerceRecap({ tiers, products, ...commerceInputs }),
     apparel: apparelTotals(
       apparelRows,
       tiers.filter((t) => t.includesApparel).map((t) => t.id),

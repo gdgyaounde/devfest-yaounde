@@ -5,7 +5,7 @@ import type { ContentCounts, ViewId } from "../AdminShell";
 import { useEventDates } from "@/components/global/EventDateProvider";
 import { EVENT, eventDates } from "@/lib/event";
 import { AdminChart } from "./AdminChart";
-import { InfoBanner, money } from "./shared";
+import { DataTable, ExportButton, InfoBanner, Panel, money } from "./shared";
 
 function Stat({
   label,
@@ -185,6 +185,8 @@ export function AdminOverview({
         </div>
       </section>
 
+      <CommerceRecap data={data} />
+
       <div className="flex flex-wrap gap-2.5">
         {(
           [
@@ -204,5 +206,190 @@ export function AdminOverview({
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * COMMERCE RECAP (ADR 0083) — what was sold across tickets and the shop, and
+ * how many of each item has to be accounted for: the items in each ticket's
+ * "In the box" plus what shop orders contain. Over every ticket and order
+ * (not the loaded page); refunded and cancelled ones are left out. One CSV
+ * carries all three tables.
+ */
+function CommerceRecap({ data }: { data: AdminData }) {
+  const { commerce } = data;
+  const mono = "font-mono text-mono-tag font-bold uppercase";
+  const csvHeaders = [
+    "Section",
+    "Item",
+    "Detail",
+    "From tickets",
+    "From shop",
+    "Total / sold",
+    "Revenue XAF",
+  ];
+  const csvRows: (string | number)[][] = [
+    ...commerce.tickets.map((t) => [
+      "Tickets",
+      t.name,
+      `${t.priceXAF} XAF base price`,
+      t.sold,
+      "",
+      t.sold,
+      "",
+    ]),
+    ...commerce.shop.map((s) => [
+      "Shop",
+      s.name,
+      s.variant,
+      "",
+      s.quantity,
+      s.quantity,
+      s.revenue,
+    ]),
+    ...commerce.swag.map((s) => [
+      "To account for",
+      s.name,
+      "",
+      s.fromTickets,
+      s.fromShop,
+      s.total,
+      "",
+    ]),
+  ];
+  const nothing =
+    commerce.tickets.length === 0 &&
+    commerce.shop.length === 0 &&
+    commerce.swag.length === 0;
+
+  return (
+    <Panel
+      title="Commerce recap"
+      subtitle="Tickets and the shop, and every item to account for — the contents of each ticket's box plus what shop orders contain. Refunded and cancelled ones are left out."
+      action={
+        <ExportButton
+          filename="devfest-commerce-recap.csv"
+          headers={csvHeaders}
+          rows={csvRows}
+        />
+      }
+    >
+      {nothing ? (
+        <p className="text-body-m text-black02/70">
+          Nothing sold yet — the recap fills in as tickets and orders come in.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-7">
+          <div>
+            <h3 className="font-sans text-body-l font-bold text-black02">
+              Items to account for
+            </h3>
+            <p className="mb-3 text-caption text-black02/70">
+              Ticket boxes + shop orders. Sizes and colours are in the apparel
+              panel and the shop table below.
+            </p>
+            <DataTable
+              compact
+              headers={["Item", "From tickets", "From shop", "Total"]}
+              empty="No items yet."
+              rows={[
+                ...commerce.swag.map((s) => [
+                  s.name,
+                  String(s.fromTickets),
+                  String(s.fromShop),
+                  <strong key="t">{s.total}</strong>,
+                ]),
+                ...(commerce.swag.length
+                  ? [
+                      [
+                        <span key="a" className={mono}>
+                          All items
+                        </span>,
+                        String(
+                          commerce.swag.reduce((n, s) => n + s.fromTickets, 0),
+                        ),
+                        String(
+                          commerce.swag.reduce((n, s) => n + s.fromShop, 0),
+                        ),
+                        <strong key="t">
+                          {commerce.swag.reduce((n, s) => n + s.total, 0)}
+                        </strong>,
+                      ],
+                    ]
+                  : []),
+              ]}
+            />
+          </div>
+
+          <div>
+            <h3 className="font-sans text-body-l font-bold text-black02">
+              Tickets sold
+            </h3>
+            <div className="mt-3">
+              <DataTable
+                compact
+                headers={["Tier", "Base price", "Sold"]}
+                empty="No tickets yet."
+                rows={[
+                  ...commerce.tickets.map((t) => [
+                    <span key="n" className={mono}>
+                      {t.name}
+                    </span>,
+                    money(t.priceXAF, "XAF"),
+                    String(t.sold),
+                  ]),
+                  ...(commerce.tickets.length
+                    ? [
+                        [
+                          <span key="a" className={mono}>
+                            All tiers
+                          </span>,
+                          "",
+                          <strong key="t">{commerce.ticketsSold}</strong>,
+                        ],
+                      ]
+                    : []),
+                ]}
+              />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-sans text-body-l font-bold text-black02">
+              Shop orders
+            </h3>
+            <div className="mt-3">
+              <DataTable
+                compact
+                headers={["Product", "Option", "Units", "Revenue"]}
+                empty="No shop orders yet."
+                rows={[
+                  ...commerce.shop.map((s) => [
+                    s.name,
+                    s.variant || "—",
+                    String(s.quantity),
+                    money(s.revenue, "XAF"),
+                  ]),
+                  ...(commerce.shop.length
+                    ? [
+                        [
+                          <span key="a" className={mono}>
+                            All products
+                          </span>,
+                          "",
+                          <strong key="u">{commerce.shopUnits}</strong>,
+                          <strong key="r">
+                            {money(commerce.shopRevenue, "XAF")}
+                          </strong>,
+                        ],
+                      ]
+                    : []),
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </Panel>
   );
 }
