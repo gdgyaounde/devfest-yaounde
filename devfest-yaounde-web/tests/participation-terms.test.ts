@@ -27,7 +27,32 @@ const FORBIDDEN_FREE =
 const LUNCH = /lunch and coffee breaks/i;
 const IDENT = /badge, lanyard, bracelet or similar/i;
 
-function checkRule(tiers: TicketTier[]) {
+const INHERITS = /^everything in (.+)$/i;
+
+/**
+ * Whether a tier offers a perk matching `re` — itself, or through an
+ * "Everything in <tier>" line (ADR 0082: each pass lists only what it adds,
+ * so OPUS gets lunch by inheriting SONNET's rather than repeating it).
+ */
+function offers(
+  tier: TicketTier,
+  tiers: TicketTier[],
+  re: RegExp,
+  seen = new Set<string>(),
+): boolean {
+  if (seen.has(tier.id)) return false;
+  seen.add(tier.id);
+  return tier.perks.some((perk) => {
+    if (re.test(perk.label.en)) return true;
+    const parent = INHERITS.exec(perk.label.en.trim())?.[1];
+    const from = parent
+      ? tiers.find((t) => t.name.toLowerCase() === parent.toLowerCase())
+      : undefined;
+    return from ? offers(from, tiers, re, seen) : false;
+  });
+}
+
+function checkRule(tiers: TicketTier[], { noRepeats = true } = {}) {
   for (const tier of tiers) {
     const labels = tier.perks.map((p) => p.label.en);
     if (tier.priceXAF <= 0) {
@@ -36,14 +61,16 @@ function checkRule(tiers: TicketTier[]) {
       }
       assert.equal(tier.swagProductIds, undefined, `${tier.id} swag`);
     } else {
-      assert.ok(
-        labels.some((l) => LUNCH.test(l)),
-        `${tier.id} lists lunch`,
-      );
-      assert.ok(
-        labels.some((l) => IDENT.test(l)),
-        `${tier.id} lists an identifier`,
-      );
+      assert.ok(offers(tier, tiers, LUNCH), `${tier.id} offers lunch`);
+      assert.ok(offers(tier, tiers, IDENT), `${tier.id} offers an identifier`);
+      // ADR 0082: no paid pass repeats what it already inherits.
+      const inherits = labels.some((l) => INHERITS.test(l.trim()));
+      if (noRepeats && inherits && !/free pass/i.test(labels[0])) {
+        assert.ok(
+          !labels.some((l) => LUNCH.test(l) || IDENT.test(l)),
+          `${tier.id} repeats an inherited perk`,
+        );
+      }
     }
     for (const perk of tier.perks) {
       assert.ok(perk.label.fr.trim() && perk.label.en.trim(), tier.id);
@@ -75,7 +102,8 @@ describe("migration 0031", () => {
       collectionSchemas["ticket-tiers"].safeParse(tiers).success,
       true,
     );
-    checkRule(tiers);
+    // Historical: 0031 repeated inherited perks; 0033 removes the repeats.
+    checkRule(tiers, { noRepeats: false });
   });
 
   it("keeps the certificate on the free pass (organiser's call)", () => {
@@ -193,5 +221,31 @@ describe("the FAQs", () => {
       /open on Sessionize through/,
       "the stale call-for-speakers answer is gone",
     );
+  });
+});
+
+describe("migration 0033 (ADR 0082)", () => {
+  const sql = readFileSync(
+    join(process.cwd(), "supabase/migrations/0033_ticket_perk_wording.sql"),
+    "utf8",
+  );
+  // Each tier's new perks are a `$p$[...]$p$` block after `when '<id>'`.
+  const perksFor = (id: string) => {
+    const at = sql.indexOf(`when '${id}'`);
+    const block = sql.slice(at).match(/\$p\$(\[[\s\S]*?\])\$p\$/);
+    return JSON.parse(block![1]) as TicketTier["perks"];
+  };
+
+  it("writes exactly the perks the repo fallback carries", () => {
+    for (const tier of tiersJson as TicketTier[]) {
+      if (tier.priceXAF <= 0) continue;
+      assert.deepEqual(perksFor(tier.id), tier.perks, tier.id);
+    }
+  });
+
+  it("refuses to overwrite a tier row edited since 0031 wrote it", () => {
+    assert.match(sql, /raise exception/);
+    assert.match(sql, /updated_at <> '2026-11-15T21:14:22\.960033\+00:00'/);
+    assert.match(sql, /editorial_migration_backup/);
   });
 });

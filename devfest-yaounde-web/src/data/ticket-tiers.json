@@ -53,35 +53,23 @@
     "perks": [
       {
         "label": {
-          "fr": "Tout ce que contient le pass gratuit",
-          "en": "Everything in the free pass"
+          "en": "Everything in the free pass",
+          "fr": "Tout ce que contient le pass gratuit"
         }
       },
       {
         "label": {
-          "fr": "Déjeuner et pauses café",
-          "en": "Lunch and coffee breaks"
+          "en": "Lunch and coffee breaks",
+          "fr": "Déjeuner et pauses café"
         },
         "icon": "coffee"
       },
       {
         "label": {
-          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
-          "en": "An event identifier (badge, lanyard, bracelet or similar)"
+          "en": "An event identifier (badge, lanyard, bracelet or similar)",
+          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)"
         },
         "icon": "ticket"
-      },
-      {
-        "label": {
-          "fr": "Le t-shirt de l'édition",
-          "en": "This edition's t-shirt"
-        }
-      },
-      {
-        "label": {
-          "fr": "Autocollants",
-          "en": "Stickers"
-        }
       }
     ]
   },
@@ -103,34 +91,14 @@
     "perks": [
       {
         "label": {
-          "fr": "Tout ce que contient Sonnet",
-          "en": "Everything in Sonnet"
+          "en": "Everything in Sonnet",
+          "fr": "Tout ce que contient Sonnet"
         }
       },
       {
         "label": {
-          "fr": "Déjeuner et pauses café",
-          "en": "Lunch and coffee breaks"
-        },
-        "icon": "coffee"
-      },
-      {
-        "label": {
-          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
-          "en": "An event identifier (badge, lanyard, bracelet or similar)"
-        },
-        "icon": "ticket"
-      },
-      {
-        "label": {
-          "fr": "Tote bag de l'édition",
-          "en": "This edition's tote bag"
-        }
-      },
-      {
-        "label": {
-          "fr": "Carnet et stylo",
-          "en": "Notebook and pen"
+          "en": "A bigger kit, notebook included",
+          "fr": "Un kit plus fourni, carnet inclus"
         }
       }
     ]
@@ -147,40 +115,20 @@
     "onSale": true,
     "includesApparel": true,
     "description": {
-      "fr": "Pour celles et ceux qui veulent le kit entier, bouteille et casquette comprises.",
-      "en": "For the ones who want the whole kit, bottle and cap included."
+      "en": "For the ones who want the premium kit: the polo, the mug and the bucket hat.",
+      "fr": "Pour celles et ceux qui veulent le kit premium : le polo, le mug et le bob."
     },
     "perks": [
       {
         "label": {
-          "fr": "Tout ce que contient OPUS",
-          "en": "Everything in OPUS"
+          "en": "Everything in OPUS",
+          "fr": "Tout ce que contient OPUS"
         }
       },
       {
         "label": {
-          "fr": "Déjeuner et pauses café",
-          "en": "Lunch and coffee breaks"
-        },
-        "icon": "coffee"
-      },
-      {
-        "label": {
-          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
-          "en": "An event identifier (badge, lanyard, bracelet or similar)"
-        },
-        "icon": "ticket"
-      },
-      {
-        "label": {
-          "fr": "Bouteille isotherme",
-          "en": "Insulated bottle"
-        }
-      },
-      {
-        "label": {
-          "fr": "Casquette de l'édition",
-          "en": "This edition's cap"
+          "en": "The premium kit: polo, mug and bucket hat",
+          "fr": "Le kit premium : polo, mug et bob"
         }
       }
     ]
@@ -203,34 +151,20 @@
     "perks": [
       {
         "label": {
-          "fr": "Tout ce que contient FABLE",
-          "en": "Everything in FABLE"
+          "en": "Everything in FABLE",
+          "fr": "Tout ce que contient FABLE"
         }
       },
       {
         "label": {
-          "fr": "Déjeuner et pauses café",
-          "en": "Lunch and coffee breaks"
-        },
-        "icon": "coffee"
-      },
-      {
-        "label": {
-          "fr": "Un identifiant de l'événement (badge, lanyard, bracelet ou similaire)",
-          "en": "An event identifier (badge, lanyard, bracelet or similar)"
-        },
-        "icon": "ticket"
-      },
-      {
-        "label": {
-          "fr": "Hoodie de l'édition",
-          "en": "This edition's hoodie"
+          "en": "The full kit, hoodie included",
+          "fr": "Le kit complet, hoodie inclus"
         }
       },
       {
         "label": {
-          "fr": "Lanyard collector",
-          "en": "Collector lanyard"
+          "en": "Collector lanyard",
+          "fr": "Lanyard collector"
         }
       }
     ]

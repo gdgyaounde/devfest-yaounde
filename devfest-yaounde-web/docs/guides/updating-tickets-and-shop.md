@@ -66,6 +66,20 @@ row is the live source and the file is no longer read.
   `{ label, icon?, note? }`. `label` is what used to be a plain perk string;
   `icon` picks from a fixed set (no free text) and `note` is an optional
   smaller line under the label.
+
+  **How to word them (ADR 0082)** — people read the tiers side by side, so:
+  - Each pass lists **only what it adds**. Start with "Everything in
+    <the pass below>" and stop repeating: OPUS does not list lunch again,
+    because "Everything in Sonnet" already gives it.
+  - **Physical items go in "Swag included", not here.** The public page
+    prints them as "In the box", so a "This edition's t-shirt" perk next to
+    a T-shirt in the box says the same thing twice. Here, at most a summary
+    line ("A bigger kit, notebook included").
+  - **Never promise an item the box doesn't contain** — the box is what is
+    handed out at the table. (OPUS used to promise a tote bag its box never
+    had.) Anything handed out that isn't a shop product, like MYTHOS's
+    collector lanyard, is the exception and stays a perk.
+
 - **Swag included** — **pick from what the Shop already sells.** Search the
   catalogue, attach the items this tier bundles, drag them into the order you
   want them shown in, detach what does not belong. Attaching an item here
@@ -79,7 +93,7 @@ row is the live source and the file is no longer read.
     certificate, say)? Add it in **Shop** as usual and switch on **Ticket-only**.
     It then shows as swag on the tiers that bundle it — the free pass included —
     but is **not listed in the shop, has no page, and cannot be ordered**. It
-    needs no price or picture. It still has to be *Published*: a hidden product
+    needs no price or picture. It still has to be _Published_: a hidden product
     stays off the ticket cards too. (ADR 0070.)
   - **Detaching never touches the product.** It stays in the Shop exactly as
     it was, and any other tier bundling it is unaffected.
@@ -185,7 +199,7 @@ charged — there is no second place to change.
 | `variants.size` / `.color` | Selectable chips. A sized product will not add to the bag without a size — the server rejects it |
 | `stock[]`                  | Per-combination cap, counted against real orders (ADR 0024) — not a UI field on the public site  |
 | `status`                   | The pill, **and** whether it can be bought at all                                                |
-| `published`                | Whether it appears at all — false stays entirely off the public shop                              |
+| `published`                | Whether it appears at all — false stays entirely off the public shop                             |
 
 **Retiring a product** is `status: "sold-out"` or `published: false` — never
 delete it once it has an order, because past orders reference the id (the
