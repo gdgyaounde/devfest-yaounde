@@ -46,20 +46,31 @@ const LAST_YEAR = 2026;
 const IN_DELAY = 900;
 const T_YEARS = 2400;
 /**
- * The years (from the moment their line starts to fade in):
- *   COUNT  — 2016 → 2026, slow, then fast through the middle, then slow
- *            again (ease-in-out), the digits drawing together as they go;
- *   SQUEEZE — on the last year the digits pinch tight…
- *   RELEASE — …and loosen gently back to normal.
+ * The years, as ONE continuous motion (from when their line starts to fade
+ * in, + COUNT_START): 2016 → 2026 slow, fast through the middle, slow again,
+ * the digits drawing together as they go — and without stopping, pinching
+ * tight on the last year and loosening gently back. No phase boundaries: the
+ * spacing is a single smooth curve, so nothing breaks or lags between parts.
  */
 const COUNT_START = 300;
-const COUNT_MS = 3600;
-const SQUEEZE_MS = 260;
-const RELEASE_MS = 800;
-const T_LINE2 =
-  T_YEARS + IN_DELAY + COUNT_START + COUNT_MS + SQUEEZE_MS + RELEASE_MS + 500;
+const YEARS_MS = 4600;
+/** Where in YEARS_MS the count lands on the last year (the spacing too). */
+const ARRIVE = 0.78;
+const T_LINE2 = T_YEARS + IN_DELAY + COUNT_START + YEARS_MS + 450;
 const T_LINE3 = T_LINE2 + IN_DELAY + 1500;
 const T_DONE = T_LINE3 + IN_DELAY + 1900;
+/**
+ * The cursors (in IntroCursors order: organiser, volunteer, speaker,
+ * attendee). They join one by one through the first half of the story and
+ * leave in reverse while the question is on screen — the organiser last.
+ */
+const CURSOR_IN = [500, 2700, 5000, 7300] as const;
+const CURSOR_OUT = [
+  T_LINE3 + 1200,
+  T_LINE3 + 800,
+  T_LINE3 + 400,
+  T_LINE3,
+] as const;
 /** How long the prompt takes to shrink into its place above the field. */
 const SHRINK_MS = 1500;
 
@@ -112,32 +123,35 @@ export function TestimonialComposer() {
     const tight = el.getBoundingClientRect().width;
     const font = parseFloat(getComputedStyle(el).fontSize);
     const widest = Math.max(0, (available - tight) / 4) * 0.92;
-    const pinch = -0.07 * font;
+    const pinch = 0.075 * font;
     const inOut = (x: number) =>
       x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-    const out = (x: number) => 1 - Math.pow(1 - x, 3);
+    // The pinch-and-release: a smooth bump that starts while the count is
+    // still settling, rises fast (the squeeze), falls slowly (the release),
+    // with zero slope at both ends — so it blends into what comes before
+    // and after it instead of starting or stopping.
+    const BUMP_FROM = 0.64;
+    const bump = (u: number) => {
+      if (u <= BUMP_FROM || u >= 1) return 0;
+      const v = (u - BUMP_FROM) / (1 - BUMP_FROM);
+      return Math.pow(Math.sin(Math.PI * Math.pow(v, 0.5)), 2);
+    };
     set(FIRST_YEAR, widest);
 
     const start = performance.now() + IN_DELAY + COUNT_START;
     let frame = 0;
     const tick = (now: number) => {
-      const t = now - start;
-      if (t < 0) {
-        // Fading in, wide and still on the first year.
-      } else if (t <= COUNT_MS) {
-        const e = inOut(t / COUNT_MS);
-        set(
-          FIRST_YEAR + Math.round(e * (LAST_YEAR - FIRST_YEAR)),
-          widest * (1 - e),
-        );
-      } else if (t <= COUNT_MS + SQUEEZE_MS) {
-        set(LAST_YEAR, pinch * out((t - COUNT_MS) / SQUEEZE_MS));
-      } else if (t <= COUNT_MS + SQUEEZE_MS + RELEASE_MS) {
-        const q = (t - COUNT_MS - SQUEEZE_MS) / RELEASE_MS;
-        set(LAST_YEAR, pinch * (1 - inOut(q)));
-      } else {
+      const u = (now - start) / YEARS_MS;
+      if (u >= 1) {
         set(LAST_YEAR, 0);
         return;
+      }
+      if (u > 0) {
+        const e = inOut(Math.min(1, u / ARRIVE));
+        set(
+          FIRST_YEAR + Math.round(e * (LAST_YEAR - FIRST_YEAR)),
+          widest * (1 - e) - pinch * bump(u),
+        );
       }
       frame = requestAnimationFrame(tick);
     };
@@ -376,7 +390,9 @@ export function TestimonialComposer() {
       </div>
 
       {/* Coloured cursors, one per role, drifting around the story. */}
-      {!calm && <IntroCursors visible={intro} />}
+      {!calm && (
+        <IntroCursors visible={intro} enterAt={CURSOR_IN} exitAt={CURSOR_OUT} />
+      )}
 
       {/* ---------------------------------------------------------- writing */}
       <div className="relative z-30 flex min-h-0 flex-1 flex-col items-center justify-center px-5 pb-6 sm:px-10">
