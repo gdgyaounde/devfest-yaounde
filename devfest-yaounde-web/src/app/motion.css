@@ -2067,18 +2067,11 @@ html:has([data-preloader="held"]) .hero-settle {
   animation: story-word 900ms var(--ease-out-devfest) forwards;
   animation-delay: var(--word-delay, 0ms);
 }
-/* The textarea grows with what is written, never snapping. */
-.story-grow {
-  transition: height 320ms var(--ease-out-devfest);
-}
 @media (prefers-reduced-motion: reduce) {
   .anim-story-word {
     animation: none !important;
     opacity: 1 !important;
     filter: none !important;
-  }
-  .story-grow {
-    transition: none !important;
   }
 }
 
@@ -2091,5 +2084,25 @@ html:has([data-preloader="held"]) .hero-settle {
 @media (prefers-reduced-motion: reduce) {
   .story-draw {
     transition: none !important;
+  }
+}
+
+/* A whole layer joining the scene: the storytime dot field, fading up softly
+   instead of being there on the first frame. */
+@keyframes calm-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.anim-calm-appear {
+  animation: calm-appear 2600ms var(--ease-out-devfest) 200ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-calm-appear {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }

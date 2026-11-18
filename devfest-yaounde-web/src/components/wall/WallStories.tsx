@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { PreloaderDots } from "@/components/global/PreloaderDots";
-import { calmFade } from "@/lib/motion";
+import { calmAppear, calmFade } from "@/lib/motion";
 import { useMediaQuery } from "@/lib/use-media-query";
 import {
   TESTIMONIAL_ROLES,
@@ -91,7 +91,10 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-pastel px-6 pb-28 pt-10 sm:px-16">
       {/* The same gentle dot field as Storytime: a soft light over a page. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div
+        aria-hidden
+        className={`${calmAppear} pointer-events-none absolute inset-0`}
+      >
         <PreloaderDots calm={calm} base={0.05} peak={0.3} />
       </div>
 

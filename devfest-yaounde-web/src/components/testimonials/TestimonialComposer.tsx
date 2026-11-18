@@ -7,11 +7,11 @@ import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import { PreloaderDots } from "@/components/global/PreloaderDots";
 import { Link } from "@/i18n/navigation";
 import {
+  calmAppear,
   calmDelay,
   calmFade,
   calmIn,
   storyDraw,
-  storyGrow,
   storyWord,
   wordDelay,
 } from "@/lib/motion";
@@ -72,6 +72,10 @@ const CURSOR_OUT = [
   T_LINE3 + 400,
   T_LINE3,
 ] as const;
+/** The field never grows past this share of the screen's height… */
+const FIELD_MAX = 0.46;
+/** …and its type never shrinks below this, in px, to make a story fit. */
+const MIN_FONT = 15;
 /** How long the prompt takes to shrink into its place above the field. */
 const SHRINK_MS = 1500;
 
@@ -111,18 +115,24 @@ export function TestimonialComposer() {
     if (stage !== "years") return;
     const el = yearRef.current;
     if (!el) return;
-    const set = (year: number, spacing: number) => {
+    const set = (year: number, spacing: number, weight = 0) => {
       el.textContent = String(year);
+      // Weight as a STROKE in the text's own colour, not font-weight: it
+      // can grow smoothly past the font's boldest cut, so 2026 lands heavy.
+      el.style.setProperty(
+        "-webkit-text-stroke",
+        `${(weight * font).toFixed(2)}px currentColor`,
+      );
       el.style.letterSpacing = `${spacing}px`;
       // letter-spacing also trails the LAST digit; cancel it so the year
       // stays centred however wide it is spread.
       el.style.marginRight = `${-spacing}px`;
     };
+    const font = parseFloat(getComputedStyle(el).fontSize);
     set(FIRST_YEAR, 0);
     // How far apart the digits can start, from the room this screen has.
     const available = Math.min(window.innerWidth - 48, 896);
     const tight = el.getBoundingClientRect().width;
-    const font = parseFloat(getComputedStyle(el).fontSize);
     const widest = Math.max(0, (available - tight) / 4) * 0.92;
     const pinch = 0.075 * font;
     const inOut = (x: number) =>
@@ -137,14 +147,14 @@ export function TestimonialComposer() {
       const v = (u - BUMP_FROM) / (1 - BUMP_FROM);
       return Math.pow(Math.sin(Math.PI * Math.pow(v, 0.5)), 2);
     };
-    set(FIRST_YEAR, widest);
+    set(FIRST_YEAR, widest, 0.004);
 
     const start = performance.now() + IN_DELAY + COUNT_START;
     let frame = 0;
     const tick = (now: number) => {
       const u = (now - start) / YEARS_MS;
       if (u >= 1) {
-        set(LAST_YEAR, 0);
+        set(LAST_YEAR, 0, 0.04);
         return;
       }
       if (u > 0) {
@@ -152,6 +162,8 @@ export function TestimonialComposer() {
         set(
           FIRST_YEAR + Math.round(e * (LAST_YEAR - FIRST_YEAR)),
           widest * (1 - e) - pinch * bump(u),
+          // Heavier with every year, and heaviest in the pinch.
+          0.004 + 0.036 * e + 0.012 * bump(u),
         );
       }
       frame = requestAnimationFrame(tick);
@@ -260,12 +272,44 @@ export function TestimonialComposer() {
   }, [stage, state]);
 
   // ------------------------------------------- the field grows as you write
+  // Never a scrollbar. The field grows with the story up to FIELD_MAX of the
+  // screen; past that, the type steps down until it all fits. Both changes
+  // animate: measure with transitions off, put the old values back, then
+  // set the new ones so the browser eases from one to the other.
+  const lastFit = useRef<{ font: string; height: string } | null>(null);
+  const [viewport, setViewport] = useState(0);
+  useEffect(() => {
+    const onResize = () => setViewport(window.innerHeight);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
   useLayoutEffect(() => {
     const el = textRef.current;
     if (!el) return;
+    const max = window.innerHeight * FIELD_MAX;
+    el.style.transition = "none";
+    el.style.fontSize = ""; // the preferred size for this length (class)
     el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
-  }, [message, intro]);
+    let size = parseFloat(getComputedStyle(el).fontSize);
+    while (el.scrollHeight > max && size > MIN_FONT) {
+      size = Math.max(MIN_FONT, size * 0.94);
+      el.style.fontSize = `${size}px`;
+    }
+    const next = {
+      font: `${size}px`,
+      height: `${Math.min(el.scrollHeight, max)}px`,
+    };
+    const prev = lastFit.current;
+    if (prev && !calm) {
+      el.style.fontSize = prev.font;
+      el.style.height = prev.height;
+      void el.offsetHeight; // commit the old values before easing away
+      el.style.transition = `height 360ms var(--ease-out-devfest), font-size 420ms var(--ease-out-devfest)`;
+    }
+    el.style.fontSize = next.font;
+    el.style.height = next.height;
+    lastFit.current = next;
+  }, [message, intro, viewport, calm]);
 
   const length = cleanMessage(message).length;
   const ready = length >= MESSAGE_MIN && length <= MESSAGE_MAX;
@@ -353,7 +397,10 @@ export function TestimonialComposer() {
       className="relative flex h-[100svh] flex-col overflow-hidden bg-pastel"
     >
       {/* The gentle dot field: a soft light wandering over a printed page. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div
+        aria-hidden
+        className={`${calmAppear} pointer-events-none absolute inset-0`}
+      >
         <PreloaderDots calm={calm} base={0.05} peak={0.32} />
       </div>
 
@@ -488,7 +535,7 @@ export function TestimonialComposer() {
                   if (e.key === "Enter" && (e.metaKey || e.ctrlKey))
                     void send();
                 }}
-                className={`${storyGrow} block max-h-[48svh] min-h-[3.2em] w-full resize-none overflow-y-auto border-0 bg-transparent p-0 font-sans ${size} font-bold leading-[1.2] text-black02 caret-primary transition-[font-size] duration-500 placeholder:text-black02/30 focus:outline-none`}
+                className={`block min-h-[3.2em] w-full resize-none overflow-hidden border-0 bg-transparent p-0 font-sans ${size} font-bold leading-[1.2] tracking-[-0.02em] text-black02 caret-primary placeholder:text-black02/30 focus:outline-none`}
               />
               <p
                 id={counterId}

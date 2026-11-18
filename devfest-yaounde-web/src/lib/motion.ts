@@ -140,7 +140,7 @@ export const storyWord = "anim-story-word";
 export function wordDelay(ms: number): CSSProperties {
   return { "--word-delay": `${ms}ms` } as CSSProperties;
 }
-/** Smooth height changes on an auto-growing field. */
-export const storyGrow = "story-grow";
 /** An SVG outline that draws itself (stroke-dashoffset 1 → 0, pathLength 1). */
 export const storyDraw = "story-draw";
+/** A full layer fading in softly on mount (no travel) — the dot field. */
+export const calmAppear = "anim-calm-appear";
