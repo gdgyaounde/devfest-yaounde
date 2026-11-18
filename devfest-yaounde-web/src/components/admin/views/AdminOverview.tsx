@@ -99,6 +99,14 @@ export function AdminOverview({
     ]),
   ].sort();
 
+  const reservedNow = data.reservations.filter((r) => r.status === "reserved");
+  const cashIn = data.reservations.filter((r) => r.status === "cash_received");
+  const cancelled = data.reservations.filter(
+    (r) => r.status === "cancelled",
+  ).length;
+  const sum = (rows: { totalXaf: number }[]) =>
+    rows.reduce((n, r) => n + r.totalXaf, 0);
+
   return (
     <div className="flex flex-col gap-6">
       <InfoBanner>
@@ -122,6 +130,21 @@ export function AdminOverview({
           label="Settled"
           value={money(c.settledRevenue, "XAF")}
           note="Activated, net of discounts and the transaction fee"
+        />
+        <Stat
+          label="Reservations"
+          value={String(reservedNow.length + cashIn.length)}
+          note={`${reservedNow.length} awaiting cash · ${cashIn.length} paid at the venue${cancelled ? ` · ${cancelled} cancelled` : ""}`}
+        />
+        <Stat
+          label="Cash to collect"
+          value={money(sum(reservedNow), "XAF")}
+          note="Reserved, not paid yet — base prices, no online fee"
+        />
+        <Stat
+          label="Cash received"
+          value={money(sum(cashIn), "XAF")}
+          note="Marked received at the door"
         />
         <Stat label="Shop orders" value={String(c.orders)} />
         <Stat label="Users" value={String(c.users)} />

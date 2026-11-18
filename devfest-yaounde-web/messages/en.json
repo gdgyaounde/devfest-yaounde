@@ -57,10 +57,10 @@
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
     "dismiss": "Dismiss announcement",
     "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot.",
-    "salesClose": "Online payments close {date} at {time} — after that, reserve your spot and pay cash at the venue. Already have a ticket? You can update the name and T-shirt size from your account until then.",
+    "salesClose": "📍 {eventDate} · {venue} — Online payments close {date} at {time} — after that, reserve your spot and pay cash at the venue. Already have a ticket? You can update the name and T-shirt size from your account until then.",
     "salesCloseCta": "Get tickets",
     "afterSales": "Reservations are closed — see you on {date} at {venue}! Pay cash on the spot 🎉",
-    "reservationsOpen": "Online payments are closed — reserve your spot (tickets or shop) until {date} at {time}, then pay cash at the venue.",
+    "reservationsOpen": "📍 {eventDate} · {venue} — Online payments are closed — reserve your spot (tickets or shop) until {date} at {time}, then pay cash at the venue.",
     "reserveCta": "Reserve"
   },
   "offline": {
@@ -1143,5 +1143,10 @@
     "newTab": "(opens in a new tab)",
     "when": "When",
     "where": "Where"
+  },
+  "agendaPopup": {
+    "title": "Our agenda is live",
+    "body": "The full programme for {date} is online: five rooms, talks, workshops, a pitch contest and more. Check it out and plan your day.",
+    "cta": "See the agenda"
   }
 }

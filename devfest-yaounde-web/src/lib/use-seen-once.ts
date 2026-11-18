@@ -99,3 +99,6 @@ export function salesNoticeSeenKey(phase: string): string {
 export function termsSeenKey(version: string): string {
   return `devfest:terms-seen:${version}`;
 }
+
+/** The pop-up's "our agenda is live" step: shown once, whatever the phase. */
+export const AGENDA_SEEN_KEY = "devfest:agenda-live-seen:2026";

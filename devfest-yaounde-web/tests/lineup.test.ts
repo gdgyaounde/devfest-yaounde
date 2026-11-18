@@ -179,9 +179,12 @@ describe("the published lineup data", () => {
     assert.equal(collectionSchemas.sessions.safeParse(sessions).success, true);
   });
 
-  it("matches the accepted roster: 24 speakers, 24 sessions, 4 workshops", () => {
+  it("matches the accepted roster: 24 speakers, 24 accepted sessions, 4 workshops", () => {
     assert.equal(speakers.length, 24);
-    assert.equal(sessions.length, 24);
+    // 0036 added the agenda's own entries (breaks, opening, five title-only
+    // talks) around the 24 accepted sessions.
+    assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);
+    assert.equal(sessions.length, 36);
     assert.equal(sessions.filter((s) => s.kind === "workshop").length, 4);
     assert.equal(sessions.filter((s) => s.lightning).length, 20);
   });
@@ -194,11 +197,12 @@ describe("the published lineup data", () => {
     );
   });
 
-  it("schedules nothing it was not given", () => {
+  it("puts every session on the agenda with a time and a length (ADR 0085)", () => {
     for (const s of sessions) {
-      assert.equal(s.time, undefined, s.id);
-      assert.equal(s.room, undefined, s.id);
-      assert.equal(s.durationMin, undefined, s.id);
+      assert.match(s.time ?? "", /^\d{2}:\d{2}$/, s.id);
+      assert.ok((s.durationMin ?? 0) > 0, s.id);
+      // Only the arrival slot has no room.
+      if (s.id !== "agenda-checkin") assert.ok(s.room, s.id);
     }
   });
 
@@ -250,7 +254,9 @@ describe("the lineup migration (0030)", () => {
     assert.equal(collectionSchemas.speakers.safeParse(sp).success, true);
     assert.equal(collectionSchemas.sessions.safeParse(se).success, true);
     assert.deepEqual(ids(sp), ids(speakers));
-    assert.deepEqual(ids(se), ids(sessions));
+    // Superseded by 0036: every session 0030 published is still there.
+    const now = new Set(ids(sessions));
+    for (const id of ids(se)) assert.ok(now.has(id), id);
   });
 
   it("refuses to overwrite hand-entered rows", () => {

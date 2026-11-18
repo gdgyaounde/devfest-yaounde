@@ -2,6 +2,7 @@
 
 import {
   CalendarCheck,
+  CalendarDots,
   MapPinLine,
   Scroll,
   Ticket,
@@ -13,6 +14,7 @@ import { Link } from "@/i18n/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import {
+  AGENDA_SEEN_KEY,
   salesNoticeSeenKey,
   termsSeenKey,
   useSeenOnce,
@@ -31,6 +33,8 @@ const SETTLE_CALM_MS = 600;
 const EXCLUDED = /^\/[a-z]{2}\/(admin|volunteer|terms|wall)(\/|$)/;
 /** The reservation page already says everything step 2 would. */
 const RESERVE = /^\/[a-z]{2}\/reserve(\/|$)/;
+/** The agenda step has no business on the agenda itself. */
+const SCHEDULE = /^\/[a-z]{2}\/schedule(\/|$)/;
 
 const PRIMARY =
   "inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-6 py-3 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none";
@@ -40,12 +44,13 @@ const SECONDARY =
 type When = { date: string; time: string } | null;
 
 /**
- * The site's first-visit pop-up, in up to TWO steps (ADR 0074, 0084):
+ * The site's first-visit pop-up, in up to THREE steps (ADR 0074, 0084, 0085):
  *
  *   1. "Our participation terms have changed" — only if this browser has not
  *      seen `legal.termsVersion` yet;
  *   2. "Where payments stand" — payments close at noon / reservations are open
- *      until Friday / pay cash at the venue. Phase-aware, remembered per phase.
+ *      until Friday / pay cash at the venue. Phase-aware, remembered per phase;
+ *   3. "Our agenda is live" — once, with a link to the Schedule page.
  *
  * Someone who already saw the terms goes straight to step 2; someone who has
  * seen both never sees it. Step 2 is what the user needs on the day it
@@ -80,6 +85,7 @@ export function TermsUpdatedPopup({
 }) {
   const t = useTranslations("termsPopup");
   const tn = useTranslations("salesPopup");
+  const ta = useTranslations("agendaPopup");
   const tCommon = useTranslations("common");
   const phase = useSalesPhase();
   const pathname = usePathname() ?? "";
@@ -90,6 +96,7 @@ export function TermsUpdatedPopup({
     version ? termsSeenKey(version) : null,
   );
   const [noticeSeen, markNoticeSeen] = useSeenOnce(salesNoticeSeenKey(phase));
+  const [agendaSeen, markAgendaSeen] = useSeenOnce(AGENDA_SEEN_KEY);
   const [ready, setReady] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -99,7 +106,8 @@ export function TermsUpdatedPopup({
   }, [onTerms, termsSeen, markTermsSeen]);
 
   const wantsNotice = !noticeSeen && !onReserve;
-  const wantsAnything = !termsSeen || wantsNotice;
+  const wantsAgenda = !agendaSeen && !SCHEDULE.test(pathname) && !onReserve;
+  const wantsAnything = !termsSeen || wantsNotice || wantsAgenda;
 
   useEffect(() => {
     if (!wantsAnything || excluded || ready) return;
@@ -123,9 +131,13 @@ export function TermsUpdatedPopup({
 
   // Step 1 while the terms are unseen; the moment they are marked seen the
   // modal simply moves on to step 2 (or closes, if there is none).
-  const step: 1 | 2 = !termsSeen ? 1 : 2;
+  const step: 1 | 2 | 3 = !termsSeen ? 1 : wantsNotice ? 2 : 3;
   const open = ready && !excluded && wantsAnything;
-  const twoSteps = !termsSeen && wantsNotice;
+  // Fixed once the pop-up opens would be nicer, but each step only ever
+  // advances, so counting what is still ahead plus what is behind is stable.
+  const total =
+    (!termsSeen ? 1 : 0) + (wantsNotice ? 1 : 0) + (wantsAgenda ? 1 : 0);
+  const position = step === 1 ? 1 : step === 2 ? (!termsSeen ? 2 : 1) : total;
 
   // The Modal focuses on open only; follow the step change ourselves.
   useEffect(() => {
@@ -133,16 +145,19 @@ export function TermsUpdatedPopup({
     panelRef.current?.querySelector<HTMLElement>("[data-autofocus]")?.focus();
   }, [open, step]);
 
-  const close = step === 1 ? markTermsSeen : markNoticeSeen;
+  const close =
+    step === 1 ? markTermsSeen : step === 2 ? markNoticeSeen : markAgendaSeen;
 
   const Icon =
     step === 1
       ? Scroll
-      : phase === "selling"
-        ? Ticket
-        : phase === "reserving"
-          ? CalendarCheck
-          : MapPinLine;
+      : step === 3
+        ? CalendarDots
+        : phase === "selling"
+          ? Ticket
+          : phase === "reserving"
+            ? CalendarCheck
+            : MapPinLine;
 
   return (
     <Modal
@@ -153,20 +168,19 @@ export function TermsUpdatedPopup({
       variant="dialog"
     >
       <div ref={panelRef} className="flex flex-col gap-5 p-2 sm:p-4">
-        {twoSteps && (
+        {total > 1 && (
           <p
             className="flex items-center gap-2 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70"
-            aria-label={tn("stepOf", { step, total: 2 })}
+            aria-label={tn("stepOf", { step: position, total })}
           >
-            <span
-              aria-hidden
-              className={`h-2.5 w-8 rounded-pill border-2 border-black02 ${step === 1 ? "bg-primary" : "bg-offwhite"}`}
-            />
-            <span
-              aria-hidden
-              className={`h-2.5 w-8 rounded-pill border-2 border-black02 ${step === 2 ? "bg-primary" : "bg-offwhite"}`}
-            />
-            {tn("stepOf", { step, total: 2 })}
+            {Array.from({ length: total }, (_, i) => (
+              <span
+                key={i}
+                aria-hidden
+                className={`h-2.5 w-8 rounded-pill border-2 border-black02 ${i + 1 === position ? "bg-primary" : "bg-offwhite"}`}
+              />
+            ))}
+            {tn("stepOf", { step: position, total })}
           </p>
         )}
         <Icon size={40} weight="duotone" aria-hidden className="text-black02" />
@@ -189,11 +203,40 @@ export function TermsUpdatedPopup({
                 onClick={markTermsSeen}
                 className={PRIMARY}
               >
-                {wantsNotice ? tn("next") : t("ok")}
+                {wantsNotice || wantsAgenda ? tn("next") : t("ok")}
               </button>
               <Link href="/terms" onClick={markTermsSeen} className={SECONDARY}>
                 {t("read")}
               </Link>
+            </div>
+          </>
+        ) : step === 3 ? (
+          <>
+            <h2
+              id="terms-popup-title"
+              className="font-sans text-heading-l font-bold leading-tight text-black02"
+            >
+              {ta("title")}
+            </h2>
+            <p className="text-body-m leading-relaxed text-black02/85">
+              {ta("body", { date: eventDate })}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/schedule"
+                data-autofocus
+                onClick={markAgendaSeen}
+                className={PRIMARY}
+              >
+                {ta("cta")}
+              </Link>
+              <button
+                type="button"
+                onClick={markAgendaSeen}
+                className={SECONDARY}
+              >
+                {tn("ok")}
+              </button>
             </div>
           </>
         ) : (

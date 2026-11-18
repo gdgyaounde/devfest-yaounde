@@ -1,18 +1,206 @@
 [
   {
-    "id": "sz-1339016",
+    "id": "agenda-checkin",
+    "time": "08:00",
+    "durationMin": 60,
     "day": 1,
-    "kind": "workshop",
+    "kind": "break",
+    "title": {
+      "fr": "Accueil, check-in et orientation",
+      "en": "Welcome, check-in & orientation"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-opening",
+    "time": "09:00",
+    "durationMin": 15,
+    "day": 1,
+    "kind": "talk",
+    "title": {
+      "fr": "Mot d'ouverture et présentation de la journée",
+      "en": "Opening remarks & presentation of the day"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-automatisez-la-gestion-des-admissions-de-vos-eve",
+    "time": "09:20",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "talk",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script",
+      "en": "Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Général",
+      "en": "General"
+    },
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "sz-1354849",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "AI & Language: Will AI Replace Translators? Rethinking Language Careers in the Age of Generative AI",
+      "en": "AI & Language: Will AI Replace Translators? Rethinking Language Careers in the Age of Generative AI"
+    },
+    "description": {
+      "fr": "L’intelligence artificielle générative transforme rapidement les métiers fondés sur le langage. Aujourd’hui, une IA peut traduire un document en quelques secondes, reformuler un texte, proposer plusieurs variantes stylistiques ou encore produire du contenu dans plusieurs langues. Face à ces avancées, une question revient souvent : l’IA va-t-elle remplacer les traducteurs ?\n\nCette session propose de dépasser cette vision binaire pour examiner la manière dont l’intelligence artificielle redéfinit concrètement les métiers de la traduction, de la communication et de la production de contenu.\n\nÀ travers des démonstrations pratiques et une analyse comparative de traductions générées par l’IA et de versions professionnelles, la session montrera les capacités actuelles des outils d’IA générative, mais aussi leurs limites : contexte, terminologie, registre, culture, cohérence institutionnelle et jugement professionnel.\n\nL’objectif sera surtout d’identifier les nouvelles compétences qui émergent : prompt engineering, post-édition, contrôle qualité, contextualisation, supervision des systèmes d’IA et gestion des données linguistiques.\n\nEnfin, la session ouvrira une réflexion sur l’avenir des langues dans l’écosystème numérique africain : qui apprend à l’IA à comprendre nos langues, nos cultures et nos réalités ?\n\nL’enjeu n’est donc plus simplement de savoir si l’IA remplacera les traducteurs, mais de comprendre comment les professionnels des langues peuvent devenir plus performants grâce à l’IA et créer de nouvelles opportunités professionnelles autour d’elle.",
+      "en": "L’intelligence artificielle générative transforme rapidement les métiers fondés sur le langage. Aujourd’hui, une IA peut traduire un document en quelques secondes, reformuler un texte, proposer plusieurs variantes stylistiques ou encore produire du contenu dans plusieurs langues. Face à ces avancées, une question revient souvent : l’IA va-t-elle remplacer les traducteurs ?\n\nCette session propose de dépasser cette vision binaire pour examiner la manière dont l’intelligence artificielle redéfinit concrètement les métiers de la traduction, de la communication et de la production de contenu.\n\nÀ travers des démonstrations pratiques et une analyse comparative de traductions générées par l’IA et de versions professionnelles, la session montrera les capacités actuelles des outils d’IA générative, mais aussi leurs limites : contexte, terminologie, registre, culture, cohérence institutionnelle et jugement professionnel.\n\nL’objectif sera surtout d’identifier les nouvelles compétences qui émergent : prompt engineering, post-édition, contrôle qualité, contextualisation, supervision des systèmes d’IA et gestion des données linguistiques.\n\nEnfin, la session ouvrira une réflexion sur l’avenir des langues dans l’écosystème numérique africain : qui apprend à l’IA à comprendre nos langues, nos cultures et nos réalités ?\n\nL’enjeu n’est donc plus simplement de savoir si l’IA remplacera les traducteurs, mais de comprendre comment les professionnels des langues peuvent devenir plus performants grâce à l’IA et créer de nouvelles opportunités professionnelles autour d’elle."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA",
+        "en": "AI"
+      },
+      {
+        "fr": "Communication",
+        "en": "Communication"
+      }
+    ],
+    "speakerIds": ["manuel-karim-abolo"],
+    "time": "09:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
+  },
+  {
+    "id": "sz-1369967",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Automatiser une tâche répétitive avec un agent IA simple",
+      "en": "Automatiser une tâche répétitive avec un agent IA simple"
+    },
+    "description": {
+      "fr": "Dans ce lightning talk, je montrerai comment partir d’un processus répétitif du quotidien pour construire un workflow intelligent simple, sans chercher à tout maîtriser dès le départ. À travers l’exemple de demandes reçues via un formulaire, le public verra comment collecter les informations, les transmettre à un modèle d’IA pour les résumer ou les classer, puis préparer une réponse à faire valider par un humain. La session expliquera pas à pas la logique du workflow avec un outil comme Make, les choix à faire, les points de vigilance et les limites de l’automatisation. Le public repartira avec une méthode concrète : identifier un problème réel, découper le processus, choisir les bons outils, tester progressivement et garder une validation humaine pour les actions importantes.",
+      "en": "Dans ce lightning talk, je montrerai comment partir d’un processus répétitif du quotidien pour construire un workflow intelligent simple, sans chercher à tout maîtriser dès le départ. À travers l’exemple de demandes reçues via un formulaire, le public verra comment collecter les informations, les transmettre à un modèle d’IA pour les résumer ou les classer, puis préparer une réponse à faire valider par un humain. La session expliquera pas à pas la logique du workflow avec un outil comme Make, les choix à faire, les points de vigilance et les limites de l’automatisation. Le public repartira avec une méthode concrète : identifier un problème réel, découper le processus, choisir les bons outils, tester progressivement et garder une validation humaine pour les actions importantes."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["anita-dongmo"],
+    "time": "09:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    }
+  },
+  {
+    "id": "sz-1377020",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
     "level": "intermediate",
     "language": ["fr"],
     "originalLanguage": "fr",
     "title": {
-      "fr": "Au-delà du vibe coding pour le Web",
-      "en": "Au-delà du vibe coding pour le Web"
+      "fr": "Développer avec l'intention : Maîtriser le Spec-Driven Development (SDD) avec GitHub Spec Kit",
+      "en": "Développer avec l'intention : Maîtriser le Spec-Driven Development (SDD) avec GitHub Spec Kit"
     },
     "description": {
-      "fr": "Alors que le Vibe Coding se répand de plus en plus, dans cette session j'explique comment utiliser les agents d'IA comme partenaires actifs et collaboratifs, avec des pratiques destinées à vous aider à réduire la dette technique et à améliorer la qualité du code généré. Vous utilisez Antigravity associé à Modern Web Guidance et DevTools for Agents pour créer un jeu de mots occasionnel et l'améliorer grâce aux fonctionnalités d'IA. Vous le déployez ensuite sur Google Cloud à l'aide de Firebase pour le partager avec vos amis et votre famille.",
-      "en": "Alors que le Vibe Coding se répand de plus en plus, dans cette session j'explique comment utiliser les agents d'IA comme partenaires actifs et collaboratifs, avec des pratiques destinées à vous aider à réduire la dette technique et à améliorer la qualité du code généré. Vous utilisez Antigravity associé à Modern Web Guidance et DevTools for Agents pour créer un jeu de mots occasionnel et l'améliorer grâce aux fonctionnalités d'IA. Vous le déployez ensuite sur Google Cloud à l'aide de Firebase pour le partager avec vos amis et votre famille."
+      "fr": "Le développement assisté par IA franchit une nouvelle étape avec l'approche Spec-Driven Development (SDD). Cette session explore le kit open-source GitHub Spec Kit pour structurer, planifier et exécuter des projets logiciels avec des agents de codage. Nous verrons comment transformer une idée en spécifications rigoureuses, générer des plans d'implémentation traçables via la CLI Specify, et automatiser le cycle de vie du code (de la constitution du projet au déploiement) tout en gardant un contrôle absolu sur la qualité architecturale.",
+      "en": "Le développement assisté par IA franchit une nouvelle étape avec l'approche Spec-Driven Development (SDD). Cette session explore le kit open-source GitHub Spec Kit pour structurer, planifier et exécuter des projets logiciels avec des agents de codage. Nous verrons comment transformer une idée en spécifications rigoureuses, générer des plans d'implémentation traçables via la CLI Specify, et automatiser le cycle de vie du code (de la constitution du projet au déploiement) tout en gardant un contrôle absolu sur la qualité architecturale."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA",
+        "en": "AI"
+      },
+      {
+        "fr": "Gestion de produit",
+        "en": "Product Management"
+      },
+      {
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["freddy-choudja"],
+    "time": "09:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
+  },
+  {
+    "id": "sz-1376783",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Du brief au code : automatiser son workflow web junior",
+      "en": "Du brief au code : automatiser son workflow web junior"
+    },
+    "description": {
+      "fr": "Dans cette session, je partage mon workflow de développeuse web junior, du moment où je reçois un brief jusqu’au passage au code. À partir de mon expérience d’étudiante en Génie Informatique et de projets sur lesquels j’ai travaillé, le public verra comment j’utilise l’IA comme assistant de réflexion, de structuration et de vérification, sans lui déléguer la compréhension du problème. Je raconterai aussi quelques erreurs de débutante : prompts trop vagues, confiance excessive dans une réponse, ou code copié sans assez tester. À travers un exemple concret, nous verrons comment transformer un besoin en tâches, poser de meilleures questions à l’IA, avancer étape par étape, puis relire et tester ce qui est produit. Le public repartira avec une méthode simple, réaliste et praticable pour apprendre plus vite, automatiser certaines étapes répétitives, et surtout progresser par la pratique.",
+      "en": "Dans cette session, je partage mon workflow de développeuse web junior, du moment où je reçois un brief jusqu’au passage au code. À partir de mon expérience d’étudiante en Génie Informatique et de projets sur lesquels j’ai travaillé, le public verra comment j’utilise l’IA comme assistant de réflexion, de structuration et de vérification, sans lui déléguer la compréhension du problème. Je raconterai aussi quelques erreurs de débutante : prompts trop vagues, confiance excessive dans une réponse, ou code copié sans assez tester. À travers un exemple concret, nous verrons comment transformer un besoin en tâches, poser de meilleures questions à l’IA, avancer étape par étape, puis relire et tester ce qui est produit. Le public repartira avec une méthode simple, réaliste et praticable pour apprendre plus vite, automatiser certaines étapes répétitives, et surtout progresser par la pratique."
     },
     "track": {
       "fr": "Web",
@@ -24,11 +212,50 @@
         "en": "Web"
       },
       {
-        "fr": "IA & ML",
-        "en": "AI & ML"
+        "fr": "IA",
+        "en": "AI"
       }
     ],
-    "speakerIds": ["cabrel-domfang"]
+    "speakerIds": ["raissa-wokmeni"],
+    "time": "09:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    }
+  },
+  {
+    "id": "sz-1376670",
+    "day": 1,
+    "kind": "workshop",
+    "level": "introductory",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Build a Telegram Agent to Configure Ubuntu Servers",
+      "en": "Build a Telegram Agent to Configure Ubuntu Servers"
+    },
+    "description": {
+      "fr": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely.",
+      "en": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely."
+    },
+    "track": {
+      "fr": "Cybersécurité",
+      "en": "Cybersecurity"
+    },
+    "tags": [
+      {
+        "fr": "Cybersécurité",
+        "en": "Cybersecurity"
+      }
+    ],
+    "speakerIds": ["noemie-youbissi"],
+    "time": "09:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
   },
   {
     "id": "sz-1350359",
@@ -59,7 +286,126 @@
         "en": "DevOps"
       }
     ],
-    "speakerIds": ["egbe-michel"]
+    "speakerIds": ["egbe-michel"],
+    "time": "09:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    }
+  },
+  {
+    "id": "sz-1373948",
+    "day": 1,
+    "kind": "workshop",
+    "level": "intermediate",
+    "language": ["fr"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "How Many Ice Creams Should I Make Tomorrow?",
+      "en": "How Many Ice Creams Should I Make Tomorrow?"
+    },
+    "description": {
+      "fr": "Every morning, Bruno, an ice cream seller, has the same problem: how many tubs should he take out of the freezer? Too few and he turns customers away, too many and he throws ice cream away. In this talk, I’ll show how four summers of sales in a simple notebook can replace his gut feeling with real forecasts.",
+      "en": "Every morning, Bruno, an ice cream seller, has the same problem: how many tubs should he take out of the freezer? Too few and he turns customers away, too many and he throws ice cream away. In this talk, I’ll show how four summers of sales in a simple notebook can replace his gut feeling with real forecasts."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["marie-ipouk"],
+    "time": "09:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
+  },
+  {
+    "id": "sz-1339016",
+    "day": 1,
+    "kind": "workshop",
+    "level": "intermediate",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Au-delà du vibe coding pour le Web",
+      "en": "Au-delà du vibe coding pour le Web"
+    },
+    "description": {
+      "fr": "Alors que le Vibe Coding se répand de plus en plus, dans cette session j'explique comment utiliser les agents d'IA comme partenaires actifs et collaboratifs, avec des pratiques destinées à vous aider à réduire la dette technique et à améliorer la qualité du code généré. Vous utilisez Antigravity associé à Modern Web Guidance et DevTools for Agents pour créer un jeu de mots occasionnel et l'améliorer grâce aux fonctionnalités d'IA. Vous le déployez ensuite sur Google Cloud à l'aide de Firebase pour le partager avec vos amis et votre famille.",
+      "en": "Alors que le Vibe Coding se répand de plus en plus, dans cette session j'explique comment utiliser les agents d'IA comme partenaires actifs et collaboratifs, avec des pratiques destinées à vous aider à réduire la dette technique et à améliorer la qualité du code généré. Vous utilisez Antigravity associé à Modern Web Guidance et DevTools for Agents pour créer un jeu de mots occasionnel et l'améliorer grâce aux fonctionnalités d'IA. Vous le déployez ensuite sur Google Cloud à l'aide de Firebase pour le partager avec vos amis et votre famille."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "tags": [
+      {
+        "fr": "Web",
+        "en": "Web"
+      },
+      {
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["cabrel-domfang"],
+    "time": "09:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    }
+  },
+  {
+    "id": "sz-1372444",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "online": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Les 5 erreurs de sécurité Cloud que même les experts commettent",
+      "en": "Les 5 erreurs de sécurité Cloud que même les experts commettent"
+    },
+    "description": {
+      "fr": "Votre application fonctionne, vos tests passent et votre déploiement est réussi. Mais votre infrastructure Cloud est-elle vraiment sécurisée ?\n\nParfois, une simple configuration suffit à mettre en danger toute une infrastructure.\n\nDans ce lightning talk, nous découvrirons 5 erreurs de sécurité Cloud fréquentes, que même les personnes expérimentées peuvent commettre.\n\nÀ travers des exemples concrets, nous verrons comment identifier ces erreurs et surtout comment les éviter grâce à quelques bonnes pratiques simples.\n\nL'objectif ? Repartir avec 5 réflexes de sécurité à appliquer dès votre prochain commit.\n\nPas besoin d'être expert en cybersécurité. Le talk s'adresse à tous ceux qui développent, déploient ou exploitent des applications sur Google Cloud.",
+      "en": "Votre application fonctionne, vos tests passent et votre déploiement est réussi. Mais votre infrastructure Cloud est-elle vraiment sécurisée ?\n\nParfois, une simple configuration suffit à mettre en danger toute une infrastructure.\n\nDans ce lightning talk, nous découvrirons 5 erreurs de sécurité Cloud fréquentes, que même les personnes expérimentées peuvent commettre.\n\nÀ travers des exemples concrets, nous verrons comment identifier ces erreurs et surtout comment les éviter grâce à quelques bonnes pratiques simples.\n\nL'objectif ? Repartir avec 5 réflexes de sécurité à appliquer dès votre prochain commit.\n\nPas besoin d'être expert en cybersécurité. Le talk s'adresse à tous ceux qui développent, déploient ou exploitent des applications sur Google Cloud."
+    },
+    "track": {
+      "fr": "Cloud",
+      "en": "Cloud"
+    },
+    "tags": [
+      {
+        "fr": "Cloud",
+        "en": "Cloud"
+      },
+      {
+        "fr": "Cybersécurité",
+        "en": "Cybersecurity"
+      },
+      {
+        "fr": "DevOps",
+        "en": "DevOps"
+      }
+    ],
+    "speakerIds": ["hubert-nang"],
+    "time": "10:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    }
   },
   {
     "id": "sz-1350410",
@@ -87,23 +433,139 @@
         "en": "Cybersecurity"
       }
     ],
-    "speakerIds": ["linda-ebete"]
+    "speakerIds": ["linda-ebete"],
+    "time": "11:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    }
   },
   {
-    "id": "sz-1351469",
+    "id": "sz-1367658",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "AI and XR technologies in Health: Empowering Healthcare workers and Elevating Patients Care",
+      "en": "AI and XR technologies in Health: Empowering Healthcare workers and Elevating Patients Care"
+    },
+    "description": {
+      "fr": "The convergence of AI and XR technologies, including Virtual Reality (VR), Augmented Reality (AR), and Mixed Reality (MR), is creating new opportunities in medical education and healthcare delivery. However, challenges such as the high cost of medical training, limited access to specialized equipment, patient safety concerns, and unequal access to quality healthcare education remain significant barriers.\n\nThis session explores how AI and XR can help overcome these challenges by combining intelligent assistance with immersive, hands-on learning. AI enables personalized guidance and real-time performance feedback, while XR provides interactive, risk-free environments where healthcare students and professionals can practise clinical procedures, visualize complex anatomy, and strengthen their decision-making skills. Beyond training, these technologies also offer promising applications in patient education, rehabilitation, and clinical care.\n\nThe session will showcase Hakkilo XR’s work in developing AI-powered immersive learning solutions that enable learners to practise clinical skills, explore complex medical scenarios, and learn from mistakes without putting patients at risk. With a focus on African healthcare contexts, it will highlight how locally developed technologies can help address infrastructure constraints, expand access to medical training, strengthen healthcare professionals’ competencies, and ultimately contribute to safer clinical practice and better patient outcomes.",
+      "en": "The convergence of AI and XR technologies, including Virtual Reality (VR), Augmented Reality (AR), and Mixed Reality (MR), is creating new opportunities in medical education and healthcare delivery. However, challenges such as the high cost of medical training, limited access to specialized equipment, patient safety concerns, and unequal access to quality healthcare education remain significant barriers.\n\nThis session explores how AI and XR can help overcome these challenges by combining intelligent assistance with immersive, hands-on learning. AI enables personalized guidance and real-time performance feedback, while XR provides interactive, risk-free environments where healthcare students and professionals can practise clinical procedures, visualize complex anatomy, and strengthen their decision-making skills. Beyond training, these technologies also offer promising applications in patient education, rehabilitation, and clinical care.\n\nThe session will showcase Hakkilo XR’s work in developing AI-powered immersive learning solutions that enable learners to practise clinical skills, explore complex medical scenarios, and learn from mistakes without putting patients at risk. With a focus on African healthcare contexts, it will highlight how locally developed technologies can help address infrastructure constraints, expand access to medical training, strengthen healthcare professionals’ competencies, and ultimately contribute to safer clinical practice and better patient outcomes."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["destin-kouam"],
+    "time": "11:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
+  },
+  {
+    "id": "sz-1372498",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "advanced",
+    "language": ["fr"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Securing Enterprise AI: Managing Prompt Injection and AI Application Risks",
+      "en": "Securing Enterprise AI: Managing Prompt Injection and AI Application Risks"
+    },
+    "description": {
+      "fr": "As organizations increasingly adopt generative AI to improve productivity, automate processes, and enhance customer experiences, new security risks are emerging. Prompt injection, sensitive data exposure, and the misuse of AI-powered applications can create significant operational, security, and business risks.\n\nThis session explores how organizations can identify and manage these risks while enabling secure AI adoption. We will examine realistic prompt injection scenarios, discuss their potential business impact, and demonstrate how Google Cloud Model Armor can contribute to protecting AI applications as part of a defense-in-depth strategy.\n\nBeyond technical safeguards, the session will highlight practical security and governance principles that cybersecurity leaders, IT teams, and developers can apply to build more resilient AI-enabled solutions.\n\nAttendees will leave with actionable insights to strengthen AI application security, reduce exposure to emerging threats, and support responsible AI adoption within their organizations.",
+      "en": "As organizations increasingly adopt generative AI to improve productivity, automate processes, and enhance customer experiences, new security risks are emerging. Prompt injection, sensitive data exposure, and the misuse of AI-powered applications can create significant operational, security, and business risks.\n\nThis session explores how organizations can identify and manage these risks while enabling secure AI adoption. We will examine realistic prompt injection scenarios, discuss their potential business impact, and demonstrate how Google Cloud Model Armor can contribute to protecting AI applications as part of a defense-in-depth strategy.\n\nBeyond technical safeguards, the session will highlight practical security and governance principles that cybersecurity leaders, IT teams, and developers can apply to build more resilient AI-enabled solutions.\n\nAttendees will leave with actionable insights to strengthen AI application security, reduce exposure to emerging threats, and support responsible AI adoption within their organizations."
+    },
+    "track": {
+      "fr": "Cybersécurité",
+      "en": "Cybersecurity"
+    },
+    "tags": [
+      {
+        "fr": "Cybersécurité",
+        "en": "Cybersecurity"
+      },
+      {
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["le-prince-dachi"],
+    "time": "11:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    }
+  },
+  {
+    "id": "sz-1352668",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Code vs Cahier : Pourquoi votre plus grand concurrent est un registre en papier",
+      "en": "Code vs Cahier : Pourquoi votre plus grand concurrent est un registre en papier"
+    },
+    "description": {
+      "fr": "1. Le choc de la réalité du terrain (Reality Check)\nLes développeurs ont tendance à concevoir des applications en se comparant aux géants du SaaS ou à d'autres startups. Sur le terrain (commerce local, logistique, chantiers, santé), le véritable adversaire est souvent un carnet à 2 €, un registre manuscrit ou un carnet de reçus sous carbone. Aborder ce sujet ramène la conception logicielle à la vraie vie des utilisateurs.\n2. La leçon d'UX ultime : La friction zéro\nUn carnet physique possède des arguments imbattables : zéro temps de chargement, pas de mot de passe à réinitialiser, pas d'erreur 500, pas de formation requise et une batterie infinie. Ce thème permet de challenger les devs sur la vitesse d'exécution et l'ergonomie : si saisir une vente prend 4 clics et 10 secondes dans ton app alors qu'il faut 2 secondes au stylo, ton logiciel perd.\n3. La lutte contre la sur-ingénierie (Feature Creep)\nLes équipes techniques passent parfois des semaines à intégrer des fonctionnalités complexes (tableaux de bord animés, IA, exports avancés) alors que l'utilisateur veut juste valider une transaction sans réfléchir. Le registre physique rappelle l'importance du « Less is more » et de la valeur fondamentale d'un produit.\n4. Un levier pour aborder des sujets techniques concrets\nCe sujet n'est pas qu'ergonomique, il ouvre la porte à d'excellentes discussions d'architecture logicielle :\n Offline-First : Comment garantir le fonctionnement sans réseau, à l'image du papier.\n Saisie ultra-rapide : Raccourcis clavier, interfaces formulaires optimisées, optimisations des requêtes.\n Synchronisation et résilience : Gestion des conflits de données quand la connexion revient.",
+      "en": "1. Le choc de la réalité du terrain (Reality Check)\nLes développeurs ont tendance à concevoir des applications en se comparant aux géants du SaaS ou à d'autres startups. Sur le terrain (commerce local, logistique, chantiers, santé), le véritable adversaire est souvent un carnet à 2 €, un registre manuscrit ou un carnet de reçus sous carbone. Aborder ce sujet ramène la conception logicielle à la vraie vie des utilisateurs.\n2. La leçon d'UX ultime : La friction zéro\nUn carnet physique possède des arguments imbattables : zéro temps de chargement, pas de mot de passe à réinitialiser, pas d'erreur 500, pas de formation requise et une batterie infinie. Ce thème permet de challenger les devs sur la vitesse d'exécution et l'ergonomie : si saisir une vente prend 4 clics et 10 secondes dans ton app alors qu'il faut 2 secondes au stylo, ton logiciel perd.\n3. La lutte contre la sur-ingénierie (Feature Creep)\nLes équipes techniques passent parfois des semaines à intégrer des fonctionnalités complexes (tableaux de bord animés, IA, exports avancés) alors que l'utilisateur veut juste valider une transaction sans réfléchir. Le registre physique rappelle l'importance du « Less is more » et de la valeur fondamentale d'un produit.\n4. Un levier pour aborder des sujets techniques concrets\nCe sujet n'est pas qu'ergonomique, il ouvre la porte à d'excellentes discussions d'architecture logicielle :\n Offline-First : Comment garantir le fonctionnement sans réseau, à l'image du papier.\n Saisie ultra-rapide : Raccourcis clavier, interfaces formulaires optimisées, optimisations des requêtes.\n Synchronisation et résilience : Gestion des conflits de données quand la connexion revient."
+    },
+    "track": {
+      "fr": "Gestion de produit",
+      "en": "Product Management"
+    },
+    "tags": [
+      {
+        "fr": "Gestion de produit",
+        "en": "Product Management"
+      },
+      {
+        "fr": "Business",
+        "en": "Business"
+      }
+    ],
+    "speakerIds": ["steve-kambea-ndjeumou"],
+    "time": "11:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
+  },
+  {
+    "id": "sz-1355263",
     "day": 1,
     "kind": "talk",
     "lightning": true,
     "level": "intermediate",
-    "language": ["fr", "en"],
-    "originalLanguage": "en",
+    "language": ["fr"],
+    "originalLanguage": "fr",
     "title": {
-      "fr": "Beyond Code Generation: Building Better Software with AI Coding Assistants",
-      "en": "Beyond Code Generation: Building Better Software with AI Coding Assistants"
+      "fr": "NotebookLM : l’IA Google qui comprend les documents pour vos révisions, recherches et mémoires",
+      "en": "NotebookLM : l’IA Google qui comprend les documents pour vos révisions, recherches et mémoires"
     },
     "description": {
-      "fr": "AI coding assistants are changing how developers write, understand, test, debug, and maintain software. But using AI effectively goes far beyond asking it to generate code.\nIn this practical session, we’ll explore how developers can integrate AI into their everyday engineering workflow from understanding unfamiliar codebases and generating tests to debugging, refactoring, documenting, and reviewing code. We’ll also discuss common mistakes, limitations, and best practices for keeping developers in control of the final result.\nThe goal is not to replace developers, but to learn how to work with AI as an engineering partner and use it to become more productive without sacrificing code quality, security, or understanding.",
-      "en": "AI coding assistants are changing how developers write, understand, test, debug, and maintain software. But using AI effectively goes far beyond asking it to generate code.\nIn this practical session, we’ll explore how developers can integrate AI into their everyday engineering workflow from understanding unfamiliar codebases and generating tests to debugging, refactoring, documenting, and reviewing code. We’ll also discuss common mistakes, limitations, and best practices for keeping developers in control of the final result.\nThe goal is not to replace developers, but to learn how to work with AI as an engineering partner and use it to become more productive without sacrificing code quality, security, or understanding."
+      "fr": "ChatGPT hallucine. Gemini généralise. NotebookLM, lui, ne parle qu’à partir de ce que vous lui donnez.\n\nDans cette session, on plonge dans ce qui rend NotebookLM unique et redoutablement utile pour les étudiants africains :\n\nRévisions intelligentes : importe tes cours, génère des résumés, des quiz, des plans en quelques secondes\nRecherche académique : charge tes articles scientifiques, interroge-les comme un expert, extrait les citations clés sans te noyer dans 80 pages\nRédaction de mémoire : organise tes sources, détecte les contradictions entre auteurs, construis ta problématique avec l’IA comme co-pilote\nPourquoi NotebookLM et pas ChatGPT ? : comparaison honnête sur le terrain — fiabilité des sources, ancrage documentaire, confidentialité, accès gratuit\n\nPas de code. Pas de prompt engineering. Juste tes fichiers et une méthode. Une session concrète pour les étudiants qui veulent travailler plus intelligemment, pas plus longtemps.",
+      "en": "ChatGPT hallucine. Gemini généralise. NotebookLM, lui, ne parle qu’à partir de ce que vous lui donnez.\n\nDans cette session, on plonge dans ce qui rend NotebookLM unique et redoutablement utile pour les étudiants africains :\n\nRévisions intelligentes : importe tes cours, génère des résumés, des quiz, des plans en quelques secondes\nRecherche académique : charge tes articles scientifiques, interroge-les comme un expert, extrait les citations clés sans te noyer dans 80 pages\nRédaction de mémoire : organise tes sources, détecte les contradictions entre auteurs, construis ta problématique avec l’IA comme co-pilote\nPourquoi NotebookLM et pas ChatGPT ? : comparaison honnête sur le terrain — fiabilité des sources, ancrage documentaire, confidentialité, accès gratuit\n\nPas de code. Pas de prompt engineering. Juste tes fichiers et une méthode. Une session concrète pour les étudiants qui veulent travailler plus intelligemment, pas plus longtemps."
     },
     "track": {
       "fr": "IA & ML",
@@ -113,21 +575,390 @@
       {
         "fr": "IA & ML",
         "en": "AI & ML"
+      }
+    ],
+    "speakerIds": ["gervais-azanga-ayissi"],
+    "time": "11:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    }
+  },
+  {
+    "id": "agenda-break-1",
+    "time": "11:50",
+    "durationMin": 30,
+    "day": 1,
+    "kind": "break",
+    "title": {
+      "fr": "Pause et rencontres",
+      "en": "Break & networking"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Toutes les salles",
+      "en": "All rooms"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-partner-words",
+    "time": "12:25",
+    "durationMin": 10,
+    "day": 1,
+    "kind": "talk",
+    "title": {
+      "fr": "Mots des partenaires",
+      "en": "Words from our partners"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-pitch",
+    "time": "12:40",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "panel",
+    "title": {
+      "fr": "Concours de pitch",
+      "en": "Pitch contest"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-break-2",
+    "time": "14:10",
+    "durationMin": 35,
+    "day": 1,
+    "kind": "break",
+    "title": {
+      "fr": "Pause et rencontres",
+      "en": "Break & networking"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Toutes les salles",
+      "en": "All rooms"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "sz-1371413",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "intermediate",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Construire son premier réseau d’entreprise en laboratoire Ubuntu",
+      "en": "Construire son premier réseau d’entreprise en laboratoire Ubuntu"
+    },
+    "description": {
+      "fr": "Dans cette session pensée pour les débutant·es, nous allons construire un petit réseau d’entreprise en laboratoire avec Ubuntu. Le public verra comment les briques essentielles se connectent entre elles : attribuer des adresses avec DHCP, résoudre des noms avec DNS, accéder à une machine avec SSH, publier une page web et comprendre les bases d’un service de messagerie. L’objectif n’est pas de tout maîtriser en profondeur, mais de rendre visibles les mécanismes qui font fonctionner un réseau au quotidien.\nÀ travers une démonstration progressive et des commandes simples, les participant·es comprendront le rôle de chaque service, les erreurs fréquentes à surveiller et une méthode pour tester que tout fonctionne. Ils repartiront avec une vision claire d’un mini-réseau d’entreprise, un plan de lab reproductible sur Ubuntu et la confiance nécessaire pour continuer à pratiquer.",
+      "en": "Dans cette session pensée pour les débutant·es, nous allons construire un petit réseau d’entreprise en laboratoire avec Ubuntu. Le public verra comment les briques essentielles se connectent entre elles : attribuer des adresses avec DHCP, résoudre des noms avec DNS, accéder à une machine avec SSH, publier une page web et comprendre les bases d’un service de messagerie. L’objectif n’est pas de tout maîtriser en profondeur, mais de rendre visibles les mécanismes qui font fonctionner un réseau au quotidien.\nÀ travers une démonstration progressive et des commandes simples, les participant·es comprendront le rôle de chaque service, les erreurs fréquentes à surveiller et une méthode pour tester que tout fonctionne. Ils repartiront avec une vision claire d’un mini-réseau d’entreprise, un plan de lab reproductible sur Ubuntu et la confiance nécessaire pour continuer à pratiquer."
+    },
+    "track": {
+      "fr": "DevOps",
+      "en": "DevOps"
+    },
+    "tags": [
+      {
+        "fr": "DevOps",
+        "en": "DevOps"
       },
       {
         "fr": "Cybersécurité",
         "en": "Cybersecurity"
       },
       {
+        "fr": "Gemini",
+        "en": "Gemini"
+      }
+    ],
+    "speakerIds": ["ange-naomy-kengne-takoumbo"],
+    "time": "14:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    }
+  },
+  {
+    "id": "sz-1372363",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "intermediate",
+    "language": ["fr", "en"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "From Beginner to Builder: Getting Started with Google Workspace",
+      "en": "From Beginner to Builder: Getting Started with Google Workspace"
+    },
+    "description": {
+      "fr": "Google Workspace est bien plus qu'une suite d'outils bureautiques : c'est un écosystème qui permet de collaborer, d'automatiser des tâches et de créer des solutions numériques.\n\nCette session propose un parcours concret pour découvrir comment tirer parti de Gmail, Google Drive, Docs et Sheets, organiser efficacement son environnement de travail, puis explorer les possibilités d'automatisation avec Google Apps Script et de création d'applications avec AppSheet.\n\nÀ travers des exemples pratiques et une feuille de route accessible aux débutants, les participants découvriront les compétences à acquérir, les ressources pour progresser et les premières étapes pour passer du simple utilisateur à un créateur de solutions avec Google Workspace.\n\nAucune expertise préalable en développement n'est nécessaire.",
+      "en": "Google Workspace est bien plus qu'une suite d'outils bureautiques : c'est un écosystème qui permet de collaborer, d'automatiser des tâches et de créer des solutions numériques.\n\nCette session propose un parcours concret pour découvrir comment tirer parti de Gmail, Google Drive, Docs et Sheets, organiser efficacement son environnement de travail, puis explorer les possibilités d'automatisation avec Google Apps Script et de création d'applications avec AppSheet.\n\nÀ travers des exemples pratiques et une feuille de route accessible aux débutants, les participants découvriront les compétences à acquérir, les ressources pour progresser et les premières étapes pour passer du simple utilisateur à un créateur de solutions avec Google Workspace.\n\nAucune expertise préalable en développement n'est nécessaire."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "tags": [
+      {
         "fr": "Web",
         "en": "Web"
       },
       {
-        "fr": "Cloud",
-        "en": "Cloud"
+        "fr": "Business",
+        "en": "Business"
+      },
+      {
+        "fr": "Science des données",
+        "en": "Data Science"
       }
     ],
-    "speakerIds": ["danwe-basga"]
+    "speakerIds": ["nathan-foka"],
+    "time": "14:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
+  },
+  {
+    "id": "agenda-networking-and-visibility",
+    "time": "14:50",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "talk",
+    "language": ["en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Networking and Visibility",
+      "en": "Networking and Visibility"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Général",
+      "en": "General"
+    },
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "sz-1371401",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "intermediate",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Cloud et cybersécurité : l’IA comme copilote de vigilance",
+      "en": "Cloud et cybersécurité : l’IA comme copilote de vigilance"
+    },
+    "description": {
+      "fr": "Durant cette session, je partagerai mon regard d’étudiante en réseaux et télécommunications sur un sujet qui évolue vite : la rencontre entre cloud, cybersécurité et intelligence artificielle. À partir de mon experience personnelle, j'essaierai de faire comprendre pourquoi le cloud change la manière de protéger les systèmes, et comment l’IA peut déjà aider à repérer des risques, analyser des alertes, résumer des journaux ou guider les premières vérifications.",
+      "en": "Durant cette session, je partagerai mon regard d’étudiante en réseaux et télécommunications sur un sujet qui évolue vite : la rencontre entre cloud, cybersécurité et intelligence artificielle. À partir de mon experience personnelle, j'essaierai de faire comprendre pourquoi le cloud change la manière de protéger les systèmes, et comment l’IA peut déjà aider à repérer des risques, analyser des alertes, résumer des journaux ou guider les premières vérifications."
+    },
+    "track": {
+      "fr": "Cloud",
+      "en": "Cloud"
+    },
+    "tags": [
+      {
+        "fr": "Cloud",
+        "en": "Cloud"
+      },
+      {
+        "fr": "Cybersécurité",
+        "en": "Cybersecurity"
+      },
+      {
+        "fr": "IA",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["sandra-macheu-talla"],
+    "time": "14:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
+  },
+  {
+    "id": "sz-1371405",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Automatiser ses vérifications réseau avec un assistant IA",
+      "en": "Automatiser ses vérifications réseau avec un assistant IA"
+    },
+    "description": {
+      "fr": "Cette session présente une méthode progressive pour automatiser les vérifications réseau à l’aide de scripts, d’outils adaptés et d’un assistant IA, afin de simplifier les contrôles répétitifs, faciliter leur utilisation en langage naturel et garder l’humain au centre de la décision réseau.",
+      "en": "Cette session présente une méthode progressive pour automatiser les vérifications réseau à l’aide de scripts, d’outils adaptés et d’un assistant IA, afin de simplifier les contrôles répétitifs, faciliter leur utilisation en langage naturel et garder l’humain au centre de la décision réseau."
+    },
+    "track": {
+      "fr": "IA & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "IA",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["verdiane-fotso"],
+    "time": "14:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    }
+  },
+  {
+    "id": "agenda-is-your-sign-in-with-button-really-safe",
+    "time": "15:20",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "talk",
+    "language": ["en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Is Your “Sign in with…” Button Really Safe?",
+      "en": "Is Your “Sign in with…” Button Really Safe?"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Général",
+      "en": "General"
+    },
+    "room": {
+      "fr": "Salle 1 · Principale",
+      "en": "Room 1 · Main"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "sz-1368723",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "expert",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Comment améliorer son employabilité dans le domaine de la tech?",
+      "en": "Comment améliorer son employabilité dans le domaine de la tech?"
+    },
+    "description": {
+      "fr": "Il s'agira au travers de partages d'expériences, démontrer qu'en termes d'employabilité dans la tech, les compétences techniques seules ne suffisent pas et que les questions liées à la définition de ses objectifs de carrière, au mindset, le savoir être, la posture professionnelle, la confiance en soi, la préparation de son CV/entretiens d'embauche, le réseautage professionnel sont tout aussi importantes.",
+      "en": "Il s'agira au travers de partages d'expériences, démontrer qu'en termes d'employabilité dans la tech, les compétences techniques seules ne suffisent pas et que les questions liées à la définition de ses objectifs de carrière, au mindset, le savoir être, la posture professionnelle, la confiance en soi, la préparation de son CV/entretiens d'embauche, le réseautage professionnel sont tout aussi importantes."
+    },
+    "track": {
+      "fr": "Business",
+      "en": "Business"
+    },
+    "tags": [
+      {
+        "fr": "Business",
+        "en": "Business"
+      }
+    ],
+    "speakerIds": ["arnaud-dzudie"],
+    "time": "15:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
+  },
+  {
+    "id": "agenda-au-dela-de-la-technologie-construire-des-startup",
+    "time": "15:20",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "talk",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Au-delà de la technologie : construire des startups africaines qui inspirent confiance",
+      "en": "Au-delà de la technologie : construire des startups africaines qui inspirent confiance"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Général",
+      "en": "General"
+    },
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    },
+    "tags": [],
+    "speakerIds": []
   },
   {
     "id": "sz-1352359",
@@ -171,55 +1002,29 @@
         "en": "Business"
       }
     ],
-    "speakerIds": ["rostand-tchuekam"]
+    "speakerIds": ["rostand-tchuekam"],
+    "time": "15:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
   },
   {
-    "id": "sz-1352668",
+    "id": "sz-1351469",
     "day": 1,
     "kind": "talk",
     "lightning": true,
-    "level": "introductory",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Code vs Cahier : Pourquoi votre plus grand concurrent est un registre en papier",
-      "en": "Code vs Cahier : Pourquoi votre plus grand concurrent est un registre en papier"
-    },
-    "description": {
-      "fr": "1. Le choc de la réalité du terrain (Reality Check)\nLes développeurs ont tendance à concevoir des applications en se comparant aux géants du SaaS ou à d'autres startups. Sur le terrain (commerce local, logistique, chantiers, santé), le véritable adversaire est souvent un carnet à 2 €, un registre manuscrit ou un carnet de reçus sous carbone. Aborder ce sujet ramène la conception logicielle à la vraie vie des utilisateurs.\n2. La leçon d'UX ultime : La friction zéro\nUn carnet physique possède des arguments imbattables : zéro temps de chargement, pas de mot de passe à réinitialiser, pas d'erreur 500, pas de formation requise et une batterie infinie. Ce thème permet de challenger les devs sur la vitesse d'exécution et l'ergonomie : si saisir une vente prend 4 clics et 10 secondes dans ton app alors qu'il faut 2 secondes au stylo, ton logiciel perd.\n3. La lutte contre la sur-ingénierie (Feature Creep)\nLes équipes techniques passent parfois des semaines à intégrer des fonctionnalités complexes (tableaux de bord animés, IA, exports avancés) alors que l'utilisateur veut juste valider une transaction sans réfléchir. Le registre physique rappelle l'importance du « Less is more » et de la valeur fondamentale d'un produit.\n4. Un levier pour aborder des sujets techniques concrets\nCe sujet n'est pas qu'ergonomique, il ouvre la porte à d'excellentes discussions d'architecture logicielle :\n Offline-First : Comment garantir le fonctionnement sans réseau, à l'image du papier.\n Saisie ultra-rapide : Raccourcis clavier, interfaces formulaires optimisées, optimisations des requêtes.\n Synchronisation et résilience : Gestion des conflits de données quand la connexion revient.",
-      "en": "1. Le choc de la réalité du terrain (Reality Check)\nLes développeurs ont tendance à concevoir des applications en se comparant aux géants du SaaS ou à d'autres startups. Sur le terrain (commerce local, logistique, chantiers, santé), le véritable adversaire est souvent un carnet à 2 €, un registre manuscrit ou un carnet de reçus sous carbone. Aborder ce sujet ramène la conception logicielle à la vraie vie des utilisateurs.\n2. La leçon d'UX ultime : La friction zéro\nUn carnet physique possède des arguments imbattables : zéro temps de chargement, pas de mot de passe à réinitialiser, pas d'erreur 500, pas de formation requise et une batterie infinie. Ce thème permet de challenger les devs sur la vitesse d'exécution et l'ergonomie : si saisir une vente prend 4 clics et 10 secondes dans ton app alors qu'il faut 2 secondes au stylo, ton logiciel perd.\n3. La lutte contre la sur-ingénierie (Feature Creep)\nLes équipes techniques passent parfois des semaines à intégrer des fonctionnalités complexes (tableaux de bord animés, IA, exports avancés) alors que l'utilisateur veut juste valider une transaction sans réfléchir. Le registre physique rappelle l'importance du « Less is more » et de la valeur fondamentale d'un produit.\n4. Un levier pour aborder des sujets techniques concrets\nCe sujet n'est pas qu'ergonomique, il ouvre la porte à d'excellentes discussions d'architecture logicielle :\n Offline-First : Comment garantir le fonctionnement sans réseau, à l'image du papier.\n Saisie ultra-rapide : Raccourcis clavier, interfaces formulaires optimisées, optimisations des requêtes.\n Synchronisation et résilience : Gestion des conflits de données quand la connexion revient."
-    },
-    "track": {
-      "fr": "Gestion de produit",
-      "en": "Product Management"
-    },
-    "tags": [
-      {
-        "fr": "Gestion de produit",
-        "en": "Product Management"
-      },
-      {
-        "fr": "Business",
-        "en": "Business"
-      }
-    ],
-    "speakerIds": ["steve-kambea-ndjeumou"]
-  },
-  {
-    "id": "sz-1353400",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
+    "level": "intermediate",
     "language": ["fr", "en"],
-    "originalLanguage": "fr",
+    "originalLanguage": "en",
     "title": {
-      "fr": "AI-Powered Learning: How to Learn Smarter",
-      "en": "AI-Powered Learning: How to Learn Smarter"
+      "fr": "Beyond Code Generation: Building Better Software with AI Coding Assistants",
+      "en": "Beyond Code Generation: Building Better Software with AI Coding Assistants"
     },
     "description": {
-      "fr": "Ce thème explore comment l’intelligence artificielle peut nous aider à apprendre de manière plus efficace, plus personnalisée et plus active. Il ne s’agit pas simplement d’utiliser l’IA pour obtenir des réponses, mais de comprendre comment s’en servir pour mieux réviser, approfondir un sujet, identifier ses difficultés, pratiquer, recevoir des explications adaptées à son niveau et développer une meilleure méthode d’apprentissage.\n\nL’objectif est de montrer comment faire de l’IA un véritable outil d’accompagnement, sans remplacer la réflexion, l’effort personnel ni l’esprit critique.",
-      "en": "Ce thème explore comment l’intelligence artificielle peut nous aider à apprendre de manière plus efficace, plus personnalisée et plus active. Il ne s’agit pas simplement d’utiliser l’IA pour obtenir des réponses, mais de comprendre comment s’en servir pour mieux réviser, approfondir un sujet, identifier ses difficultés, pratiquer, recevoir des explications adaptées à son niveau et développer une meilleure méthode d’apprentissage.\n\nL’objectif est de montrer comment faire de l’IA un véritable outil d’accompagnement, sans remplacer la réflexion, l’effort personnel ni l’esprit critique."
+      "fr": "AI coding assistants are changing how developers write, understand, test, debug, and maintain software. But using AI effectively goes far beyond asking it to generate code.\nIn this practical session, we’ll explore how developers can integrate AI into their everyday engineering workflow from understanding unfamiliar codebases and generating tests to debugging, refactoring, documenting, and reviewing code. We’ll also discuss common mistakes, limitations, and best practices for keeping developers in control of the final result.\nThe goal is not to replace developers, but to learn how to work with AI as an engineering partner and use it to become more productive without sacrificing code quality, security, or understanding.",
+      "en": "AI coding assistants are changing how developers write, understand, test, debug, and maintain software. But using AI effectively goes far beyond asking it to generate code.\nIn this practical session, we’ll explore how developers can integrate AI into their everyday engineering workflow from understanding unfamiliar codebases and generating tests to debugging, refactoring, documenting, and reviewing code. We’ll also discuss common mistakes, limitations, and best practices for keeping developers in control of the final result.\nThe goal is not to replace developers, but to learn how to work with AI as an engineering partner and use it to become more productive without sacrificing code quality, security, or understanding."
     },
     "track": {
       "fr": "IA & ML",
@@ -227,423 +1032,29 @@
     },
     "tags": [
       {
-        "fr": "IA",
-        "en": "AI"
-      }
-    ],
-    "speakerIds": ["samuel-de-essaka"]
-  },
-  {
-    "id": "sz-1353994",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "VPS ou Cloud : comment choisir la bonne infrastructure pour son application ?",
-      "en": "VPS ou Cloud : comment choisir la bonne infrastructure pour son application ?"
-    },
-    "description": {
-      "fr": "Cette question revient souvent lorsqu’on doit déployer une application, un site web ou une API. Pourtant, le meilleur choix ne dépend pas uniquement du prix ou du fait que « le cloud est plus moderne et plus flexible ».\n\nDans cette session, nous allons comparer concrètement les deux approches et surtout comprendre quand choisir un VPS, quand privilégier le Cloud, et pourquoi.",
-      "en": "Cette question revient souvent lorsqu’on doit déployer une application, un site web ou une API. Pourtant, le meilleur choix ne dépend pas uniquement du prix ou du fait que « le cloud est plus moderne et plus flexible ».\n\nDans cette session, nous allons comparer concrètement les deux approches et surtout comprendre quand choisir un VPS, quand privilégier le Cloud, et pourquoi."
-    },
-    "track": {
-      "fr": "Cloud",
-      "en": "Cloud"
-    },
-    "tags": [
+        "fr": "IA & ML",
+        "en": "AI & ML"
+      },
       {
-        "fr": "Cloud",
-        "en": "Cloud"
+        "fr": "Cybersécurité",
+        "en": "Cybersecurity"
       },
       {
         "fr": "Web",
         "en": "Web"
       },
       {
-        "fr": "DevOps",
-        "en": "DevOps"
-      }
-    ],
-    "speakerIds": ["emerson-folong"]
-  },
-  {
-    "id": "sz-1354849",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "AI & Language: Will AI Replace Translators? Rethinking Language Careers in the Age of Generative AI",
-      "en": "AI & Language: Will AI Replace Translators? Rethinking Language Careers in the Age of Generative AI"
-    },
-    "description": {
-      "fr": "L’intelligence artificielle générative transforme rapidement les métiers fondés sur le langage. Aujourd’hui, une IA peut traduire un document en quelques secondes, reformuler un texte, proposer plusieurs variantes stylistiques ou encore produire du contenu dans plusieurs langues. Face à ces avancées, une question revient souvent : l’IA va-t-elle remplacer les traducteurs ?\n\nCette session propose de dépasser cette vision binaire pour examiner la manière dont l’intelligence artificielle redéfinit concrètement les métiers de la traduction, de la communication et de la production de contenu.\n\nÀ travers des démonstrations pratiques et une analyse comparative de traductions générées par l’IA et de versions professionnelles, la session montrera les capacités actuelles des outils d’IA générative, mais aussi leurs limites : contexte, terminologie, registre, culture, cohérence institutionnelle et jugement professionnel.\n\nL’objectif sera surtout d’identifier les nouvelles compétences qui émergent : prompt engineering, post-édition, contrôle qualité, contextualisation, supervision des systèmes d’IA et gestion des données linguistiques.\n\nEnfin, la session ouvrira une réflexion sur l’avenir des langues dans l’écosystème numérique africain : qui apprend à l’IA à comprendre nos langues, nos cultures et nos réalités ?\n\nL’enjeu n’est donc plus simplement de savoir si l’IA remplacera les traducteurs, mais de comprendre comment les professionnels des langues peuvent devenir plus performants grâce à l’IA et créer de nouvelles opportunités professionnelles autour d’elle.",
-      "en": "L’intelligence artificielle générative transforme rapidement les métiers fondés sur le langage. Aujourd’hui, une IA peut traduire un document en quelques secondes, reformuler un texte, proposer plusieurs variantes stylistiques ou encore produire du contenu dans plusieurs langues. Face à ces avancées, une question revient souvent : l’IA va-t-elle remplacer les traducteurs ?\n\nCette session propose de dépasser cette vision binaire pour examiner la manière dont l’intelligence artificielle redéfinit concrètement les métiers de la traduction, de la communication et de la production de contenu.\n\nÀ travers des démonstrations pratiques et une analyse comparative de traductions générées par l’IA et de versions professionnelles, la session montrera les capacités actuelles des outils d’IA générative, mais aussi leurs limites : contexte, terminologie, registre, culture, cohérence institutionnelle et jugement professionnel.\n\nL’objectif sera surtout d’identifier les nouvelles compétences qui émergent : prompt engineering, post-édition, contrôle qualité, contextualisation, supervision des systèmes d’IA et gestion des données linguistiques.\n\nEnfin, la session ouvrira une réflexion sur l’avenir des langues dans l’écosystème numérique africain : qui apprend à l’IA à comprendre nos langues, nos cultures et nos réalités ?\n\nL’enjeu n’est donc plus simplement de savoir si l’IA remplacera les traducteurs, mais de comprendre comment les professionnels des langues peuvent devenir plus performants grâce à l’IA et créer de nouvelles opportunités professionnelles autour d’elle."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA",
-        "en": "AI"
-      },
-      {
-        "fr": "Communication",
-        "en": "Communication"
-      }
-    ],
-    "speakerIds": ["manuel-karim-abolo"]
-  },
-  {
-    "id": "sz-1355263",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "NotebookLM : l’IA Google qui comprend les documents pour vos révisions, recherches et mémoires",
-      "en": "NotebookLM : l’IA Google qui comprend les documents pour vos révisions, recherches et mémoires"
-    },
-    "description": {
-      "fr": "ChatGPT hallucine. Gemini généralise. NotebookLM, lui, ne parle qu’à partir de ce que vous lui donnez.\n\nDans cette session, on plonge dans ce qui rend NotebookLM unique et redoutablement utile pour les étudiants africains :\n\nRévisions intelligentes : importe tes cours, génère des résumés, des quiz, des plans en quelques secondes\nRecherche académique : charge tes articles scientifiques, interroge-les comme un expert, extrait les citations clés sans te noyer dans 80 pages\nRédaction de mémoire : organise tes sources, détecte les contradictions entre auteurs, construis ta problématique avec l’IA comme co-pilote\nPourquoi NotebookLM et pas ChatGPT ? : comparaison honnête sur le terrain — fiabilité des sources, ancrage documentaire, confidentialité, accès gratuit\n\nPas de code. Pas de prompt engineering. Juste tes fichiers et une méthode. Une session concrète pour les étudiants qui veulent travailler plus intelligemment, pas plus longtemps.",
-      "en": "ChatGPT hallucine. Gemini généralise. NotebookLM, lui, ne parle qu’à partir de ce que vous lui donnez.\n\nDans cette session, on plonge dans ce qui rend NotebookLM unique et redoutablement utile pour les étudiants africains :\n\nRévisions intelligentes : importe tes cours, génère des résumés, des quiz, des plans en quelques secondes\nRecherche académique : charge tes articles scientifiques, interroge-les comme un expert, extrait les citations clés sans te noyer dans 80 pages\nRédaction de mémoire : organise tes sources, détecte les contradictions entre auteurs, construis ta problématique avec l’IA comme co-pilote\nPourquoi NotebookLM et pas ChatGPT ? : comparaison honnête sur le terrain — fiabilité des sources, ancrage documentaire, confidentialité, accès gratuit\n\nPas de code. Pas de prompt engineering. Juste tes fichiers et une méthode. Une session concrète pour les étudiants qui veulent travailler plus intelligemment, pas plus longtemps."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA & ML",
-        "en": "AI & ML"
-      }
-    ],
-    "speakerIds": ["gervais-azanga-ayissi"]
-  },
-  {
-    "id": "sz-1367658",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
-    "language": ["fr", "en"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "AI and XR technologies in Health: Empowering Healthcare workers and Elevating Patients Care",
-      "en": "AI and XR technologies in Health: Empowering Healthcare workers and Elevating Patients Care"
-    },
-    "description": {
-      "fr": "The convergence of AI and XR technologies, including Virtual Reality (VR), Augmented Reality (AR), and Mixed Reality (MR), is creating new opportunities in medical education and healthcare delivery. However, challenges such as the high cost of medical training, limited access to specialized equipment, patient safety concerns, and unequal access to quality healthcare education remain significant barriers.\n\nThis session explores how AI and XR can help overcome these challenges by combining intelligent assistance with immersive, hands-on learning. AI enables personalized guidance and real-time performance feedback, while XR provides interactive, risk-free environments where healthcare students and professionals can practise clinical procedures, visualize complex anatomy, and strengthen their decision-making skills. Beyond training, these technologies also offer promising applications in patient education, rehabilitation, and clinical care.\n\nThe session will showcase Hakkilo XR’s work in developing AI-powered immersive learning solutions that enable learners to practise clinical skills, explore complex medical scenarios, and learn from mistakes without putting patients at risk. With a focus on African healthcare contexts, it will highlight how locally developed technologies can help address infrastructure constraints, expand access to medical training, strengthen healthcare professionals’ competencies, and ultimately contribute to safer clinical practice and better patient outcomes.",
-      "en": "The convergence of AI and XR technologies, including Virtual Reality (VR), Augmented Reality (AR), and Mixed Reality (MR), is creating new opportunities in medical education and healthcare delivery. However, challenges such as the high cost of medical training, limited access to specialized equipment, patient safety concerns, and unequal access to quality healthcare education remain significant barriers.\n\nThis session explores how AI and XR can help overcome these challenges by combining intelligent assistance with immersive, hands-on learning. AI enables personalized guidance and real-time performance feedback, while XR provides interactive, risk-free environments where healthcare students and professionals can practise clinical procedures, visualize complex anatomy, and strengthen their decision-making skills. Beyond training, these technologies also offer promising applications in patient education, rehabilitation, and clinical care.\n\nThe session will showcase Hakkilo XR’s work in developing AI-powered immersive learning solutions that enable learners to practise clinical skills, explore complex medical scenarios, and learn from mistakes without putting patients at risk. With a focus on African healthcare contexts, it will highlight how locally developed technologies can help address infrastructure constraints, expand access to medical training, strengthen healthcare professionals’ competencies, and ultimately contribute to safer clinical practice and better patient outcomes."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA",
-        "en": "AI"
-      }
-    ],
-    "speakerIds": ["destin-kouam"]
-  },
-  {
-    "id": "sz-1368723",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "expert",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Comment améliorer son employabilité dans le domaine de la tech?",
-      "en": "Comment améliorer son employabilité dans le domaine de la tech?"
-    },
-    "description": {
-      "fr": "Il s'agira au travers de partages d'expériences, démontrer qu'en termes d'employabilité dans la tech, les compétences techniques seules ne suffisent pas et que les questions liées à la définition de ses objectifs de carrière, au mindset, le savoir être, la posture professionnelle, la confiance en soi, la préparation de son CV/entretiens d'embauche, le réseautage professionnel sont tout aussi importantes.",
-      "en": "Il s'agira au travers de partages d'expériences, démontrer qu'en termes d'employabilité dans la tech, les compétences techniques seules ne suffisent pas et que les questions liées à la définition de ses objectifs de carrière, au mindset, le savoir être, la posture professionnelle, la confiance en soi, la préparation de son CV/entretiens d'embauche, le réseautage professionnel sont tout aussi importantes."
-    },
-    "track": {
-      "fr": "Business",
-      "en": "Business"
-    },
-    "tags": [
-      {
-        "fr": "Business",
-        "en": "Business"
-      }
-    ],
-    "speakerIds": ["arnaud-dzudie"]
-  },
-  {
-    "id": "sz-1369967",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Automatiser une tâche répétitive avec un agent IA simple",
-      "en": "Automatiser une tâche répétitive avec un agent IA simple"
-    },
-    "description": {
-      "fr": "Dans ce lightning talk, je montrerai comment partir d’un processus répétitif du quotidien pour construire un workflow intelligent simple, sans chercher à tout maîtriser dès le départ. À travers l’exemple de demandes reçues via un formulaire, le public verra comment collecter les informations, les transmettre à un modèle d’IA pour les résumer ou les classer, puis préparer une réponse à faire valider par un humain. La session expliquera pas à pas la logique du workflow avec un outil comme Make, les choix à faire, les points de vigilance et les limites de l’automatisation. Le public repartira avec une méthode concrète : identifier un problème réel, découper le processus, choisir les bons outils, tester progressivement et garder une validation humaine pour les actions importantes.",
-      "en": "Dans ce lightning talk, je montrerai comment partir d’un processus répétitif du quotidien pour construire un workflow intelligent simple, sans chercher à tout maîtriser dès le départ. À travers l’exemple de demandes reçues via un formulaire, le public verra comment collecter les informations, les transmettre à un modèle d’IA pour les résumer ou les classer, puis préparer une réponse à faire valider par un humain. La session expliquera pas à pas la logique du workflow avec un outil comme Make, les choix à faire, les points de vigilance et les limites de l’automatisation. Le public repartira avec une méthode concrète : identifier un problème réel, découper le processus, choisir les bons outils, tester progressivement et garder une validation humaine pour les actions importantes."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA & ML",
-        "en": "AI & ML"
-      }
-    ],
-    "speakerIds": ["anita-dongmo"]
-  },
-  {
-    "id": "sz-1371401",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Cloud et cybersécurité : l’IA comme copilote de vigilance",
-      "en": "Cloud et cybersécurité : l’IA comme copilote de vigilance"
-    },
-    "description": {
-      "fr": "Durant cette session, je partagerai mon regard d’étudiante en réseaux et télécommunications sur un sujet qui évolue vite : la rencontre entre cloud, cybersécurité et intelligence artificielle. À partir de mon experience personnelle, j'essaierai de faire comprendre pourquoi le cloud change la manière de protéger les systèmes, et comment l’IA peut déjà aider à repérer des risques, analyser des alertes, résumer des journaux ou guider les premières vérifications.",
-      "en": "Durant cette session, je partagerai mon regard d’étudiante en réseaux et télécommunications sur un sujet qui évolue vite : la rencontre entre cloud, cybersécurité et intelligence artificielle. À partir de mon experience personnelle, j'essaierai de faire comprendre pourquoi le cloud change la manière de protéger les systèmes, et comment l’IA peut déjà aider à repérer des risques, analyser des alertes, résumer des journaux ou guider les premières vérifications."
-    },
-    "track": {
-      "fr": "Cloud",
-      "en": "Cloud"
-    },
-    "tags": [
-      {
         "fr": "Cloud",
         "en": "Cloud"
-      },
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      },
-      {
-        "fr": "IA",
-        "en": "AI"
       }
     ],
-    "speakerIds": ["sandra-macheu-talla"]
-  },
-  {
-    "id": "sz-1371405",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Automatiser ses vérifications réseau avec un assistant IA",
-      "en": "Automatiser ses vérifications réseau avec un assistant IA"
-    },
-    "description": {
-      "fr": "Cette session présente une méthode progressive pour automatiser les vérifications réseau à l’aide de scripts, d’outils adaptés et d’un assistant IA, afin de simplifier les contrôles répétitifs, faciliter leur utilisation en langage naturel et garder l’humain au centre de la décision réseau.",
-      "en": "Cette session présente une méthode progressive pour automatiser les vérifications réseau à l’aide de scripts, d’outils adaptés et d’un assistant IA, afin de simplifier les contrôles répétitifs, faciliter leur utilisation en langage naturel et garder l’humain au centre de la décision réseau."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA",
-        "en": "AI"
-      }
-    ],
-    "speakerIds": ["verdiane-fotso"]
-  },
-  {
-    "id": "sz-1371413",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Construire son premier réseau d’entreprise en laboratoire Ubuntu",
-      "en": "Construire son premier réseau d’entreprise en laboratoire Ubuntu"
-    },
-    "description": {
-      "fr": "Dans cette session pensée pour les débutant·es, nous allons construire un petit réseau d’entreprise en laboratoire avec Ubuntu. Le public verra comment les briques essentielles se connectent entre elles : attribuer des adresses avec DHCP, résoudre des noms avec DNS, accéder à une machine avec SSH, publier une page web et comprendre les bases d’un service de messagerie. L’objectif n’est pas de tout maîtriser en profondeur, mais de rendre visibles les mécanismes qui font fonctionner un réseau au quotidien.\nÀ travers une démonstration progressive et des commandes simples, les participant·es comprendront le rôle de chaque service, les erreurs fréquentes à surveiller et une méthode pour tester que tout fonctionne. Ils repartiront avec une vision claire d’un mini-réseau d’entreprise, un plan de lab reproductible sur Ubuntu et la confiance nécessaire pour continuer à pratiquer.",
-      "en": "Dans cette session pensée pour les débutant·es, nous allons construire un petit réseau d’entreprise en laboratoire avec Ubuntu. Le public verra comment les briques essentielles se connectent entre elles : attribuer des adresses avec DHCP, résoudre des noms avec DNS, accéder à une machine avec SSH, publier une page web et comprendre les bases d’un service de messagerie. L’objectif n’est pas de tout maîtriser en profondeur, mais de rendre visibles les mécanismes qui font fonctionner un réseau au quotidien.\nÀ travers une démonstration progressive et des commandes simples, les participant·es comprendront le rôle de chaque service, les erreurs fréquentes à surveiller et une méthode pour tester que tout fonctionne. Ils repartiront avec une vision claire d’un mini-réseau d’entreprise, un plan de lab reproductible sur Ubuntu et la confiance nécessaire pour continuer à pratiquer."
-    },
-    "track": {
-      "fr": "DevOps",
-      "en": "DevOps"
-    },
-    "tags": [
-      {
-        "fr": "DevOps",
-        "en": "DevOps"
-      },
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      },
-      {
-        "fr": "Gemini",
-        "en": "Gemini"
-      }
-    ],
-    "speakerIds": ["ange-naomy-kengne-takoumbo"]
-  },
-  {
-    "id": "sz-1372363",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr", "en"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "From Beginner to Builder: Getting Started with Google Workspace",
-      "en": "From Beginner to Builder: Getting Started with Google Workspace"
-    },
-    "description": {
-      "fr": "Google Workspace est bien plus qu'une suite d'outils bureautiques : c'est un écosystème qui permet de collaborer, d'automatiser des tâches et de créer des solutions numériques.\n\nCette session propose un parcours concret pour découvrir comment tirer parti de Gmail, Google Drive, Docs et Sheets, organiser efficacement son environnement de travail, puis explorer les possibilités d'automatisation avec Google Apps Script et de création d'applications avec AppSheet.\n\nÀ travers des exemples pratiques et une feuille de route accessible aux débutants, les participants découvriront les compétences à acquérir, les ressources pour progresser et les premières étapes pour passer du simple utilisateur à un créateur de solutions avec Google Workspace.\n\nAucune expertise préalable en développement n'est nécessaire.",
-      "en": "Google Workspace est bien plus qu'une suite d'outils bureautiques : c'est un écosystème qui permet de collaborer, d'automatiser des tâches et de créer des solutions numériques.\n\nCette session propose un parcours concret pour découvrir comment tirer parti de Gmail, Google Drive, Docs et Sheets, organiser efficacement son environnement de travail, puis explorer les possibilités d'automatisation avec Google Apps Script et de création d'applications avec AppSheet.\n\nÀ travers des exemples pratiques et une feuille de route accessible aux débutants, les participants découvriront les compétences à acquérir, les ressources pour progresser et les premières étapes pour passer du simple utilisateur à un créateur de solutions avec Google Workspace.\n\nAucune expertise préalable en développement n'est nécessaire."
-    },
-    "track": {
-      "fr": "Web",
-      "en": "Web"
-    },
-    "tags": [
-      {
-        "fr": "Web",
-        "en": "Web"
-      },
-      {
-        "fr": "Business",
-        "en": "Business"
-      },
-      {
-        "fr": "Science des données",
-        "en": "Data Science"
-      }
-    ],
-    "speakerIds": ["nathan-foka"]
-  },
-  {
-    "id": "sz-1372444",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "online": true,
-    "level": "introductory",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Les 5 erreurs de sécurité Cloud que même les experts commettent",
-      "en": "Les 5 erreurs de sécurité Cloud que même les experts commettent"
-    },
-    "description": {
-      "fr": "Votre application fonctionne, vos tests passent et votre déploiement est réussi. Mais votre infrastructure Cloud est-elle vraiment sécurisée ?\n\nParfois, une simple configuration suffit à mettre en danger toute une infrastructure.\n\nDans ce lightning talk, nous découvrirons 5 erreurs de sécurité Cloud fréquentes, que même les personnes expérimentées peuvent commettre.\n\nÀ travers des exemples concrets, nous verrons comment identifier ces erreurs et surtout comment les éviter grâce à quelques bonnes pratiques simples.\n\nL'objectif ? Repartir avec 5 réflexes de sécurité à appliquer dès votre prochain commit.\n\nPas besoin d'être expert en cybersécurité. Le talk s'adresse à tous ceux qui développent, déploient ou exploitent des applications sur Google Cloud.",
-      "en": "Votre application fonctionne, vos tests passent et votre déploiement est réussi. Mais votre infrastructure Cloud est-elle vraiment sécurisée ?\n\nParfois, une simple configuration suffit à mettre en danger toute une infrastructure.\n\nDans ce lightning talk, nous découvrirons 5 erreurs de sécurité Cloud fréquentes, que même les personnes expérimentées peuvent commettre.\n\nÀ travers des exemples concrets, nous verrons comment identifier ces erreurs et surtout comment les éviter grâce à quelques bonnes pratiques simples.\n\nL'objectif ? Repartir avec 5 réflexes de sécurité à appliquer dès votre prochain commit.\n\nPas besoin d'être expert en cybersécurité. Le talk s'adresse à tous ceux qui développent, déploient ou exploitent des applications sur Google Cloud."
-    },
-    "track": {
-      "fr": "Cloud",
-      "en": "Cloud"
-    },
-    "tags": [
-      {
-        "fr": "Cloud",
-        "en": "Cloud"
-      },
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      },
-      {
-        "fr": "DevOps",
-        "en": "DevOps"
-      }
-    ],
-    "speakerIds": ["hubert-nang"]
-  },
-  {
-    "id": "sz-1372498",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "advanced",
-    "language": ["fr"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "Securing Enterprise AI: Managing Prompt Injection and AI Application Risks",
-      "en": "Securing Enterprise AI: Managing Prompt Injection and AI Application Risks"
-    },
-    "description": {
-      "fr": "As organizations increasingly adopt generative AI to improve productivity, automate processes, and enhance customer experiences, new security risks are emerging. Prompt injection, sensitive data exposure, and the misuse of AI-powered applications can create significant operational, security, and business risks.\n\nThis session explores how organizations can identify and manage these risks while enabling secure AI adoption. We will examine realistic prompt injection scenarios, discuss their potential business impact, and demonstrate how Google Cloud Model Armor can contribute to protecting AI applications as part of a defense-in-depth strategy.\n\nBeyond technical safeguards, the session will highlight practical security and governance principles that cybersecurity leaders, IT teams, and developers can apply to build more resilient AI-enabled solutions.\n\nAttendees will leave with actionable insights to strengthen AI application security, reduce exposure to emerging threats, and support responsible AI adoption within their organizations.",
-      "en": "As organizations increasingly adopt generative AI to improve productivity, automate processes, and enhance customer experiences, new security risks are emerging. Prompt injection, sensitive data exposure, and the misuse of AI-powered applications can create significant operational, security, and business risks.\n\nThis session explores how organizations can identify and manage these risks while enabling secure AI adoption. We will examine realistic prompt injection scenarios, discuss their potential business impact, and demonstrate how Google Cloud Model Armor can contribute to protecting AI applications as part of a defense-in-depth strategy.\n\nBeyond technical safeguards, the session will highlight practical security and governance principles that cybersecurity leaders, IT teams, and developers can apply to build more resilient AI-enabled solutions.\n\nAttendees will leave with actionable insights to strengthen AI application security, reduce exposure to emerging threats, and support responsible AI adoption within their organizations."
-    },
-    "track": {
-      "fr": "Cybersécurité",
-      "en": "Cybersecurity"
-    },
-    "tags": [
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      },
-      {
-        "fr": "IA & ML",
-        "en": "AI & ML"
-      }
-    ],
-    "speakerIds": ["le-prince-dachi"]
-  },
-  {
-    "id": "sz-1373948",
-    "day": 1,
-    "kind": "workshop",
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "How Many Ice Creams Should I Make Tomorrow?",
-      "en": "How Many Ice Creams Should I Make Tomorrow?"
-    },
-    "description": {
-      "fr": "Every morning, Bruno, an ice cream seller, has the same problem: how many tubs should he take out of the freezer? Too few and he turns customers away, too many and he throws ice cream away. In this talk, I’ll show how four summers of sales in a simple notebook can replace his gut feeling with real forecasts.",
-      "en": "Every morning, Bruno, an ice cream seller, has the same problem: how many tubs should he take out of the freezer? Too few and he turns customers away, too many and he throws ice cream away. In this talk, I’ll show how four summers of sales in a simple notebook can replace his gut feeling with real forecasts."
-    },
-    "track": {
-      "fr": "IA & ML",
-      "en": "AI & ML"
-    },
-    "tags": [
-      {
-        "fr": "IA & ML",
-        "en": "AI & ML"
-      }
-    ],
-    "speakerIds": ["marie-ipouk"]
+    "speakerIds": ["danwe-basga"],
+    "time": "15:20",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    }
   },
   {
     "id": "sz-1376249",
@@ -679,82 +1090,29 @@
         "en": "Gemini"
       }
     ],
-    "speakerIds": ["david-njome"]
+    "speakerIds": ["david-njome"],
+    "time": "15:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 2",
+      "en": "Room 2"
+    }
   },
   {
-    "id": "sz-1376670",
+    "id": "sz-1353400",
     "day": 1,
-    "kind": "workshop",
+    "kind": "talk",
+    "lightning": true,
     "level": "introductory",
     "language": ["fr", "en"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "Build a Telegram Agent to Configure Ubuntu Servers",
-      "en": "Build a Telegram Agent to Configure Ubuntu Servers"
-    },
-    "description": {
-      "fr": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely.",
-      "en": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely."
-    },
-    "track": {
-      "fr": "Cybersécurité",
-      "en": "Cybersecurity"
-    },
-    "tags": [
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      }
-    ],
-    "speakerIds": ["noemie-youbissi"]
-  },
-  {
-    "id": "sz-1376783",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "introductory",
-    "language": ["fr"],
     "originalLanguage": "fr",
     "title": {
-      "fr": "Du brief au code : automatiser son workflow web junior",
-      "en": "Du brief au code : automatiser son workflow web junior"
+      "fr": "AI-Powered Learning: How to Learn Smarter",
+      "en": "AI-Powered Learning: How to Learn Smarter"
     },
     "description": {
-      "fr": "Dans cette session, je partage mon workflow de développeuse web junior, du moment où je reçois un brief jusqu’au passage au code. À partir de mon expérience d’étudiante en Génie Informatique et de projets sur lesquels j’ai travaillé, le public verra comment j’utilise l’IA comme assistant de réflexion, de structuration et de vérification, sans lui déléguer la compréhension du problème. Je raconterai aussi quelques erreurs de débutante : prompts trop vagues, confiance excessive dans une réponse, ou code copié sans assez tester. À travers un exemple concret, nous verrons comment transformer un besoin en tâches, poser de meilleures questions à l’IA, avancer étape par étape, puis relire et tester ce qui est produit. Le public repartira avec une méthode simple, réaliste et praticable pour apprendre plus vite, automatiser certaines étapes répétitives, et surtout progresser par la pratique.",
-      "en": "Dans cette session, je partage mon workflow de développeuse web junior, du moment où je reçois un brief jusqu’au passage au code. À partir de mon expérience d’étudiante en Génie Informatique et de projets sur lesquels j’ai travaillé, le public verra comment j’utilise l’IA comme assistant de réflexion, de structuration et de vérification, sans lui déléguer la compréhension du problème. Je raconterai aussi quelques erreurs de débutante : prompts trop vagues, confiance excessive dans une réponse, ou code copié sans assez tester. À travers un exemple concret, nous verrons comment transformer un besoin en tâches, poser de meilleures questions à l’IA, avancer étape par étape, puis relire et tester ce qui est produit. Le public repartira avec une méthode simple, réaliste et praticable pour apprendre plus vite, automatiser certaines étapes répétitives, et surtout progresser par la pratique."
-    },
-    "track": {
-      "fr": "Web",
-      "en": "Web"
-    },
-    "tags": [
-      {
-        "fr": "Web",
-        "en": "Web"
-      },
-      {
-        "fr": "IA",
-        "en": "AI"
-      }
-    ],
-    "speakerIds": ["raissa-wokmeni"]
-  },
-  {
-    "id": "sz-1377020",
-    "day": 1,
-    "kind": "talk",
-    "lightning": true,
-    "level": "intermediate",
-    "language": ["fr"],
-    "originalLanguage": "fr",
-    "title": {
-      "fr": "Développer avec l'intention : Maîtriser le Spec-Driven Development (SDD) avec GitHub Spec Kit",
-      "en": "Développer avec l'intention : Maîtriser le Spec-Driven Development (SDD) avec GitHub Spec Kit"
-    },
-    "description": {
-      "fr": "Le développement assisté par IA franchit une nouvelle étape avec l'approche Spec-Driven Development (SDD). Cette session explore le kit open-source GitHub Spec Kit pour structurer, planifier et exécuter des projets logiciels avec des agents de codage. Nous verrons comment transformer une idée en spécifications rigoureuses, générer des plans d'implémentation traçables via la CLI Specify, et automatiser le cycle de vie du code (de la constitution du projet au déploiement) tout en gardant un contrôle absolu sur la qualité architecturale.",
-      "en": "Le développement assisté par IA franchit une nouvelle étape avec l'approche Spec-Driven Development (SDD). Cette session explore le kit open-source GitHub Spec Kit pour structurer, planifier et exécuter des projets logiciels avec des agents de codage. Nous verrons comment transformer une idée en spécifications rigoureuses, générer des plans d'implémentation traçables via la CLI Specify, et automatiser le cycle de vie du code (de la constitution du projet au déploiement) tout en gardant un contrôle absolu sur la qualité architecturale."
+      "fr": "Ce thème explore comment l’intelligence artificielle peut nous aider à apprendre de manière plus efficace, plus personnalisée et plus active. Il ne s’agit pas simplement d’utiliser l’IA pour obtenir des réponses, mais de comprendre comment s’en servir pour mieux réviser, approfondir un sujet, identifier ses difficultés, pratiquer, recevoir des explications adaptées à son niveau et développer une meilleure méthode d’apprentissage.\n\nL’objectif est de montrer comment faire de l’IA un véritable outil d’accompagnement, sans remplacer la réflexion, l’effort personnel ni l’esprit critique.",
+      "en": "Ce thème explore comment l’intelligence artificielle peut nous aider à apprendre de manière plus efficace, plus personnalisée et plus active. Il ne s’agit pas simplement d’utiliser l’IA pour obtenir des réponses, mais de comprendre comment s’en servir pour mieux réviser, approfondir un sujet, identifier ses difficultés, pratiquer, recevoir des explications adaptées à son niveau et développer une meilleure méthode d’apprentissage.\n\nL’objectif est de montrer comment faire de l’IA un véritable outil d’accompagnement, sans remplacer la réflexion, l’effort personnel ni l’esprit critique."
     },
     "track": {
       "fr": "IA & ML",
@@ -764,16 +1122,108 @@
       {
         "fr": "IA",
         "en": "AI"
-      },
-      {
-        "fr": "Gestion de produit",
-        "en": "Product Management"
-      },
-      {
-        "fr": "IA & ML",
-        "en": "AI & ML"
       }
     ],
-    "speakerIds": ["freddy-choudja"]
+    "speakerIds": ["samuel-de-essaka"],
+    "time": "15:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 3",
+      "en": "Room 3"
+    }
+  },
+  {
+    "id": "sz-1353994",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "intermediate",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "VPS ou Cloud : comment choisir la bonne infrastructure pour son application ?",
+      "en": "VPS ou Cloud : comment choisir la bonne infrastructure pour son application ?"
+    },
+    "description": {
+      "fr": "Cette question revient souvent lorsqu’on doit déployer une application, un site web ou une API. Pourtant, le meilleur choix ne dépend pas uniquement du prix ou du fait que « le cloud est plus moderne et plus flexible ».\n\nDans cette session, nous allons comparer concrètement les deux approches et surtout comprendre quand choisir un VPS, quand privilégier le Cloud, et pourquoi.",
+      "en": "Cette question revient souvent lorsqu’on doit déployer une application, un site web ou une API. Pourtant, le meilleur choix ne dépend pas uniquement du prix ou du fait que « le cloud est plus moderne et plus flexible ».\n\nDans cette session, nous allons comparer concrètement les deux approches et surtout comprendre quand choisir un VPS, quand privilégier le Cloud, et pourquoi."
+    },
+    "track": {
+      "fr": "Cloud",
+      "en": "Cloud"
+    },
+    "tags": [
+      {
+        "fr": "Cloud",
+        "en": "Cloud"
+      },
+      {
+        "fr": "Web",
+        "en": "Web"
+      },
+      {
+        "fr": "DevOps",
+        "en": "DevOps"
+      }
+    ],
+    "speakerIds": ["emerson-folong"],
+    "time": "15:50",
+    "durationMin": 25,
+    "room": {
+      "fr": "Salle 4",
+      "en": "Room 4"
+    }
+  },
+  {
+    "id": "agenda-genui-making-mobile-interfaces-dynamic-with-ai",
+    "time": "15:50",
+    "durationMin": 25,
+    "day": 1,
+    "kind": "talk",
+    "language": ["en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "GenUI: Making Mobile Interfaces Dynamic with AI",
+      "en": "GenUI: Making Mobile Interfaces Dynamic with AI"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Général",
+      "en": "General"
+    },
+    "room": {
+      "fr": "Salle 5",
+      "en": "Room 5"
+    },
+    "tags": [],
+    "speakerIds": []
+  },
+  {
+    "id": "agenda-closing",
+    "time": "17:00",
+    "durationMin": 120,
+    "day": 1,
+    "kind": "break",
+    "title": {
+      "fr": "Divers et fin des programmes",
+      "en": "Miscellaneous & end of the programme"
+    },
+    "description": {
+      "fr": "",
+      "en": ""
+    },
+    "track": {
+      "fr": "Programme",
+      "en": "Programme"
+    },
+    "room": {
+      "fr": "Toutes les salles",
+      "en": "All rooms"
+    },
+    "tags": [],
+    "speakerIds": []
   }
 ]

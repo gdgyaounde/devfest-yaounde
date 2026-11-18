@@ -75,6 +75,9 @@ export async function VenueCard() {
             <h2 className="mt-1 font-sans text-display-l font-bold leading-tight text-black02">
               {EVENT.venue}
             </h2>
+            <p className="font-sans text-body-l font-bold text-black02/85">
+              {EVENT.venueFull[locale]}
+            </p>
             {EVENT.venueRoom && (
               <p className="font-sans text-heading-m font-bold text-black02/85">
                 {EVENT.venueRoom}
@@ -208,6 +211,9 @@ export async function VenueBand() {
             <h2 className="mt-5 font-sans text-display-hero font-bold leading-[0.85] text-black02">
               {EVENT.venueShort}
             </h2>
+            <p className="mt-3 max-w-xl font-sans text-heading-m font-bold leading-snug text-black02/85">
+              {EVENT.venueFull[locale]}
+            </p>
           </Reveal>
           <Reveal index={3}>
             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">

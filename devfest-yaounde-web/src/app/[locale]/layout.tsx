@@ -153,6 +153,8 @@ export default async function LocaleLayout({
     tickets, which is false once sales have closed. Past the cutoff the
     fallback is a "see you on the day" line instead.
   */
+  const eventDate = formatEventDates(l, [settings.eventDate]) ?? "";
+  const venue = EVENT.venue ?? EVENT.city;
   const fallback = salesOpen
     ? undefined
     : tAnnouncement("afterSales", {
@@ -166,11 +168,15 @@ export default async function LocaleLayout({
       ? tAnnouncement("salesClose", {
           date: salesCutoff!.date,
           time: salesCutoff!.time,
+          eventDate,
+          venue,
         })
       : reserveBanner
         ? tAnnouncement("reservationsOpen", {
             date: reservationsCutoff?.date ?? "",
             time: reservationsCutoff?.time ?? "",
+            eventDate,
+            venue,
           })
         : cfsBanner
           ? tCfs("banner")

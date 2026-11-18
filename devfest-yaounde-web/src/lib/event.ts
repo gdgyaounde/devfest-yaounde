@@ -50,6 +50,11 @@ export const EVENT = {
   venue: "FMSB Yaoundé" as string | null,
   /** The venue's short name — what the hero leads with (the city is the caption). */
   venueShort: "FMSB",
+  /** What FMSB stands for, as the organisers gave it. Shown where the venue is introduced. */
+  venueFull: {
+    fr: "Faculté de Médecine et des Sciences Biomédicales de Yaoundé",
+    en: "Faculty of Medicine and Biomedical Sciences Yaoundé",
+  },
   /** The room inside the venue. */
   venueRoom: "Amphi 350" as string | null,
   venueStreet: null as string | null,
@@ -364,7 +369,12 @@ export function eventJsonLd(
     location: {
       "@type": "Place",
       name: EVENT.venue
-        ? [EVENT.venue, EVENT.venueRoom].filter(Boolean).join(" — ")
+        ? [
+            `${EVENT.venueFull[locale]} (${EVENT.venueShort})`,
+            EVENT.venueRoom,
+          ]
+            .filter(Boolean)
+            .join(" — ")
         : EVENT.city,
       geo: {
         "@type": "GeoCoordinates",

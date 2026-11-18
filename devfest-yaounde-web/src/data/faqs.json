@@ -7,8 +7,8 @@
       "en": "What is DevFest Yaoundé?"
     },
     "answer": {
-      "fr": "DevFest Yaoundé, c'est le grand rendez-vous annuel de notre communauté, organisé par GDG Yaoundé — une journée complète de talks, d'ateliers et de vraies conversations avec des développeurs, designers et passionnés de tech du Cameroun et d'ailleurs. Moins « conférence », plus « une super journée avec sa communauté ».",
-      "en": "DevFest Yaoundé is our community's flagship yearly conference, organized by GDG Yaoundé — a full day of talks, workshops, and hallway conversations with developers, designers, and tech enthusiasts from Cameroon and beyond. Think less \"conference,\" more \"a really good day with your community.\""
+      "fr": "DevFest Yaoundé, c'est le grand rendez-vous annuel de notre communauté, organisé par GDG Yaoundé — une journée complète (de 8h à 19h) de talks, d'ateliers et de vraies conversations répartis sur cinq salles, avec des développeurs, designers et passionnés de tech du Cameroun et d'ailleurs. Moins « conférence », plus « une super journée avec sa communauté ».",
+      "en": "DevFest Yaoundé is our community's flagship yearly conference, organized by GDG Yaoundé — a full day (08:00 to 19:00) of talks, workshops, and hallway conversations across five rooms, with developers, designers, and tech enthusiasts from Cameroon and beyond. Think less \"conference,\" more \"a really good day with your community.\""
     }
   },
   {
@@ -50,8 +50,8 @@
       "en": "When and where is it happening?"
     },
     "answer": {
-      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026 à FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroun). La section « Quand et où » de la page d'accueil donne la date et un lien vers le point exact sur Maps, et le programme de la journée est sur la page Programme.",
-      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026 at FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroon). The venue section on the home page has the date and a link to the exact spot on Maps, and the day's schedule is on the Schedule page."
+      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026. Il se tient à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350. Le bloc « Quand et où » de la page d'accueil donne la date et un lien vers le point exact sur Maps, et le programme complet est sur la page Programme.",
+      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026. It is held at the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350. The venue section on the home page has the date and a link to the exact spot on Maps, and the full agenda is on the Schedule page."
     },
     "cta": {
       "label": {
@@ -59,6 +59,25 @@
         "en": "See the venue"
       },
       "href": "/#venue"
+    }
+  },
+  {
+    "id": "faq-agenda",
+    "category": "general",
+    "question": {
+      "fr": "Le programme est-il disponible ?",
+      "en": "Is the agenda available?"
+    },
+    "answer": {
+      "fr": "Oui — le programme est en ligne. La journée va de 8h00 (accueil) à 19h00 sur cinq salles, avec l'ouverture à 9h00, des talks et des ateliers toute la journée, des pauses, une session partenaires et un concours de pitch. Les salles sont ouvertes à tous : choisis ce qui te plaît. Certaines entrées peuvent encore bouger, jette donc un œil à la page Programme le jour J.",
+      "en": "Yes — the agenda is live. The day runs from 08:00 (check-in) to 19:00 across five rooms, with the opening at 09:00, talks and workshops all day, breaks, a partner session and a pitch contest. Rooms are open to everyone: pick what you like. Some entries may still move, so check the Schedule page on the day."
+    },
+    "cta": {
+      "label": {
+        "fr": "Voir le programme",
+        "en": "See the agenda"
+      },
+      "href": "/schedule"
     }
   },
   {
@@ -108,8 +127,8 @@
       "en": "What ticket types are available?"
     },
     "answer": {
-      "fr": "Cinq paliers, nommés d'après les versions de Claude (oui, vraiment). Haikyu est gratuit : il te fait entrer aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le repas et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier. Les pass payants se réservent désormais sur le site et se paient en espèces sur place, à leur prix de base.",
-      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag. Paid passes are now reserved on the site and paid in cash at the venue, at their base price."
+      "fr": "Cinq catégories, nommées d'après des modèles Claude (oui, vraiment). Haikyu est gratuit : il donne accès aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le déjeuner et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier. Les paiements en ligne sont clos : les pass payants se réservent désormais sur le site et se paient en espèces sur place — Sonnet 5 000, Opus 6 500, Fable 12 000, Mythos 27 000 XAF.",
+      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag. Online payments are closed: paid passes are now reserved on the site and paid in cash at the venue — Sonnet 5,000, Opus 6,500, Fable 12,000, Mythos 27,000 XAF."
     },
     "cta": {
       "label": {
@@ -165,8 +184,8 @@
       "en": "What does it mean to reserve?"
     },
     "answer": {
-      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix de base (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 17h00.",
-      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at base price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 17:00."
+      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix en espèces (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 17h00.",
+      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at the cash price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 17:00."
     },
     "cta": {
       "label": {
@@ -184,8 +203,8 @@
       "en": "Can I just show up and pay on the day?"
     },
     "answer": {
-      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 17h00), viens à FMSB Yaoundé, Amphi 350 et paie en espèces sur place. Les pass gratuits se réservent toujours sur notre page communautaire.",
-      "en": "Yes. After reservations close (Friday 20 November, 17:00), come to FMSB Yaoundé, Amphi 350 and pay in cash on the spot. Free passes are still reserved on our community page."
+      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 17h00), viens à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350, et paie en espèces sur place, au prix en espèces. Les pass gratuits se réservent toujours sur notre page communautaire.",
+      "en": "Yes. After reservations close (Friday 20 November, 17:00), come to the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350, and pay in cash on the spot, at the cash price. Free passes are still reserved on our community page."
     },
     "cta": {
       "label": {
@@ -297,8 +316,8 @@
       "en": "What should I bring?"
     },
     "answer": {
-      "fr": "Juste toi-même, une pièce d'identité valide au nom indiqué sur ton billet, et peut-être une veste si tu es frileux dans les salles climatisées. Les laptops sont bienvenus si tu suis un atelier.",
-      "en": "Just yourself, a valid ID matching the name on your ticket, and maybe a jacket if you run cold in AC'd rooms. Laptops are welcome if you're following along with a workshop."
+      "fr": "Toi-même, une pièce d'identité valide au nom de ton billet, ta référence de réservation si tu as réservé (et de quoi payer en espèces), et peut-être une veste si tu as vite froid dans les salles climatisées. Les ordinateurs portables sont les bienvenus pour suivre un atelier.",
+      "en": "Yourself, a valid ID matching the name on your ticket, your reservation reference if you reserved (and cash to pay it), and maybe a jacket if you run cold in AC'd rooms. Laptops are welcome if you're following along with a workshop."
     }
   },
   {
@@ -359,8 +378,8 @@
       "en": "Can I buy merch without buying a ticket?"
     },
     "answer": {
-      "fr": "Oui — la boutique est ouverte à toutes et à tous, billet ou pas, avant, pendant et après l'événement. Acheter du merch ne transforme pas un pass gratuit en pass payant, en revanche : le repas, les identifiants et le swag de palier restent liés aux billets payants.",
-      "en": "Yes — the shop is open to everyone, ticket or not, before, during and after the event. Buying merch doesn't turn a free pass into a paid one, though: food, event identifiers and tier swag stay with paid tickets."
+      "fr": "Oui — la boutique est ouverte à tous, avec ou sans billet. Les paiements en ligne étant clos, les articles se réservent désormais sur le site (jusqu'au vendredi 20 novembre à 17h00) et se paient en espèces en les récupérant sur place. Réserver du merch ne transforme pas un pass gratuit en pass payant : le repas, les identifiants et le swag des paliers restent liés aux billets payants.",
+      "en": "Yes — the shop is open to everyone, ticket or not. Online payments are closed, so shop items are now reserved on the site (until Friday 20 November at 17:00) and paid in cash when you collect them at the venue. Reserving merch doesn't turn a free pass into a paid one, though: food, event identifiers and tier swag stay with paid tickets."
     },
     "cta": {
       "label": {
@@ -378,8 +397,8 @@
       "en": "How do I get my order — pickup or delivery?"
     },
     "answer": {
-      "fr": "Au moment de payer, tu choisis retrait sur place ou livraison directement dans le récapitulatif de commande.",
-      "en": "You choose pickup at the venue or shipping right in the order summary at checkout."
+      "fr": "Les articles réservés se récupèrent — et se paient en espèces — à la table merch sur place ; il n'y a pas d'expédition. Apporte ta référence de réservation. Les commandes payées en ligne avant la clôture se récupèrent aussi là-bas.",
+      "en": "Reserved items are collected — and paid for in cash — at the merch table at the venue; there is no shipping. Bring your reservation reference. Orders paid online before the cutoff are collected there too."
     }
   },
   {
@@ -390,8 +409,8 @@
       "en": "Can I return or exchange something I bought?"
     },
     "answer": {
-      "fr": "Pas de remboursement en cas de changement d'avis, mais si un article arrive abîmé, défectueux ou incorrect — ou qu'un vêtement ne te va pas — écris-nous et on trouve un échange, selon le stock disponible.",
-      "en": "Change-of-mind purchases aren't refundable, but if something arrives damaged, defective, or wrong — or apparel just doesn't fit — reach out and we'll sort out an exchange, subject to stock."
+      "fr": "Articles achetés en ligne avant la clôture : les achats « sur un coup de tête » ne sont pas remboursables, mais si un article est abîmé, défectueux ou erroné — ou si un vêtement ne va pas — écris-nous et nous verrons un échange, selon le stock. Articles réservés et payés en espèces : vérifie-les à la table avant de payer, et annule ta réservation depuis ton compte si tu changes d'avis.",
+      "en": "Items bought online before the cutoff: change-of-mind purchases aren't refundable, but if something is damaged, defective, or wrong — or apparel just doesn't fit — reach out and we'll sort out an exchange, subject to stock. Items reserved and paid in cash: check them at the table before you pay, and cancel your reservation from your account if you change your mind."
     }
   },
   {
@@ -402,8 +421,8 @@
       "en": "What if a product I want is sold out?"
     },
     "answer": {
-      "fr": "Les articles épuisés sont clairement indiqués sur la boutique. Repasse de temps en temps — on se réapprovisionne parfois.",
-      "en": "Sold-out items are marked clearly on the shop page. Check back — we sometimes restock."
+      "fr": "Les articles épuisés sont clairement indiqués sur la page boutique et ne peuvent pas être réservés. Repasse nous voir — nous réassortissons parfois.",
+      "en": "Sold-out items are marked clearly on the shop page and can't be reserved. Check back — we sometimes restock."
     }
   },
   {

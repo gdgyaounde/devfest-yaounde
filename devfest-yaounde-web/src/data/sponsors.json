@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "impact-hub-yaounde",
+    "name": "Impact Hub Yaoundé",
+    "logoUrl": "/sponsors/impact-hub-yaounde.png",
+    "tier": "community",
+    "websiteUrl": "https://yaounde.impacthub.net/",
+    "blurb": {
+      "en": "A youth- and women-led social innovation space, co-working hub and incubator in Yaoundé, part of a global network of 50+ Impact Hubs backing entrepreneurs who put people and the planet first.",
+      "fr": "Un espace d'innovation sociale, de coworking et un incubateur à Yaoundé, porté par des jeunes et des femmes, membre d'un réseau mondial de plus de 50 Impact Hubs qui soutiennent les entrepreneurs engagés pour les gens et la planète."
+    }
+  },
+  {
+    "id": "tic-foundation",
+    "name": "Tech Innovation Center (TiC)",
+    "logoUrl": "/sponsors/tic-foundation.png",
+    "tier": "community",
+    "websiteUrl": "https://www.linkedin.com/company/tic-foundation/home/",
+    "blurb": {
+      "en": "The TiC Foundation uses technology to solve everyday problems in African communities, and equips Cameroon's next generation of tech entrepreneurs with digital and business skills.",
+      "fr": "La Fondation TiC utilise la technologie pour résoudre les problèmes du quotidien des communautés africaines, et outille la prochaine génération d'entrepreneurs tech du Cameroun avec les compétences numériques et business nécessaires."
+    }
+  }
+]

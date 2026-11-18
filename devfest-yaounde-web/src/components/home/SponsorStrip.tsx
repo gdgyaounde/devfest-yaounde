@@ -45,10 +45,12 @@ export async function SponsorStrip({
   style?: React.CSSProperties;
 }) {
   const t = await getTranslations("home.sponsors");
-  const seats = sponsorSeats(sponsors);
+  // Only the logos that exist (ADR 0085): the dashed "open seat" boxes are
+  // gone now that partners have signed — the ask sits beside the logos, as the
+  // last item of ONE row, instead of being implied by empty slots.
+  const seats = sponsorSeats(sponsors, sponsors.length);
   const scrolls = sponsors.length >= SPONSOR_SEATS;
   const asking = sponsorCallOpen(call);
-  const open = seats.length - sponsors.length;
 
   return (
     <div
@@ -70,7 +72,9 @@ export async function SponsorStrip({
               ? // No flex `gap` in the scrolling case — spacing is a per-item
                 // margin so the -50% loop lands exactly on the seam.
                 `${marqueeLoop} flex w-max items-center`
-              : "mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5 sm:gap-4 sm:px-8"
+              : // ONE row: logos then the ask. On a phone it scrolls sideways
+                // rather than wrapping onto a second line.
+                "mx-auto flex max-w-6xl flex-nowrap items-center gap-3 overflow-x-auto px-5 sm:gap-4 sm:px-8"
           }
         >
           <SponsorRow seats={seats} scrolls={scrolls} />
@@ -92,11 +96,6 @@ export async function SponsorStrip({
           )}
         </div>
       </div>
-
-      {/* The count, for anyone who cannot see a row of dashed boxes. The
-          visual seats are decorative and hidden from AT; this sentence is
-          what carries their meaning. */}
-      {open > 0 && <p className="sr-only">{t("openSeats", { count: open })}</p>}
     </div>
   );
 }

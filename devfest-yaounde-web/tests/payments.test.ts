@@ -7,7 +7,7 @@
  *
  * Run with `npm test`.
  */
-import { after, before, describe, it } from "node:test";
+import { after, before, describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import {
   createHash,
@@ -111,12 +111,21 @@ import { dealColumns } from "@/lib/dp/wall-layout";
 const DEPOSIT = "11111111-2222-3333-4444-555555555555";
 
 before(() => {
+  // These tests price carts as they were BEFORE payments closed (12:00 on
+  // Wed 18 Nov, ADR 0084). Pin the clock to that morning so they do not turn
+  // red the moment the real cutoff passes; the closed phases are covered in
+  // ticketing-cutoff.test.ts.
+  mock.timers.enable({
+    apis: ["Date"],
+    now: Date.UTC(2026, 10, 18, 9, 0, 0),
+  });
   process.env.BADGE_CODE_SECRET = "test-secret-that-is-comfortably-long-enough";
   process.env.CLAIM_TOKEN_SECRET =
     "another-test-secret-comfortably-long-enough";
 });
 
 after(() => {
+  mock.timers.reset();
   delete process.env.BADGE_CODE_SECRET;
   delete process.env.CLAIM_TOKEN_SECRET;
 });

@@ -57,10 +57,10 @@
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
     "dismiss": "Fermer l'annonce",
     "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous.",
-    "salesClose": "Les paiements en ligne ferment {date} à {time} — ensuite, réserve ta place et paie en espèces sur place. Tu as déjà un billet ? Tu peux modifier ton nom et ta taille de T-shirt depuis ton compte jusque-là.",
+    "salesClose": "📍 {eventDate} · {venue} — Les paiements en ligne ferment {date} à {time} — ensuite, réserve ta place et paie en espèces sur place. Tu as déjà un billet ? Tu peux modifier ton nom et ta taille de T-shirt depuis ton compte jusque-là.",
     "salesCloseCta": "Billets",
     "afterSales": "Les réservations sont closes — rendez-vous le {date} à {venue} ! Paiement en espèces sur place 🎉",
-    "reservationsOpen": "Les paiements en ligne sont clos — réserve ta place (billets ou boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
+    "reservationsOpen": "📍 {eventDate} · {venue} — Les paiements en ligne sont clos — réserve ta place (billets ou boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
     "reserveCta": "Réserver"
   },
   "offline": {
@@ -1143,5 +1143,10 @@
     "newTab": "(s'ouvre dans un nouvel onglet)",
     "when": "Quand",
     "where": "Où"
+  },
+  "agendaPopup": {
+    "title": "Notre programme est en ligne",
+    "body": "Le programme complet du {date} est en ligne : cinq salles, des talks, des ateliers, un concours de pitch et bien plus. Jette-y un œil et prépare ta journée.",
+    "cta": "Voir le programme"
   }
 }
