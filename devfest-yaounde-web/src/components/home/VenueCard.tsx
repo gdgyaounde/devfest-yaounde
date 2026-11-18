@@ -34,7 +34,6 @@ export async function VenueCard() {
     weekday: "long",
     timeZone: "Africa/Douala",
   }).format(new Date(`${settings.eventDate}T12:00:00+01:00`));
-  const { latitude, longitude } = EVENT.venueGeo;
 
   const label =
     "font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65";
@@ -84,10 +83,7 @@ export async function VenueCard() {
               </p>
             )}
             <p className="mt-2 text-body-m text-black02/75">
-              {EVENT.city}, Cameroun ·{" "}
-              <span className="font-mono text-caption">
-                {latitude.toFixed(5)}, {longitude.toFixed(5)}
-              </span>
+              {EVENT.city}, Cameroun
             </p>
           </div>
         </div>
@@ -237,10 +233,6 @@ export async function VenueBand() {
                 {t("openMaps")}
                 <span className="sr-only">{t("newTab")}</span>
               </Button>
-              <span className="font-mono text-caption font-bold text-black02/70">
-                {EVENT.venueGeo.latitude.toFixed(5)},{" "}
-                {EVENT.venueGeo.longitude.toFixed(5)}
-              </span>
             </div>
           </Reveal>
         </div>

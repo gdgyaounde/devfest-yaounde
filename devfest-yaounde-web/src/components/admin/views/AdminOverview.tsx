@@ -90,12 +90,19 @@ export function AdminOverview({
   );
   const orders = seriesByDay(data.orders.rows);
   const wall = seriesByDay(data.wallCards);
+  // Reservations (ADR 0084): cancelled ones are not demand.
+  const live = data.reservations.filter((r) => r.status !== "cancelled");
+  const reservations = seriesByDay(live);
+  const reservedCash = seriesByDay(
+    live.map((r) => ({ createdAt: r.createdAt, amount: r.totalXaf })),
+  );
   const labels = [
     ...new Set([
       ...tickets.labels,
       ...revenue.labels,
       ...orders.labels,
       ...wall.labels,
+      ...reservations.labels,
     ]),
   ].sort();
 
@@ -171,7 +178,8 @@ export function AdminOverview({
           The edition so far
         </h2>
         <p className="mt-1 text-body-m text-black02/70">
-          Counts on the left axis, settled XAF on the right.
+          Counts on the left axis; settled XAF and cash reserved (to collect at
+          the venue) on the right.
         </p>
         <div className="mt-4">
           <AdminChart
@@ -188,6 +196,11 @@ export function AdminOverview({
                 color: "#4285f4",
               },
               {
+                label: "Reservations",
+                values: align(labels, reservations),
+                color: "#57caff",
+              },
+              {
                 label: "DP cards",
                 values: align(labels, wall),
                 color: "#34a853",
@@ -196,6 +209,12 @@ export function AdminOverview({
                 label: "Revenue (XAF)",
                 values: align(labels, revenue),
                 color: "#1e1e1e",
+                axis: "y1",
+              },
+              {
+                label: "Reserved cash (XAF)",
+                values: align(labels, reservedCash),
+                color: "#7a7a7a",
                 axis: "y1",
               },
             ]}
@@ -303,7 +322,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
   return (
     <Panel
       title="Commerce recap"
-      subtitle="Tickets and the shop, and every item to account for — the contents of each ticket's box plus what shop orders and reservations contain. Refunded orders and cancelled orders and reservations are left out."
+      subtitle="Paid online and reserved (cash at the venue, marked Reserved) side by side. Tickets and the shop, and every item to account for — the contents of each ticket's box plus what shop orders and reservations contain. Refunded orders and cancelled orders and reservations are left out."
       action={
         <ExportButton
           filename="devfest-commerce-recap.csv"
@@ -314,7 +333,8 @@ function CommerceRecap({ data }: { data: AdminData }) {
     >
       {nothing ? (
         <p className="text-body-m text-black02/70">
-          Nothing sold yet — the recap fills in as tickets and orders come in.
+          Nothing sold or reserved yet — the recap fills in as tickets, orders
+          and reservations come in.
         </p>
       ) : (
         <div className="flex flex-col gap-7">
@@ -380,7 +400,13 @@ function CommerceRecap({ data }: { data: AdminData }) {
             <div className="mt-3">
               <DataTable
                 compact
-                headers={["Tier", "Base price", "Sold", "Reserved"]}
+                headers={[
+                  "Tier",
+                  "Base price",
+                  "Paid online",
+                  "Reserved (cash)",
+                  "Total",
+                ]}
                 empty="No tickets yet."
                 rows={[
                   ...commerce.tickets.map((t) => [
@@ -389,7 +415,8 @@ function CommerceRecap({ data }: { data: AdminData }) {
                     </span>,
                     money(t.priceXAF, "XAF"),
                     String(t.sold),
-                    String(t.reserved),
+                    <ReservedMark key="r" n={t.reserved} />,
+                    <strong key="t">{t.sold + t.reserved}</strong>,
                   ]),
                   ...(commerce.tickets.length
                     ? [
@@ -400,6 +427,9 @@ function CommerceRecap({ data }: { data: AdminData }) {
                           "",
                           <strong key="t">{commerce.ticketsSold}</strong>,
                           <strong key="r">{commerce.ticketsReserved}</strong>,
+                          <strong key="t">
+                            {commerce.ticketsSold + commerce.ticketsReserved}
+                          </strong>,
                         ],
                       ]
                     : []),
@@ -415,35 +445,109 @@ function CommerceRecap({ data }: { data: AdminData }) {
             <div className="mt-3">
               <DataTable
                 compact
-                headers={["Product", "Option", "Units", "Revenue"]}
-                empty="No shop orders yet."
-                rows={[
-                  ...commerce.shop.map((s) => [
-                    s.name,
-                    s.variant || "—",
-                    String(s.quantity),
-                    money(s.revenue, "XAF"),
-                  ]),
-                  ...(commerce.shop.length
-                    ? [
-                        [
-                          <span key="a" className={mono}>
-                            All products
-                          </span>,
-                          "",
-                          <strong key="u">{commerce.shopUnits}</strong>,
-                          <strong key="r">
-                            {money(commerce.shopRevenue, "XAF")}
-                          </strong>,
-                        ],
-                      ]
-                    : []),
+                headers={[
+                  "Product",
+                  "Option",
+                  "Paid online",
+                  "Reserved (cash)",
+                  "Total",
+                  "Revenue",
                 ]}
+                empty="No shop orders yet."
+                rows={(() => {
+                  // One row per product + option, paid online and reserved
+                  // side by side, so nothing is counted twice or hidden.
+                  const merged = new Map<
+                    string,
+                    {
+                      name: string;
+                      variant: string;
+                      paid: number;
+                      reserved: number;
+                      revenue: number;
+                    }
+                  >();
+                  for (const x of commerce.shop) {
+                    merged.set(`${x.productId}|${x.variant}`, {
+                      name: x.name,
+                      variant: x.variant,
+                      paid: x.quantity,
+                      reserved: 0,
+                      revenue: x.revenue,
+                    });
+                  }
+                  for (const x of commerce.reservedShop) {
+                    const key = `${x.productId}|${x.variant}`;
+                    const row = merged.get(key) ?? {
+                      name: x.name,
+                      variant: x.variant,
+                      paid: 0,
+                      reserved: 0,
+                      revenue: 0,
+                    };
+                    row.reserved += x.quantity;
+                    merged.set(key, row);
+                  }
+                  const list = [...merged.values()].sort(
+                    (p, q) =>
+                      p.name.localeCompare(q.name) ||
+                      p.variant.localeCompare(q.variant),
+                  );
+                  return [
+                    ...list.map((x) => [
+                      x.name,
+                      x.variant || "—",
+                      String(x.paid),
+                      <ReservedMark key="r" n={x.reserved} />,
+                      <strong key="t">{x.paid + x.reserved}</strong>,
+                      money(x.revenue, "XAF"),
+                    ]),
+                    ...(list.length
+                      ? [
+                          [
+                            <span key="a" className={mono}>
+                              All products
+                            </span>,
+                            "",
+                            <strong key="u">{commerce.shopUnits}</strong>,
+                            <strong key="rs">
+                              {list.reduce((n, x) => n + x.reserved, 0)}
+                            </strong>,
+                            <strong key="t">
+                              {list.reduce(
+                                (n, x) => n + x.paid + x.reserved,
+                                0,
+                              )}
+                            </strong>,
+                            <strong key="r">
+                              {money(commerce.shopRevenue, "XAF")}
+                            </strong>,
+                          ],
+                        ]
+                      : []),
+                  ];
+                })()}
               />
             </div>
           </div>
         </div>
       )}
     </Panel>
+  );
+}
+
+/**
+ * A reserved count, marked so it is never mistaken for a paid one: a pill
+ * with the word, not colour alone. Zero stays a plain dash.
+ */
+function ReservedMark({ n }: { n: number }) {
+  if (n === 0) return <span className="text-black02/40">—</span>;
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <strong>{n}</strong>
+      <span className="rounded-pill border border-black02/40 bg-pastel px-2 py-0.5 font-mono text-mono-tag font-bold uppercase text-black02">
+        Reserved
+      </span>
+    </span>
   );
 }
