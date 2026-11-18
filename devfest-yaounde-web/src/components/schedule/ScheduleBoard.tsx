@@ -21,9 +21,6 @@ const GROUP_LABEL_KEY: Record<ProgrammeGroup, string> = {
   other: "groupOther",
 };
 
-/** Slight per-card tilt so the timeline reads as pinned notes, not a table. */
-const CARD_TILT = [-0.8, 0.6, -0.5, 0.9, -0.7];
-
 export interface ScheduleBoardProps {
   sessions: Session[];
   speakers?: Speaker[];
@@ -331,7 +328,6 @@ export function ScheduleBoard({
                           setOpenId(openId === s.id ? null : s.id)
                         }
                         variant="timeline"
-                        tilt={CARD_TILT[(i + j) % CARD_TILT.length]}
                         showCalendar={showCalendar}
                         detailsHref={detailsFor(s.id)}
                       />
@@ -434,7 +430,6 @@ export function ScheduleBoard({
                             setOpenId(openId === s.id ? null : s.id)
                           }
                           variant="timeline"
-                          tilt={CARD_TILT[(gi + i) % CARD_TILT.length]}
                           showCalendar={showCalendar}
                           detailsHref={detailsFor(s.id)}
                         />
