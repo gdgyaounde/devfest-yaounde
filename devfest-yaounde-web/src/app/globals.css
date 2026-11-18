@@ -1116,6 +1116,11 @@ html:has([data-preloader]) body {
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
+/* Storytime's field (ADR 0087): its whole bordered card lights up on focus
+   (border + offset shadow), so a second ring inside it would be noise. */
+[data-story-field]:focus-visible {
+  outline: none;
+}
 
 /* ---------------------------------------------------------------------------
    The admin sidebar's scrollbar, shown only while it is moving.

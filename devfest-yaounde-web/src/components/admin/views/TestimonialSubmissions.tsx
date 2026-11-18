@@ -24,7 +24,7 @@ const TABS: { key: Status; label: string }[] = [
 ];
 
 /**
- * Anonymous testimonials sent from /testimonial (ADR 0087). Nothing reaches
+ * Anonymous testimonials sent from /storytime (ADR 0087). Nothing reaches
  * the wall's Stories until it is approved here. Self-fetching: these are not
  * part of the editorial content, so they do not travel with the dashboard's
  * main load.
@@ -84,7 +84,7 @@ export function TestimonialSubmissions() {
     );
   }
 
-  const link = `${SITE_URL}/testimonial`;
+  const link = `${SITE_URL}/storytime`;
   const count = (s: Status) =>
     (rows ?? []).filter((r) => r.status === s).length;
   const shown = (rows ?? []).filter((r) => r.status === tab);

@@ -2008,8 +2008,7 @@ html:has([data-preloader="held"]) .hero-settle {
 
 /*
   Deliberately SLOW and soft — the one place on the site where motion should
-  feel like breathing, not bouncing. Long ease-out fades, small travel, and a
-  barely-there swell on the background shape. Nothing here is required to
+  feel like breathing, not bouncing. Long ease-out fades and small travel. Nothing here is required to
   read or to write.
 */
 @keyframes calm-in {
@@ -2022,20 +2021,9 @@ html:has([data-preloader="held"]) .hero-settle {
     transform: none;
   }
 }
-@keyframes calm-breathe {
-  from {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1.06);
-  }
-}
 .anim-calm-in {
   animation: calm-in 1600ms var(--ease-out-devfest) both;
   animation-delay: var(--calm-delay, 0ms);
-}
-.anim-calm-breathe {
-  animation: calm-breathe 9s ease-in-out infinite alternate;
 }
 /* A long cross-fade, toggled by a class rather than replayed by a key. */
 .calm-fade {
@@ -2049,17 +2037,47 @@ html:has([data-preloader="held"]) .hero-settle {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .anim-calm-in,
-  .anim-calm-breathe {
+  .anim-calm-in {
     animation: none !important;
     opacity: 1 !important;
-  }
-  .anim-calm-breathe {
-    transform: translate(-50%, -50%) !important;
   }
   .calm-fade,
   .calm-fade[data-shown="false"] {
     transition: opacity 200ms linear !important;
     transform: none !important;
+  }
+}
+
+/* --- Storytime intro (ADR 0087): words surface like ink on a page -------- */
+@keyframes story-word {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+.anim-story-word {
+  display: inline-block;
+  opacity: 0;
+  animation: story-word 900ms var(--ease-out-devfest) forwards;
+  animation-delay: var(--word-delay, 0ms);
+}
+/* The textarea grows with what is written, never snapping. */
+.story-grow {
+  transition: height 320ms var(--ease-out-devfest);
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-story-word {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+  .story-grow {
+    transition: none !important;
   }
 }

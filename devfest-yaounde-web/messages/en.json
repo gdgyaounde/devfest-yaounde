@@ -61,7 +61,8 @@
     "salesCloseCta": "Get tickets",
     "afterSales": "Reservations are closed — see you on {date} at {venue}! Pay cash on the spot 🎉",
     "reservationsOpen": "📍 {eventDate} · {venue} — Online payments are closed — reserve your spot (tickets or shop) until {date} at {time}, then pay cash at the venue.",
-    "reserveCta": "Reserve"
+    "reserveCta": "Reserve",
+    "wallStories": "Every word here was left by someone in this community — anonymous stories from the editions of DevFest Yaoundé, told one at a time. Thank you for each one of them."
   },
   "offline": {
     "banner": "You're offline — {pages} still work."
@@ -1199,11 +1200,11 @@
     "counter": "{count} / {max}",
     "tooLong": "{over} characters too many",
     "roleLabel": "Your role (optional)",
-    "rolePlaceholder": "I was… (optional)",
+    "rolePlaceholder": "I was…",
     "roleOtherLabel": "Your role",
     "roleOtherPlaceholder": "Your role",
     "editionLabel": "Edition (optional)",
-    "editionPlaceholder": "Which edition? (optional)",
+    "editionPlaceholder": "Which edition?",
     "editionOtherLabel": "Edition",
     "editionOtherPlaceholder": "Edition",
     "other": "Other…",
@@ -1224,7 +1225,9 @@
       "sponsor": "Sponsor",
       "partner": "Partner"
     },
-    "welcomeTitle": "Welcome.",
-    "welcomeBody": "Let's look back at the road we've travelled together."
+    "introOnce": "Once upon a time, in Yaoundé…",
+    "introCommunity": "…a community began to write its story.",
+    "introTurn": "Now, it's your turn.",
+    "skip": "Tap to skip"
   }
 }

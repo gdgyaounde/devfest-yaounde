@@ -1,10 +1,18 @@
 "use client";
 
-import { ArrowRight, CaretDown } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { PreloaderDots } from "@/components/global/PreloaderDots";
 import { Link } from "@/i18n/navigation";
-import { calmBreathe, calmDelay, calmFade, calmIn } from "@/lib/motion";
+import {
+  calmDelay,
+  calmFade,
+  calmIn,
+  storyGrow,
+  storyWord,
+  wordDelay,
+} from "@/lib/motion";
 import {
   MESSAGE_MAX,
   MESSAGE_MIN,
@@ -13,23 +21,46 @@ import {
   TESTIMONIAL_ROLES,
   cleanMessage,
 } from "@/lib/testimonials/rules";
-
-const OTHER = "__other";
+import { useMediaQuery } from "@/lib/use-media-query";
+import { ChoicePicker, OTHER } from "./ChoicePicker";
 
 type Choice = { kind: "preset" | "other"; value: string } | null;
 
 /**
- * The testimonial page (ADR 0087): one screen, one sentence.
+ * The intro, as a timeline (ms from landing). A storybook opening:
+ *   "Once upon a time, in Yaoundé…" surfaces word by word,
+ *   the years count up from the first edition to this one,
+ *   "…a community began to write its story.",
+ *   "Now, it's your turn." — and the page opens onto the blank one.
+ */
+const FIRST_YEAR = 2016;
+const LAST_YEAR = 2026;
+/**
+ * Each line fades OUT fully before the next fades in (IN_DELAY), so two lines
+ * are never on screen at once — one sentence at a time, like turning a page.
+ */
+const IN_DELAY = 900;
+const T_YEARS = 2400;
+const YEAR_STEP = 150;
+const T_COUNT = T_YEARS + IN_DELAY + 200;
+const T_LINE2 = T_COUNT + (LAST_YEAR - FIRST_YEAR) * YEAR_STEP + 700;
+const T_LINE3 = T_LINE2 + IN_DELAY + 1800;
+const T_DONE = T_LINE3 + IN_DELAY + 1700;
+
+type Stage = "line1" | "years" | "line2" | "line3" | "done";
+
+/**
+ * Storytime (ADR 0087): one screen, one blank page, one story.
  *
- * Tap anywhere and the cursor is in the text. Role and edition sit quietly
- * at the bottom, both optional, both with an "Other" that turns into a small
- * field. Sending fades the page out slowly and a thank-you fades in — calm,
- * not celebratory: the point is the story, not the button.
+ * A short storybook intro, then a single centred field that grows as you
+ * write. Role and edition are optional pills underneath. Sending fades the
+ * page out and a thank-you fades in — calm, not celebratory.
  */
 export function TestimonialComposer() {
   const t = useTranslations("testimonial");
   const tr = useTranslations("testimonial.roles");
   const locale = useLocale() === "en" ? "en" : "fr";
+  const calm = useMediaQuery("(prefers-reduced-motion: reduce)");
   const textRef = useRef<HTMLTextAreaElement>(null);
   const counterId = useId();
 
@@ -41,27 +72,65 @@ export function TestimonialComposer() {
   const [website, setWebsite] = useState("");
   const [state, setState] = useState<"writing" | "sending" | "sent">("writing");
   const [error, setError] = useState<string | null>(null);
-  // The welcome: a greeting that fades in, holds, and gives way to the page.
-  // Any key or tap skips it; under reduced motion it never shows.
-  const [welcome, setWelcome] = useState(true);
+
+  // ------------------------------------------------------------- the intro
+  const [stage, setStage] = useState<Stage>("line1");
+  const [year, setYear] = useState(FIRST_YEAR);
   useEffect(() => {
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const id = window.setTimeout(() => setWelcome(false), calm ? 0 : 2600);
-    const skip = () => setWelcome(false);
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const timers: number[] = [];
+    const at = (ms: number, fn: () => void) =>
+      timers.push(window.setTimeout(fn, reduce ? 0 : ms));
+    if (reduce) {
+      at(0, () => setStage("done"));
+    } else {
+      at(T_YEARS, () => setStage("years"));
+      for (let y = FIRST_YEAR + 1; y <= LAST_YEAR; y++) {
+        const yy = y;
+        at(T_COUNT + (y - FIRST_YEAR) * YEAR_STEP, () => setYear(yy));
+      }
+      at(T_LINE2, () => setStage("line2"));
+      at(T_LINE3, () => setStage("line3"));
+      at(T_DONE, () => setStage("done"));
+    }
+    // Any key or tap skips straight to the page.
+    const skip = () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      setYear(LAST_YEAR);
+      setStage("done");
+    };
     window.addEventListener("keydown", skip, { once: true });
     window.addEventListener("pointerdown", skip, { once: true });
     return () => {
-      window.clearTimeout(id);
+      timers.forEach((id) => window.clearTimeout(id));
       window.removeEventListener("keydown", skip);
       window.removeEventListener("pointerdown", skip);
     };
   }, []);
+  const intro = stage !== "done";
   useEffect(() => {
-    if (!welcome && state === "writing") textRef.current?.focus();
-  }, [welcome, state]);
+    if (!intro && state === "writing") textRef.current?.focus();
+  }, [intro, state]);
+
+  // ------------------------------------------- the field grows as you write
+  useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [message, intro]);
 
   const length = cleanMessage(message).length;
   const ready = length >= MESSAGE_MIN && length <= MESSAGE_MAX;
+  // Long stories step down a size so they keep fitting, gently.
+  const size =
+    length > 200
+      ? "text-[clamp(1.25rem,2.6vw,2.25rem)]"
+      : length > 110
+        ? "text-[clamp(1.4rem,3.1vw,2.75rem)]"
+        : "text-[clamp(1.6rem,3.6vw,3.25rem)]";
 
   const choice = (value: string, other: string): Choice =>
     value === ""
@@ -116,13 +185,15 @@ export function TestimonialComposer() {
     setEditionOther("");
     setError(null);
     setState("writing");
-    window.setTimeout(() => textRef.current?.focus(), 50);
   }
 
-  const select =
-    "appearance-none rounded-pill border-2 border-black02/25 bg-transparent py-2 pl-4 pr-9 font-sans text-body-m text-black02 transition-colors duration-300 hover:border-black02/60 focus:border-black02 focus:outline-none";
-  const other =
-    "w-40 rounded-pill border-2 border-black02/25 bg-transparent px-4 py-2 font-sans text-body-m text-black02 placeholder:text-black02/40 focus:border-black02 focus:outline-none";
+  const words = (text: string, start = 0, step = 160) =>
+    text.split(" ").map((w, i) => (
+      <span key={i} className={storyWord} style={wordDelay(start + i * step)}>
+        {w}
+        {" "}
+      </span>
+    ));
 
   return (
     <main
@@ -131,207 +202,180 @@ export function TestimonialComposer() {
       data-quiet
       className="relative flex h-[100svh] flex-col overflow-hidden bg-pastel"
     >
-      {/* One large, flat, slowly swelling shape: the only decoration. */}
-      <span
-        aria-hidden
-        className={`${calmBreathe} pointer-events-none absolute left-1/2 top-1/2 h-[70vmax] w-[70vmax] rounded-full bg-halftone/25`}
-      />
+      {/* The gentle dot field: a soft light wandering over a printed page. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <PreloaderDots calm={calm} base={0.05} peak={0.32} />
+      </div>
 
-      <header
-        className={`${calmIn} relative z-10 flex items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8`}
-      >
+      <header className="relative z-10 flex items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8">
         <Link
           href="/"
           className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/55 transition-colors hover:text-black02"
         >
           DevFest Yaoundé
         </Link>
+        {intro && (
+          <span className="font-mono text-caption text-black02/45">
+            {t("skip")}
+          </span>
+        )}
       </header>
 
-      {/* ---------------------------------------------------------- welcome */}
+      {/* ------------------------------------------------------------ intro */}
       <div
-        data-shown={welcome}
-        aria-hidden={!welcome}
-        className={`${calmFade} pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center`}
+        data-shown={intro}
+        aria-hidden={!intro}
+        className={`${calmFade} pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-6 text-center`}
       >
-        <p
-          className={`${calmIn} font-sans text-[clamp(2.25rem,6vw,5rem)] font-bold leading-tight text-black02`}
-          style={calmDelay(150)}
-        >
-          {t("welcomeTitle")}
-        </p>
-        <p
-          className={`${calmIn} mt-4 text-body-l text-black02/70`}
-          style={calmDelay(700)}
-        >
-          {t("welcomeBody")}
-        </p>
+        <div className="relative grid w-full max-w-4xl place-items-center [&>*]:col-start-1 [&>*]:row-start-1">
+          <p
+            data-shown={stage === "line1"}
+            className={`${calmFade} font-sans text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-tight text-black02`}
+          >
+            {words(t("introOnce"))}
+          </p>
+          <p
+            data-shown={stage === "years"}
+            style={{
+              transitionDelay: stage === "years" ? `${IN_DELAY}ms` : "0ms",
+            }}
+            className={`${calmFade} font-sans text-[clamp(5rem,18vw,14rem)] font-bold leading-none tabular-nums text-black02`}
+          >
+            {year}
+          </p>
+          <p
+            data-shown={stage === "line2"}
+            style={{
+              transitionDelay: stage === "line2" ? `${IN_DELAY}ms` : "0ms",
+            }}
+            className={`${calmFade} font-sans text-[clamp(1.75rem,4.5vw,3.75rem)] font-bold leading-tight text-black02`}
+          >
+            {stage === "line2" || stage === "line3"
+              ? words(t("introCommunity"), IN_DELAY, 130)
+              : null}
+          </p>
+          <p
+            data-shown={stage === "line3"}
+            style={{
+              transitionDelay: stage === "line3" ? `${IN_DELAY}ms` : "0ms",
+            }}
+            className={`${calmFade} font-sans text-[clamp(2.25rem,6vw,5rem)] font-bold leading-tight text-black02`}
+          >
+            {stage === "line3" ? words(t("introTurn"), IN_DELAY, 220) : null}
+          </p>
+        </div>
       </div>
 
       {/* ---------------------------------------------------------- writing */}
       <div
-        data-shown={!welcome && state !== "sent"}
-        aria-hidden={welcome || state === "sent"}
-        inert={welcome || state === "sent"}
-        className={`${calmFade} relative z-10 flex min-h-0 flex-1 flex-col`}
+        data-shown={!intro && state !== "sent"}
+        aria-hidden={intro || state === "sent"}
+        inert={intro || state === "sent"}
+        className={`${calmFade} relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-5 pb-6 sm:px-10`}
       >
-        {/* Tap anywhere in this area and you are typing. */}
-        <div
-          className="flex min-h-0 flex-1 cursor-text flex-col px-6 pt-[8svh] sm:justify-center sm:px-10 sm:pt-0 lg:px-24"
-          onClick={() => textRef.current?.focus()}
-        >
-          <h1
-            className={`${calmIn} font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/60`}
-            style={calmDelay(250)}
-          >
+        <div className="flex w-full max-w-3xl flex-col">
+          <h1 className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/60">
             {t("prompt")}
           </h1>
-          <label htmlFor="testimonial-text" className="sr-only">
-            {t("label")}
-          </label>
-          <textarea
-            id="testimonial-text"
-            ref={textRef}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength={MESSAGE_MAX + 40}
-            rows={4}
-            placeholder={t("placeholder")}
-            aria-describedby={counterId}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) void send();
-            }}
-            className={`${calmIn} mt-5 min-h-0 w-full flex-1 resize-none border-0 bg-transparent p-0 font-sans text-[clamp(1.5rem,4.2vw,3.75rem)] sm:flex-none font-bold leading-[1.15] text-black02 caret-primary placeholder:text-black02/30 focus:outline-none`}
-            style={calmDelay(500)}
-          />
-          <p
-            id={counterId}
-            aria-live="polite"
-            className={`mt-4 font-mono text-caption transition-colors duration-500 ${
-              length > MESSAGE_MAX
-                ? "text-black02"
-                : length >= MESSAGE_MIN
-                  ? "text-black02/55"
-                  : "text-black02/35"
-            }`}
+
+          {/* The page: a bordered field that grows with the story. */}
+          <div
+            className="mt-4 cursor-text rounded-lg border-2 border-black02/20 bg-offwhite/60 px-5 py-4 transition-[border-color,box-shadow,background-color] duration-300 focus-within:border-black02 focus-within:bg-offwhite focus-within:shadow-[0_5px_0_0_var(--color-black02)] sm:px-7 sm:py-6"
+            onClick={() => textRef.current?.focus()}
           >
-            {length > MESSAGE_MAX
-              ? t("tooLong", { over: length - MESSAGE_MAX })
-              : t("counter", { count: length, max: MESSAGE_MAX })}
-          </p>
-        </div>
-
-        {/* Optional details, then send. */}
-        <div
-          className={`${calmIn} flex flex-wrap items-end gap-3 px-6 pb-6 sm:px-10 sm:pb-8 lg:px-24`}
-          style={calmDelay(900)}
-        >
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="relative">
-              <label htmlFor="testimonial-role" className="sr-only">
-                {t("roleLabel")}
-              </label>
-              <select
-                id="testimonial-role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className={select}
-              >
-                <option value="">{t("rolePlaceholder")}</option>
-                {TESTIMONIAL_ROLES.map((r) => (
-                  <option key={r} value={r}>
-                    {tr(r)}
-                  </option>
-                ))}
-                <option value={OTHER}>{t("other")}</option>
-              </select>
-              <CaretDown
-                size={14}
-                weight="bold"
-                aria-hidden
-                className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-black02/60"
-              />
-            </span>
-            {role === OTHER && (
-              <input
-                aria-label={t("roleOtherLabel")}
-                value={roleOther}
-                maxLength={OTHER_MAX}
-                onChange={(e) => setRoleOther(e.target.value)}
-                placeholder={t("roleOtherPlaceholder")}
-                className={`${calmIn} ${other}`}
-                autoFocus
-              />
-            )}
+            <label htmlFor="testimonial-text" className="sr-only">
+              {t("label")}
+            </label>
+            <textarea
+              id="testimonial-text"
+              data-story-field
+              ref={textRef}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              maxLength={MESSAGE_MAX + 40}
+              rows={2}
+              placeholder={t("placeholder")}
+              aria-describedby={counterId}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) void send();
+              }}
+              className={`${storyGrow} block max-h-[48svh] min-h-[3.2em] w-full resize-none overflow-y-auto border-0 bg-transparent p-0 font-sans ${size} font-bold leading-[1.2] text-black02 caret-primary transition-[font-size] duration-500 placeholder:text-black02/30 focus:outline-none`}
+            />
+            <p
+              id={counterId}
+              aria-live="polite"
+              className={`mt-3 text-right font-mono text-caption transition-colors duration-500 ${
+                length > MESSAGE_MAX
+                  ? "text-black02"
+                  : length >= MESSAGE_MIN
+                    ? "text-black02/55"
+                    : "text-black02/35"
+              }`}
+            >
+              {length > MESSAGE_MAX
+                ? t("tooLong", { over: length - MESSAGE_MAX })
+                : t("counter", { count: length, max: MESSAGE_MAX })}
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="relative">
-              <label htmlFor="testimonial-edition" className="sr-only">
-                {t("editionLabel")}
-              </label>
-              <select
-                id="testimonial-edition"
-                value={edition}
-                onChange={(e) => setEdition(e.target.value)}
-                className={select}
-              >
-                <option value="">{t("editionPlaceholder")}</option>
-                {TESTIMONIAL_EDITIONS.map((y) => (
-                  <option key={y} value={y}>
-                    DevFest {y}
-                  </option>
-                ))}
-                <option value={OTHER}>{t("other")}</option>
-              </select>
-              <CaretDown
-                size={14}
-                weight="bold"
-                aria-hidden
-                className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-black02/60"
-              />
-            </span>
-            {edition === OTHER && (
-              <input
-                aria-label={t("editionOtherLabel")}
-                value={editionOther}
-                maxLength={OTHER_MAX}
-                onChange={(e) => setEditionOther(e.target.value)}
-                placeholder={t("editionOtherPlaceholder")}
-                className={`${calmIn} ${other}`}
-                autoFocus
-              />
-            )}
-          </div>
+          {/* Optional details, then send. */}
+          <div className="mt-5 flex flex-wrap items-center gap-2.5">
+            <ChoicePicker
+              label={t("roleLabel")}
+              placeholder={t("rolePlaceholder")}
+              options={TESTIMONIAL_ROLES.map((r) => ({
+                value: r,
+                label: tr(r),
+              }))}
+              value={role}
+              onChange={setRole}
+              otherLabel={t("other")}
+              otherValue={roleOther}
+              onOtherChange={setRoleOther}
+              otherMax={OTHER_MAX}
+            />
+            <ChoicePicker
+              label={t("editionLabel")}
+              placeholder={t("editionPlaceholder")}
+              options={TESTIMONIAL_EDITIONS.map((y) => ({
+                value: y,
+                label: y,
+              }))}
+              value={edition}
+              onChange={setEdition}
+              otherLabel={t("other")}
+              otherValue={editionOther}
+              onOtherChange={setEditionOther}
+              otherMax={OTHER_MAX}
+            />
 
-          {/* Honeypot: off-screen, unlabelled for people, skipped by tab. */}
-          <input
-            type="text"
-            name="website"
-            tabIndex={-1}
-            autoComplete="off"
-            aria-hidden
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            className="absolute -left-[9999px] h-px w-px opacity-0"
-          />
+            {/* Honeypot: off-screen, unlabelled for people, skipped by tab. */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              className="absolute -left-[9999px] h-px w-px opacity-0"
+            />
 
-          <div className="ml-auto flex flex-col items-end gap-2">
-            {error && (
-              <p role="alert" className="text-body-m text-black02/80">
-                {error}
-              </p>
-            )}
             <button
               type="button"
               onClick={() => void send()}
               disabled={!ready || state === "sending"}
-              className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-7 py-3.5 font-sans text-body-l font-bold text-black02 transition-[opacity,transform] duration-500 ease-out-devfest hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-30 motion-reduce:transform-none"
+              className="ml-auto inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-7 py-3 font-sans text-body-l font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-[opacity,transform,box-shadow] duration-500 ease-out-devfest hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none motion-reduce:transform-none"
             >
               {state === "sending" ? t("sending") : t("send")}
               <ArrowRight size={20} weight="bold" aria-hidden />
             </button>
           </div>
+          {error && (
+            <p role="alert" className="mt-3 text-body-m text-black02/80">
+              {error}
+            </p>
+          )}
         </div>
       </div>
 
@@ -347,16 +391,22 @@ export function TestimonialComposer() {
           role="status"
           className="max-w-3xl font-sans text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-black02"
         >
-          {state === "sent" ? t("thanksTitle") : ""}
+          {state === "sent" ? words(t("thanksTitle"), 700, 140) : ""}
         </p>
-        <p className="mt-5 max-w-xl text-body-l text-black02/70">
+        <p
+          className={`${state === "sent" ? calmIn : ""} mt-5 max-w-xl text-body-l text-black02/70`}
+          style={calmDelay(2200)}
+        >
           {t("thanksBody")}
         </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div
+          className={`${state === "sent" ? calmIn : ""} mt-10 flex flex-wrap items-center justify-center gap-4`}
+          style={calmDelay(2700)}
+        >
           <button
             type="button"
             onClick={reset}
-            className="rounded-pill border-2 border-black02 px-6 py-3 font-sans text-body-m font-bold text-black02 transition-colors hover:bg-halftone/40"
+            className="rounded-pill border-2 border-black02 bg-offwhite px-6 py-3 font-sans text-body-m font-bold text-black02 transition-colors hover:bg-halftone/40"
           >
             {t("again")}
           </button>

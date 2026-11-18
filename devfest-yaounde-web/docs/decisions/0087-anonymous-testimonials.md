@@ -9,11 +9,11 @@ The team wants people to leave a few words about what DevFest Yaoundé has meant
 
 ## Decision
 
-- **Writing:** `/testimonial` (both locales). One screen with no site chrome, no scroll and no splash. A greeting fades in and gives way to one large text field. Tap anywhere to type. The message is 20–280 characters; the home page's own testimonials run 80–175. Role is optional, from attendee / speaker / volunteer / organiser / sponsor / partner, or Other typed by hand. Edition is optional, from 2016–2026, or Other. Motion uses the new calm presets (`calmIn`, `calmBreathe`, `calmFade` in `motion.css`), all disabled under reduced motion.
+- **Writing:** `/storytime` (both locales). One screen with no site chrome, no scroll and no splash, over a gentle version of the hero's dot field (`PreloaderDots` with `base`/`peak` lowered). A storybook intro plays first: "Once upon a time, in Yaoundé…", the years counting 2016 → 2026, "…a community began to write its story.", "Now, it's your turn." One line shows at a time and words surface from a blur. Tap or press a key to skip; it doesn't play under reduced motion. Then a centred, bordered field that lights up on focus and grows with the text; long stories step the type down a size instead of scrolling. The message is 20–280 characters. Role and edition are optional pill pickers (a small sheet of pills, with "Other…" turning into a text field), not native selects. Motion presets: `calmIn`, `calmFade`, `storyWord`, `storyGrow`.
 - **Storage:** table `testimonials` (migration 0039). It holds only the message, role, edition, locale and status. No name, account, email or IP is stored. RLS is on with no policies.
 - **Abuse:** same-origin only, 5 per hour per IP (the address is used only for the counter), and a honeypot field.
 - **Moderation:** every submission is `pending`. Admin → Testimonials → Submissions has Approve, "Don't show" / "Take off the wall", and Delete, all audited, plus a copy-link button.
-- **Display:** the wall gets a Cards / Stories switch in its navbar (`/wall?view=stories`). Stories shows approved testimonials one at a time with a long cross-fade. The faint year sits behind each one. Oldest edition plays first, undated ones last, then the reel loops. It refreshes every minute. There is no separate public page for reading them.
+- **Display:** the wall gets a Cards / Stories switch in its navbar (`/wall?view=stories`). Stories has its own banner line and shows approved testimonials one at a time with a long cross-fade. The faint year sits behind each one. Oldest edition plays first, undated ones last, then the reel loops. It refreshes every minute. There is no separate public page for reading them.
 
 ## Consequences
 

@@ -128,10 +128,17 @@ export function confettiPieceStyle(
   } as CSSProperties;
 }
 
-/** Calm presets (ADR 0087): slow fade-up on mount, a slow swell, a long cross-fade. */
+/** Calm presets (ADR 0087): slow fade-up on mount and a long cross-fade. */
 export const calmIn = "anim-calm-in";
-export const calmBreathe = "anim-calm-breathe";
 export const calmFade = "calm-fade";
 export function calmDelay(ms: number): CSSProperties {
   return { "--calm-delay": `${ms}ms` } as CSSProperties;
 }
+
+/** Storytime intro: one word surfacing (blur → sharp), staggered by `wordDelay`. */
+export const storyWord = "anim-story-word";
+export function wordDelay(ms: number): CSSProperties {
+  return { "--word-delay": `${ms}ms` } as CSSProperties;
+}
+/** Smooth height changes on an auto-growing field. */
+export const storyGrow = "story-grow";

@@ -61,7 +61,8 @@
     "salesCloseCta": "Billets",
     "afterSales": "Les réservations sont closes — rendez-vous le {date} à {venue} ! Paiement en espèces sur place 🎉",
     "reservationsOpen": "📍 {eventDate} · {venue} — Les paiements en ligne sont clos — réserve ta place (billets ou boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
-    "reserveCta": "Réserver"
+    "reserveCta": "Réserver",
+    "wallStories": "Chaque mot ici a été laissé par quelqu'un de cette communauté — des histoires anonymes des éditions du DevFest Yaoundé, racontées une à une. Merci pour chacune d'elles."
   },
   "offline": {
     "banner": "Tu es hors ligne — {pages} restent disponibles."
@@ -1199,11 +1200,11 @@
     "counter": "{count} / {max}",
     "tooLong": "{over} caractères de trop",
     "roleLabel": "Ton rôle (facultatif)",
-    "rolePlaceholder": "J'étais… (facultatif)",
+    "rolePlaceholder": "J'étais…",
     "roleOtherLabel": "Ton rôle",
     "roleOtherPlaceholder": "Ton rôle",
     "editionLabel": "Édition (facultatif)",
-    "editionPlaceholder": "Quelle édition ? (facultatif)",
+    "editionPlaceholder": "Quelle édition ?",
     "editionOtherLabel": "Édition",
     "editionOtherPlaceholder": "Édition",
     "other": "Autre…",
@@ -1224,7 +1225,9 @@
       "sponsor": "Sponsor",
       "partner": "Partenaire"
     },
-    "welcomeTitle": "Bienvenue.",
-    "welcomeBody": "Regardons ensemble le chemin parcouru."
+    "introOnce": "Il était une fois, à Yaoundé…",
+    "introCommunity": "…une communauté a commencé à écrire son histoire.",
+    "introTurn": "À toi de raconter.",
+    "skip": "Touche pour passer"
   }
 }

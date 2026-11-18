@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { navSettle } from "@/lib/motion";
 import { announcementDismissKey } from "@/lib/announcement-key";
 import { useBeforeInstant } from "@/lib/use-before-instant";
@@ -131,19 +132,55 @@ export function GlobalChrome({
           style={{ gridTemplateRows: bannerOpen ? "1fr" : "0fr" }}
         >
           <div className="min-h-0 overflow-hidden">
-            <AnnouncementBanner
-              onDismiss={dismiss}
-              hidden={!bannerOpen}
-              dismissible={!onWall}
-              messageKey={onWall ? "wall" : undefined}
-              messageOverride={onWall ? undefined : announcementMessage}
-              cta={onWall ? undefined : announcementCta}
-            />
+            {onWall ? (
+              /* The wall's own line — one for the cards, one for Stories
+                 (ADR 0087). Suspense because the mode is in the query string,
+                 and this bar renders on every static page too. */
+              <Suspense
+                fallback={
+                  <AnnouncementBanner
+                    onDismiss={dismiss}
+                    hidden={!bannerOpen}
+                    dismissible={false}
+                    messageKey="wall"
+                  />
+                }
+              >
+                <WallBanner onDismiss={dismiss} hidden={!bannerOpen} />
+              </Suspense>
+            ) : (
+              <AnnouncementBanner
+                onDismiss={dismiss}
+                hidden={!bannerOpen}
+                dismissible
+                messageOverride={announcementMessage}
+                cta={announcementCta}
+              />
+            )}
           </div>
         </div>
 
         <Navbar compact={scrolled} nav={nav} />
       </div>
     </header>
+  );
+}
+
+/** The wall's banner: the cards' line, or Stories' own (`?view=stories`). */
+function WallBanner({
+  onDismiss,
+  hidden,
+}: {
+  onDismiss: () => void;
+  hidden: boolean;
+}) {
+  const stories = useSearchParams()?.get("view") === "stories";
+  return (
+    <AnnouncementBanner
+      onDismiss={onDismiss}
+      hidden={hidden}
+      dismissible={false}
+      messageKey={stories ? "wallStories" : "wall"}
+    />
   );
 }

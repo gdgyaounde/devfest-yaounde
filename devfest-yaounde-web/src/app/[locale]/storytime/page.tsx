@@ -12,7 +12,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "testimonial" });
   return pageMetadata({
     locale,
-    path: "/testimonial",
+    path: "/storytime",
     title: t("metaTitle"),
     description: t("metaDesc"),
     // A form to fill in, reached by a shared link or a QR code — not a
@@ -22,10 +22,10 @@ export async function generateMetadata({
 }
 
 /**
- * `/{locale}/testimonial` — leave a few anonymous words about DevFest
+ * `/{locale}/storytime` — leave a few anonymous words about DevFest
  * Yaoundé (ADR 0087). One screen, no chrome: see `TestimonialComposer`.
  */
-export default async function TestimonialPage({
+export default async function StorytimePage({
   params,
 }: {
   params: Promise<{ locale: string }>;

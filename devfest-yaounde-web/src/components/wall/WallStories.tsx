@@ -2,7 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { calmBreathe, calmFade } from "@/lib/motion";
+import { PreloaderDots } from "@/components/global/PreloaderDots";
+import { calmFade } from "@/lib/motion";
+import { useMediaQuery } from "@/lib/use-media-query";
 import {
   TESTIMONIAL_ROLES,
   type PublicTestimonial,
@@ -26,6 +28,7 @@ const REFRESH_MS = 60_000;
 export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
   const t = useTranslations("pages.wall.stories");
   const tr = useTranslations("testimonial.roles");
+  const calm = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [stories, setStories] = useState(initial);
   const [index, setIndex] = useState(0);
   const [shown, setShown] = useState(true);
@@ -87,10 +90,10 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
 
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-pastel px-6 pb-28 pt-10 sm:px-16">
-      <span
-        aria-hidden
-        className={`${calmBreathe} pointer-events-none absolute left-1/2 top-1/2 h-[75vmax] w-[75vmax] rounded-full bg-halftone/25`}
-      />
+      {/* The same gentle dot field as Storytime: a soft light over a page. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <PreloaderDots calm={calm} base={0.05} peak={0.3} />
+      </div>
 
       {story ? (
         <>
@@ -130,7 +133,7 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
 
       {/* How to add yours — at the top, clear of the wall's bottom bar. */}
       <p className="absolute inset-x-6 top-6 text-center font-mono text-caption text-black02/60 sm:top-8">
-        {t("addYours", { url: `${SITE_HOST}/testimonial` })}
+        {t("addYours", { url: `${SITE_HOST}/storytime` })}
       </p>
     </div>
   );

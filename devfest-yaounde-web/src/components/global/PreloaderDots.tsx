@@ -57,8 +57,13 @@ export function PreloaderDots({
   calm,
   follow = false,
   ink = "#1E1E1E",
+  base = BASE_ALPHA,
+  peak = PEAK_ALPHA,
 }: {
   calm: boolean;
+  /** Resting and highlight opacity — lower both for a gentler field. */
+  base?: number;
+  peak?: number;
   /** Point the highlight at the pointer instead of drifting it. */
   follow?: boolean;
   ink?: string;
@@ -143,8 +148,7 @@ export function PreloaderDots({
 
           const d = Math.hypot(sx - hx, sy - hy);
           const fall = Math.max(0, 1 - d / reach);
-          ctx.globalAlpha =
-            BASE_ALPHA + (PEAK_ALPHA - BASE_ALPHA) * fall * fall;
+          ctx.globalAlpha = base + (peak - base) * fall * fall;
 
           ctx.beginPath();
           ctx.arc(x, y, RADIUS, 0, Math.PI * 2);
@@ -220,7 +224,7 @@ export function PreloaderDots({
       visibility?.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
     };
-  }, [calm, follow, ink]);
+  }, [calm, follow, ink, base, peak]);
 
   return (
     <canvas
