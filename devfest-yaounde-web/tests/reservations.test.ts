@@ -269,6 +269,45 @@ describe("priceReservation (cash, base prices)", () => {
   });
 });
 
+describe("cash price at the venue (ADR 0084)", () => {
+  it("a reservation is priced at venuePriceXAF when set, else the base price", () => {
+    const withCash = [
+      tier({ id: "sonnet", priceXAF: 3500, venuePriceXAF: 5000 }),
+      tier({ id: "opus", priceXAF: 5000, includesApparel: false }),
+    ];
+    const priced = priceReservation(
+      {
+        tickets: [
+          { tierId: "sonnet", name: "Ada", apparelSize: "M" },
+          { tierId: "opus", name: "Bruno" },
+        ],
+        items: [],
+      },
+      withCash,
+      products,
+    );
+    assert.equal(priced.totalXaf, 5000 + 5000);
+  });
+
+  it("shop lines use the product's cash price too", () => {
+    const priced = priceReservation(
+      { tickets: [], items: [{ productId: "mug", quantity: 2 }] },
+      tiers,
+      [product({ id: "mug", priceXAF: 2000, venuePriceXAF: 2500 })],
+    );
+    assert.equal(priced.totalXaf, 5000);
+  });
+
+  it("the repo has the mug's cash price the organisers asked for", async () => {
+    const { readFileSync } = await import("node:fs");
+    const json = JSON.parse(readFileSync("src/data/products.json", "utf8"));
+    assert.equal(
+      json.find((p: { id: string }) => p.id === "mug-community").venuePriceXAF,
+      2500,
+    );
+  });
+});
+
 describe("reservationGate", () => {
   it("opens only between the cutoff and the deadline", () => {
     assert.equal(reservationGate("selling"), "reservations_not_open");

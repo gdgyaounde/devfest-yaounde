@@ -42,8 +42,8 @@ const CUTOFF = "2026-11-18T12:00:00+01:00";
 const CUTOFF_MS = Date.UTC(2026, 10, 18, 11, 0, 0);
 /** Edits still close at 23:59 the same day. */
 const EDITS_MS = Date.UTC(2026, 10, 18, 22, 59, 0);
-/** Reservations close Friday 23:59 (22:59 UTC). */
-const RESERVATIONS_MS = Date.UTC(2026, 10, 20, 22, 59, 0);
+/** Reservations close Friday 17:00 (16:00 UTC). */
+const RESERVATIONS_MS = Date.UTC(2026, 10, 20, 16, 0, 0);
 
 const settings = (
   salesCloseAt: string | null,
@@ -81,7 +81,7 @@ describe("the repo default cutoff", () => {
     assert.equal(Date.parse(TICKET_EDITS_CLOSE_AT), EDITS_MS);
   });
 
-  it("closes reservations Friday 20 November at 23:59", () => {
+  it("closes reservations Friday 20 November at 17:00", () => {
     assert.equal(Date.parse(RESERVATIONS_CLOSE_AT), RESERVATIONS_MS);
   });
 });
@@ -104,7 +104,7 @@ describe("salesPhase (ADR 0084)", () => {
     assert.equal(at(RESERVATIONS_MS - 1), "reserving");
   });
 
-  it("is cash at the door from Friday 23:59", () => {
+  it("is cash at the door from Friday 17:00", () => {
     assert.equal(at(RESERVATIONS_MS), "door");
     assert.equal(at(Date.UTC(2026, 10, 21, 8, 0, 0)), "door");
   });

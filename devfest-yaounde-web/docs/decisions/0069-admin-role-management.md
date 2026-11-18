@@ -26,11 +26,11 @@ executable by the service role only:
 2. **The actor is re-checked inside the lock.** Somebody demoted a moment ago,
    whose request was already past the route's check, is refused.
 3. **The last admin cannot be removed.** The count is taken inside the lock.
-   This check comes *before* the self-confirmation check, so no flag a caller
+   This check comes _before_ the self-confirmation check, so no flag a caller
    can send gets past it.
 4. **Self-demotion needs `confirm_self`** even when other admins exist.
 5. **The audit row is written in the same transaction.** Promotion, demotion
-   *and every refused attempt* (`organiser.promoted`, `organiser.demoted`,
+   _and every refused attempt_ (`organiser.promoted`, `organiser.demoted`,
    `organiser.demote_refused`, `organiser.change_refused`) — with who, whom,
    the role before/after and the admin count. Unlike the best-effort
    `recordAudit` used elsewhere (which swallows failures so an audit outage
@@ -42,9 +42,9 @@ executable by the service role only:
 A statement-level `AFTER DELETE` trigger with a transition table refuses any
 delete that leaves `organisers` empty — from the SQL console, a future bug, or
 a cascade. Statement-level on purpose: a row-level trigger sees the table as it
-was when the statement began, so one `delete` of *both* of two rows passes each
+was when the statement began, so one `delete` of _both_ of two rows passes each
 row's check and leaves none. Two deliberate consequences, both documented in the
-admin guide: an empty table can still be *inserted into* (bootstrapping the
+admin guide: an empty table can still be _inserted into_ (bootstrapping the
 first admin by hand still works), and **deleting the auth user of the last admin
 is refused** because that cascades into `organisers` — add the next admin first.
 
@@ -57,7 +57,7 @@ collaborators, and Next only lets a route module export HTTP handlers):
 1. **Same-origin + `application/json`** — before any session is read.
 2. **Caller is an admin** (`currentOrganiser`, a live `organisers` lookup) — 403.
 3. **Rate limit**, keyed to the person: 10 changes / 10 minutes. The **5th**
-   change in a window is additionally flagged once, to the log *and* the audit
+   change in a window is additionally flagged once, to the log _and_ the audit
    trail (`organiser.rapid_changes`), so a burst is visible later even though
    every change in it was allowed.
 4. **Strict body** (zod `.strict()`): uuid, `promote|demote`, typed email,
@@ -78,7 +78,7 @@ state already holds, so a double-click or a retry after a timeout is harmless.
 ## The screen
 
 Admins are listed first, in full (unmasked addresses — here the address is the
-point of the row), with *You* marked. Both directions use a confirmation modal
+point of the row), with _You_ marked. Both directions use a confirmation modal
 in the style of the delete double-confirmation: promotion states plainly that
 admin access is **full control** (content, financial data, other people's data,
 and the power to make or remove other admins — including you); removal states
@@ -100,10 +100,10 @@ refuse regardless.
   assertions: every rule, raw-SQL attempts to empty the table, audit atomicity,
   and **real `Request` objects through the real handler wired to that
   database** — e.g. `POST demote {sole admin, correct typed email,
-  confirmSelf:true}` → `409 last_admin`, admin still present. It is
+confirmSelf:true}` → `409 last_admin`, admin still present. It is
   **mutation-checked**: with the function's last-admin check removed the trigger
   still holds (and the tests fail loudly); with the trigger removed the deletes
-  succeed and the tests fail; with *both* removed the API test reports
+  succeed and the tests fail; with _both_ removed the API test reports
   `200 demoted` for the last admin — the lockout the whole design exists to
   prevent.
 - **Not demonstrated: two connections racing.** PGlite is a single connection,

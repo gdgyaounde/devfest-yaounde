@@ -146,8 +146,8 @@
       "en": "How do I pay for a paid ticket?"
     },
     "answer": {
-      "fr": "Les paiements en ligne ont fermé le mercredi 18 novembre à 12h00 — plus rien ne se paie sur le site. Réserve ta place (billets ou articles de la boutique) jusqu'au vendredi 20 novembre à 23h59, puis paie en espèces sur place. Avant la clôture, nous n'acceptions que le Mobile Money (MTN MoMo et Orange Money).",
-      "en": "Online payments closed on Wednesday 18 November at 12:00 — nothing is paid on the site any more. Reserve your spot (tickets or shop items) until Friday 20 November at 23:59, then pay in cash at the venue. Before the cutoff we accepted Mobile Money only (MTN MoMo and Orange Money)."
+      "fr": "Les paiements en ligne ont fermé le mercredi 18 novembre à 12h00 — plus rien ne se paie sur le site. Réserve ta place (billets ou articles de la boutique) jusqu'au vendredi 20 novembre à 17h00, puis paie en espèces sur place. Avant la clôture, nous n'acceptions que le Mobile Money (MTN MoMo et Orange Money).",
+      "en": "Online payments closed on Wednesday 18 November at 12:00 — nothing is paid on the site any more. Reserve your spot (tickets or shop items) until Friday 20 November at 17:00, then pay in cash at the venue. Before the cutoff we accepted Mobile Money only (MTN MoMo and Orange Money)."
     },
     "cta": {
       "label": {
@@ -165,8 +165,8 @@
       "en": "What does it mean to reserve?"
     },
     "answer": {
-      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix de base (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 23h59.",
-      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at base price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 23:59."
+      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix de base (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 17h00.",
+      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at base price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 17:00."
     },
     "cta": {
       "label": {
@@ -184,8 +184,8 @@
       "en": "Can I just show up and pay on the day?"
     },
     "answer": {
-      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 23h59), viens à FMSB Yaoundé, Amphi 350 et paie en espèces sur place. Les pass gratuits se réservent toujours sur notre page communautaire.",
-      "en": "Yes. After reservations close (Friday 20 November, 23:59), come to FMSB Yaoundé, Amphi 350 and pay in cash on the spot. Free passes are still reserved on our community page."
+      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 17h00), viens à FMSB Yaoundé, Amphi 350 et paie en espèces sur place. Les pass gratuits se réservent toujours sur notre page communautaire.",
+      "en": "Yes. After reservations close (Friday 20 November, 17:00), come to FMSB Yaoundé, Amphi 350 and pay in cash on the spot. Free passes are still reserved on our community page."
     },
     "cta": {
       "label": {
@@ -227,8 +227,8 @@
       "en": "Are tickets refundable?"
     },
     "answer": {
-      "fr": "Les billets achetés en ligne avant la clôture ne sont pas remboursables — c'était indiqué au paiement. Les réservations ne coûtent rien tant que tu ne paies pas en espèces sur place, et tu peux annuler la tienne depuis ton compte jusqu'au vendredi 20 novembre à 23h59.",
-      "en": "Tickets bought online before the cutoff are non-refundable — we flagged this at checkout. Reservations cost nothing until you pay in cash at the venue, and you can cancel yours from your account until Friday 20 November at 23:59."
+      "fr": "Les billets achetés en ligne avant la clôture ne sont pas remboursables — c'était indiqué au paiement. Les réservations ne coûtent rien tant que tu ne paies pas en espèces sur place, et tu peux annuler la tienne depuis ton compte jusqu'au vendredi 20 novembre à 17h00.",
+      "en": "Tickets bought online before the cutoff are non-refundable — we flagged this at checkout. Reservations cost nothing until you pay in cash at the venue, and you can cancel yours from your account until Friday 20 November at 17:00."
     }
   },
   {
@@ -340,8 +340,8 @@
       "en": "Will there be food for free-pass holders?"
     },
     "answer": {
-      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 12h00 en ligne, et tu peux encore en réserver un jusqu'au vendredi 20 novembre à 23h59 puis payer en espèces sur place.",
-      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes could be bought online until Wednesday 18 November at 12:00, and you can still reserve one until Friday 20 November at 23:59 and pay in cash at the venue."
+      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 12h00 en ligne, et tu peux encore en réserver un jusqu'au vendredi 20 novembre à 17h00 puis payer en espèces sur place.",
+      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes could be bought online until Wednesday 18 November at 12:00, and you can still reserve one until Friday 20 November at 17:00 and pay in cash at the venue."
     },
     "cta": {
       "label": {

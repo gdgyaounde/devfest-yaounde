@@ -61,7 +61,7 @@ where the bug lived, without writing to the production bucket to do it.
 Both PHASE22 asks for reused mechanics rather than new ones, applied to a
 new subject:
 
-- **The cursor popup** (§A2) is a new *state* of the existing
+- **The cursor popup** (§A2) is a new _state_ of the existing
   `CustomCursor`, not a second follower. `[data-cursor-card="<name>"]` marks
   a hover zone (paired with `data-cursor-card-body` for an optional blurb,
   `data-cursor-tilt` for a per-zone lean) — parallel to, and deliberately
@@ -113,7 +113,7 @@ the schema no longer accepts.
 legitimately hold a tier value the CURRENT code no longer recognises — the
 live Google record does, right now, because the migration has not run
 against production yet. `sponsor.tier ?? "community"` only falls back when
-the field is *absent*; an unrecognised *string* (`"platinum"`) sailed past
+the field is _absent_; an unrecognised _string_ (`"platinum"`) sailed past
 that check into `TIER_ACCENT["platinum"]`, which is `undefined` — verified
 live: the badge rendered with `background-color: rgba(0,0,0,0)`, invisible.
 Fixed with a `knownTier()` guard that falls back on ANY value not in the new

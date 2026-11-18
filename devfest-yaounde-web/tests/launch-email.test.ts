@@ -64,8 +64,8 @@ describe("the launch update renders as a self-contained bilingual email", () => 
         /(?:payer|pay|Payments|paiements)[^\n]*18 (?:novembre|November) (?:à|at) 23[h:]59/,
       );
       // Then reservations until Friday, then cash at the venue.
-      assert.match(email.text, /vendredi 20 novembre à 23h59/);
-      assert.match(email.text, /Friday 20 November at 23:59/);
+      assert.match(email.text, /vendredi 20 novembre à 17h00/);
+      assert.match(email.text, /Friday 20 November at 17:00/);
     });
   }
 

@@ -2,7 +2,7 @@
 
 **Timeline (Yaoundé time).** Until **Wed 18 Nov, 12:00**: tickets and shop are
 paid online as before. From 12:00: **nothing is paid on the site**; people
-**reserve** on `/reserve`. After **Fri 20 Nov, 23:59**: no more reserving —
+**reserve** on `/reserve`. After **Fri 20 Nov, 17:00**: no more reserving —
 people come to **FMSB Yaoundé, Amphi 350** and pay cash. Ticket edits (name,
 T-shirt size) still close Wed 23:59. Change any instant in **Admin → Config →
 Ticket sales & edits** (payments close · edits close · reservations close).
@@ -15,7 +15,7 @@ Ticket sales & edits** (payments close · edits close · reservations close).
   has a T-shirt) and any shop items from their device bag, give a name and a
   phone, tick the cash acknowledgement. They get a reference like `RES-AB3CD9`
   on screen and under **My reservations** in their account, where they can
-  cancel until Friday 23:59 (not once cash has been taken). **No email is
+  cancel until Friday 17:00 (not once cash has been taken). **No email is
   sent.**
 - Limits: at most 10 tickets per reservation, 3 live reservations per account.
   Tier caps count paid tickets + live reservations, so nothing oversells.

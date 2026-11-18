@@ -11,7 +11,7 @@ import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL, GDG_CODE_OF_CONDUCT_URL } from "@/lib/site-config";
 import { loadSettings } from "@/lib/content/settings";
 import { getSwagProducts, getTiers } from "@/lib/content/store";
-import { feeInclusiveAmount } from "@/lib/payments/fees";
+import { cashPriceXAF, feeInclusiveAmount } from "@/lib/payments/fees";
 import { formatCutoff, salesPhase } from "@/lib/event";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
@@ -187,7 +187,7 @@ export default async function TermsPage({
                           : `${money(
                               selling
                                 ? feeInclusiveAmount(tier.priceXAF)
-                                : tier.priceXAF,
+                                : cashPriceXAF(tier),
                             )} XAF`}
                         {tier.rsvpExternal && (
                           <span className="block font-sans text-caption font-normal text-black02/65">

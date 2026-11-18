@@ -8,10 +8,10 @@ Status: **Superseded** (2026-09-14) by ADR 0054.
 > separate t-shirt listings, none of them the one the shop already sold — 20
 > auto-created products against 5 genuine ones in the live catalogue. The
 > implementation did what this record specified; the model was wrong. A tier
-> bundling a product is a *reference*, not an act of creation. See ADR 0054
+> bundling a product is a _reference_, not an act of creation. See ADR 0054
 > for the replacement and the migration. Kept for the reasoning below, which
 > is still the best account of why unlink-not-delete and draft-by-default
-> were the right calls *within* this model.
+> were the right calls _within_ this model.
 
 ## Context
 
@@ -44,7 +44,7 @@ called from `PUT /api/admin/content/[id]/route.ts` only when
 already has. For every swag item without a `shopProductId`, it:
 
 1. Creates a product: `{ id: "swag-<swagId>", name, images, priceXAF: 0,
-   status: "pre-order", published: false, sourceSwag: { tierId, swagId } }`.
+status: "pre-order", published: false, sourceSwag: { tierId, swagId } }`.
 2. Patches the swag item's `shopProductId` onto the tiers array **before**
    that array is written — so the saved payload and the newly created
    product agree about the link from the first write, never for one request
@@ -76,7 +76,7 @@ outright if the product is linked to real orders.
   that creates it.
 - **What this does not do**: it does not touch a product manually created
   by an admin (no `sourceSwag`), and it never re-links a product to a
-  *different* swag item automatically — that would need a human decision
+  _different_ swag item automatically — that would need a human decision
   about which listing is meant.
 - A product cannot end up both unlinked and still claiming an origin: the
   unlink pass clears `sourceSwag` in the same write, so "linked" and

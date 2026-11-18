@@ -55,10 +55,10 @@ not interleaved by insertion order.
 
 ## Applied to
 
-| Listing | Toggle reads | Sections |
-| --- | --- | --- |
-| Shop | `published !== false` | Published / Hidden |
-| Tickets (tiers) | `onSale` | On sale / Off sale |
+| Listing         | Toggle reads          | Sections           |
+| --------------- | --------------------- | ------------------ |
+| Shop            | `published !== false` | Published / Hidden |
+| Tickets (tiers) | `onSale`              | On sale / Off sale |
 
 Speakers and Team keep their existing toggle and gain the shimmer and the
 optimistic flip for free. They are **not** sectioned: Team is `reorderable`,

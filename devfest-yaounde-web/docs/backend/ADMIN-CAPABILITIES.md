@@ -81,25 +81,25 @@ so. Nothing offers a save button that would discard what you typed.
 **Wire for real** means: reads through existing tables behind
 `currentOrganiser()`; writes only through endpoints that already exist.
 
-| Feature                                      | Backend                                                            | This phase                               |
-| -------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------- |
-| Overview metrics                             | `tickets`, `orders`, `payment_intents`, `dp_cards` in Postgres     | **Wire for real**                        |
-| Paid tickets list                            | `tickets` table                                                    | **Wire for real** (read + CSV export)    |
-| Transactions                                 | `payment_intents` (status, amounts, discount, failure code)        | **Wire for real** (read + export)        |
-| Shop orders                                  | `orders` + `order_items`                                           | **Wire for real** (read + export)        |
-| Order fulfilment                             | `PATCH /api/orders/:id/status` — exists, organiser-guarded         | **Wire for real** (the one real write)   |
-| DP wall queue                                | `GET /api/dp/gallery/pending`, `PATCH /api/dp/gallery/:id` — exist | **Wire for real**                        |
-| Users who signed in                          | `profiles` table                                                   | **Wire for real** (read, PII-restrained) |
+| Feature                                      | Backend                                                            | This phase                                             |
+| -------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| Overview metrics                             | `tickets`, `orders`, `payment_intents`, `dp_cards` in Postgres     | **Wire for real**                                      |
+| Paid tickets list                            | `tickets` table                                                    | **Wire for real** (read + CSV export)                  |
+| Transactions                                 | `payment_intents` (status, amounts, discount, failure code)        | **Wire for real** (read + export)                      |
+| Shop orders                                  | `orders` + `order_items`                                           | **Wire for real** (read + export)                      |
+| Order fulfilment                             | `PATCH /api/orders/:id/status` — exists, organiser-guarded         | **Wire for real** (the one real write)                 |
+| DP wall queue                                | `GET /api/dp/gallery/pending`, `PATCH /api/dp/gallery/:id` — exist | **Wire for real**                                      |
+| Users who signed in                          | `profiles` table                                                   | **Wire for real** (read, PII-restrained)               |
 | Promote / remove admins (Users page)         | `organisers` via `set_organiser_role()` (migration 0026), audited  | **Wired** (Phase 23 §E, ADR 0069) — needs 0026 applied |
-| Discount codes                               | `discount_codes` + `POST/PATCH /api/admin/discounts`               | **Writable — ADR 0031**                  |
-| Speakers / team / sessions / sponsors / FAQs | `editorial_documents` (JSON files until first publish)             | **Writable — ADR 0031**                  |
-| Product catalogue                            | same store; checkout reads it                                      | **Writable — ADR 0031**                  |
-| Info-bar message                             | `site_settings.announcement`                                       | **Writable — ADR 0031**                  |
-| Privacy / CoC URLs                           | `site_settings`                                                    | **Writable — ADR 0031**                  |
-| CSV bulk import                              | Validate + preview; publish is JSON                                | **Validate + JSON publish**              |
-| CSV export                                   | Reads that already exist                                           | **Wire for real**                        |
-| Free-pass RSVPs                              | Bevy, off-platform                                                 | **Not shown at all** — see below         |
-| Audit log                                    | No table, no endpoint                                              | **Gap**                                  |
+| Discount codes                               | `discount_codes` + `POST/PATCH /api/admin/discounts`               | **Writable — ADR 0031**                                |
+| Speakers / team / sessions / sponsors / FAQs | `editorial_documents` (JSON files until first publish)             | **Writable — ADR 0031**                                |
+| Product catalogue                            | same store; checkout reads it                                      | **Writable — ADR 0031**                                |
+| Info-bar message                             | `site_settings.announcement`                                       | **Writable — ADR 0031**                                |
+| Privacy / CoC URLs                           | `site_settings`                                                    | **Writable — ADR 0031**                                |
+| CSV bulk import                              | Validate + preview; publish is JSON                                | **Validate + JSON publish**                            |
+| CSV export                                   | Reads that already exist                                           | **Wire for real**                                      |
+| Free-pass RSVPs                              | Bevy, off-platform                                                 | **Not shown at all** — see below                       |
+| Audit log                                    | No table, no endpoint                                              | **Gap**                                                |
 
 ### Discount codes: writable table, no write path
 

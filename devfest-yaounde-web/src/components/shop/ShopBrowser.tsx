@@ -216,7 +216,9 @@ export function ShopBrowser({
                   <p className="mt-auto pt-4 font-mono text-body-l font-bold text-black02">
                     {new Intl.NumberFormat(
                       locale === "fr" ? "fr-CM" : "en-CM",
-                    ).format(displayPrice(product.priceXAF))}{" "}
+                    ).format(
+                      displayPrice(product.priceXAF, product.venuePriceXAF),
+                    )}{" "}
                     XAF
                   </p>
                   {!BUYABLE.includes(product.status as ProductStatus) && (

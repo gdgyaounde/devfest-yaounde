@@ -12,7 +12,7 @@ prospectus, not a constant.
 - Stored as `site_settings.memory_lane` (`{ galleryUrl }`), one jsonb column per
   settings group like `hero`/`cfs`/`legal`/`capacity` (migration 0022).
 - `NULL` means the repo default, `PAST_GALLERY_URL` in `site-config.ts`, seeded
-  with `https://photos.app.goo.gl/S4nVSxBmu73FjChW6`. The default *is* the seed,
+  with `https://photos.app.goo.gl/S4nVSxBmu73FjChW6`. The default _is_ the seed,
   so the migration writes nothing — the URL gets one home, not two.
 - Empty hides the link rather than pointing it nowhere.
 - `target="_blank" rel="noopener noreferrer"`, plus a screen-reader-only
@@ -23,7 +23,7 @@ prospectus, not a constant.
 `loadSettings()` named every column in its `select`. Checked against the live
 project: naming a column that does not exist fails the **whole** query
 (`column site_settings.no_such_column does not exist`), and the error path
-returns repo defaults for *everything*. So shipping code that reads
+returns repo defaults for _everything_. So shipping code that reads
 `memory_lane` before migration 0022 was applied would have silently reverted
 the live announcement, hero backdrop, call for speakers and prospectus at once.
 
@@ -102,6 +102,6 @@ reduced motion has nothing to switch off. `aria-hidden`, pointer-inert.
 **Measured, not eyeballed.** In a browser at 360, 390, 768, 1024, 1280, 1440 and
 1920px, in both locales, for each of the three quotes: no sticker box
 intersects any copy or dot control, none is clipped, and the smallest
-distance to a text *box* is 20px (to glyphs it is larger — centred text sits
+distance to a text _box_ is 20px (to glyphs it is larger — centred text sits
 well inside its box). A first pass measured 10px at 768px; the bubble was
 moved up and trimmed rather than argued about.

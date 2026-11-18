@@ -19,14 +19,14 @@ It is written as one ceiling, not a branch on divisibility: a figure that
 already lands on a multiple of 50 is left alone because the ceiling has
 nothing to do.
 
-| base   | × 1.015 | displayed / charged |
-| ------ | ------- | ------------------- |
-| 2 000  | 2 030   | **2 050**           |
-| 5 000  | 5 075   | **5 100**           |
-| 10 000 | 10 150  | **10 150** (unchanged) |
-| 25 000 | 25 375  | **25 400**          |
-| 12 000 (product) | 12 180 | **12 200** |
-| 3 000 (product)  | 3 045  | **3 050**  |
+| base             | × 1.015 | displayed / charged    |
+| ---------------- | ------- | ---------------------- |
+| 2 000            | 2 030   | **2 050**              |
+| 5 000            | 5 075   | **5 100**              |
+| 10 000           | 10 150  | **10 150** (unchanged) |
+| 25 000           | 25 375  | **25 400**             |
+| 12 000 (product) | 12 180  | **12 200**             |
+| 3 000 (product)  | 3 045   | **3 050**              |
 
 Applies to every existing and future tier and product with no data edit —
 nothing rounded is ever stored.
@@ -72,7 +72,7 @@ total` with no row that has to explain itself.
 ## Consequences worth knowing
 
 - **The "fee" row is now the fee and the round-up together** (`feeAmount =
-  feeInclusiveAmount(net) − net`), so rows always add up to the charged total.
+feeInclusiveAmount(net) − net`), so rows always add up to the charged total.
   A 3 600 net pays a 100 line (2.8%), not 54, which is why the label now says
   "1.5%, rounded up to the next 50 XAF" in both locales, the receipt email,
   and the account view — a bare "1.5%" would have been untrue.
@@ -87,10 +87,10 @@ total` with no row that has to explain itself.
   takes the free path.
 - **The admin shows both prices, labelled** (follow-up to the first cut, which
   had only a small caption): a `PriceReadout` under the price field in the tier
-  and product forms — *Base price — what you enter* beside *Displayed price —
-  what visitors pay*, updating as you type, with how much the fee and round-up
+  and product forms — _Base price — what you enter_ beside _Displayed price —
+  what visitors pay_, updating as you type, with how much the fee and round-up
   add — and a compact **Base / Displayed** pair on every list row and in the
-  tier's swag picker. The field itself is now labelled *Base price (XAF)*. It
+  tier's swag picker. The field itself is now labelled _Base price (XAF)_. It
   calls the same `feeInclusiveAmount` as the storefront and checkout.
 - Revenue reporting is unaffected: `settledRevenue` sums `net_amount`, which
   never included the fee or the round-up.

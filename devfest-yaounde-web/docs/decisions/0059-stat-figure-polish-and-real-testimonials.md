@@ -32,10 +32,10 @@ This needed a **third nested layer**, not two. `.cursor-image` composes position
 
 The brief asked for something that reads like an actual person's recollection — dry, a little self-aware, short — rather than the brochure-toned originals ("Hands down the best tech event...", "...genuinely makes you want to come back every year"). Rewritten in both locales as native rewrites, not literal translations, per the `devfest-brand-voice` skill's own rule on tone crossing languages:
 
-| Before | After |
-| --- | --- |
-| "Hands down the best tech event I've been to in Yaoundé." | "Came for the free t-shirt. Stayed because the talks were, annoyingly, actually good." |
-| "I found my co-founder in the coffee line." | "Found my co-founder in the coffee queue. Best business meeting I never scheduled." |
+| Before                                                               | After                                                                                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| "Hands down the best tech event I've been to in Yaoundé."            | "Came for the free t-shirt. Stayed because the talks were, annoyingly, actually good."           |
+| "I found my co-founder in the coffee line."                          | "Found my co-founder in the coffee queue. Best business meeting I never scheduled."              |
 | "A community that genuinely makes you want to come back every year." | "Rehearsed for a half-empty room. Got a packed one and still ran two minutes over — old habits." |
 
 None of this changes their status: these are still **invented sample copy**, same as before this rewrite (`docs/guides/updating-content.md`'s "still placeholder" table already flags `quotes.json` for that, unchanged by this ADR) — the fix is to the voice, not a claim that these are now real testimonials.

@@ -38,15 +38,15 @@ information living only in an inbox.
 
 `refund_requests` (migration `0025`) — one row per request:
 
-| Column                          | What it holds                                                    |
-| -------------------------------- | ------------------------------------------------------------------ |
-| `kind`                          | `tickets` or `shop`                                               |
-| `reference`                     | Free text — a badge code, deposit id, order id, whatever the requester gave |
-| `requester_name`/`_email`       | Who asked                                                          |
-| `reason`                        | Why                                                                 |
-| `status`                        | `requested → in_progress → resolved` or `denied`                  |
-| `notes`                         | An organiser's own running note                                    |
-| `created_by`                    | Which organiser logged it                                          |
+| Column                    | What it holds                                                               |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `kind`                    | `tickets` or `shop`                                                         |
+| `reference`               | Free text — a badge code, deposit id, order id, whatever the requester gave |
+| `requester_name`/`_email` | Who asked                                                                   |
+| `reason`                  | Why                                                                         |
+| `status`                  | `requested → in_progress → resolved` or `denied`                            |
+| `notes`                   | An organiser's own running note                                             |
+| `created_by`              | Which organiser logged it                                                   |
 
 **`reference` is free text on purpose, not a foreign key.** Requiring a
 real ticket or order id would refuse to record a request the moment an

@@ -11,16 +11,16 @@ No dependency. A transition never animates an element's first painted value,
 so it only rolls on a real change; a caller wanting an entrance roll paints 0
 first and sets the value later (that is what `StatCounter` does).
 
-| Prop          | Default                         | Notes                                                  |
-| ------------- | ------------------------------- | ------------------------------------------------------ |
-| `value`       | required                        | whole, non-negative                                    |
-| `digits`      | required                        | zero-padded width, so nothing shifts mid-roll          |
-| `className`   | the ticket counter's mono style | type styling                                           |
+| Prop          | Default                         | Notes                                                   |
+| ------------- | ------------------------------- | ------------------------------------------------------- |
+| `value`       | required                        | whole, non-negative                                     |
+| `digits`      | required                        | zero-padded width, so nothing shifts mid-roll           |
+| `className`   | the ticket counter's mono style | type styling                                            |
 | `live`        | `true`                          | `aria-live="polite"`; off for figures that only roll in |
-| `srText`      | the value                       | what assistive tech reads                              |
-| `durationMs`  | `500`                           | per column                                             |
-| `revolutions` | `0`                             | extra full turns per column on the way to the value    |
-| `staggerMs`   | `0`                             | delay between columns, left to right                   |
+| `srText`      | the value                       | what assistive tech reads                               |
+| `durationMs`  | `500`                           | per column                                              |
+| `revolutions` | `0`                             | extra full turns per column on the way to the value     |
+| `staggerMs`   | `0`                             | delay between columns, left to right                    |
 
 Defaults are the ticket counter's behaviour exactly. Columns are `1ch` wide
 with tabular figures — measured `0.6em` in the mono counter, matching the

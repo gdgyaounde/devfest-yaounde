@@ -36,7 +36,7 @@ So the split is not a preference:
 | `SUPABASE_SERVICE_ROLE_KEY` | every checkout         | **Vercel**                                                      |
 | the PawaPay token           | every payment/callback | **Supabase Vault** (ADR 0018), or Vercel, or AWS SSM (ADR 0017) |
 | `BADGE_CODE_SECRET`         | every fulfilment       | **Vercel**                                                      |
-| `CRON_SECRET`               | every cron call        | **Vercel** *and* Vault as `cron-secret` (ADR 0028)              |
+| `CRON_SECRET`               | every cron call        | **Vercel** _and_ Vault as `cron-secret` (ADR 0028)              |
 | `RESEND_API_KEY`            | every receipt          | **Vercel**                                                      |
 | `SUPABASE_ACCESS_TOKEN`     | in a workflow          | **GitHub**                                                      |
 | `SUPABASE_DB_PASSWORD`      | in a workflow          | **GitHub**                                                      |

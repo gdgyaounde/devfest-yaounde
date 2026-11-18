@@ -155,6 +155,26 @@ export function AdminTicketTiers({
             </Field>
 
             <Field
+              label="Cash price at the venue (XAF)"
+              hint="From the payments cutoff on, people reserve and pay this in cash — no online fee. Blank = same as the base price."
+            >
+              <TextInput
+                type="number"
+                value={
+                  draft.venuePriceXAF === undefined
+                    ? ""
+                    : String(draft.venuePriceXAF)
+                }
+                onChange={(v) =>
+                  patch({
+                    venuePriceXAF:
+                      v.trim() === "" ? undefined : Math.max(0, Number(v) || 0),
+                  })
+                }
+              />
+            </Field>
+
+            <Field
               label="Quantity available"
               hint="Blank = unlimited. Enforced server-side at checkout regardless of what this admin shows."
             >

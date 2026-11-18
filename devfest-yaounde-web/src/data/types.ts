@@ -285,6 +285,12 @@ export interface TicketTier {
   /** Whole XAF. 0 = free tier, which skips the payment provider entirely. */
   priceXAF: number;
   /**
+   * The CASH price at the venue, from the payments cutoff on (ADR 0084). No
+   * online fee applies, and it may differ from `priceXAF` (which stays what
+   * is charged online until then). Absent = same as `priceXAF`.
+   */
+  venuePriceXAF?: number;
+  /**
    * True when this tier is NOT sold here at all: the RSVP is delegated to the
    * community platform, which already enforces one free RSVP per person.
    * Such a tier shows an outbound CTA instead of a quantity selector, and
@@ -324,6 +330,8 @@ export interface Product {
   name: LocalizedString;
   description: LocalizedString;
   priceXAF: number;
+  /** The CASH price at the venue from the payments cutoff on (ADR 0084). Absent = `priceXAF`. */
+  venuePriceXAF?: number;
   images: string[];
   variants?: { size?: ApparelSize[]; color?: string[] };
   /**

@@ -36,7 +36,7 @@ Deliberately in several places, none of them small print:
 | -------------------------- | ------------------------------------------------------------------------------------- |
 | `/tickets`, payment step   | Body-sized text plus a **required** acknowledgment checkbox that gates the pay button |
 | `/faqs`, Tickets & Pricing | `faq-refunds` in `src/data/faqs.json`                                                 |
-| `/terms`, Refunds          | Summary in the participation terms (ADR 0074), linking back to the FAQ               |
+| `/terms`, Refunds          | Summary in the participation terms (ADR 0074), linking back to the FAQ                |
 | This file                  | The policy itself                                                                     |
 
 The checkbox is unticked by default and payment cannot proceed without it. It
@@ -67,7 +67,7 @@ closing **G9** in `docs/backend/GAPS.md`.
 **Settled 2026-09-16 (PHASE22 §D).** The policies above are unchanged —
 tickets stay non-refundable, shop exchanges stay handled manually,
 off-platform. What used to have nowhere to live is the REQUEST itself: an
-organiser logs one (from *Commerce → Refunds & exchanges* in the
+organiser logs one (from _Commerce → Refunds & exchanges_ in the
 dashboard) when an email comes in, and moves it through
 `requested → in progress → resolved` or `denied` as it's handled. This is
 a visibility tracker, not a feature that refunds anything — no money moves

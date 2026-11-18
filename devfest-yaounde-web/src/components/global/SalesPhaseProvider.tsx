@@ -9,7 +9,7 @@ import { useBeforeInstant } from "@/lib/use-before-instant";
  * The end-game phase, live (ADR 0084): `selling` → `reserving` → `door`.
  *
  * The public pages are statically prerendered, so the server's answer goes
- * stale at 12:00 today and again on Friday at 23:59. This provider keeps the
+ * stale at 12:00 today and again on Friday at 17:00. This provider keeps the
  * server's answer for hydration (so there is no mismatch whatever time the
  * page was built), then follows the clock at the minute — the same
  * `useBeforeInstant` seam the cutoff already used, now read ONCE for the
@@ -61,7 +61,10 @@ export function useSalesPhase(): SalesPhase {
  * reserved at, its base price. One hook, so no card ever shows one number
  * and a reservation another.
  */
-export function useDisplayPrice(): (base: number) => number {
+export function useDisplayPrice(): (base: number, venue?: number) => number {
   const phase = useSalesPhase();
-  return (base) => (phase === "selling" ? feeInclusiveAmount(base) : base);
+  // Online: the base price plus the fee. From the cutoff: the cash price at
+  // the venue — its own `venuePriceXAF` if the organisers set one.
+  return (base, venue) =>
+    phase === "selling" ? feeInclusiveAmount(base) : (venue ?? base);
 }

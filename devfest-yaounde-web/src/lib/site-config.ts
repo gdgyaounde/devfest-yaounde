@@ -126,11 +126,11 @@ export const TICKET_EDITS_CLOSE_AT = "2026-11-18T23:59:00+01:00";
 /**
  * The end of RESERVATIONS (ADR 0084). Payments stop at `TICKET_SALES_CLOSE_AT`
  * — for tickets AND the shop — and from then on people reserve instead of
- * paying on the platform. Friday 20 November 2026, 23:59 in Yaoundé; after
+ * paying on the platform. Friday 20 November 2026, 17:00 in Yaoundé; after
  * that, anyone pays in cash at the venue. Overridden by
  * `site_settings.ticketing.reservationsCloseAt`.
  */
-export const RESERVATIONS_CLOSE_AT = "2026-11-20T23:59:00+01:00";
+export const RESERVATIONS_CLOSE_AT = "2026-11-20T17:00:00+01:00";
 
 /**
  * Last edition's full photo gallery, linked from Memory Lane. Overridden by

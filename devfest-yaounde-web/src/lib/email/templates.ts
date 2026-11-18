@@ -963,7 +963,7 @@ export function renderLaunchUpdate({
   eventDate = EVENT_DATES[0] ?? "2026-11-21",
   salesCloseAt = "2026-11-18T12:00:00+01:00",
   editsCloseAt = "2026-11-18T23:59:00+01:00",
-  reservationsCloseAt = "2026-11-20T23:59:00+01:00",
+  reservationsCloseAt = "2026-11-20T17:00:00+01:00",
 }: {
   audience: LaunchAudience;
   eventDate?: string;
@@ -976,7 +976,7 @@ export function renderLaunchUpdate({
     const sales = formatCutoff(l, salesCloseAt ?? "2026-11-18T12:00:00+01:00");
     const reserve = formatCutoff(
       l,
-      reservationsCloseAt ?? "2026-11-20T23:59:00+01:00",
+      reservationsCloseAt ?? "2026-11-20T17:00:00+01:00",
     );
     const edits = formatCutoff(l, editsCloseAt ?? "2026-11-18T23:59:00+01:00");
     return {

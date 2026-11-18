@@ -43,6 +43,7 @@
       "en": ""
     },
     "priceXAF": 2000,
+    "venuePriceXAF": 5000,
     "quantityAvailable": 150,
     "onSale": true,
     "includesApparel": true,
@@ -81,6 +82,7 @@
       "en": ""
     },
     "priceXAF": 5000,
+    "venuePriceXAF": 6500,
     "quantityAvailable": 40,
     "onSale": true,
     "includesApparel": true,
@@ -111,6 +113,7 @@
       "en": ""
     },
     "priceXAF": 10000,
+    "venuePriceXAF": 12000,
     "quantityAvailable": 25,
     "onSale": true,
     "includesApparel": true,
@@ -141,6 +144,7 @@
       "en": "Legendary pass"
     },
     "priceXAF": 25000,
+    "venuePriceXAF": 27000,
     "quantityAvailable": 10,
     "onSale": true,
     "includesApparel": true,

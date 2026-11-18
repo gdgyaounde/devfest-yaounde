@@ -170,7 +170,7 @@ physical mouse present, even though it's never being moved to
 all.
 
 **Fix**: a new `sr-only` span carries the blurb unconditionally,
-gated by the *inverse* media query (`.sponsor-sr-blurb`, in
+gated by the _inverse_ media query (`.sponsor-sr-blurb`, in
 `globals.css`) so it drops out of the accessibility tree specifically
 when the inline paragraph is the one actually visible — preventing a
 touchscreen VoiceOver visitor from hearing the blurb twice. Verified
@@ -255,4 +255,4 @@ followup rather than asserted from noisy local data.
   (was 94-98 before this pass's fixes).
 - Scripted keyboard pass: skip link is the first Tab stop on every
   page, and moves real focus (`document.activeElement.id ===
-  "main-content"`), not just the URL hash.
+"main-content"`), not just the URL hash.

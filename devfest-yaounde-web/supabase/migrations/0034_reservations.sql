@@ -2,7 +2,7 @@
 -- 0034 — Reservations: reserve now, pay cash at the venue (ADR 0084)
 --
 -- From Wed 18 Nov 12:00 NO payment passes through the platform. Tickets and
--- shop items are RESERVED instead (until Fri 20 Nov 23:59), and paid in cash
+-- shop items are RESERVED instead (until Fri 20 Nov 17:00), and paid in cash
 -- at the venue. This table records what was reserved so the team can prepare
 -- stock, shirts and cash, and so volunteers can find a reservation at the
 -- door, mark the cash as received and check the person in.
@@ -21,7 +21,7 @@
 --   * `set_reservation_cash` / `check_in_reservation` — the door; row-locked
 --     and idempotent, so two phones cannot both record the same cash.
 --
--- The deadline (Friday 23:59) is enforced by the API route from the site
+-- The deadline (Friday 17:00) is enforced by the API route from the site
 -- settings, because the settings are not in the database as columns.
 --
 -- DEPLOY ORDER: apply AFTER the code is deployed or before — either is safe.

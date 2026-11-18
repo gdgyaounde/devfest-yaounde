@@ -139,6 +139,7 @@
       "en": "350 ml ceramic, four-colour logo. Collected at the venue on the day."
     },
     "priceXAF": 7000,
+    "venuePriceXAF": 2500,
     "images": ["/shop/mug-community.jpg"],
     "status": "venue-only"
   },

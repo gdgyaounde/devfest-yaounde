@@ -11,7 +11,7 @@ The banner shows the FIRST of these that applies:
 1. **Whatever is typed in Admin → Config → Announcement.** Always wins.
 2. **The payments cutoff** — "Online payments close Wednesday 18 November at
    12:00", with a "Get tickets" button. Once it passes, the banner moves on to
-   **"Reservations are open until Friday 20 November at 23:59"** (with a
+   **"Reservations are open until Friday 20 November at 17:00"** (with a
    "Reserve" button) and, after Friday, to **"pay cash at the venue"**. Built from Config → Ticket sales &
    edits, so it always matches what checkout enforces. It disappears by
    itself at the cutoff (the open page folds it away at the minute; the

@@ -70,3 +70,15 @@ export function feeInclusiveAmount(base: number): number {
 export function transactionFeeAmount(base: number): number {
   return feeInclusiveAmount(base) - base;
 }
+
+/**
+ * What a tier costs in CASH at the venue (ADR 0084): its `venuePriceXAF` if
+ * the organisers set one, else its base price. No online fee applies. Used by
+ * reservations, and by every page once payments have closed.
+ */
+export function cashPriceXAF(tier: {
+  priceXAF: number;
+  venuePriceXAF?: number;
+}): number {
+  return tier.venuePriceXAF ?? tier.priceXAF;
+}

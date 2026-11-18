@@ -100,7 +100,7 @@ export function ProductDetail({ product }: { product: Product }) {
             {product.name[locale]}
           </h2>
           <p className="mt-4 font-mono text-heading-m font-bold text-black02">
-            {money(displayPrice(product.priceXAF))} XAF
+            {money(displayPrice(product.priceXAF, product.venuePriceXAF))} XAF
           </p>
           <p className="mt-5 max-w-prose text-body-l text-black02/80">
             {product.description[locale]}

@@ -79,9 +79,9 @@ assumed.
 
 **`net` is the base, post-discount amount — what the event actually
 earns**, reusing a field `pricing.ts` had reserved for exactly this since
-before this fee existed (the old comment: *"kept separate so a future
+before this fee existed (the old comment: _"kept separate so a future
 gateway fee has somewhere to live without rewriting every stored
-intent"*). `admin/data.ts`'s `settledRevenue` headline already summed
+intent"_). `admin/data.ts`'s `settledRevenue` headline already summed
 `net_amount`, not `charged_amount`, for "what the chapter actually
 received" — that was already correct in spirit, and now it is correct in
 fact: the 1.5% is real money the buyer pays but not real ticket/product
@@ -139,17 +139,18 @@ repo's seed JSON:
 
 - Ticket tier cards (`/tickets`) and the sticky order summary: adding 2×
   Sonnet showed `Subtotal 7 000 / Transaction fee (1.5%) 105 / Total to
-  pay 7 105 XAF` — exactly `feeInclusiveAmount(7000)`.
+pay 7 105 XAF` — exactly `feeInclusiveAmount(7000)`.
 - Shop product cards, product detail, the bag, and its order summary:
   adding one mug (base 2 000) showed `Subtotal 2 000 / Transaction fee
-  30 / Total to pay 2 030 XAF` — exactly `feeInclusiveAmount(2000)`.
+30 / Total to pay 2 030 XAF` — exactly `feeInclusiveAmount(2000)`.
 - Both screenshotted again in French, confirming `Frais de transaction
-  (1,5 %)` and the totals agree.
+(1,5 %)` and the totals agree.
 - A real receipt email rendered with a discount present (`net 3 600,
-  discount 400, fee 54, total 3 654`) showed all four rows in the right
+discount 400, fee 54, total 3 654`) showed all four rows in the right
   order, matching the exact arithmetic above.
 
 ## Downstream paths that needed NO code change, because they already
+
 ## threaded `PricedBasket.charged` end to end
 
 Traced before writing anything, not assumed:

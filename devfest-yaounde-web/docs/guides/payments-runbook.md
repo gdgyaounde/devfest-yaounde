@@ -17,9 +17,9 @@ There is no callback in this flow — the one callback URL on this PawaPay
 account belongs to the SCD shop, and a second account would need another
 registered company. So settlement works by asking, in two places:
 
-| Path                                            | Speed       | Covers                                    |
-| ----------------------------------------------- | ----------- | ----------------------------------------- |
-| The return page polls `/api/payments/status`    | seconds     | anyone watching the screen after paying   |
+| Path                                                                           | Speed       | Covers                                    |
+| ------------------------------------------------------------------------------ | ----------- | ----------------------------------------- |
+| The return page polls `/api/payments/status`                                   | seconds     | anyone watching the screen after paying   |
 | A sweep inside `/api/cron/cleanup`, every 5 min (Supabase `pg_cron`, ADR 0028) | ≤ 5 minutes | closed tab, dead battery, dropped network |
 
 Both call the same authoritative lookup and the same guarded delivery, so any
@@ -389,7 +389,7 @@ other application does that, a payment meant for this one is lost silently.
 - **Card payments.** `PAGES.md` §7 wants card as a secondary option; this
   integration is Mobile Money only. Tracked in `0013`.
 - **Refunds.** Cancelling an order moves no money. Refunding is manual, in the
-  PawaPay dashboard. *Commerce → Refunds & exchanges* in the admin dashboard
+  PawaPay dashboard. _Commerce → Refunds & exchanges_ in the admin dashboard
   (ADR 0064) tracks that a request was made and its status — it does not
   perform the refund or exchange itself.
 - **Any interface** for check-in or order management — the endpoints exist, the

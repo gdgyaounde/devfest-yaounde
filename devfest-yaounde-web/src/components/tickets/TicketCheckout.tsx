@@ -463,7 +463,9 @@ export function TicketCheckout({
                       <p className="mt-4 font-sans text-display-l font-bold leading-none text-black02">
                         {tier.priceXAF === 0
                           ? t("free")
-                          : `${money(displayPrice(tier.priceXAF))} XAF`}
+                          : `${money(
+                              displayPrice(tier.priceXAF, tier.venuePriceXAF),
+                            )} XAF`}
                       </p>
                       <p className="mt-3 max-w-prose text-body-m text-black02/75">
                         {tier.description[locale as "fr" | "en"]}

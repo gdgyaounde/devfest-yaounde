@@ -105,7 +105,7 @@ drift from what the single-row button already says.
   delete confirmation correctly separating 2 deletable rows from 1 blocked
   one — including the blocked row's own reason text — with the confirm
   button disabled until `DELETE` is typed exactly and re-labelled `Delete
-  2` once it is.
+2` once it is.
 - `npm run verify` (210 tests, lint, typecheck) and `npm run build` pass.
   The `tests/browser/admin.mjs` gate suite re-run against a real build,
   13/13 passing, including a new check that the refund-request tracker's

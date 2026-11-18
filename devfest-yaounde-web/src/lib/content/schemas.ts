@@ -181,6 +181,7 @@ export const productSchema = z.object({
   name: localizedRequired,
   description: localizedRequired,
   priceXAF: z.number().int().min(0).max(10_000_000),
+  venuePriceXAF: z.number().int().min(0).max(10_000_000).optional(),
   images: z.array(z.string().max(400)).max(12),
   variants: z
     .object({
@@ -222,6 +223,7 @@ export const ticketTierSchema = z.object({
   name: z.string().trim().min(1).max(40),
   label: localized.optional(),
   priceXAF: z.number().int().min(0).max(10_000_000),
+  venuePriceXAF: z.number().int().min(0).max(10_000_000).optional(),
   rsvpExternal: z.boolean().optional(),
   /**
    * Shop products bundled with this tier, BY REFERENCE (ADR 0054).

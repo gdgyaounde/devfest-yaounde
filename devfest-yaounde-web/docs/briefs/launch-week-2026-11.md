@@ -58,7 +58,7 @@ Parts A and C both read one instant.
 
 ---
 
-## Part A — One day only + "sales close Wednesday"  (branch `feat/one-day-and-sales-close`)
+## Part A — One day only + "sales close Wednesday" (branch `feat/one-day-and-sales-close`)
 
 ### A1. One day
 
@@ -67,8 +67,8 @@ Parts A and C both read one instant.
   emails, the JSON-LD (single day = no `subEvent`), `EVENT.days`, `eventHasEnded`, and the
   admin day pickers. Check each of these.
 - Rewrite the copy that says two days, in **both** languages:
-  - `messages/*.json`: hero `tagline` (~:120, "Two Saturdays…/Deux samedis…"),
-    `home.metaDesc` (~:203), `pages.schedule.lead` (~:209), `pages.schedule.metaDesc` (~:210).
+  - `messages/*.json`: hero `tagline` (~~:120, "Two Saturdays…/Deux samedis…"),
+    `home.metaDesc` (~~:203), `pages.schedule.lead` (~~:209), `pages.schedule.metaDesc` (~~:210).
   - `src/data/faqs.json:34-35`: the "two Saturdays" answer.
   - While you're there, fix the stale "CFS open until 31 October" answer (:53-54). Line :10-11
     already says "a full day".
@@ -105,7 +105,7 @@ Parts A and C both read one instant.
 
 ---
 
-## Part B — Publish the speakers  (branch `feat/speakers-lineup-2026`)
+## Part B — Publish the speakers (branch `feat/speakers-lineup-2026`)
 
 ### Source data
 
@@ -120,48 +120,48 @@ flattened", exported 2026-11-15) at `devfest-yaounde-web/.private/sessionize-acc
 T-shirt size, or the "owner informed/confirmed" timestamps into the repo, the DB, a commit
 message or a log.
 
-| Export column | Site field |
-|---|---|
-| FirstName + LastName | `name`. Fix the order and casing where Sessionize split it badly (see the table below). |
-| TagLine | `role` {fr,en}. Translate; keep the original language as one side. `company` is taken from the tagline when it names one. |
-| Bio | `bio` {fr,en}. Translate into the missing language and keep the speaker's own text verbatim on their side. Fix obvious typos only. |
-| Profile Picture | `photoUrl`. See Photos below. |
-| LinkedIn / Blog / Company Website / X | `social.linkedin` / `social.website` (Blog, or Company if there's no blog) / `social.x`. Drop Facebook unless the schema already supports it. |
-| Ice breaker question / answer | `icebreakerQuestion` / `icebreakerAnswer` {fr,en} where given, otherwise the schema's existing empty-state value. Check how `"—"` renders and make sure it renders nothing. |
-| Session Id + Title + Description | One `Session` per row (`speakerIds: [speaker]`, and the speaker's `sessionIds: [session]`). |
-| Session format | `kind`: Workshop → `workshop`, Lightning talk → `talk`. Keep "lightning" visible, e.g. as a tag or the duration. |
-| Session type (In person / Online) | Hubert Nang's session is **Online**. Show an "Online" marker. |
-| Level, Language, Tags | Add optional `level` and `language` fields to the Session type and Zod schema (`src/data/types.ts:172-194`, `schemas.ts:91-109`), and render them as chips. Tags map to `tags[]`. |
-| Room / Scheduled At | **Empty in the export.** Nothing is scheduled yet. |
+| Export column                         | Site field                                                                                                                                                                        |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FirstName + LastName                  | `name`. Fix the order and casing where Sessionize split it badly (see the table below).                                                                                           |
+| TagLine                               | `role` {fr,en}. Translate; keep the original language as one side. `company` is taken from the tagline when it names one.                                                         |
+| Bio                                   | `bio` {fr,en}. Translate into the missing language and keep the speaker's own text verbatim on their side. Fix obvious typos only.                                                |
+| Profile Picture                       | `photoUrl`. See Photos below.                                                                                                                                                     |
+| LinkedIn / Blog / Company Website / X | `social.linkedin` / `social.website` (Blog, or Company if there's no blog) / `social.x`. Drop Facebook unless the schema already supports it.                                     |
+| Ice breaker question / answer         | `icebreakerQuestion` / `icebreakerAnswer` {fr,en} where given, otherwise the schema's existing empty-state value. Check how `"—"` renders and make sure it renders nothing.       |
+| Session Id + Title + Description      | One `Session` per row (`speakerIds: [speaker]`, and the speaker's `sessionIds: [session]`).                                                                                       |
+| Session format                        | `kind`: Workshop → `workshop`, Lightning talk → `talk`. Keep "lightning" visible, e.g. as a tag or the duration.                                                                  |
+| Session type (In person / Online)     | Hubert Nang's session is **Online**. Show an "Online" marker.                                                                                                                     |
+| Level, Language, Tags                 | Add optional `level` and `language` fields to the Session type and Zod schema (`src/data/types.ts:172-194`, `schemas.ts:91-109`), and render them as chips. Tags map to `tags[]`. |
+| Room / Scheduled At                   | **Empty in the export.** Nothing is scheduled yet.                                                                                                                                |
 
 Expected roster, as a cross-check (24 people, 24 sessions; 4 workshops):
 
-| Sessionize id | Display name | Format | Notes |
-|---|---|---|---|
-| 1339016 | Cabrel Domfang | Workshop | |
-| 1350359 | Egbe Michel ("Mich") | Workshop | "From git push…" |
-| 1350410 | Linda Ebete | Lightning | |
-| 1351469 | Danwe Basga | Lightning | |
-| 1352359 | Rostand Tchuekam | Lightning | |
-| 1352668 | Steve Kambea Ndjeumou | Lightning | export splits it as "Kambea ndjeumou / Steve" |
-| 1353400 | Samuel De Essaka | Lightning | |
-| 1353994 | Emerson Folong | Lightning | |
-| 1354849 | Manuel Karim Abolo | Lightning | export has "ABOLO" in caps |
-| 1355263 | Gervais Azanga Ayissi | Lightning | |
-| 1367658 | Destin Kouam | Lightning | |
-| 1368723 | Arnaud Dzudie | Lightning | |
-| 1369967 | Anita Dongmo | Lightning | |
-| 1371401 | Sandra Macheu Talla | Lightning | |
-| 1371405 | Verdiane Fotso | Lightning | |
-| 1371413 | Ange Naomy Kengne Takoumbo | Lightning | export splits it as "Kengne Takoumbo / Ange Naomy" |
-| 1372363 | Nathan Foka | Lightning | |
-| 1372444 | Hubert Nang | Lightning | **Online** |
-| 1372498 | Le Prince Dachi | Lightning | export splits it as "Le / Prince Dachi" |
-| 1373948 | Marie Ipouk | Workshop | |
-| 1376249 | David Njome | Lightning | export: "Njome / David" |
-| 1376670 | Noémie Youbissi | Workshop | |
-| 1376783 | Raïssa Wokmeni | Lightning | |
-| 1377020 | Freddy Choudja | Lightning | |
+| Sessionize id | Display name               | Format    | Notes                                              |
+| ------------- | -------------------------- | --------- | -------------------------------------------------- |
+| 1339016       | Cabrel Domfang             | Workshop  |                                                    |
+| 1350359       | Egbe Michel ("Mich")       | Workshop  | "From git push…"                                   |
+| 1350410       | Linda Ebete                | Lightning |                                                    |
+| 1351469       | Danwe Basga                | Lightning |                                                    |
+| 1352359       | Rostand Tchuekam           | Lightning |                                                    |
+| 1352668       | Steve Kambea Ndjeumou      | Lightning | export splits it as "Kambea ndjeumou / Steve"      |
+| 1353400       | Samuel De Essaka           | Lightning |                                                    |
+| 1353994       | Emerson Folong             | Lightning |                                                    |
+| 1354849       | Manuel Karim Abolo         | Lightning | export has "ABOLO" in caps                         |
+| 1355263       | Gervais Azanga Ayissi      | Lightning |                                                    |
+| 1367658       | Destin Kouam               | Lightning |                                                    |
+| 1368723       | Arnaud Dzudie              | Lightning |                                                    |
+| 1369967       | Anita Dongmo               | Lightning |                                                    |
+| 1371401       | Sandra Macheu Talla        | Lightning |                                                    |
+| 1371405       | Verdiane Fotso             | Lightning |                                                    |
+| 1371413       | Ange Naomy Kengne Takoumbo | Lightning | export splits it as "Kengne Takoumbo / Ange Naomy" |
+| 1372363       | Nathan Foka                | Lightning |                                                    |
+| 1372444       | Hubert Nang                | Lightning | **Online**                                         |
+| 1372498       | Le Prince Dachi            | Lightning | export splits it as "Le / Prince Dachi"            |
+| 1373948       | Marie Ipouk                | Workshop  |                                                    |
+| 1376249       | David Njome                | Lightning | export: "Njome / David"                            |
+| 1376670       | Noémie Youbissi            | Workshop  |                                                    |
+| 1376783       | Raïssa Wokmeni             | Lightning |                                                    |
+| 1377020       | Freddy Choudja             | Lightning |                                                    |
 
 Name-order fixes are a best guess. **List every renamed person in the review summary**
 so the organiser can confirm.
@@ -219,7 +219,7 @@ The `Session` schema requires `time`, and the schedule must not show invented ti
 
 ---
 
-## Part D — Terms, FAQs, and the "terms updated" pop-up  (branch `feat/participation-terms`)
+## Part D — Terms, FAQs, and the "terms updated" pop-up (branch `feat/participation-terms`)
 
 (D comes before C on purpose: the terms must be live before Wednesday.)
 
@@ -302,7 +302,7 @@ never legalese and never scolding). The French version is the reference.
 
 ---
 
-## Part C — Let ticket holders edit their ticket until Wednesday  (branch `feat/ticket-self-edit`)
+## Part C — Let ticket holders edit their ticket until Wednesday (branch `feat/ticket-self-edit`)
 
 - **Who:** the signed-in user whose `auth.uid() = tickets.user_id`. That's the buyer for unclaimed
   tickets they bought for others, and the attendee once claimed (`0024_ticket_claim.sql`).
@@ -346,7 +346,7 @@ never legalese and never scolding). The French version is the reference.
 
 ---
 
-## Part E — "What's changing" email templates, sent manually  (branch `feat/terms-update-email`)
+## Part E — "What's changing" email templates, sent manually (branch `feat/terms-update-email`)
 
 **Decided: there's no email domain yet, so the site sends nothing.** Organisers download the
 templates and send them by hand: Gmail (BCC) for paid holders and site users, and the
@@ -410,7 +410,7 @@ send button, no Resend batch sender and no broadcast tables.
 
 ---
 
-## Part F — Collector-edition DP frames for paid ticket holders  (branch `feat/dp-collector-frames`)
+## Part F — Collector-edition DP frames for paid ticket holders (branch `feat/dp-collector-frames`)
 
 - **Eligibility:** the signed-in user holds at least one ticket where `user_id = auth.uid()`
   **and** (`is_self` **or** `claimed_at is not null`) **and** the tier's `priceXAF > 0`
@@ -435,7 +435,7 @@ send button, no Resend batch sender and no broadcast tables.
   - Today frames are static client data, so anything in the bundle is unlockable from devtools.
     Keep the collector frame **definitions** out of the public bundle: serve them from
     `GET /api/dp/collector-frames`, which returns the definitions only when the entitlement passes.
-  - The canvas pattern *code* may ship, since it's harmless without a definition. Keep it small.
+  - The canvas pattern _code_ may ship, since it's harmless without a definition. Keep it small.
   - Wall saves: `gallery-server.ts` (`cleanTheme` :155) must reject a collector `theme` unless
     the saver is entitled.
 - **UI** (`DpGenerator.tsx`, frame picker ~:675):
@@ -454,6 +454,7 @@ send button, no Resend batch sender and no broadcast tables.
 ## Review summary format (end of every part)
 
 Include:
+
 - What changed, by file.
 - Migrations to apply and in what order relative to the deploy.
 - DB rows that override repo JSON, and what you did about each.

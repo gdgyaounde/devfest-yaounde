@@ -1,7 +1,7 @@
 # 0054 — Swag references shop products; it does not create them
 
 Date: 2026-09-14
-Status: Accepted — **supersedes ADR 0050**; **amended by [0070](0070-ticket-only-products-and-nav-tabs.md)** — a tier's swag now resolves against published products *including* ticket-only ones, which are deliberately not in the shop
+Status: Accepted — **supersedes ADR 0050**; **amended by [0070](0070-ticket-only-products-and-nav-tabs.md)** — a tier's swag now resolves against published products _including_ ticket-only ones, which are deliberately not in the shop
 
 ## What went wrong
 
@@ -14,12 +14,12 @@ the product — and none of those were the problem.
 The problem was **duplication**, and it showed up the moment real tiers were
 entered. Measured in the live database before this change:
 
-| | |
-| --- | --- |
-| Shop products total | **25** |
-| Genuine, hand-authored listings | **5** |
-| Auto-created from tier swag | **20** |
-| Distinct listings for "T-shirt" | **5** (`tee-edition` + four `swag-*-tshirt`) |
+|                                      |                                                 |
+| ------------------------------------ | ----------------------------------------------- |
+| Shop products total                  | **25**                                          |
+| Genuine, hand-authored listings      | **5**                                           |
+| Auto-created from tier swag          | **20**                                          |
+| Distinct listings for "T-shirt"      | **5** (`tee-edition` + four `swag-*-tshirt`)    |
 | Distinct listings for "Sticker pack" | **5** (`sticker-pack` + four `swag-*-stickers`) |
 
 Five tiers each bundling a t-shirt produced five separate t-shirt products,
@@ -88,7 +88,7 @@ knows which listing is meant.
 4. Rewrites `swag` → `swagProductIds`, keeping only ids that still resolve.
 
 **Order matters, and so does deploying first.** The migration must run
-*after* this code is live. Run against the old code, the pre-existing
+_after_ this code is live. Run against the old code, the pre-existing
 swag-sync would simply re-create the drafts on the next tier save, and the
 public preview — still reading `tier.swag` — would go blank.
 
@@ -109,6 +109,6 @@ public preview — still reading `tier.swag` — would go blank.
 
 **Not verified:** the SQL itself has not been executed — there is no
 Postgres or Docker in the authoring sandbox, and the Supabase JS client
-cannot run arbitrary SQL. The *rules* it encodes were dry-run in JS against
+cannot run arbitrary SQL. The _rules_ it encodes were dry-run in JS against
 the real payload and produce the table above; the SQL expressing them is
 reviewed, not run. Read the backup table it writes as the safety net it is.

@@ -33,10 +33,10 @@ tickets AND the shop.** The instant is set in **Admin → Config → Ticket sale
   a page or a stale tab shows. A buyer who was already on the Mobile Money
   prompt before 12:00 still gets their ticket or order.
 - People **reserve instead** on `/reserve` — tickets and shop items, at base
-  price (cash has no online fee) — until **Friday 20 November, 23:59**
+  price (cash has no online fee) — until **Friday 20 November, 17:00**
   ("Reservations close" in Config). They pay **in cash at FMSB Yaoundé,
   Amphi 350**. See [reservations.md](reservations.md).
-- After Friday 23:59 there is no more reserving: people simply come and pay
+- After Friday 17:00 there is no more reserving: people simply come and pay
   cash on the spot.
 - The tickets page, the shop, the banner, the pop-up and the buttons all follow
   these two instants through one shared phase (selling → reserving → door).

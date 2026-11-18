@@ -11,6 +11,7 @@ import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
 import { getProducts, getSwagProducts, getTiers } from "@/lib/content/store";
 import { EVENT, formatCutoff, formatEventDates } from "@/lib/event";
+import { cashPriceXAF } from "@/lib/payments/fees";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -59,7 +60,8 @@ export default async function ReservePage({
       name: tier.name,
       label: tier.label?.[l] ?? "",
       description: tier.description[l],
-      priceXAF: tier.priceXAF,
+      // The cash price at the venue (ADR 0084), not the online one.
+      priceXAF: cashPriceXAF(tier),
       includesApparel: tier.includesApparel,
       soldOut: Boolean(tier.soldOut),
       box: (tier.swagProductIds ?? [])
@@ -73,7 +75,7 @@ export default async function ReservePage({
     .map((p) => ({
       id: p.id,
       name: p.name[l],
-      priceXAF: p.priceXAF,
+      priceXAF: cashPriceXAF(p),
     }));
 
   return (

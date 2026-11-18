@@ -21,8 +21,7 @@ capacity has been set, in which case nothing public renders (no "0 of 0"
 counter, which would read as sold out).
 
 **Per-tier `quantityAvailable` keeps doing exactly what it already did** —
-the binding checkout gate, enforced in `create_payment_intent` (migration
-0002) and the optimistic fast-fail in `quoteTierCounts`. Nothing about this
+the binding checkout gate, enforced in `create_payment_intent` (migration 0002) and the optimistic fast-fail in `quoteTierCounts`. Nothing about this
 phase changes that. The overall total is a **display and admin-planning
 number**, not a second enforcement point: checkout never reads
 `settings.capacity` at all.

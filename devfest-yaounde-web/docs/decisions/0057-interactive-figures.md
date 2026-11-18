@@ -42,7 +42,7 @@ screen. `revolutions={1}` makes each column spin one full turn on the way, and
 and leaves two zeros sitting still, which does not read as a counter at all.
 
 - **Reduced motion:** the final value from the first client render and no
-  transition — verified to be final *before* the section is scrolled to.
+  transition — verified to be final _before_ the section is scrolled to.
 - **Screen readers:** always the real figure (`srText`), never "0"; not a live
   region, since rolling in on scroll is not a change worth announcing.
 - **No JS:** shows zeros, as the count-up it replaced did; the accessible text
@@ -69,7 +69,7 @@ the glyphs with a cancelling negative margin — a deliberate target bigger than
 the ink, without moving the layout.
 
 **The fallback** for everyone the cursor cannot reach is the image shown inline
-above the number. It is hidden by CSS under *exactly* the cursor's media query
+above the number. It is hidden by CSS under _exactly_ the cursor's media query
 (`(hover: hover) and (pointer: fine) and (prefers-reduced-motion:
 no-preference)`), so the choice is made before hydration and one of the two is
 always present. As a side effect the hidden inline image preloads the picture,
@@ -80,18 +80,18 @@ so the cursor card never reveals an empty box.
 In headless Chrome with a real fine/hover pointer (`--blink-settings`; default
 headless reports neither, which doubled as the no-hover case):
 
-| Check | Result |
-| --- | --- |
-| Before scroll | digits at 0, accessible text "500+" |
-| Scrolled in | caught **mid-roll** (−548px), settled at 5/0/0 after one turn each |
-| Zone vs glyphs | zone 24px wider each side, 16px taller |
-| Enter via padding, 14px left of the first digit | image state, reveal mid-transition, then fully open |
-| Trailing after a fast move | card 149 → 105 → 83 → 58 → 41 → 33px behind over 240ms |
-| Leave | state back to default, dismiss runs over the kept picture, arrow returns |
-| Figure without image | no zone, no inline image |
-| Ticket counter after extraction | shows 312, column 0.6em (was 0.62em) |
-| Desktop / reduced motion / no-hover / phone 390px | cursor on·off·off·off; inline image hidden·shown·shown·shown; roll 1.1s·none·1.1s·1.1s |
-| Real home page, fr + en | 500+ / 40+ / 1 with correct labels, no zones yet, cursor still turns interactive over links, no errors |
+| Check                                             | Result                                                                                                 |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Before scroll                                     | digits at 0, accessible text "500+"                                                                    |
+| Scrolled in                                       | caught **mid-roll** (−548px), settled at 5/0/0 after one turn each                                     |
+| Zone vs glyphs                                    | zone 24px wider each side, 16px taller                                                                 |
+| Enter via padding, 14px left of the first digit   | image state, reveal mid-transition, then fully open                                                    |
+| Trailing after a fast move                        | card 149 → 105 → 83 → 58 → 41 → 33px behind over 240ms                                                 |
+| Leave                                             | state back to default, dismiss runs over the kept picture, arrow returns                               |
+| Figure without image                              | no zone, no inline image                                                                               |
+| Ticket counter after extraction                   | shows 312, column 0.6em (was 0.62em)                                                                   |
+| Desktop / reduced motion / no-hover / phone 390px | cursor on·off·off·off; inline image hidden·shown·shown·shown; roll 1.1s·none·1.1s·1.1s                 |
+| Real home page, fr + en                           | 500+ / 40+ / 1 with correct labels, no zones yet, cursor still turns interactive over links, no errors |
 
 ## Consequences
 

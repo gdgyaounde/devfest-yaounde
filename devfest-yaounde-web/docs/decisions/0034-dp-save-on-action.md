@@ -31,7 +31,7 @@ destroying the file (Part B9). A submitter takedown still **deletes**.
 Consent is the notice sitting above the buttons, with a link to
 `/wall/terms`. The server records that wording (`galleryConsentText`), never
 a client-supplied string. There is no second "put it on the wall" click —
-the action *is* the save.
+the action _is_ the save.
 
 Retention remains 200 days (`gallery-retention.ts`). Report (`0033`) and
 token takedown stay. `/wall/remove` lists cards this browser saved.
@@ -41,7 +41,7 @@ intent buttons are gone; Web Share for the image remains.
 
 ## Consequences
 
-- `0015`'s "nothing is uploaded" is no longer true of the *card*. It remains
+- `0015`'s "nothing is uploaded" is no longer true of the _card_. It remains
   true of the source photo.
 - A download can put a face on the public wall before anyone looks. That is
   the default-on trade already accepted in `0027`, now on every save rather

@@ -28,7 +28,7 @@ list:
   called `lenis.stop()` for every overlay — the preloader, `Modal`,
   `BottomSheet`, the admin drawer — and a stopped Lenis does not go quiet: it
   keeps its wheel listener and calls `preventDefault()` on everything it
-  sees. That swallowed scrolling *inside* the overlay too, not just on the
+  sees. That swallowed scrolling _inside_ the overlay too, not just on the
   page behind it — measured, a scrollable drawer's `scrollTop` never left 0
   under a 3000px wheel. The workaround was a `data-lenis-prevent` attribute
   on every scrollable overlay body, checked by Lenis before its stopped
@@ -41,9 +41,9 @@ list:
   intermittently, depending on which effect won the race on a given load.
 
 Both were real, both were fixed, and fixing them is exactly the kind of
-patching that stops being worth it once the underlying pattern — *a library
+patching that stops being worth it once the underlying pattern — _a library
 runs its own scroll loop against the real document, and every piece of code
-that freezes or measures scroll has to know that and work around it* — keeps
+that freezes or measures scroll has to know that and work around it_ — keeps
 producing new instances of the same category of bug.
 
 ## Decision: remove, don't disable
@@ -109,7 +109,7 @@ outright means:
 - One fewer runtime dependency, and one fewer category of "what did the
   scroll library do this time" bug class to re-discover.
 - Momentum/accelerate-then-decelerate wheel scrolling is gone. `PHASE7_
-  INSTRUCTIONS.md §1a` asked for it; this reverses that, deliberately,
+INSTRUCTIONS.md §1a` asked for it; this reverses that, deliberately,
   because the actual behaviour it shipped was worse than plain native scroll
   for a real visitor, which is the only thing that was ever meant to matter.
 - **Not proposing this again without new information.** ADR 0007's own

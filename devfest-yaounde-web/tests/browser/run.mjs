@@ -35,10 +35,15 @@ for (const name of SUITES) {
   const output = `${run.stdout ?? ""}${run.stderr ?? ""}`;
   const summary = output.split("\n").find((l) => /: \d+ passed/.test(l)) ?? "";
   const ok = run.status === 0 && /0 failures/.test(summary);
-  console.log(`${ok ? "ok      " : "FAILED  "} ${name.padEnd(12)} ${summary.trim()}`);
+  console.log(
+    `${ok ? "ok      " : "FAILED  "} ${name.padEnd(12)} ${summary.trim()}`,
+  );
   if (!ok) {
     failed++;
-    output.split("\n").filter((l) => l.startsWith("FAIL")).forEach((l) => console.log("   " + l));
+    output
+      .split("\n")
+      .filter((l) => l.startsWith("FAIL"))
+      .forEach((l) => console.log("   " + l));
   }
 }
 

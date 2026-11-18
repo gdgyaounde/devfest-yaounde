@@ -279,6 +279,28 @@ export function AdminShop({
               </Field>
 
               <Field
+                label="Cash price at the venue (XAF)"
+                hint="From the payments cutoff on, shop items are reserved and paid in cash at this price — no online fee. Blank = same as the base price."
+              >
+                <TextInput
+                  type="number"
+                  value={
+                    draft.venuePriceXAF === undefined
+                      ? ""
+                      : String(draft.venuePriceXAF)
+                  }
+                  onChange={(v) =>
+                    patch({
+                      venuePriceXAF:
+                        v.trim() === ""
+                          ? undefined
+                          : Math.max(0, Number(v) || 0),
+                    })
+                  }
+                />
+              </Field>
+
+              <Field
                 label="Images"
                 hint="First image is the card cover. Drag to add several — each uploads immediately."
               >

@@ -63,4 +63,4 @@ than inventing a second convention.
   into the admin dashboard's props. A determined direct API call still goes
   through the collection's normal write path, which has its own
   organiser-gate, rate limit and audit log; this modal's job is specifically
-  to stop a *misclick* in the UI, not to be a second authorisation layer.
+  to stop a _misclick_ in the UI, not to be a second authorisation layer.

@@ -15,7 +15,7 @@ So the actual new work is the claim feature. The email side needed one addition 
 
 ## 2. Self-service claim: what it does and doesn't cover
 
-A ticket bought for someone else (`is_self = false`, PHASE22 §B's own FAQ copy already promised this: *"if you bought a ticket on someone else's behalf, they can claim it into their own account to manage and check in with it themselves"*) now gets a **separate email**, sent to `attendee_email` alongside — not instead of — the buyer's own receipt. It contains a link to `/{locale}/account/claim/{ticketId}/{token}`. Opening it:
+A ticket bought for someone else (`is_self = false`, PHASE22 §B's own FAQ copy already promised this: _"if you bought a ticket on someone else's behalf, they can claim it into their own account to manage and check in with it themselves"_) now gets a **separate email**, sent to `attendee_email` alongside — not instead of — the buyer's own receipt. It contains a link to `/{locale}/account/claim/{ticketId}/{token}`. Opening it:
 
 1. Prompts Google sign-in if not already signed in (reusing `signInWithGoogle`'s existing `next` redirect, so it lands back on the same claim URL after auth).
 2. Once signed in, submits automatically — no second "are you sure," since clicking the emailed link and going through Google's own consent screen already were the two confirmations.
@@ -37,7 +37,7 @@ A derived HMAC token has no expiry of its own — it is valid for as long as the
 
 ## 3. Closing the email provider decision
 
-ADR 0003's closing note left one line open: *"provider still not chosen, Resend is wired as the one concrete adapter."* PHASE22 §C explicitly asks to finish that. **Decision: Resend is the provider**, full stop — not "the only one wired so far." `send.ts`'s two-adapter shape (configured → sent through Resend; unconfigured → logged and skipped) stays exactly as it is; nothing about the code needed to change to make this official; what changed is that the ambiguity is now recorded as resolved rather than open.
+ADR 0003's closing note left one line open: _"provider still not chosen, Resend is wired as the one concrete adapter."_ PHASE22 §C explicitly asks to finish that. **Decision: Resend is the provider**, full stop — not "the only one wired so far." `send.ts`'s two-adapter shape (configured → sent through Resend; unconfigured → logged and skipped) stays exactly as it is; nothing about the code needed to change to make this official; what changed is that the ambiguity is now recorded as resolved rather than open.
 
 **What "finish" did NOT mean here, and could not from this environment:** confirming a real message actually lands in a real inbox against the production Resend account and the verified `gdgyaounde.com` domain. That is an operational check against live credentials this sandbox does not have and, per this project's standing rule, must not attempt — `.env.local` here points at the real production Supabase project and is read-only for exactly this reason; the same caution extends to not making a live call against a real Resend key even if one were available. What COULD be verified, and was:
 

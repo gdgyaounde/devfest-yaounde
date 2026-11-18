@@ -9,14 +9,14 @@ and tilt reworked in ADR 0059).
 
 ## Props
 
-| Prop        | Type     | Default                                          |
-| ----------- | -------- | ------------------------------------------------ |
-| `value`     | `number` | required — whole, non-negative                   |
-| `label`     | `string` | required — e.g. `"developers"`                   |
-| `suffix`    | `string` | `""` — e.g. `"+"` for "500+"                     |
-| `imageUrl`  | `string` | — optional picture; enables the cursor reveal    |
+| Prop        | Type     | Default                                                                                              |
+| ----------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `value`     | `number` | required — whole, non-negative                                                                       |
+| `label`     | `string` | required — e.g. `"developers"`                                                                       |
+| `suffix`    | `string` | `""` — e.g. `"+"` for "500+"                                                                         |
+| `imageUrl`  | `string` | — optional picture; enables the cursor reveal                                                        |
 | `index`     | `number` | required — position among the section's figures; the only input the alternating tilt is derived from |
-| `className` | `string` | —                                                |
+| `className` | `string` | —                                                                                                    |
 
 ## Motion
 
@@ -34,11 +34,11 @@ and tilt reworked in ADR 0059).
 
 ## The image
 
-| Visitor                                      | What they get                                           |
-| -------------------------------------------- | ------------------------------------------------------- |
+| Visitor                                      | What they get                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------------------------------- |
 | Mouse/trackpad, motion allowed               | Hover zone → cursor becomes the image card, trailing, bobbing gently once revealed |
-| Touch, no hover, or `prefers-reduced-motion` | The image shown inline above the number, always visible |
-| Figure without an image                      | Just the number                                         |
+| Touch, no hover, or `prefers-reduced-motion` | The image shown inline above the number, always visible                            |
+| Figure without an image                      | Just the number                                                                    |
 
 The inline image is hidden by CSS (`.stat-inline-image`) under exactly the
 media query `CustomCursor` runs under, so one of the two is always there and
@@ -47,8 +47,7 @@ vertically) with a matching negative margin, so it does not move the layout.
 
 **Sizing:** the cursor card is 320×200 and the inline fallback 144×96 —
 both closer to an actual landscape photo's shape than the original ~4:3
-boxes, so `object-fit: cover` (kept, not swapped for `contain` — see ADR
-0059) has far less to crop off the sides.
+boxes, so `object-fit: cover` (kept, not swapped for `contain` — see ADR 0059) has far less to crop off the sides.
 
 **Tilt:** derived from `index` — `index % 2 === 0 ? -5 : 5` — so figures in a
 row alternate which way they lean rather than all matching. Passed to
@@ -59,5 +58,11 @@ for how the cursor reads it and why the bob needed its own nested element.
 ## Usage
 
 ```tsx
-<StatCounter value={500} suffix="+" label="developers" imageUrl={url} index={0} />
+<StatCounter
+  value={500}
+  suffix="+"
+  label="developers"
+  imageUrl={url}
+  index={0}
+/>
 ```

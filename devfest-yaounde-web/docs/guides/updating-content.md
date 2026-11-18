@@ -257,11 +257,11 @@ Day 2 is worked out automatically as the following day. The buttons appear on
   running" beats "responsible for infrastructure operations". In the admin it
   is labelled **Tagline**: one line on what they do beyond GDG (day job,
   studies, something personal). It shows on the card itself and in the detail.
-- **`expertise`** (admin: *Expertise tags*) is up to **3** short bilingual chips
+- **`expertise`** (admin: _Expertise tags_) is up to **3** short bilingual chips
   — "Frontend", "Community", "Design". They show in the detail (popover, sheet
   and slider) and on alumni cards, not on the grid card face, which stays a
   portrait first. Fill one language in the admin and the other is copied.
-- **`gdgSince`** (admin: *With GDG since*) is the four-digit year they joined,
+- **`gdgSince`** (admin: _With GDG since_) is the four-digit year they joined,
   shown quietly under their role as "With GDG since 2022". All three are
   optional — nothing is invented for someone who hasn't supplied them, and a
   CSV re-import keeps whatever is already saved.
@@ -284,7 +284,7 @@ be regrouped — it's driven by one field, so it's a small change.
 
 ## Sponsors and Memory Lane — from the dashboard (ADR 0060)
 
-- **Sponsors** — *Content → Sponsors*. Name, logo, website, tier, and an
+- **Sponsors** — _Content → Sponsors_. Name, logo, website, tier, and an
   optional blurb. The tier list is Haikyu, Sonnet, Opus, Fable, Mythos
   (ascending, same names as the ticket tiers), plus Community and Partner
   for non-monetary listings.
@@ -298,7 +298,7 @@ be regrouped — it's driven by one field, so it's a small change.
     distinct mark per tier (a seed, a note, a star, a book, a flame, a
     node cluster, two linked rings), never reused as decoration anywhere
     else on the site.
-- **Memory Lane** — *Content → Memory Lane*. Photo, alt text (both
+- **Memory Lane** — _Content → Memory Lane_. Photo, alt text (both
   languages), an optional year. Order here is the order the grid on the home
   page shows them in. Four or five portrait photos is the sweet spot — this
   is a taste of past editions, not the full album (that's the gallery link
@@ -310,7 +310,7 @@ be regrouped — it's driven by one field, so it's a small change.
 
 Both live in the admin now, not in files.
 
-- **Testimonials** — *Community → Testimonials*. Quote in both languages, an
+- **Testimonials** — _Community → Testimonials_. Quote in both languages, an
   optional name, role/company and photo. The order of the list is the order
   they rotate in on the home page; **Hide** on a row takes one out of the
   rotation without deleting it. Deleting asks you to type the id.
@@ -319,7 +319,7 @@ Both live in the admin now, not in files.
     member" / "Membre de la communauté". Never invent a name for a quote.
   - Hide every testimonial and the whole section disappears from the home
     page rather than showing an empty heading.
-- **Gallery links** — *Settings → Info bar & policies → Gallery links*, two
+- **Gallery links** — _Settings → Info bar & policies → Gallery links_, two
   fields (ADR 0058):
   - The **past edition's** album URL — shown as "View the {year} gallery" in
     Memory Lane, the year filled in automatically (one back from the current
@@ -337,12 +337,12 @@ Both live in the admin now, not in files.
 
 ## What's still placeholder
 
-| File                   | What's fake                                                |
-| ---------------------- | ---------------------------------------------------------- |
-| `speakers.json`        | All 14 entries — invented names, companies and bios        |
-| `sessions.json`        | All 8 — invented titles, times, tracks and rooms           |
-| `team.json`            | All 8 — every name literally reads "Placeholder Organizer" |
-| `public/placeholders/` | Every image is a flat colour block, not a photo            |
+| File                   | What's fake                                                                                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `speakers.json`        | All 14 entries — invented names, companies and bios                                                                                                                    |
+| `sessions.json`        | All 8 — invented titles, times, tracks and rooms                                                                                                                       |
+| `team.json`            | All 8 — every name literally reads "Placeholder Organizer"                                                                                                             |
+| `public/placeholders/` | Every image is a flat colour block, not a photo                                                                                                                        |
 | `past-editions.json`   | Empty (`[]`) — the old 4 fake colourful placeholder photos were removed; the home page shows dashed empty frames until real ones are uploaded at Content → Memory Lane |
 
 The images make the biggest visual difference. Swapping in real community

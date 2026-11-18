@@ -11,6 +11,7 @@
  */
 import { z } from "zod";
 import type { Product, TicketTier } from "@/data/types";
+import { cashPriceXAF } from "@/lib/payments/fees";
 import { APPAREL_SIZES } from "@/lib/tickets/self-edit";
 
 // -------------------------------------------------------------------- limits
@@ -232,7 +233,7 @@ export function priceReservation(
     if (tier.includesApparel && !ticket.apparelSize) {
       throw new ReservationError(RESERVATION_ERRORS.SIZE_REQUIRED, 400);
     }
-    total += tier.priceXAF;
+    total += cashPriceXAF(tier);
     caps[tier.id] = tier.quantityAvailable ?? null;
   }
 
@@ -246,7 +247,7 @@ export function priceReservation(
     if (!validVariant(product, line.variant)) {
       throw new ReservationError(RESERVATION_ERRORS.INVALID_VARIANT, 400);
     }
-    total += product.priceXAF * line.quantity;
+    total += cashPriceXAF(product) * line.quantity;
   }
 
   return {

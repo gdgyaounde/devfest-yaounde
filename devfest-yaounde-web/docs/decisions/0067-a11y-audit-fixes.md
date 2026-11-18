@@ -87,7 +87,7 @@ is present, even though it's never used to trigger `:hover`), so a
 sponsor's blurb text was reachable by mouse-hover OR by touch, but
 never by that combination.
 
-Fix: a fourth, `sr-only` copy of the blurb, gated by the *inverse*
+Fix: a fourth, `sr-only` copy of the blurb, gated by the _inverse_
 query — present in the accessibility tree exactly when the inline
 paragraph is display:none (i.e., when the cursor-card is the active
 reveal), and itself removed from the tree exactly when the inline

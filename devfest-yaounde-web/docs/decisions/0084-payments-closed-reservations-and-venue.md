@@ -8,7 +8,7 @@ Status: Accepted
 DevFest is Saturday 21 November. The organisers decided on Wednesday 18
 November: online payments stop at **12:00 that day** (it had been 23:59), for
 tickets **and the shop**; from then on **no payment passes through the
-platform**. People **reserve** instead, until **Friday 20 November, 23:59**;
+platform**. People **reserve** instead, until **Friday 20 November, 17:00**;
 after that they come to the venue and pay **cash**. The venue is **FMSB
 Yaoundé, Amphi 350**, to be shown on the site with one exact map link, and the
 section right after the hero should lead with the date and the venue.
@@ -33,7 +33,7 @@ section right after the hero should lead with the date and the venue.
    live reservations per tier against the tier's cap under one lock, and caps
    live reservations per account at 3. Prices are BASE prices (cash has no
    online fee), computed from the catalog on the server; the body carries no
-   price. Sign-in required. Cancel by the owner until Friday 23:59 and only
+   price. Sign-in required. Cancel by the owner until Friday 17:00 and only
    while `reserved`. The Friday deadline is enforced by the route from settings.
    If 0034 isn't applied the route answers 503 and writes nothing.
 
@@ -66,3 +66,14 @@ section right after the hero should lead with the date and the venue.
 - No confirmation email (no sending domain): the reference is on screen and in
   "My reservations".
 - Free passes are still RSVP'd on the community page.
+
+## Amendment — 2026-11-18 (later)
+
+- **Reservations close Friday 20 November at 17:00** (not 23:59).
+- **Cash prices at the venue** are their own field, `venuePriceXAF`, on tiers and
+  shop products (absent = the base price). Online prices are unchanged until
+  noon; from noon, reservations, `/tickets`, `/terms` and the shop show the cash
+  price, with no online fee. SONNET 5 000 · OPUS 6 500 · FABLE 12 000 ·
+  MYTHOS 27 000 · Mug GDG Yaoundé 2 500 · La Casquette du Dev Senior 2 500.
+  Set in the dashboard ("Cash price at the venue") and, for the live rows, by
+  migration 0035 (guarded: it stops if either row was edited since).
