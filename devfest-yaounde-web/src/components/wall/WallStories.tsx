@@ -53,15 +53,24 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
   const calm = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [stories, setStories] = useState(initial);
   const [index, setIndex] = useState(0);
-  const [shown, setShown] = useState(true);
-  // A single welcoming line first, then the stories.
+  // The first story starts HIDDEN, so it fades in rather than being there.
+  const [shown, setShown] = useState(false);
+  // A single welcoming line first, then the stories — strictly one after
+  // the other: the welcome fades out completely (welcome → false), the
+  // stage is empty for a beat, and only then does the reel mount (ready)
+  // and its first story fade in (shown). Never both on screen at once.
   const [welcome, setWelcome] = useState(true);
+  const [ready, setReady] = useState(false);
   useEffect(() => {
-    const id = window.setTimeout(
-      () => setWelcome(false),
-      calm ? 600 : WELCOME_MS,
-    );
-    return () => window.clearTimeout(id);
+    const hold = calm ? 600 : WELCOME_MS;
+    const gap = calm ? 250 : FADE_MS + 300;
+    const timers = [
+      window.setTimeout(() => setWelcome(false), hold),
+      window.setTimeout(() => setReady(true), hold + gap),
+      // A frame after mounting hidden, so the fade-in actually runs.
+      window.setTimeout(() => setShown(true), hold + gap + 60),
+    ];
+    return () => timers.forEach((id) => window.clearTimeout(id));
   }, [calm]);
 
   // Refresh the reel as it starts, then from time to time.
@@ -84,7 +93,7 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
 
   // Hold, fade out, move on, fade in.
   useEffect(() => {
-    if (welcome || !story || count < 2) return;
+    if (!ready || !story || count < 2) return;
     const out = window.setTimeout(
       () => setShown(false),
       holdFor(story.message),
@@ -100,7 +109,7 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
       window.clearTimeout(out);
       window.clearTimeout(next);
     };
-  }, [story, count, welcome]);
+  }, [story, count, ready]);
 
   const roleLabel = (role: string | null) =>
     role && (TESTIMONIAL_ROLES as readonly string[]).includes(role)
@@ -151,7 +160,7 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
           ))}
       </p>
 
-      {welcome ? null : story ? (
+      {!ready ? null : story ? (
         <>
           {/* The year, enormous and faint: where in the story we are. */}
           <span
@@ -169,10 +178,10 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
           >
             <blockquote
               lang={story.locale}
-              className="whitespace-pre-line text-balance font-sans font-bold leading-[1.14] tracking-[-0.02em] text-black02"
+              className="whitespace-pre-line text-balance font-sans font-bold leading-[1.2] tracking-[-0.02em] text-black02"
               style={{ fontSize: sizeFor(story.message) }}
             >
-              &ldquo;{story.message}&rdquo;
+              {story.message}
             </blockquote>
             <figcaption className="mt-6 font-mono text-body-m text-black02/65">
               {attribution || t("anonymous")}
@@ -180,7 +189,10 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
           </figure>
         </>
       ) : (
-        <div className="relative max-w-xl text-center">
+        <div
+          data-shown={shown}
+          className={`${calmFade} relative max-w-xl text-center`}
+        >
           <p className="font-sans text-heading-l font-bold text-black02">
             {t("emptyTitle")}
           </p>
