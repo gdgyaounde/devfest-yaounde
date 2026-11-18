@@ -57,6 +57,9 @@ const COUNT_START = 300;
 const YEARS_MS = 4600;
 /** Where in YEARS_MS the count lands on the last year (the spacing too). */
 const ARRIVE = 0.78;
+/** The year's final stroke, as a share of its font size: thick enough that
+ * the digits touch. */
+const STROKE_END = 0.096;
 const T_LINE2 = T_YEARS + IN_DELAY + COUNT_START + YEARS_MS + 450;
 const T_LINE3 = T_LINE2 + IN_DELAY + 1500;
 const T_DONE = T_LINE3 + IN_DELAY + 1900;
@@ -154,7 +157,7 @@ export function TestimonialComposer() {
     const tick = (now: number) => {
       const u = (now - start) / YEARS_MS;
       if (u >= 1) {
-        set(LAST_YEAR, 0, 0.04);
+        set(LAST_YEAR, 0, STROKE_END);
         return;
       }
       if (u > 0) {
@@ -162,8 +165,10 @@ export function TestimonialComposer() {
         set(
           FIRST_YEAR + Math.round(e * (LAST_YEAR - FIRST_YEAR)),
           widest * (1 - e) - pinch * bump(u),
-          // Heavier with every year, and heaviest in the pinch.
-          0.004 + 0.036 * e + 0.012 * bump(u),
+          // Heavier with every year — slowly at first, then fast, so the
+          // last years thicken until the digits run into each other — and
+          // heaviest of all in the pinch.
+          0.004 + 0.092 * e * e + 0.016 * bump(u),
         );
       }
       frame = requestAnimationFrame(tick);
