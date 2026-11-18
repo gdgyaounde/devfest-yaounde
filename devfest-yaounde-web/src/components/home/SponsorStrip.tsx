@@ -72,9 +72,10 @@ export async function SponsorStrip({
               ? // No flex `gap` in the scrolling case — spacing is a per-item
                 // margin so the -50% loop lands exactly on the seam.
                 `${marqueeLoop} flex w-max items-center`
-              : // ONE row: logos then the ask. On a phone it scrolls sideways
-                // rather than wrapping onto a second line.
-                "mx-auto flex max-w-6xl flex-nowrap items-center gap-3 overflow-x-auto px-5 sm:gap-4 sm:px-8"
+              : // Logos then the ask, never a scrollbar: an overflow axis would
+                // also clip the hover lift. One row on a laptop; on a narrow
+                // phone it wraps rather than scrolls.
+                "mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5 py-2 sm:gap-4 sm:px-8"
           }
         >
           <SponsorRow seats={seats} scrolls={scrolls} />
