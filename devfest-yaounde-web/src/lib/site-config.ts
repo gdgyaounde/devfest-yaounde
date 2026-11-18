@@ -111,15 +111,26 @@ export const CFS_CLOSES_AT = "2026-10-31T23:59:00+01:00";
 /**
  * The ticketing cutoff (ADR 0072). Overridden by `site_settings.ticketing`.
  *
- * Wednesday 18 November 2026, 23:59 in Yaoundé (UTC+1, no DST). After
- * `TICKET_SALES_CLOSE_AT` checkout refuses tickets and ticket-only products;
+ * Wednesday 18 November 2026 in Yaoundé (UTC+1, no DST): payments close at
+ * 12:00 (moved up from 23:59 by ADR 0084), edits at 23:59. After
+ * `TICKET_SALES_CLOSE_AT` checkout refuses tickets, ticket-only products AND
+ * the shop;
  * after `TICKET_EDITS_CLOSE_AT` holders can no longer change their ticket's
  * details. Two instants rather than one so they CAN diverge, but today they
  * are the same minute. The offset is always written out: an offset-less
  * string would be read in the server's timezone, not Yaoundé's.
  */
-export const TICKET_SALES_CLOSE_AT = "2026-11-18T23:59:00+01:00";
+export const TICKET_SALES_CLOSE_AT = "2026-11-18T12:00:00+01:00";
 export const TICKET_EDITS_CLOSE_AT = "2026-11-18T23:59:00+01:00";
+
+/**
+ * The end of RESERVATIONS (ADR 0084). Payments stop at `TICKET_SALES_CLOSE_AT`
+ * — for tickets AND the shop — and from then on people reserve instead of
+ * paying on the platform. Friday 20 November 2026, 23:59 in Yaoundé; after
+ * that, anyone pays in cash at the venue. Overridden by
+ * `site_settings.ticketing.reservationsCloseAt`.
+ */
+export const RESERVATIONS_CLOSE_AT = "2026-11-20T23:59:00+01:00";
 
 /**
  * Last edition's full photo gallery, linked from Memory Lane. Overridden by

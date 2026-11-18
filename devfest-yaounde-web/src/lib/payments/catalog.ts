@@ -72,8 +72,8 @@ const PURCHASABLE: ReadonlySet<ProductStatus> = new Set([
  * a courtesy on top of this rather than the enforcement.
  *
  * Only tickets. Ticket-only products ride along with a ticket and are never
- * sold alone (`isPurchasable` below), so they close with it; the general shop
- * deliberately stays open (`quoteCart` never calls this).
+ * sold alone (`isPurchasable` below), so they close with it. The shop closes
+ * too, through `assertPaymentsOpen` below (ADR 0084).
  *
  * Pure, `now` and `settings` arguments, so the boundary is unit-tested
  * without a database.
@@ -84,6 +84,26 @@ export function assertTicketSalesOpen(
 ): void {
   if (!ticketSalesOpen(now, settings)) {
     throw new CheckoutError(CHECKOUT_ERRORS.TICKET_SALES_CLOSED, 409);
+  }
+}
+
+/**
+ * Refuses ANY new payment — tickets or shop — once payments have closed
+ * (ADR 0084): from `salesCloseAt` on nothing is paid on the platform; people
+ * reserve and pay cash at the venue.
+ *
+ * Called from `quoteCart` (the shop's preview AND checkout), and again in
+ * `startCheckout` — the one function that creates a payment intent for either
+ * kind — so a stale tab, a hand-written POST and any future route all hit the
+ * same wall. Deliberately NOT called from the PawaPay callback or the status
+ * poller: a payment started before the cutoff must still be able to finish.
+ */
+export function assertPaymentsOpen(
+  now: Date,
+  settings: { ticketing: Pick<TicketingSettings, "salesCloseAt"> },
+): void {
+  if (!ticketSalesOpen(now, settings)) {
+    throw new CheckoutError(CHECKOUT_ERRORS.PAYMENTS_CLOSED, 409);
   }
 }
 

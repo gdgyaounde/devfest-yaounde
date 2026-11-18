@@ -78,11 +78,13 @@ const PHOTO_EXTENSION: Record<PhotoFormat, "jpg" | "webp"> = {
   webp: "webp",
 };
 
-export const PHOTO_CONTENT_TYPE: Record<PhotoFormat, "image/jpeg" | "image/webp"> =
-  {
-    jpeg: "image/jpeg",
-    webp: "image/webp",
-  };
+export const PHOTO_CONTENT_TYPE: Record<
+  PhotoFormat,
+  "image/jpeg" | "image/webp"
+> = {
+  jpeg: "image/jpeg",
+  webp: "image/webp",
+};
 
 export function publicPhotoUrl(
   collection: CollectionId,
@@ -206,9 +208,15 @@ export async function normalisePhoto(file: Blob): Promise<NormalisedPhoto> {
  */
 export async function deletePhotoIfExists(path: string): Promise<void> {
   const supabase = createAdminSupabase();
-  const { error } = await supabase.storage.from(EDITORIAL_BUCKET).remove([path]);
+  const { error } = await supabase.storage
+    .from(EDITORIAL_BUCKET)
+    .remove([path]);
   if (error) {
-    console.warn("[content/photos] stale-file cleanup failed", path, error.message);
+    console.warn(
+      "[content/photos] stale-file cleanup failed",
+      path,
+      error.message,
+    );
   }
 }
 

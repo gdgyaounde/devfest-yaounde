@@ -159,6 +159,39 @@ export function ticketSalesOpen(
 }
 
 /**
+ * Where we are in the end-game (ADR 0084), as ONE answer every surface reads:
+ *
+ *   - `selling`   — before `salesCloseAt`: tickets and the shop take payments;
+ *   - `reserving` — from `salesCloseAt` to `reservationsCloseAt`: NO payment
+ *                   passes through the platform; people reserve and pay in
+ *                   cash at the venue;
+ *   - `door`      — from `reservationsCloseAt`: reservations are over; anyone
+ *                   comes to the venue and pays cash.
+ *
+ * Same boundary rule as `ticketSalesOpen` (closed FROM the instant). A cleared
+ * `salesCloseAt` keeps selling; a cleared `reservationsCloseAt` keeps
+ * reserving — emptying a field in the dashboard must never shut a door.
+ * Pure, `now` an argument, so the banner, the CTAs, the pop-up, checkout and
+ * the tests cannot disagree.
+ */
+export type SalesPhase = "selling" | "reserving" | "door";
+
+export function salesPhase(
+  now: Date,
+  settings: {
+    ticketing: Pick<TicketingSettings, "salesCloseAt" | "reservationsCloseAt">;
+  },
+): SalesPhase {
+  const sales = cutoffInstant(settings.ticketing.salesCloseAt);
+  if (sales === null || now.getTime() < sales) return "selling";
+  const reservations = cutoffInstant(settings.ticketing.reservationsCloseAt);
+  if (reservations === null || now.getTime() < reservations) {
+    return "reserving";
+  }
+  return "door";
+}
+
+/**
  * Whether ticket holders can still edit their ticket's details (ADR 0072).
  * Same boundary rule as `ticketSalesOpen`, against `editsCloseAt`.
  */
@@ -213,12 +246,21 @@ export function withinPostEventRevalidateWindow(
  */
 export function withinSalesCloseRevalidateWindow(
   now: Date,
-  settings: { ticketing: Pick<TicketingSettings, "salesCloseAt"> },
+  settings: {
+    ticketing: Pick<TicketingSettings, "salesCloseAt"> &
+      Partial<Pick<TicketingSettings, "reservationsCloseAt">>;
+  },
 ): boolean {
-  const end = cutoffInstant(settings.ticketing.salesCloseAt);
-  if (end === null) return false;
-  const elapsed = now.getTime() - end;
-  return elapsed >= 0 && elapsed < POST_EVENT_REVALIDATE_WINDOW_MS;
+  // Two switches now (ADR 0084): payments close, then reservations close.
+  return [
+    settings.ticketing.salesCloseAt,
+    settings.ticketing.reservationsCloseAt,
+  ].some((value) => {
+    const end = cutoffInstant(value);
+    if (end === null) return false;
+    const elapsed = now.getTime() - end;
+    return elapsed >= 0 && elapsed < POST_EVENT_REVALIDATE_WINDOW_MS;
+  });
 }
 
 /** Each event day as its own start/end pair, in order. */

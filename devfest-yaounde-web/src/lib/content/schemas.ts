@@ -374,6 +374,7 @@ export const sponsorCallSchema = z.object({
 export const ticketingSchema = z.object({
   salesCloseAt: instantOrEmpty.optional().nullable(),
   editsCloseAt: instantOrEmpty.optional().nullable(),
+  reservationsCloseAt: instantOrEmpty.optional().nullable(),
 });
 
 export const heroSchema = z.object({

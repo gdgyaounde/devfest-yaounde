@@ -14,7 +14,8 @@
  */
 import "server-only";
 import type { AttendeeInput, PricedBasket } from "@/data/types";
-import { COUNTRY } from "./catalog";
+import { assertPaymentsOpen, COUNTRY } from "./catalog";
+import { loadSettings } from "@/lib/content/settings";
 import { CHECKOUT_ERRORS, CheckoutError } from "./errors";
 import { createPaymentIntent, logPaymentEvent, markFailed } from "./intents";
 import { fulfilFreeIntent } from "./apply";
@@ -53,6 +54,13 @@ export interface StartCheckoutInput {
 export async function startCheckout(
   input: StartCheckoutInput,
 ): Promise<CheckoutResult> {
+  // The last wall (ADR 0084): this function creates the payment intent for
+  // BOTH tickets and the shop, so after the cutoff nothing new is ever
+  // charged on the platform, whatever route or stale tab got here. The
+  // PawaPay callback and the status poller are separate and stay open, so a
+  // payment started before the cutoff can still finish.
+  assertPaymentsOpen(new Date(), await loadSettings());
+
   // Before anything irreversible: a ticket order that cannot mint badge codes
   // or claim links must fail now, not after the buyer has paid for it.
   if (input.kind === "tickets") {

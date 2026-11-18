@@ -18,6 +18,7 @@ import {
   SPONSOR_PROSPECTUS_URL,
   TERMS_URL,
   TERMS_UPDATED_AT,
+  RESERVATIONS_CLOSE_AT,
   TERMS_VERSION,
   TICKET_EDITS_CLOSE_AT,
   TICKET_SALES_CLOSE_AT,
@@ -60,6 +61,7 @@ const REPO_DEFAULTS: SiteSettings = {
   ticketing: {
     salesCloseAt: TICKET_SALES_CLOSE_AT,
     editsCloseAt: TICKET_EDITS_CLOSE_AT,
+    reservationsCloseAt: RESERVATIONS_CLOSE_AT,
   },
   /* No overall capacity until an admin sets one — `null` total means "don't
      show a public counter", not "zero tickets left". */

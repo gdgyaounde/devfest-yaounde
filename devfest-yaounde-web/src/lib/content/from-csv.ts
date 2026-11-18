@@ -19,10 +19,7 @@ function loc(fr: string, en: string) {
   return BLANK;
 }
 
-function keepPhoto(
-  incoming: string,
-  previous: string | undefined,
-): string {
+function keepPhoto(incoming: string, previous: string | undefined): string {
   const next = incoming.trim();
   if (next) return next;
   return previous ?? "";

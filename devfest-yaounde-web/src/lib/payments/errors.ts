@@ -16,8 +16,13 @@ export const CHECKOUT_ERRORS = {
   TIER_NOT_ON_SALE: "tier_not_on_sale",
   TIER_RSVP_EXTERNAL: "tier_rsvp_external",
   TIER_SOLD_OUT: "tier_sold_out",
-  /** Past `ticketing.salesCloseAt` (ADR 0072). The shop is NOT affected. */
+  /** Past `ticketing.salesCloseAt` (ADR 0072): no more ticket sales. */
   TICKET_SALES_CLOSED: "ticket_sales_closed",
+  /**
+   * Past `ticketing.salesCloseAt` (ADR 0084): NO payment of any kind — shop
+   * included — passes through the platform. People reserve instead.
+   */
+  PAYMENTS_CLOSED: "payments_closed",
   UNKNOWN_PRODUCT: "unknown_product",
   PRODUCT_UNAVAILABLE: "product_unavailable",
   INVALID_VARIANT: "invalid_variant",

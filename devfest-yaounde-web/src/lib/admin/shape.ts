@@ -185,8 +185,11 @@ export interface HeroSettings {
  * Null / empty = no cutoff — sales / edits stay open.
  */
 export interface TicketingSettings {
+  /** Payments close (tickets AND shop) — reservations start (ADR 0084). */
   salesCloseAt: string | null;
   editsCloseAt: string | null;
+  /** Reservations close — from here on it is cash at the venue (ADR 0084). */
+  reservationsCloseAt: string | null;
 }
 
 export interface CapacitySettings {

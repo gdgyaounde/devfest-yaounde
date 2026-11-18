@@ -14,6 +14,7 @@ import type {
   PricedLine,
 } from "@/data/types";
 import {
+  assertPaymentsOpen,
   assertTicketSalesOpen,
   CURRENCY,
   declaredStock,
@@ -257,6 +258,10 @@ export async function quoteCart(
   discountCode?: string,
 ): Promise<PricedBasket> {
   if (cart.length === 0) throw new CheckoutError(CHECKOUT_ERRORS.EMPTY_BASKET);
+
+  // The shop stops taking payments with the tickets (ADR 0084). Here, and not
+  // only in the route, so the price preview and the real checkout agree.
+  assertPaymentsOpen(new Date(), await loadSettings());
 
   const products = await loadProducts();
   const lines: PricedLine[] = [];

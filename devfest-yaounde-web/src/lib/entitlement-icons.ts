@@ -59,22 +59,24 @@ export const ENTITLEMENT_ICONS: Record<EntitlementIconKey, Icon> = {
   users: UsersThree,
 };
 
-export const ENTITLEMENT_ICON_OPTIONS: { value: EntitlementIconKey; label: string }[] =
-  [
-    { value: "check", label: "Check" },
-    { value: "ticket", label: "Entry" },
-    { value: "microphone", label: "Talks" },
-    { value: "fork-knife", label: "Food" },
-    { value: "coffee", label: "Coffee" },
-    { value: "gift", label: "Swag" },
-    { value: "tshirt", label: "Apparel" },
-    { value: "bag", label: "Bag" },
-    { value: "certificate", label: "Certificate" },
-    { value: "map-pin", label: "Venue" },
-    { value: "calendar", label: "Schedule" },
-    { value: "bed", label: "Lodging" },
-    { value: "users", label: "Workshop" },
-  ];
+export const ENTITLEMENT_ICON_OPTIONS: {
+  value: EntitlementIconKey;
+  label: string;
+}[] = [
+  { value: "check", label: "Check" },
+  { value: "ticket", label: "Entry" },
+  { value: "microphone", label: "Talks" },
+  { value: "fork-knife", label: "Food" },
+  { value: "coffee", label: "Coffee" },
+  { value: "gift", label: "Swag" },
+  { value: "tshirt", label: "Apparel" },
+  { value: "bag", label: "Bag" },
+  { value: "certificate", label: "Certificate" },
+  { value: "map-pin", label: "Venue" },
+  { value: "calendar", label: "Schedule" },
+  { value: "bed", label: "Lodging" },
+  { value: "users", label: "Workshop" },
+];
 
 export function entitlementIcon(key: string | undefined): Icon {
   return ENTITLEMENT_ICONS[key as EntitlementIconKey] ?? Check;

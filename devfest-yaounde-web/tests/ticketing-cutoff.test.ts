@@ -1,5 +1,6 @@
 /**
- * The one-day edition and the ticketing cutoff (ADRs 0071, 0072).
+ * The one-day edition, the ticketing cutoff and the payments → reservations →
+ * cash-at-the-venue phases (ADRs 0071, 0072, 0084).
  *
  * Pure logic only: the cutoff helpers checkout, the tickets page, the banner
  * and the admin all call; the checkout guard; the cron window; the banner's
@@ -18,27 +19,38 @@ import {
   eventJsonLd,
   formatCutoff,
   formatEventDates,
+  salesPhase,
   ticketEditsOpen,
   ticketSalesOpen,
   withinSalesCloseRevalidateWindow,
 } from "@/lib/event";
-import { assertTicketSalesOpen } from "@/lib/payments/catalog";
+import {
+  assertPaymentsOpen,
+  assertTicketSalesOpen,
+} from "@/lib/payments/catalog";
 import { CheckoutError } from "@/lib/payments/errors";
 import { quoteCart, quoteTierCounts } from "@/lib/payments/pricing";
 import {
+  RESERVATIONS_CLOSE_AT,
   TICKET_EDITS_CLOSE_AT,
   TICKET_SALES_CLOSE_AT,
 } from "@/lib/site-config";
 
-const CUTOFF = "2026-11-18T23:59:00+01:00";
-/** 23:59 in Yaoundé (UTC+1, no DST) is 22:59 UTC. */
-const CUTOFF_MS = Date.UTC(2026, 10, 18, 22, 59, 0);
+/** Payments close at 12:00 Wednesday (ADR 0084; was 23:59). */
+const CUTOFF = "2026-11-18T12:00:00+01:00";
+/** 12:00 in Yaoundé (UTC+1, no DST) is 11:00 UTC. */
+const CUTOFF_MS = Date.UTC(2026, 10, 18, 11, 0, 0);
+/** Edits still close at 23:59 the same day. */
+const EDITS_MS = Date.UTC(2026, 10, 18, 22, 59, 0);
+/** Reservations close Friday 23:59 (22:59 UTC). */
+const RESERVATIONS_MS = Date.UTC(2026, 10, 20, 22, 59, 0);
 
 const settings = (
   salesCloseAt: string | null,
   editsCloseAt = salesCloseAt,
+  reservationsCloseAt: string | null = null,
 ) => ({
-  ticketing: { salesCloseAt, editsCloseAt },
+  ticketing: { salesCloseAt, editsCloseAt, reservationsCloseAt },
 });
 
 describe("the 2026 edition is one day (ADR 0071)", () => {
@@ -61,9 +73,74 @@ describe("the 2026 edition is one day (ADR 0071)", () => {
 });
 
 describe("the repo default cutoff", () => {
-  it("is Wednesday 18 November 2026, 23:59 Yaoundé time, for both", () => {
+  it("closes payments Wednesday 18 November 2026 at 12:00 Yaoundé time", () => {
     assert.equal(Date.parse(TICKET_SALES_CLOSE_AT), CUTOFF_MS);
-    assert.equal(Date.parse(TICKET_EDITS_CLOSE_AT), CUTOFF_MS);
+  });
+
+  it("still closes edits at 23:59 the same day", () => {
+    assert.equal(Date.parse(TICKET_EDITS_CLOSE_AT), EDITS_MS);
+  });
+
+  it("closes reservations Friday 20 November at 23:59", () => {
+    assert.equal(Date.parse(RESERVATIONS_CLOSE_AT), RESERVATIONS_MS);
+  });
+});
+
+describe("salesPhase (ADR 0084)", () => {
+  const s = settings(
+    TICKET_SALES_CLOSE_AT,
+    TICKET_EDITS_CLOSE_AT,
+    RESERVATIONS_CLOSE_AT,
+  );
+  const at = (ms: number) => salesPhase(new Date(ms), s);
+
+  it("sells until the very last second before noon", () => {
+    assert.equal(at(CUTOFF_MS - 1), "selling");
+  });
+
+  it("reserves from noon on — closed FROM the instant", () => {
+    assert.equal(at(CUTOFF_MS), "reserving");
+    assert.equal(at(Date.UTC(2026, 10, 19, 9, 0, 0)), "reserving");
+    assert.equal(at(RESERVATIONS_MS - 1), "reserving");
+  });
+
+  it("is cash at the door from Friday 23:59", () => {
+    assert.equal(at(RESERVATIONS_MS), "door");
+    assert.equal(at(Date.UTC(2026, 10, 21, 8, 0, 0)), "door");
+  });
+
+  it("never shuts a door because a field was cleared", () => {
+    const now = new Date(Date.UTC(2026, 10, 25));
+    assert.equal(salesPhase(now, settings(null, null, null)), "selling");
+    assert.equal(salesPhase(now, settings(CUTOFF, null, null)), "reserving");
+  });
+
+  it("rebuilds the site around BOTH switches", () => {
+    assert.equal(
+      withinSalesCloseRevalidateWindow(new Date(CUTOFF_MS + 60_000), s),
+      true,
+    );
+    assert.equal(
+      withinSalesCloseRevalidateWindow(new Date(RESERVATIONS_MS + 60_000), s),
+      true,
+    );
+    assert.equal(
+      withinSalesCloseRevalidateWindow(new Date(CUTOFF_MS - 60_000), s),
+      false,
+    );
+  });
+});
+
+describe("assertPaymentsOpen (ADR 0084)", () => {
+  it("lets a payment through before noon, refuses it from noon", () => {
+    assert.doesNotThrow(() =>
+      assertPaymentsOpen(new Date(CUTOFF_MS - 1), settings(CUTOFF)),
+    );
+    assert.throws(
+      () => assertPaymentsOpen(new Date(CUTOFF_MS), settings(CUTOFF)),
+      (err: unknown) =>
+        err instanceof CheckoutError && err.code === "payments_closed",
+    );
   });
 });
 
@@ -75,18 +152,18 @@ describe("ticketSalesOpen (ADR 0072)", () => {
     );
   });
 
-  it("is open through the last second of 23:58", () => {
+  it("is open through the last second of 11:59", () => {
     assert.equal(
       ticketSalesOpen(new Date(CUTOFF_MS - 1), settings(CUTOFF)),
       true,
     );
     assert.equal(
-      ticketSalesOpen(new Date("2026-11-18T23:58:59+01:00"), settings(CUTOFF)),
+      ticketSalesOpen(new Date("2026-11-18T11:59:59+01:00"), settings(CUTOFF)),
       true,
     );
   });
 
-  it("closes AT 23:59:00 Yaoundé time, and stays closed", () => {
+  it("closes AT 12:00:00 Yaoundé time, and stays closed", () => {
     assert.equal(ticketSalesOpen(new Date(CUTOFF_MS), settings(CUTOFF)), false);
     assert.equal(
       ticketSalesOpen(new Date("2026-11-21T10:00:00+01:00"), settings(CUTOFF)),
@@ -95,21 +172,21 @@ describe("ticketSalesOpen (ADR 0072)", () => {
   });
 
   it("reads the instant's own offset, not the server's timezone", () => {
-    // 22:59 UTC and 23:59 WAT are the same instant; 23:59 UTC is an hour
+    // 11:00 UTC and 12:00 WAT are the same instant; 12:00 UTC is an hour
     // later. A server on UTC must not keep selling for that extra hour.
     assert.equal(
-      ticketSalesOpen(new Date("2026-11-18T22:59:00Z"), settings(CUTOFF)),
+      ticketSalesOpen(new Date("2026-11-18T11:00:00Z"), settings(CUTOFF)),
       false,
     );
     assert.equal(
-      ticketSalesOpen(new Date("2026-11-18T22:58:59Z"), settings(CUTOFF)),
+      ticketSalesOpen(new Date("2026-11-18T10:59:59Z"), settings(CUTOFF)),
       true,
     );
     // The same cutoff written in UTC behaves identically.
     assert.equal(
       ticketSalesOpen(
         new Date(CUTOFF_MS),
-        settings("2026-11-18T22:59:00.000Z"),
+        settings("2026-11-18T11:00:00.000Z"),
       ),
       false,
     );
@@ -192,12 +269,12 @@ describe("formatCutoff — the deadline as people read it", () => {
     assert.deepEqual(formatCutoff("fr", CUTOFF), {
       date: "mercredi 18 novembre",
       short: "mer. 18 nov.",
-      time: "23h59",
+      time: "12h00",
     });
     assert.deepEqual(formatCutoff("en", CUTOFF), {
       date: "Wednesday 18 November",
       short: "Wed 18 Nov",
-      time: "23:59",
+      time: "12:00",
     });
   });
 
@@ -205,10 +282,10 @@ describe("formatCutoff — the deadline as people read it", () => {
     const original = process.env.TZ;
     try {
       process.env.TZ = "America/Los_Angeles";
-      assert.equal(formatCutoff("en", CUTOFF)?.time, "23:59");
+      assert.equal(formatCutoff("en", CUTOFF)?.time, "12:00");
       assert.equal(formatCutoff("en", CUTOFF)?.date, "Wednesday 18 November");
       process.env.TZ = "Asia/Tokyo";
-      assert.equal(formatCutoff("fr", CUTOFF)?.time, "23h59");
+      assert.equal(formatCutoff("fr", CUTOFF)?.time, "12h00");
     } finally {
       if (original === undefined) delete process.env.TZ;
       else process.env.TZ = original;
@@ -278,21 +355,21 @@ describe("banner dismissal is keyed by the message (ADR 0072)", () => {
  * which means the cutoff is the repo default, Wed 18 Nov 23:59 Yaoundé.
  * The clock is mocked on both sides of it.
  */
-describe("pricing enforces the cutoff on the server (tickets only)", () => {
+describe("pricing enforces the cutoff on the server (tickets AND shop)", () => {
   const at = (iso: string) => {
     mock.timers.enable({ apis: ["Date"], now: Date.parse(iso) });
   };
 
   it("prices a ticket before the cutoff", async (t) => {
     t.after(() => mock.timers.reset());
-    at("2026-11-18T23:58:59+01:00");
+    at("2026-11-18T11:59:59+01:00");
     const quote = await quoteTierCounts([{ tierId: "sonnet", quantity: 1 }]);
     assert.ok(quote.charged > 0);
   });
 
-  it("refuses a ticket from 23:59 on — preview and checkout share this path", async (t) => {
+  it("refuses a ticket from 12:00 on — preview and checkout share this path", async (t) => {
     t.after(() => mock.timers.reset());
-    at("2026-11-18T23:59:00+01:00");
+    at("2026-11-18T12:00:00+01:00");
     await assert.rejects(
       quoteTierCounts([{ tierId: "sonnet", quantity: 1 }]),
       (err: unknown) =>
@@ -300,10 +377,20 @@ describe("pricing enforces the cutoff on the server (tickets only)", () => {
     );
   });
 
-  it("keeps the shop open after the cutoff", async (t) => {
+  it("prices the shop before the cutoff", async (t) => {
     t.after(() => mock.timers.reset());
-    at("2026-11-19T10:00:00+01:00");
+    at("2026-11-18T11:59:59+01:00");
     const quote = await quoteCart([{ productId: "sticker-pack", quantity: 1 }]);
     assert.ok(quote.charged > 0);
+  });
+
+  it("refuses the shop too from 12:00 on — nothing is paid on the platform", async (t) => {
+    t.after(() => mock.timers.reset());
+    at("2026-11-19T10:00:00+01:00");
+    await assert.rejects(
+      quoteCart([{ productId: "sticker-pack", quantity: 1 }]),
+      (err: unknown) =>
+        err instanceof CheckoutError && err.code === "payments_closed",
+    );
   });
 });
