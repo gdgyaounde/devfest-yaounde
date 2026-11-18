@@ -369,10 +369,7 @@ export function eventJsonLd(
     location: {
       "@type": "Place",
       name: EVENT.venue
-        ? [
-            `${EVENT.venueFull[locale]} (${EVENT.venueShort})`,
-            EVENT.venueRoom,
-          ]
+        ? [`${EVENT.venueFull[locale]} (${EVENT.venueShort})`, EVENT.venueRoom]
             .filter(Boolean)
             .join(" — ")
         : EVENT.city,

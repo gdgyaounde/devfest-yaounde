@@ -14,7 +14,7 @@ import { useEventDates } from "@/components/global/EventDateProvider";
 import { googleCalendarUrl, icsDataUrl } from "@/lib/calendar";
 import { hasCalendarSlot } from "@/lib/sessions";
 import { SessionMeta } from "./SessionMeta";
-import type { Session, Speaker } from "@/data/types";
+import type { Session, Speaker, Sponsor } from "@/data/types";
 
 export interface SessionCardProps {
   session: Session;
@@ -27,6 +27,8 @@ export interface SessionCardProps {
   /** Show add-to-calendar actions (full /schedule route only). */
   showCalendar?: boolean;
   speakers?: Speaker[];
+  /** Sponsors, to show the logos a session names in `partnerIds`. */
+  partners?: Sponsor[];
   /**
    * Home teaser: the description is cut to four lines and a "Full details"
    * link to this href follows, so a long abstract never turns the home
@@ -56,6 +58,7 @@ export function SessionCard({
   tilt = 0,
   showCalendar = false,
   speakers = [],
+  partners = [],
   detailsHref,
 }: SessionCardProps) {
   const eventDate = useEventDates()[0];
@@ -65,6 +68,10 @@ export function SessionCard({
   const sessionSpeakers = session.speakerIds
     .map((id) => speakerById.get(id))
     .filter((s): s is Speaker => Boolean(s));
+
+  const sessionPartners = (session.partnerIds ?? [])
+    .map((id) => partners.find((s) => s.id === id))
+    .filter((s): s is Sponsor => Boolean(s));
 
   const isTimeline = variant === "timeline";
 
@@ -109,6 +116,21 @@ export function SessionCard({
           <p className="mt-3 font-sans text-heading-m font-bold leading-tight text-black02">
             {session.title[locale]}
           </p>
+
+          {sessionPartners.length > 0 && (
+            <ul className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
+              {sessionPartners.map((p) => (
+                <li key={p.id}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.logoUrl}
+                    alt={p.name}
+                    className="h-9 w-auto object-contain"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
 
           {sessionSpeakers.length > 0 && (
             <p className="mt-1.5 font-mono text-caption text-black02/70">

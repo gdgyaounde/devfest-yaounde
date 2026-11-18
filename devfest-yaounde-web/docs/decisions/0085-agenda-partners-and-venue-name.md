@@ -22,3 +22,10 @@ Three days before the event the organisers sent the final agenda, two new commun
 - Live `sessions` and `sponsors` rows override the JSON, so the change ships as migration `0036_agenda_and_partners.sql` (guarded: backs up both rows and refuses if either was edited since).
 - `EVENT.startTime/endTime` (09:00/18:00, structured data only) were left alone though the agenda runs 08:00–19:00.
 - Tests that pinned the real clock to "before noon" now mock it.
+
+## Follow-up (same day)
+
+- Every agenda entry now has a short bilingual description (welcome, opening keynote by the team, breaks, partner words, pitch contest from the Impact Hub partnership, closing as a thank-you and safe-journey note, plus the five title-only talks). `partnerIds` on a session shows partner logos on its card (partner words, pitch).
+- `sticker` on a sponsor swaps the tier mark for an icon: Impact Hub Yaoundé = incubator (egg), TiC = venue (building). Icons only; the roles are not spelled out on the page, only in the pop-up.
+- Pop-up gained a step 3 "Welcome to our new partners" (button: thank you) before the agenda step; sponsor logos are bigger and further apart, and the row never scrolls.
+- Migration `0037_agenda_descriptions_and_stickers.sql` fills only still-empty descriptions and missing stickers, so dashboard edits are never overwritten.

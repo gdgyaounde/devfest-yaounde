@@ -1148,5 +1148,10 @@
     "title": "Notre programme est en ligne",
     "body": "Le programme complet du {date} est en ligne : cinq salles, des talks, des ateliers, un concours de pitch et bien plus. Jette-y un œil et prépare ta journée.",
     "cta": "Voir le programme"
+  },
+  "partnersPopup": {
+    "title": "Bienvenue à nos nouveaux partenaires",
+    "body": "Un immense merci à Impact Hub Yaoundé, notre partenaire incubateur, qui accueillera les deux lauréats du Pitch Contest dans son programme, et au Tech Innovation Center (TiC), notre partenaire lieu. Cette édition est plus belle grâce à eux.",
+    "ok": "Merci à eux !"
   }
 }

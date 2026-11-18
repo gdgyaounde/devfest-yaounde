@@ -10,8 +10,8 @@
       "en": "Welcome, check-in & orientation"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Récupère ton accès, repère les salles et installe-toi : l'équipe est là pour t'accueillir et t'orienter avant le début des talks.",
+      "en": "Pick up your access, find your way around the rooms and settle in: the team is here to welcome and guide you before the talks start."
     },
     "track": {
       "fr": "Programme",
@@ -31,8 +31,8 @@
       "en": "Opening remarks & presentation of the day"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Le mot d'accueil de l'équipe : bienvenue à toutes et à tous, qui est GDG Yaoundé, et comment va se dérouler la journée — salles, pauses, concours de pitch.",
+      "en": "A keynote-style welcome from the team: who we are at GDG Yaoundé, and how the day will unfold — rooms, breaks and the pitch contest."
     },
     "track": {
       "fr": "Programme",
@@ -58,8 +58,8 @@
       "en": "Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Comment automatiser l'accueil et les admissions de vos événements avec Gemini et Google Apps Script.",
+      "en": "How to automate your events' check-in and admissions with Gemini and Google Apps Script."
     },
     "track": {
       "fr": "Général",
@@ -596,8 +596,8 @@
       "en": "Break & networking"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Un moment pour souffler, se restaurer et discuter. C'est souvent là que naissent les meilleures conversations de la journée.",
+      "en": "Time to catch your breath, grab something to eat and talk. This is often where the day's best conversations start."
     },
     "track": {
       "fr": "Programme",
@@ -621,8 +621,8 @@
       "en": "Words from our partners"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Nos partenaires prennent la parole pour se présenter et dire ce qu'ils font pour la communauté tech.",
+      "en": "Our partners take the floor to introduce themselves and share what they do for the tech community."
     },
     "track": {
       "fr": "Programme",
@@ -633,7 +633,8 @@
       "en": "Room 1 · Main"
     },
     "tags": [],
-    "speakerIds": []
+    "speakerIds": [],
+    "partnerIds": ["impact-hub-yaounde", "tic-foundation"]
   },
   {
     "id": "agenda-pitch",
@@ -646,8 +647,8 @@
       "en": "Pitch contest"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Le Pitch Contest, organisé avec Impact Hub Yaoundé : jusqu'à 15 équipes présélectionnées ont 3 minutes chacune, démo comprise, pour convaincre le public — sans jury ni questions. Le public vote ensuite pour deux projets lauréats, qui bénéficieront de 3 mois d'incubation chez Impact Hub Yaoundé dès février 2027 : mentorat, ressources d'accompagnement et accès gratuit au coworking et aux événements du Hub.",
+      "en": "The Pitch Contest, run with Impact Hub Yaoundé: up to 15 shortlisted teams get 3 minutes each, demo included, to win over the audience — no jury, no questions. The audience then votes for two winning projects, who get 3 months of incubation at Impact Hub Yaoundé from February 2027: mentoring, support resources and free access to the coworking space and the Hub's events."
     },
     "track": {
       "fr": "Programme",
@@ -658,7 +659,8 @@
       "en": "Room 1 · Main"
     },
     "tags": [],
-    "speakerIds": []
+    "speakerIds": [],
+    "partnerIds": ["impact-hub-yaounde"]
   },
   {
     "id": "agenda-break-2",
@@ -671,8 +673,8 @@
       "en": "Break & networking"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Deuxième pause : recharge les batteries, retrouve des visages connus et fais-toi de nouveaux contacts avant les derniers talks.",
+      "en": "Second break: recharge, find familiar faces and meet new ones before the last talks."
     },
     "track": {
       "fr": "Programme",
@@ -782,8 +784,8 @@
       "en": "Networking and Visibility"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Comment développer son réseau et rendre son travail visible dans la communauté tech.",
+      "en": "How to grow your network and make your work visible in the tech community."
     },
     "track": {
       "fr": "Général",
@@ -885,8 +887,8 @@
       "en": "Is Your “Sign in with…” Button Really Safe?"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Un regard sur la sécurité des boutons « Se connecter avec… » : sont-ils vraiment sûrs, et que vérifier avant de les ajouter à son application.",
+      "en": "A look at the security of “Sign in with…” buttons: how safe they really are, and what to check before adding one to your app."
     },
     "track": {
       "fr": "Général",
@@ -946,8 +948,8 @@
       "en": "Au-delà de la technologie : construire des startups africaines qui inspirent confiance"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Comment bâtir des startups africaines qui inspirent confiance, au-delà de la technologie.",
+      "en": "How to build African startups people can trust, beyond the technology."
     },
     "track": {
       "fr": "Général",
@@ -1187,8 +1189,8 @@
       "en": "GenUI: Making Mobile Interfaces Dynamic with AI"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Comment l'IA générative permet de rendre les interfaces mobiles dynamiques et adaptatives.",
+      "en": "How generative AI can make mobile interfaces dynamic and adaptive."
     },
     "track": {
       "fr": "Général",
@@ -1208,12 +1210,12 @@
     "day": 1,
     "kind": "break",
     "title": {
-      "fr": "Divers et fin des programmes",
-      "en": "Miscellaneous & end of the programme"
+      "fr": "Merci et bon retour !",
+      "en": "Thank you & safe travels home"
     },
     "description": {
-      "fr": "",
-      "en": ""
+      "fr": "Merci d'être venus ! Merci aux speakers, aux partenaires, aux bénévoles et à toi. Quelques photos, un dernier tour pour dire au revoir, et rentre bien — à l'année prochaine !",
+      "en": "Thank you for coming! Thanks to our speakers, partners, volunteers and you. A few photos, one last round of goodbyes, and safe travels home — see you next year!"
     },
     "track": {
       "fr": "Programme",

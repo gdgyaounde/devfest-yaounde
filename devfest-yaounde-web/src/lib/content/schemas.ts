@@ -121,6 +121,7 @@ export const sessionSchema = z.object({
   bring: localized.optional(),
   provided: localized.optional(),
   speakerIds: z.array(slug).max(20),
+  partnerIds: z.array(slug).max(10).optional(),
 });
 
 /**
@@ -160,6 +161,7 @@ export const sponsorSchema = z.object({
   websiteUrl: z.string().max(400).optional(),
   /** Short line for the cursor-reveal popup. Optional, both languages. */
   blurb: localized.optional(),
+  sticker: z.enum(["incubator", "venue"]).optional(),
 });
 
 export const faqSchema = z.object({

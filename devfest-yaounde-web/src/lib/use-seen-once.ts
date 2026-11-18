@@ -102,3 +102,6 @@ export function termsSeenKey(version: string): string {
 
 /** The pop-up's "our agenda is live" step: shown once, whatever the phase. */
 export const AGENDA_SEEN_KEY = "devfest:agenda-live-seen:2026";
+
+/** The pop-up's "welcome our new partners" step: shown once (ADR 0085). */
+export const PARTNERS_SEEN_KEY = "devfest:partners-welcome-seen:2026";

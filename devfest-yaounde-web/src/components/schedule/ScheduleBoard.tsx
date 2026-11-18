@@ -13,7 +13,7 @@ import {
   type ProgrammeGroup,
 } from "@/lib/sessions";
 import { SessionCard } from "./SessionCard";
-import type { Session, Speaker } from "@/data/types";
+import type { Session, Speaker, Sponsor } from "@/data/types";
 
 const GROUP_LABEL_KEY: Record<ProgrammeGroup, string> = {
   workshop: "groupWorkshop",
@@ -27,6 +27,7 @@ const CARD_TILT = [-0.8, 0.6, -0.5, 0.9, -0.7];
 export interface ScheduleBoardProps {
   sessions: Session[];
   speakers?: Speaker[];
+  partners?: Sponsor[];
   /** Full route shows track/room filters; the Home preview keeps it simple. */
   showFilters?: boolean;
   /** Full route offers add-to-calendar per session. */
@@ -54,6 +55,7 @@ export interface ScheduleBoardProps {
 export function ScheduleBoard({
   sessions,
   speakers = [],
+  partners = [],
   showFilters = false,
   showCalendar = false,
   previewLimit,
@@ -323,6 +325,7 @@ export function ScheduleBoard({
                         key={s.id}
                         session={s}
                         speakers={speakers}
+                        partners={partners}
                         open={openId === s.id}
                         onToggle={() =>
                           setOpenId(openId === s.id ? null : s.id)
@@ -365,6 +368,7 @@ export function ScheduleBoard({
                           <SessionCard
                             session={s}
                             speakers={speakers}
+                            partners={partners}
                             open={openId === s.id}
                             onToggle={() =>
                               setOpenId(openId === s.id ? null : s.id)
@@ -424,6 +428,7 @@ export function ScheduleBoard({
                         <SessionCard
                           session={s}
                           speakers={speakers}
+                          partners={partners}
                           open={openId === s.id}
                           onToggle={() =>
                             setOpenId(openId === s.id ? null : s.id)
@@ -447,6 +452,7 @@ export function ScheduleBoard({
                         <SessionCard
                           session={s}
                           speakers={speakers}
+                          partners={partners}
                           open={openId === s.id}
                           onToggle={() =>
                             setOpenId(openId === s.id ? null : s.id)

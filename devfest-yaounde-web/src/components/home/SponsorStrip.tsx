@@ -75,7 +75,7 @@ export async function SponsorStrip({
               : // Logos then the ask, never a scrollbar: an overflow axis would
                 // also clip the hover lift. One row on a laptop; on a narrow
                 // phone it wraps rather than scrolls.
-                "mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5 py-2 sm:gap-4 sm:px-8"
+                "mx-auto flex max-w-6xl flex-wrap items-center gap-6 px-5 py-3 sm:gap-10 sm:px-8"
           }
         >
           <SponsorRow seats={seats} scrolls={scrolls} />

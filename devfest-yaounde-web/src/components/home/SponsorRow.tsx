@@ -13,6 +13,7 @@
  */
 /* eslint-disable @next/next/no-img-element */
 
+import { Buildings, Egg } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Sponsor, SponsorTier } from "@/data/types";
@@ -363,11 +364,11 @@ function SponsorCard({
     <img
       src={sponsor.logoUrl}
       alt={sponsor.name}
-      className="h-11 w-auto object-contain sm:h-14"
+      className="h-14 w-auto object-contain sm:h-[4.5rem]"
     />
   );
 
-  const box = scrolls ? "mx-7 shrink-0 sm:mx-9" : "shrink-0";
+  const box = scrolls ? "mx-9 shrink-0 sm:mx-12" : "shrink-0";
 
   const tierSticker = (
     <span
@@ -378,7 +379,13 @@ function SponsorCard({
         transform: `rotate(${badge.rotate}deg)`,
       }}
     >
-      <TierBadgeContent tier={tier} />
+      {sponsor.sticker === "incubator" ? (
+        <Egg size={14} weight="bold" color="var(--color-offwhite)" />
+      ) : sponsor.sticker === "venue" ? (
+        <Buildings size={14} weight="bold" color="var(--color-offwhite)" />
+      ) : (
+        <TierBadgeContent tier={tier} />
+      )}
     </span>
   );
 
@@ -485,7 +492,7 @@ function EmptySeat({
       aria-hidden
       className={[
         hideOnMobile ? "hidden sm:flex" : "flex",
-        scrolls ? "mx-7 sm:mx-9" : "",
+        scrolls ? "mx-9 sm:mx-12" : "",
         "h-11 min-w-24 shrink-0 items-center justify-center rounded-md border-2 border-dashed border-black02/25 px-4 sm:h-14 sm:min-w-32 sm:px-6",
       ].join(" ")}
     />

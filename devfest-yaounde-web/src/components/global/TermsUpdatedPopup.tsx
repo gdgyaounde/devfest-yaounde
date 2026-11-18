@@ -3,6 +3,7 @@
 import {
   CalendarCheck,
   CalendarDots,
+  Handshake,
   MapPinLine,
   Scroll,
   Ticket,
@@ -15,6 +16,7 @@ import { Modal } from "@/components/ui/Modal";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import {
   AGENDA_SEEN_KEY,
+  PARTNERS_SEEN_KEY,
   salesNoticeSeenKey,
   termsSeenKey,
   useSeenOnce,
@@ -40,6 +42,14 @@ const PRIMARY =
   "inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-6 py-3 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none";
 const SECONDARY =
   "inline-flex items-center rounded-pill border-2 border-black02 bg-offwhite px-6 py-3 font-sans text-body-m font-bold text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-pastel motion-reduce:transform-none";
+
+type Step = "terms" | "notice" | "partners" | "agenda";
+
+/** Our two newest partners, thanked in step 3 (ADR 0085). */
+const PARTNER_LOGOS = [
+  { name: "Impact Hub Yaoundé", src: "/sponsors/impact-hub-yaounde.png" },
+  { name: "Tech Innovation Center (TiC)", src: "/sponsors/tic-foundation.png" },
+] as const;
 
 type When = { date: string; time: string } | null;
 
@@ -86,6 +96,7 @@ export function TermsUpdatedPopup({
   const t = useTranslations("termsPopup");
   const tn = useTranslations("salesPopup");
   const ta = useTranslations("agendaPopup");
+  const tp = useTranslations("partnersPopup");
   const tCommon = useTranslations("common");
   const phase = useSalesPhase();
   const pathname = usePathname() ?? "";
@@ -97,6 +108,7 @@ export function TermsUpdatedPopup({
   );
   const [noticeSeen, markNoticeSeen] = useSeenOnce(salesNoticeSeenKey(phase));
   const [agendaSeen, markAgendaSeen] = useSeenOnce(AGENDA_SEEN_KEY);
+  const [partnersSeen, markPartnersSeen] = useSeenOnce(PARTNERS_SEEN_KEY);
   const [ready, setReady] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -107,7 +119,9 @@ export function TermsUpdatedPopup({
 
   const wantsNotice = !noticeSeen && !onReserve;
   const wantsAgenda = !agendaSeen && !SCHEDULE.test(pathname) && !onReserve;
-  const wantsAnything = !termsSeen || wantsNotice || wantsAgenda;
+  const wantsPartners = !partnersSeen && !onReserve;
+  const wantsAnything =
+    !termsSeen || wantsNotice || wantsPartners || wantsAgenda;
 
   useEffect(() => {
     if (!wantsAnything || excluded || ready) return;
@@ -129,15 +143,24 @@ export function TermsUpdatedPopup({
     };
   }, [wantsAnything, excluded, ready]);
 
-  // Step 1 while the terms are unseen; the moment they are marked seen the
-  // modal simply moves on to step 2 (or closes, if there is none).
-  const step: 1 | 2 | 3 = !termsSeen ? 1 : wantsNotice ? 2 : 3;
+  // The steps this visitor still has to see, in order. Each one only ever
+  // advances; the list is frozen when the pop-up opens so the counter reads
+  // "1 of 3, 2 of 3…" instead of shrinking as steps are marked seen.
+  const pending: Step[] = [
+    ...(!termsSeen ? (["terms"] as const) : []),
+    ...(wantsNotice ? (["notice"] as const) : []),
+    ...(wantsPartners ? (["partners"] as const) : []),
+    ...(wantsAgenda ? (["agenda"] as const) : []),
+  ];
   const open = ready && !excluded && wantsAnything;
-  // Fixed once the pop-up opens would be nicer, but each step only ever
-  // advances, so counting what is still ahead plus what is behind is stable.
-  const total =
-    (!termsSeen ? 1 : 0) + (wantsNotice ? 1 : 0) + (wantsAgenda ? 1 : 0);
-  const position = step === 1 ? 1 : step === 2 ? (!termsSeen ? 2 : 1) : total;
+  const [plan, setPlan] = useState<Step[] | null>(null);
+  // Frozen once, by adjusting state while rendering (not in an effect).
+  if (open && plan === null) setPlan(pending);
+  const step: Step = pending[0] ?? "agenda";
+  const steps = plan ?? pending;
+  const total = steps.length;
+  const position = Math.max(1, steps.indexOf(step) + 1);
+  const more = pending.length > 1;
 
   // The Modal focuses on open only; follow the step change ourselves.
   useEffect(() => {
@@ -146,18 +169,26 @@ export function TermsUpdatedPopup({
   }, [open, step]);
 
   const close =
-    step === 1 ? markTermsSeen : step === 2 ? markNoticeSeen : markAgendaSeen;
+    step === "terms"
+      ? markTermsSeen
+      : step === "notice"
+        ? markNoticeSeen
+        : step === "partners"
+          ? markPartnersSeen
+          : markAgendaSeen;
 
   const Icon =
-    step === 1
+    step === "terms"
       ? Scroll
-      : step === 3
+      : step === "agenda"
         ? CalendarDots
-        : phase === "selling"
-          ? Ticket
-          : phase === "reserving"
-            ? CalendarCheck
-            : MapPinLine;
+        : step === "partners"
+          ? Handshake
+          : phase === "selling"
+            ? Ticket
+            : phase === "reserving"
+              ? CalendarCheck
+              : MapPinLine;
 
   return (
     <Modal
@@ -185,7 +216,7 @@ export function TermsUpdatedPopup({
         )}
         <Icon size={40} weight="duotone" aria-hidden className="text-black02" />
 
-        {step === 1 ? (
+        {step === "terms" ? (
           <>
             <h2
               id="terms-popup-title"
@@ -203,14 +234,48 @@ export function TermsUpdatedPopup({
                 onClick={markTermsSeen}
                 className={PRIMARY}
               >
-                {wantsNotice || wantsAgenda ? tn("next") : t("ok")}
+                {more ? tn("next") : t("ok")}
               </button>
               <Link href="/terms" onClick={markTermsSeen} className={SECONDARY}>
                 {t("read")}
               </Link>
             </div>
           </>
-        ) : step === 3 ? (
+        ) : step === "partners" ? (
+          <>
+            <h2
+              id="terms-popup-title"
+              className="font-sans text-heading-l font-bold leading-tight text-black02"
+            >
+              {tp("title")}
+            </h2>
+            <ul className="flex flex-wrap items-center gap-x-10 gap-y-4">
+              {PARTNER_LOGOS.map((p) => (
+                <li key={p.name} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.src}
+                    alt={p.name}
+                    className="h-14 w-auto object-contain sm:h-16"
+                  />
+                </li>
+              ))}
+            </ul>
+            <p className="text-body-m leading-relaxed text-black02/85">
+              {tp("body")}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                data-autofocus
+                onClick={markPartnersSeen}
+                className={PRIMARY}
+              >
+                {tp("ok")}
+              </button>
+            </div>
+          </>
+        ) : step === "agenda" ? (
           <>
             <h2
               id="terms-popup-title"

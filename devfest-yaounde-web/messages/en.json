@@ -1148,5 +1148,10 @@
     "title": "Our agenda is live",
     "body": "The full programme for {date} is online: five rooms, talks, workshops, a pitch contest and more. Check it out and plan your day.",
     "cta": "See the agenda"
+  },
+  "partnersPopup": {
+    "title": "Welcome to our new partners",
+    "body": "A big thank you to Impact Hub Yaoundé, our incubator partner, who will welcome the two winners of the Pitch Contest into its programme, and to the Tech Innovation Center (TiC), our venue partner. This edition is better because of them.",
+    "ok": "Thank you both!"
   }
 }

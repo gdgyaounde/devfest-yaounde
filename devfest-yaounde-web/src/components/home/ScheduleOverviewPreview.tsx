@@ -3,7 +3,7 @@ import { ScheduleBoard } from "@/components/schedule/ScheduleBoard";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionContainer } from "@/components/ui/SectionContainer";
-import { getSessions, getSpeakers } from "@/lib/content/store";
+import { getSessions, getSpeakers, getSponsors } from "@/lib/content/store";
 
 /**
  * Home schedule preview. The board itself (day tabs, view toggle, expandable
@@ -13,9 +13,10 @@ import { getSessions, getSpeakers } from "@/lib/content/store";
  */
 export async function ScheduleOverviewPreview() {
   const t = await getTranslations("home.schedule");
-  const [sessions, speakers] = await Promise.all([
+  const [sessions, speakers, partners] = await Promise.all([
     getSessions(),
     getSpeakers(),
+    getSponsors(),
   ]);
 
   return (
@@ -43,6 +44,7 @@ export async function ScheduleOverviewPreview() {
         <ScheduleBoard
           sessions={sessions}
           speakers={speakers}
+          partners={partners}
           previewLimit={3}
           programmeHeading="h3"
         />

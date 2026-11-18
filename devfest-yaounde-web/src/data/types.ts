@@ -134,6 +134,12 @@ export interface Sponsor {
    * none still gets the popup, just with only their name in it.
    */
   blurb?: LocalizedString;
+  /**
+   * A small mark on the logo's corner INSTEAD of the tier mark: `incubator`
+   * (a startup incubator) or `venue` (a building). Icons only, never spelled
+   * out on the page (ADR 0085).
+   */
+  sticker?: "incubator" | "venue";
 }
 
 export interface Stat {
@@ -229,6 +235,8 @@ export interface Session {
   provided?: LocalizedString;
   /** Ids into speakers.json; empty for breaks. */
   speakerIds: string[];
+  /** Ids into sponsors.json whose logos the card shows (partner words, pitch). */
+  partnerIds?: string[];
 }
 
 export interface FaqItem {

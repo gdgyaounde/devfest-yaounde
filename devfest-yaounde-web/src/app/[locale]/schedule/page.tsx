@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ScheduleBoard } from "@/components/schedule/ScheduleBoard";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
-import { getSessions, getSpeakers } from "@/lib/content/store";
+import { getSessions, getSpeakers, getSponsors } from "@/lib/content/store";
 
 export async function generateMetadata({
   params,
@@ -29,9 +29,10 @@ export default async function SchedulePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.schedule");
-  const [allSessions, speakers] = await Promise.all([
+  const [allSessions, speakers, partners] = await Promise.all([
     getSessions(),
     getSpeakers(),
+    getSponsors(),
   ]);
 
   return (
@@ -49,6 +50,7 @@ export default async function SchedulePage({
           <ScheduleBoard
             sessions={allSessions}
             speakers={speakers}
+            partners={partners}
             showFilters
             showCalendar
           />
