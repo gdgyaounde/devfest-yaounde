@@ -212,7 +212,8 @@
       "fullDetails": "Voir tous les détails",
       "addToCalendar": "Ajouter à ton agenda",
       "google": "Google Agenda",
-      "ics": "Apple / Outlook (.ics)"
+      "ics": "Apple / Outlook (.ics)",
+      "readMore": "Lire la suite"
     },
     "quotes": {
       "title": "Ce qu'on en dit",

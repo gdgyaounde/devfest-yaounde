@@ -212,7 +212,8 @@
       "fullDetails": "Full details",
       "addToCalendar": "Add to your calendar",
       "google": "Google Calendar",
-      "ics": "Apple / Outlook (.ics)"
+      "ics": "Apple / Outlook (.ics)",
+      "readMore": "Read more"
     },
     "quotes": {
       "title": "What people are saying",
