@@ -18,14 +18,15 @@ interface Row {
 }
 
 const TABS: { key: Status; label: string }[] = [
-  { key: "pending", label: "Waiting" },
   { key: "approved", label: "On the wall" },
+  { key: "pending", label: "Waiting" },
   { key: "rejected", label: "Not shown" },
 ];
 
 /**
- * Anonymous testimonials sent from /storytime (ADR 0087). Nothing reaches
- * the wall's Stories until it is approved here. Self-fetching: these are not
+ * Anonymous testimonials sent from /storytime (ADR 0087). They join the
+ * wall's Stories as soon as they are sent; this is where an organiser takes
+ * one off the wall or deletes it. Self-fetching: these are not
  * part of the editorial content, so they do not travel with the dashboard's
  * main load.
  */
@@ -33,7 +34,7 @@ export function TestimonialSubmissions() {
   const toast = useToast();
   const [rows, setRows] = useState<Row[] | null>(null);
   const [unavailable, setUnavailable] = useState(false);
-  const [tab, setTab] = useState<Status>("pending");
+  const [tab, setTab] = useState<Status>("approved");
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export function TestimonialSubmissions() {
   return (
     <Panel
       title="Submissions"
-      subtitle="Anonymous words from the testimonial page. Only approved ones appear on the wall's Stories."
+      subtitle="Anonymous words from Storytime. They go on the wall's Stories as soon as they are sent — take one off or delete it here."
       action={
         <button
           type="button"
@@ -136,7 +137,7 @@ export function TestimonialSubmissions() {
         <p className="text-body-m text-black02/70">Loading…</p>
       ) : shown.length === 0 ? (
         <p className="text-body-m text-black02/70">
-          {tab === "pending" ? "Nothing waiting." : "None here."}
+          {tab === "approved" ? "Nothing on the wall yet." : "None here."}
         </p>
       ) : (
         <ul className="flex flex-col gap-3">

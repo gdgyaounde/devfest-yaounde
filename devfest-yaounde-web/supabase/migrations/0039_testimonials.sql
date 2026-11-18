@@ -1,13 +1,14 @@
 -- ============================================================================
 -- 0039 — Anonymous testimonials (ADR 0087)
 --
--- Anyone can leave a few words about DevFest Yaoundé at /testimonial: a
+-- Anyone can leave a few words about DevFest Yaoundé at /storytime: a
 -- message, and optionally their role and the edition it is about. No name, no
 -- account, no email, no IP is stored — nothing here identifies the writer.
 --
--- Every submission arrives as 'pending'. Only an organiser can approve it
--- (admin → Testimonials → Submissions), and only APPROVED ones are shown, on
--- the wall's "Stories" mode. Anonymous text on a projected screen is why.
+-- Every submission is APPROVED on arrival and joins the wall's "Stories"
+-- straight away. Organisers can still take one off the wall ('rejected') or
+-- delete it from admin -> Testimonials -> Submissions; 'pending' remains
+-- available should the team ever want to review before showing.
 --
 -- RLS ON and NO policies: only the service role (the API routes) reads or
 -- writes this table, like `reservations` (0034) and `session_interests`
@@ -24,7 +25,7 @@ create table if not exists public.testimonials (
   edition     text check (edition is null or char_length(edition) between 1 and 40),
   -- The language the page was in when it was written ("fr" | "en").
   locale      text not null default 'fr' check (locale in ('fr', 'en')),
-  status      text not null default 'pending'
+  status      text not null default 'approved'
                 check (status in ('pending', 'approved', 'rejected')),
   created_at  timestamptz not null default now(),
   reviewed_at timestamptz,
@@ -35,6 +36,6 @@ create index if not exists testimonials_status_idx
   on public.testimonials (status, created_at);
 
 comment on table public.testimonials is
-  'Anonymous testimonials (ADR 0087). Pending until an organiser approves. Service role only: RLS on, no policies.';
+  'Anonymous testimonials (ADR 0087). Shown on arrival; organisers can take one off the wall or delete it. Service role only: RLS on, no policies.';
 
 alter table public.testimonials enable row level security;

@@ -6,7 +6,8 @@
  *
  * No account and nothing identifying is stored. Same-origin only, rate-limited
  * by IP (the address is used for the counter, never saved with the text), a
- * honeypot for bots, and every submission waits for an organiser's approval.
+ * honeypot for bots. Submissions are shown straight away; organisers can take
+ * one off the wall or delete it from the admin.
  */
 import { NextRequest } from "next/server";
 import { isSameOrigin } from "@/lib/admin/organiser-roles";
@@ -62,6 +63,8 @@ export async function POST(request: NextRequest) {
     role: checked.role,
     edition: checked.edition,
     locale: parsed.data.locale,
+    // Shown straight away (ADR 0087); organisers can take it down.
+    status: "approved",
   });
   if (error) {
     // Includes "relation does not exist" before migration 0039.
