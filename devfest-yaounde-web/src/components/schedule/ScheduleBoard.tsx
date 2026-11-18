@@ -313,24 +313,36 @@ export function ScheduleBoard({
                   <div
                     className={
                       group.length > 1
-                        ? "grid grid-cols-1 items-start gap-5 md:grid-cols-2"
+                        ? "grid grid-cols-1 items-stretch gap-5 md:grid-cols-2"
                         : ""
                     }
                   >
                     {group.map((s, j) => (
-                      <SessionCard
+                      /* Equal-height cells: the card stretches to its row so
+                         parallel sessions never leave a ragged gap, and an
+                         odd one out spans the full row instead of leaving a
+                         hole beside it. */
+                      <div
                         key={s.id}
-                        session={s}
-                        speakers={speakers}
-                        partners={partners}
-                        open={openId === s.id}
-                        onToggle={() =>
-                          setOpenId(openId === s.id ? null : s.id)
-                        }
-                        variant="timeline"
-                        showCalendar={showCalendar}
-                        detailsHref={detailsFor(s.id)}
-                      />
+                        className={`flex [&>*]:w-full ${
+                          group.length % 2 === 1 && j === group.length - 1
+                            ? "md:col-span-2"
+                            : ""
+                        }`}
+                      >
+                        <SessionCard
+                          session={s}
+                          speakers={speakers}
+                          partners={partners}
+                          open={openId === s.id}
+                          onToggle={() =>
+                            setOpenId(openId === s.id ? null : s.id)
+                          }
+                          variant="timeline"
+                          showCalendar={showCalendar}
+                          detailsHref={detailsFor(s.id)}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -405,7 +417,7 @@ export function ScheduleBoard({
               {t("programmeBody")}
             </p>
 
-            {programme.map(({ group, sessions: list, total }, gi) => (
+            {programme.map(({ group, sessions: list, total }) => (
               <div key={group} className="mt-12">
                 <p className="flex items-center gap-3 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
                   {t(GROUP_LABEL_KEY[group] as "groupWorkshop")}
