@@ -13,6 +13,7 @@ import {
   type ProgrammeGroup,
 } from "@/lib/sessions";
 import { SessionCard } from "./SessionCard";
+import { SessionReader } from "./SessionReader";
 import type { Session, Speaker, Sponsor } from "@/data/types";
 
 const GROUP_LABEL_KEY: Record<ProgrammeGroup, string> = {
@@ -88,6 +89,8 @@ export function ScheduleBoard({
   const [track, setTrack] = useState<string | null>(null);
   const [room, setRoom] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
+  // The session the full-screen reader is on, or null while it is closed.
+  const [reading, setReading] = useState<string | null>(null);
 
   /*
    * Deep links (`/schedule?session=<id>`), which the home preview's "Full
@@ -341,6 +344,7 @@ export function ScheduleBoard({
                           variant="timeline"
                           showCalendar={showCalendar}
                           detailsHref={detailsFor(s.id)}
+                          onRead={() => setReading(s.id)}
                         />
                       </div>
                     ))}
@@ -384,6 +388,7 @@ export function ScheduleBoard({
                             variant="list"
                             showCalendar={showCalendar}
                             detailsHref={detailsFor(s.id)}
+                            onRead={() => setReading(s.id)}
                           />
                         </li>
                       ))}
@@ -444,6 +449,7 @@ export function ScheduleBoard({
                           variant="timeline"
                           showCalendar={showCalendar}
                           detailsHref={detailsFor(s.id)}
+                          onRead={() => setReading(s.id)}
                         />
                       </li>
                     ))}
@@ -467,6 +473,7 @@ export function ScheduleBoard({
                           variant="list"
                           showCalendar={showCalendar}
                           detailsHref={detailsFor(s.id)}
+                          onRead={() => setReading(s.id)}
                         />
                       </li>
                     ))}
@@ -482,6 +489,22 @@ export function ScheduleBoard({
           </section>
         )}
       </div>
+      {reading && (
+        <SessionReader
+          // The day's slots in order, so previous / next step through them;
+          // a session outside them (the unscheduled programme) reads alone.
+          slots={
+            slots.some(([, g]) => g.some((x) => x.id === reading))
+              ? slots.map(([, g]) => g)
+              : [sessions.filter((x) => x.id === reading)]
+          }
+          startId={reading}
+          speakers={speakers}
+          partners={partners}
+          showCalendar={showCalendar}
+          onClose={() => setReading(null)}
+        />
+      )}
     </>
   );
 

@@ -213,7 +213,11 @@
       "addToCalendar": "Add to your calendar",
       "google": "Google Calendar",
       "ics": "Apple / Outlook (.ics)",
-      "readMore": "Read more"
+      "readMore": "Read more",
+      "readerPrev": "Previous",
+      "readerNext": "Next",
+      "readerPosition": "{current} of {total}",
+      "readerParallel": "{count} sessions in parallel"
     },
     "quotes": {
       "title": "What people are saying",

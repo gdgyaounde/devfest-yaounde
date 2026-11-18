@@ -213,7 +213,11 @@
       "addToCalendar": "Ajouter à ton agenda",
       "google": "Google Agenda",
       "ics": "Apple / Outlook (.ics)",
-      "readMore": "Lire la suite"
+      "readMore": "Lire la suite",
+      "readerPrev": "Précédent",
+      "readerNext": "Suivant",
+      "readerPosition": "{current} sur {total}",
+      "readerParallel": "{count} sessions en parallèle"
     },
     "quotes": {
       "title": "Ce qu'on en dit",
