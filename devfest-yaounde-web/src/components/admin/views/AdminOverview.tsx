@@ -153,6 +153,11 @@ export function AdminOverview({
           value={money(sum(cashIn), "XAF")}
           note="Marked received at the door"
         />
+        <Stat
+          label="Interested"
+          value={String(data.sessionInterest.total)}
+          note="Sessions marked “this interests me”, all accounts"
+        />
         <Stat label="Shop orders" value={String(c.orders)} />
         <Stat label="Users" value={String(c.users)} />
         <Stat
@@ -228,6 +233,8 @@ export function AdminOverview({
       </section>
 
       <CommerceRecap data={data} />
+
+      <SessionInterest data={data} />
 
       <div className="flex flex-wrap gap-2.5">
         {(
@@ -549,5 +556,54 @@ function ReservedMark({ n }: { n: number }) {
         Reserved
       </span>
     </span>
+  );
+}
+
+/**
+ * "This interests me" per session (ADR 0086): which sessions people want to
+ * attend, to plan rooms and seating. Numbers only — the admin never sees who
+ * marked what.
+ */
+function SessionInterest({ data }: { data: AdminData }) {
+  const { rows, total } = data.sessionInterest;
+  return (
+    <Panel
+      title="Session interest"
+      subtitle="How many accounts marked each session “this interests me”. Counts only — never who."
+      action={
+        <ExportButton
+          filename="devfest-session-interest.csv"
+          headers={["Session", "Time", "Interested"]}
+          rows={rows.map((r) => [r.title, r.time, r.interested])}
+        />
+      }
+    >
+      <DataTable
+        compact
+        headers={["Session", "Time", "Interested"]}
+        empty="Nobody has marked a session yet."
+        rows={[
+          ...rows.map((r) => [
+            r.title,
+            r.time || "—",
+            <strong key="n">{r.interested}</strong>,
+          ]),
+          ...(rows.length
+            ? [
+                [
+                  <span
+                    key="a"
+                    className="font-mono text-mono-tag font-bold uppercase"
+                  >
+                    All marks
+                  </span>,
+                  "",
+                  <strong key="t">{total}</strong>,
+                ],
+              ]
+            : []),
+        ]}
+      />
+    </Panel>
   );
 }

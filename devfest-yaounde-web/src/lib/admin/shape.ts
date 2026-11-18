@@ -270,6 +270,16 @@ export interface AdminData {
   tickets: { rows: AdminTicket[]; total: number };
   /** Reserve-now, pay-cash-at-the-venue reservations (ADR 0084), newest first. */
   reservations: AdminReservation[];
+  /** "This interests me" per session — counts only, never who (ADR 0086). */
+  sessionInterest: {
+    total: number;
+    rows: {
+      sessionId: string;
+      title: string;
+      time: string;
+      interested: number;
+    }[];
+  };
   /** Tickets + shop sold, and the swag to account for (ADR 0083). */
   commerce: import("@/lib/admin/commerce-recap").CommerceRecap;
   /** Apparel per tier × size, over EVERY ticket, not the loaded page (ADR 0075). */

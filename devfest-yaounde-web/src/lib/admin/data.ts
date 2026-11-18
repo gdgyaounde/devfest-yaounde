@@ -30,6 +30,8 @@ import type { AdminData, AdminReservation } from "./shape";
 import { LIST_CAP } from "./shape";
 import { apparelTotals } from "@/lib/tickets/apparel-totals";
 import { loadProducts, loadTiers } from "@/lib/payments/catalog";
+import { getSessions } from "@/lib/content/store";
+import { interestRows } from "@/lib/interests/rules";
 import {
   commerceRecap,
   type RecapOrder,
@@ -168,12 +170,29 @@ export async function loadAdminData(): Promise<AdminData> {
   const organiser = await gate();
   const db = createAdminSupabase();
 
-  const [apparelRows, tiers, products, commerceInputs] = await Promise.all([
+  const [
+    apparelRows,
+    tiers,
+    products,
+    commerceInputs,
+    interestCounts,
+    sessions,
+  ] = await Promise.all([
     allApparelRows(db),
     loadTiers(),
     loadProducts(),
     loadCommerceInputs(db),
+    // Counts only. Before migration 0038 the function is missing: reads as none.
+    db.rpc("session_interest_counts").then(({ data, error }) => {
+      if (error) {
+        console.error("[admin] session interest read failed", error.message);
+        return [];
+      }
+      return data ?? [];
+    }),
+    getSessions(),
   ]);
+  const interest = interestRows(interestCounts, sessions);
   const [tickets, orders, intents, users, discounts, refundRequests] =
     await Promise.all([
       db
@@ -379,6 +398,10 @@ export async function loadAdminData(): Promise<AdminData> {
       users: users.count ?? 0,
     },
     reservations: commerceInputs.reservations,
+    sessionInterest: {
+      total: interest.reduce((n, r) => n + r.interested, 0),
+      rows: interest,
+    },
     commerce: commerceRecap({
       tiers,
       products,

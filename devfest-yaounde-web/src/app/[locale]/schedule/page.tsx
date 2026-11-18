@@ -53,6 +53,7 @@ export default async function SchedulePage({
             partners={partners}
             showFilters
             showCalendar
+            showInterest
           />
         </div>
       </SectionContainer>

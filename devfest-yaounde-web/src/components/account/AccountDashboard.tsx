@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BookmarkSimple,
   CalendarCheck,
   Check,
   LockSimple,
@@ -18,6 +19,10 @@ import { Button } from "@/components/ui/Button";
 import { BadgeCode } from "@/components/tickets/BadgeCode";
 import { Toast } from "@/components/ui/Toast";
 import { MyReservations } from "@/components/account/MyReservations";
+import {
+  MySessions,
+  type AccountSession,
+} from "@/components/account/MySessions";
 import { TicketEditor } from "@/components/account/TicketEditor";
 import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL } from "@/lib/site-config";
@@ -86,18 +91,21 @@ interface Order {
   order_items: OrderItem[];
 }
 
-type Tab = "tickets" | "orders" | "reservations";
+type Tab = "tickets" | "orders" | "reservations" | "sessions";
 
 export function AccountDashboard({
   editsCloseAt,
   editsOpenAtRender,
   editsDeadline,
+  sessions,
 }: {
   /** The edits cutoff (ADR 0075) and what was true when the page rendered. */
   editsCloseAt: string | null;
   editsOpenAtRender: boolean;
   /** Formatted in Yaoundé time on the server; null = no cutoff. */
   editsDeadline: { date: string; short: string; time: string } | null;
+  /** The schedule, so "My sessions" can show titles for the saved ids. */
+  sessions: AccountSession[];
 }) {
   const t = useTranslations("pages.account");
   const te = useTranslations("pages.account.ticketEdit");
@@ -198,6 +206,7 @@ export function AccountDashboard({
             ["tickets", TicketIcon, t("myTickets")],
             ["orders", Package, t("myOrders")],
             ["reservations", CalendarCheck, t("myReservations")],
+            ["sessions", BookmarkSimple, t("mySessions.tab")],
           ] as const
         ).map(([key, Icon, label]) => (
           <button
@@ -437,6 +446,12 @@ export function AccountDashboard({
       {tab === "reservations" && (
         <div className="mt-8">
           <MyReservations />
+        </div>
+      )}
+
+      {tab === "sessions" && (
+        <div className="mt-8">
+          <MySessions sessions={sessions} />
         </div>
       )}
 

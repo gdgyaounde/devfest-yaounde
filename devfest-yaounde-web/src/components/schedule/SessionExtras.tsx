@@ -26,13 +26,10 @@ export function SessionExtras({
   session,
   speakers,
   showCalendar,
-  large = false,
 }: {
   session: Session;
   speakers: Speaker[];
   showCalendar: boolean;
-  /** The full-screen reader shows the speaker photos bigger. */
-  large?: boolean;
 }) {
   const eventDate = useEventDates()[0];
   const t = useTranslations("home.schedule");
@@ -115,32 +112,15 @@ export function SessionExtras({
               <li key={s.id}>
                 <Link
                   href={{ pathname: "/speakers", query: { spk: s.id } }}
-                  className={`inline-flex items-center gap-3 rounded-pill border-2 border-black02 bg-offwhite py-1 pl-1 pr-5 font-bold ${large ? "text-body-l" : "text-body-m"} text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary`}
+                  className={`inline-flex items-center gap-3 rounded-pill border-2 border-black02 bg-offwhite py-1 pl-1 pr-5 font-bold text-body-m text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-primary`}
                 >
                   <span
                     aria-hidden
-                    className={`relative shrink-0 overflow-hidden rounded-pill border-2 border-black02 bg-pastel ${large ? "h-14 w-14" : "h-8 w-8"}`}
+                    className={`relative shrink-0 overflow-hidden rounded-pill border-2 border-black02 bg-pastel h-8 w-8`}
                   >
-                    <ContentImage
-                      src={s.photoUrl}
-                      alt=""
-                      sizes={large ? "56px" : "32px"}
-                    />
+                    <ContentImage src={s.photoUrl} alt="" sizes="32px" />
                   </span>
-                  {large ? (
-                    <span className="flex min-w-0 flex-col py-0.5 leading-tight">
-                      <span>{s.name}</span>
-                      {(s.role?.[locale] || s.company) && (
-                        <span className="mt-0.5 text-body-m font-normal text-black02/70">
-                          {[s.role?.[locale], s.company]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        </span>
-                      )}
-                    </span>
-                  ) : (
-                    s.name
-                  )}
+                  {s.name}
                 </Link>
               </li>
             ))}

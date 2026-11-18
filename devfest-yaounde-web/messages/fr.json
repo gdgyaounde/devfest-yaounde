@@ -211,13 +211,17 @@
       "groupMore": "{count, plural, one {+# autre session} other {+# autres sessions}} dans le programme complet",
       "fullDetails": "Voir tous les détails",
       "addToCalendar": "Ajouter à ton agenda",
-      "google": "Google Agenda",
-      "ics": "Apple / Outlook (.ics)",
+      "google": "Google",
+      "ics": "Autres (.ics)",
       "readMore": "Lire la suite",
       "readerPrev": "Précédent",
       "readerNext": "Suivant",
       "readerPosition": "{current} sur {total}",
-      "readerParallel": "{count} sessions en parallèle"
+      "readerParallel": "{count} sessions en parallèle",
+      "interest": "Ça m'intéresse",
+      "interestSignIn": "Connecte-toi pour garder cette session",
+      "interestOn": "Ajoutée à ton compte",
+      "interestFailed": "Impossible d'enregistrer — tu peux réessayer ?"
     },
     "quotes": {
       "title": "Ce qu'on en dit",
@@ -252,8 +256,8 @@
       "lead": "Une journée, une salle pleine de gens qui n'auraient voulu être nulle part ailleurs.",
       "metaDesc": "Le programme complet de DevFest Yaoundé — conférences, ateliers, tables rondes et pauses sur la journée.",
       "addToCalendar": "Ajouter au calendrier",
-      "google": "Google Agenda",
-      "ics": "Apple / Outlook (.ics)"
+      "google": "Google",
+      "ics": "Autres (.ics)"
     },
     "speakers": {
       "title": "Intervenants",
@@ -702,6 +706,15 @@
         "cancel": "Annuler la réservation",
         "confirmCancel": "Annuler la réservation {reference} ? Cela libère les places et les articles.",
         "cancelFailed": "Impossible d'annuler. Réessaie, ou demande sur place."
+      },
+      "mySessions": {
+        "tab": "Mes sessions",
+        "loading": "Chargement…",
+        "emptyTitle": "Aucune session gardée pour l'instant",
+        "emptyBody": "Touche « Ça m'intéresse » sur une session du programme et elle apparaîtra ici.",
+        "browse": "Voir le programme",
+        "remove": "Retirer",
+        "removeFailed": "Impossible de retirer celle-ci — tu peux réessayer ?"
       }
     },
     "claimTicket": {

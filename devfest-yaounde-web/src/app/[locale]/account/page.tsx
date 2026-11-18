@@ -5,6 +5,7 @@ import { AccountDashboard } from "@/components/account/AccountDashboard";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
+import { getSessions } from "@/lib/content/store";
 import { formatCutoff, ticketEditsOpen } from "@/lib/event";
 
 export async function generateMetadata({
@@ -33,6 +34,12 @@ export default async function AccountPage({
   setRequestLocale(locale);
   const t = await getTranslations("pages.account");
   const settings = await loadSettings();
+  const sessions = (await getSessions()).map((s) => ({
+    id: s.id,
+    title: s.title,
+    time: s.time,
+    room: s.room,
+  }));
   const l = locale === "en" ? "en" : "fr";
 
   return (
@@ -48,6 +55,7 @@ export default async function AccountPage({
             editsCloseAt={settings.ticketing.editsCloseAt}
             editsOpenAtRender={ticketEditsOpen(new Date(), settings)}
             editsDeadline={formatCutoff(l, settings.ticketing.editsCloseAt)}
+            sessions={sessions}
           />
         </div>
       </SectionContainer>

@@ -51,6 +51,8 @@ export const RATE_LIMITS = {
    * the alphabet to list every attendee needs hundreds.
    */
   staffSearch: { bucket: "staff-search", limit: 60, windowSeconds: 300 },
+  /** "This interests me" (ADR 0086): a tap each, per account. */
+  interest: { bucket: "interest", limit: 60, windowSeconds: 300 },
   /** Reservations (ADR 0084), per account: a few tries, not a script. */
   reservation: { bucket: "reservation", limit: 12, windowSeconds: 300 },
   reservationRead: {

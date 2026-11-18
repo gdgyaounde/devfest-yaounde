@@ -592,6 +592,24 @@ export type Database = {
           },
         ]
       }
+      session_interests: {
+        Row: {
+          created_at: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
           cancelled_at: string | null
@@ -682,6 +700,10 @@ export type Database = {
       cancel_reservation: {
         Args: { p_id: string; p_user_id: string }
         Returns: string
+      }
+      session_interest_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: { session_id: string; interested: number }[]
       }
       check_in_reservation: { Args: { p_id: string }; Returns: Json }
       create_reservation: {

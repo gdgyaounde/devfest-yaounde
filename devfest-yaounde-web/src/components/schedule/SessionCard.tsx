@@ -3,6 +3,7 @@
 import { ArrowRight, CaretDown, Clock, MapPin } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { InterestButton } from "./InterestProvider";
 import { SessionExtras, isLongText } from "./SessionExtras";
 import { SessionMeta } from "./SessionMeta";
 import type { Session, Speaker, Sponsor } from "@/data/types";
@@ -75,11 +76,19 @@ export function SessionCard({
     <div
       className={
         isTimeline
-          ? "rounded-lg border-2 border-black02 bg-pastel shadow-[0_5px_0_0_var(--color-black02)] transition-transform duration-200 ease-out-devfest hover:-translate-y-1 motion-reduce:transform-none"
-          : "bg-pastel transition-colors duration-200 hover:bg-primary/30"
+          ? "relative rounded-lg border-2 border-black02 bg-pastel shadow-[0_5px_0_0_var(--color-black02)] transition-transform duration-200 ease-out-devfest hover:-translate-y-1 motion-reduce:transform-none"
+          : "relative bg-pastel transition-colors duration-200 hover:bg-primary/30"
       }
       style={isTimeline && tilt ? { rotate: `${tilt}deg` } : undefined}
     >
+      {/* Beside the open/close caret, not inside it: a button cannot nest
+          in a button. Breaks have nothing to be interested in. */}
+      {session.kind !== "break" && (
+        <InterestButton
+          sessionId={session.id}
+          className="absolute right-[4.25rem] top-4 z-10 sm:right-[4.5rem]"
+        />
+      )}
       <button
         type="button"
         onClick={onToggle}
@@ -88,7 +97,7 @@ export function SessionCard({
         id={`session-trigger-${session.id}`}
         className="flex w-full items-start gap-4 px-6 py-5 text-left sm:px-7"
       >
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pr-12">
           {/* Format, Online, level, language — the same chips the speaker
               profile shows (SessionMeta). Duration and room only once they
               exist: an unscheduled session (ADR 0073) has neither yet. */}

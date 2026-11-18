@@ -211,13 +211,17 @@
       "groupMore": "{count, plural, one {+# more session} other {+# more sessions}} in the full programme",
       "fullDetails": "Full details",
       "addToCalendar": "Add to your calendar",
-      "google": "Google Calendar",
-      "ics": "Apple / Outlook (.ics)",
+      "google": "Google",
+      "ics": "Others (.ics)",
       "readMore": "Read more",
       "readerPrev": "Previous",
       "readerNext": "Next",
       "readerPosition": "{current} of {total}",
-      "readerParallel": "{count} sessions in parallel"
+      "readerParallel": "{count} sessions in parallel",
+      "interest": "This interests me",
+      "interestSignIn": "Sign in to save this session",
+      "interestOn": "Saved to your account",
+      "interestFailed": "Couldn't save that — give it another shot?"
     },
     "quotes": {
       "title": "What people are saying",
@@ -252,8 +256,8 @@
       "lead": "One day, one room full of people who'd rather be here than anywhere else.",
       "metaDesc": "The full DevFest Yaoundé schedule — talks, workshops, panels and breaks, all in one day.",
       "addToCalendar": "Add to calendar",
-      "google": "Google Calendar",
-      "ics": "Apple / Outlook (.ics)"
+      "google": "Google",
+      "ics": "Others (.ics)"
     },
     "speakers": {
       "title": "Speakers",
@@ -702,6 +706,15 @@
         "cancel": "Cancel reservation",
         "confirmCancel": "Cancel reservation {reference}? This frees the seats and items.",
         "cancelFailed": "We couldn't cancel it. Try again, or ask at the venue."
+      },
+      "mySessions": {
+        "tab": "My sessions",
+        "loading": "Loading…",
+        "emptyTitle": "No sessions saved yet",
+        "emptyBody": "Tap “This interests me” on a session in the agenda and it will show up here.",
+        "browse": "See the agenda",
+        "remove": "Remove",
+        "removeFailed": "Couldn't remove that one — give it another shot?"
       }
     },
     "claimTicket": {

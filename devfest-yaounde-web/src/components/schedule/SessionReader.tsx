@@ -15,6 +15,7 @@ import { Modal } from "@/components/ui/Modal";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { fadeInUp } from "@/lib/motion";
 import type { Session, Speaker, Sponsor } from "@/data/types";
+import { InterestButton } from "./InterestProvider";
 import { SessionExtras } from "./SessionExtras";
 import { SessionMeta } from "./SessionMeta";
 
@@ -299,6 +300,11 @@ function SessionView({
   const locale = useLocale() as "fr" | "en";
   const single = layout === "single";
 
+  const heart =
+    session.kind !== "break" ? (
+      <InterestButton sessionId={session.id} className="ml-auto" />
+    ) : null;
+
   const chips = (
     <div className="flex flex-wrap items-center gap-2.5">
       <SessionMeta session={session} />
@@ -315,6 +321,7 @@ function SessionView({
           {session.room[locale]}
         </span>
       )}
+      {heart}
     </div>
   );
 
@@ -363,7 +370,6 @@ function SessionView({
               session={session}
               speakers={speakers}
               showCalendar={showCalendar}
-              large
             />
           </aside>
         </div>
@@ -388,7 +394,6 @@ function SessionView({
         session={session}
         speakers={speakers}
         showCalendar={showCalendar}
-        large
       />
     </article>
   );

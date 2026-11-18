@@ -12,6 +12,7 @@ import {
   isScheduled,
   type ProgrammeGroup,
 } from "@/lib/sessions";
+import { InterestProvider } from "./InterestProvider";
 import { SessionCard } from "./SessionCard";
 import { SessionReader } from "./SessionReader";
 import type { Session, Speaker, Sponsor } from "@/data/types";
@@ -37,6 +38,8 @@ export interface ScheduleBoardProps {
   previewLimit?: number;
   /** The programme heading's level — h3 under the home section's own h2. */
   programmeHeading?: "h2" | "h3";
+  /** "This interests me" buttons (the /schedule page only; ADR 0086). */
+  showInterest?: boolean;
 }
 
 /**
@@ -58,6 +61,7 @@ export function ScheduleBoard({
   showCalendar = false,
   previewLimit,
   programmeHeading = "h2",
+  showInterest = false,
 }: ScheduleBoardProps) {
   const t = useTranslations("home.schedule");
   const locale = useLocale() as "fr" | "en";
@@ -510,9 +514,11 @@ export function ScheduleBoard({
 
   // The Home preview has no filters, so it skips the sidebar layout entirely
   // rather than rendering an empty one.
-  if (!showFilters) return board;
+  const wrap = (node: React.ReactNode) =>
+    showInterest ? <InterestProvider>{node}</InterestProvider> : node;
+  if (!showFilters) return wrap(board);
 
-  return (
+  return wrap(
     <FilterLayout
       filters={filters}
       activeCount={activeCount}
@@ -522,6 +528,6 @@ export function ScheduleBoard({
       }}
     >
       {board}
-    </FilterLayout>
+    </FilterLayout>,
   );
 }
