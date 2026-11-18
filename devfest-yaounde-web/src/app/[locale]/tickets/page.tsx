@@ -112,7 +112,7 @@ export default async function TicketsPage({
         />
 
         <div className="mt-10">
-          <VenueCard bare />
+          <VenueCard />
         </div>
 
         <div className="mt-16">

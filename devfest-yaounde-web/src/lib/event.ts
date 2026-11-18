@@ -48,15 +48,19 @@ export const EVENT = {
    * Appears in rich results, the hero, the OG card and the venue block.
    */
   venue: "FMSB Yaoundé" as string | null,
+  /** The venue's short name — what the hero leads with (the city is the caption). */
+  venueShort: "FMSB",
   /** The room inside the venue. */
   venueRoom: "Amphi 350" as string | null,
   venueStreet: null as string | null,
   /** The venue's exact position, from the organisers (WGS84). */
   venueGeo: { latitude: 3.861431332755392, longitude: 11.496877341937122 },
-  /** "Accurate" — the pin the organisers say is exact. */
+  /**
+   * The ONE map link on the site: the exact pin, as the organisers gave it.
+   * (A second "known location" link was dropped on purpose — two pins made
+   * people ask which was right.)
+   */
   mapUrl: "https://maps.app.goo.gl/MqCKKPkbyaSkbLa46",
-  /** "Known location" — how most people find it on Google Maps. */
-  mapKnownUrl: "https://maps.app.goo.gl/C17CMEMM7V2B6YUc8",
 } as const;
 
 /**

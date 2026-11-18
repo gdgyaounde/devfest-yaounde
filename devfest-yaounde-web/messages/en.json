@@ -49,7 +49,9 @@
     "switchToEnglish": "Switch to English",
     "switchToFrench": "Switch to French",
     "skipToContent": "Skip to content",
-    "home": "DevFest Yaoundé — home"
+    "home": "DevFest Yaoundé — home",
+    "reserve": "Reserve",
+    "payAtVenue": "Pay at the venue"
   },
   "announcement": {
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
@@ -673,7 +675,26 @@
           "server_error": "Something glitched on our end — give it another shot?"
         }
       },
-      "orderRef": "Order #{ref}"
+      "orderRef": "Order #{ref}",
+      "myReservations": "My reservations",
+      "reservations": {
+        "loading": "Loading…",
+        "emptyTitle": "No reservations yet",
+        "emptyReserving": "Online payments are closed. Reserve your tickets and shop items, and pay in cash at the venue.",
+        "emptySelling": "Reservations open when online payments close, today at noon.",
+        "emptyDoor": "Reservations are closed. Come to {venue} and pay in cash on the spot.",
+        "reserveCta": "Reserve my spot",
+        "status": {
+          "reserved": "Reserved",
+          "cash_received": "Paid in cash",
+          "cancelled": "Cancelled"
+        },
+        "toPay": "To pay in cash: {total}",
+        "payAt": "Pay at {venue}, on the day. Show this reference.",
+        "cancel": "Cancel reservation",
+        "confirmCancel": "Cancel reservation {reference}? This frees the seats and items.",
+        "cancelFailed": "We couldn't cancel it. Try again, or ask at the venue."
+      }
     },
     "claimTicket": {
       "title": "Claim your ticket",
@@ -1061,6 +1082,27 @@
       "buyerUnknown": "Buyer name not on file",
       "size": "size {size}",
       "color": "colour {color}"
+    },
+    "reservations": {
+      "title": "Reserved online? Find the reservation",
+      "hint": "Type the reference (RES-XXXXXX) or at least 3 letters of the name.",
+      "search": "Search",
+      "searching": "Searching…",
+      "empty": "No reservation under that. Walk-ins pay at the table.",
+      "statusReserved": "Reserved",
+      "statusCash": "Cash received",
+      "statusCancelled": "Cancelled",
+      "owed": "Cash to collect: {total}",
+      "paid": "Paid in cash: {total}",
+      "alreadyIn": "Already checked in.",
+      "cancelled": "This reservation was cancelled. Don't take cash for it — call an organiser.",
+      "cashAndIn": "Cash received & check in",
+      "cashOnly": "Cash received",
+      "checkInOnly": "Check in only",
+      "doneCash": "{reference}: cash recorded.",
+      "doneCheckIn": "{reference}: checked in.",
+      "doneBoth": "{reference}: cash recorded and checked in.",
+      "notFound": "Reservation not found."
     }
   },
   "reservations": {
@@ -1097,8 +1139,9 @@
   },
   "venue": {
     "label": "Where to find us",
-    "openMaps": "Open the exact spot in Maps",
-    "knownMaps": "Known location on Maps",
-    "newTab": "(opens in a new tab)"
+    "openMaps": "Open in Maps",
+    "newTab": "(opens in a new tab)",
+    "when": "When",
+    "where": "Where"
   }
 }

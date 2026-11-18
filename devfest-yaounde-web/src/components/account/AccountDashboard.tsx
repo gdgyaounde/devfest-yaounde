@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CalendarCheck,
   Check,
   LockSimple,
   Package,
@@ -16,6 +17,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { BadgeCode } from "@/components/tickets/BadgeCode";
 import { Toast } from "@/components/ui/Toast";
+import { MyReservations } from "@/components/account/MyReservations";
 import { TicketEditor } from "@/components/account/TicketEditor";
 import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL } from "@/lib/site-config";
@@ -84,7 +86,7 @@ interface Order {
   order_items: OrderItem[];
 }
 
-type Tab = "tickets" | "orders";
+type Tab = "tickets" | "orders" | "reservations";
 
 export function AccountDashboard({
   editsCloseAt,
@@ -195,6 +197,7 @@ export function AccountDashboard({
           [
             ["tickets", TicketIcon, t("myTickets")],
             ["orders", Package, t("myOrders")],
+            ["reservations", CalendarCheck, t("myReservations")],
           ] as const
         ).map(([key, Icon, label]) => (
           <button
@@ -428,6 +431,12 @@ export function AccountDashboard({
               ))}
             </ul>
           )}
+        </div>
+      )}
+
+      {tab === "reservations" && (
+        <div className="mt-8">
+          <MyReservations />
         </div>
       )}
 

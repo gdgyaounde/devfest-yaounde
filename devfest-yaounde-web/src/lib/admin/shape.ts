@@ -92,6 +92,30 @@ export interface AdminAdmin {
   addedAt: string;
 }
 
+/** A reservation as the dashboard lists it (ADR 0084) — organisers see contact details. */
+export interface AdminReservation {
+  id: string;
+  reference: string;
+  status: "reserved" | "cash_received" | "cancelled";
+  contactName: string;
+  contactPhone: string;
+  contactEmail: string | null;
+  tickets: {
+    tierId: string;
+    name: string;
+    apparelSize?: string;
+  }[];
+  items: {
+    productId: string;
+    quantity: number;
+    variant?: { size?: string; color?: string };
+  }[];
+  totalXaf: number;
+  createdAt: string;
+  cashReceivedAt: string | null;
+  checkedInAt: string | null;
+}
+
 /** A day-of volunteer (ADR 0079) — not an admin, no dashboard. */
 export interface AdminVolunteer {
   id: string;
@@ -244,6 +268,8 @@ export interface AdminData {
     users: number;
   };
   tickets: { rows: AdminTicket[]; total: number };
+  /** Reserve-now, pay-cash-at-the-venue reservations (ADR 0084), newest first. */
+  reservations: AdminReservation[];
   /** Tickets + shop sold, and the swag to account for (ADR 0083). */
   commerce: import("@/lib/admin/commerce-recap").CommerceRecap;
   /** Apparel per tier × size, over EVERY ticket, not the loaded page (ADR 0075). */

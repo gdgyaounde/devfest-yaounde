@@ -53,3 +53,30 @@ export interface StaffOrder {
     variant: { size?: string; color?: string } | null;
   }[];
 }
+
+/**
+ * A reservation as the DOOR sees it (ADR 0084): the name and what was
+ * reserved, the amount owed in cash and where it stands — never the phone or
+ * the email. Volunteers collect cash and tick people off; chasing is for
+ * organisers, from the dashboard.
+ */
+export interface StaffReservation {
+  id: string;
+  reference: string;
+  name: string;
+  status: "reserved" | "cash_received" | "cancelled";
+  totalXaf: number;
+  tickets: { tierName: string; name: string; apparelSize?: string }[];
+  items: {
+    name: { fr: string; en: string } | string;
+    quantity: number;
+    variant?: { size?: string; color?: string };
+  }[];
+  cashReceivedAt: string | null;
+  checkedInAt: string | null;
+}
+
+export type ReservationDoorResult =
+  | { status: "ok"; reservation: StaffReservation }
+  | { status: "not_found" }
+  | { status: "cancelled" };

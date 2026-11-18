@@ -26,7 +26,7 @@ async function gate() {
 }
 
 export * from "./shape";
-import type { AdminData } from "./shape";
+import type { AdminData, AdminReservation } from "./shape";
 import { LIST_CAP } from "./shape";
 import { apparelTotals } from "@/lib/tickets/apparel-totals";
 import { loadProducts, loadTiers } from "@/lib/payments/catalog";
@@ -72,6 +72,7 @@ async function loadCommerceInputs(
   tickets: RecapTicket[];
   orders: RecapOrder[];
   refunded: Set<string>;
+  reservations: AdminReservation[];
 }> {
   const PAGE = 1000;
   async function paged<T>(
@@ -96,7 +97,7 @@ async function loadCommerceInputs(
     }
     return out;
   }
-  const [tickets, orders, refunds] = await Promise.all([
+  const [tickets, orders, refunds, reservationRows] = await Promise.all([
     paged("tickets", (from, to) =>
       db
         .from("tickets")
@@ -121,6 +122,16 @@ async function loadCommerceInputs(
         .order("id")
         .range(from, to),
     ),
+    // Before migration 0034 the table does not exist: that reads as "none".
+    paged("reservations", (from, to) =>
+      db
+        .from("reservations")
+        .select(
+          "id, reference, status, contact_name, contact_phone, contact_email, tickets, items, total_xaf, created_at, cash_received_at, checked_in_at",
+        )
+        .order("created_at", { ascending: false })
+        .range(from, to),
+    ),
   ]);
   return {
     tickets,
@@ -136,6 +147,20 @@ async function loadCommerceInputs(
       })),
     })),
     refunded: new Set(refunds.map((r) => r.reference.toLowerCase())),
+    reservations: reservationRows.map((r) => ({
+      id: r.id,
+      reference: r.reference,
+      status: r.status as AdminReservation["status"],
+      contactName: r.contact_name,
+      contactPhone: r.contact_phone,
+      contactEmail: r.contact_email,
+      tickets: r.tickets as unknown as AdminReservation["tickets"],
+      items: r.items as unknown as AdminReservation["items"],
+      totalXaf: r.total_xaf,
+      createdAt: r.created_at,
+      cashReceivedAt: r.cash_received_at,
+      checkedInAt: r.checked_in_at,
+    })),
   };
 }
 
@@ -353,7 +378,15 @@ export async function loadAdminData(): Promise<AdminData> {
       wallApproved,
       users: users.count ?? 0,
     },
-    commerce: commerceRecap({ tiers, products, ...commerceInputs }),
+    reservations: commerceInputs.reservations,
+    commerce: commerceRecap({
+      tiers,
+      products,
+      tickets: commerceInputs.tickets,
+      orders: commerceInputs.orders,
+      refunded: commerceInputs.refunded,
+      reservations: commerceInputs.reservations,
+    }),
     apparel: apparelTotals(
       apparelRows,
       tiers.filter((t) => t.includesApparel).map((t) => t.id),

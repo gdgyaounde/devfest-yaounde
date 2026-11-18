@@ -50,8 +50,8 @@
       "en": "When and where is it happening?"
     },
     "answer": {
-      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026 à FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroun). Le bloc « Où nous trouver » de la page d'accueil donne deux liens Maps — le point exact et le lieu connu — et le programme de la journée est sur la page Programme.",
-      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026 at FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroon). The venue block on the home page has two map links — the exact spot and the known location — and the day's schedule is on the Schedule page."
+      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026 à FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroun). La section « Quand et où » de la page d'accueil donne la date et un lien vers le point exact sur Maps, et le programme de la journée est sur la page Programme.",
+      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026 at FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroon). The venue section on the home page has the date and a link to the exact spot on Maps, and the day's schedule is on the Schedule page."
     },
     "cta": {
       "label": {
@@ -309,8 +309,8 @@
       "en": "Is there parking / is the venue accessible?"
     },
     "answer": {
-      "fr": "Nous n'avons pas encore de détails confirmés sur le parking ou l'accessibilité à FMSB Yaoundé. Ouvre les liens Maps pour voir les alentours, et écris à gdgyaounde@gmail.com si tu as des besoins particuliers — nous te dirons ce que nous pouvons.",
-      "en": "We don't have confirmed details about parking or accessibility at FMSB Yaoundé yet. Open the map links to see the surroundings, and write to gdgyaounde@gmail.com if you have specific needs — we'll tell you what we can."
+      "fr": "Nous n'avons pas encore de détails confirmés sur le parking ou l'accessibilité à FMSB Yaoundé. Ouvre le lien Maps pour voir les alentours, et écris à gdgyaounde@gmail.com si tu as des besoins particuliers — nous te dirons ce que nous pouvons.",
+      "en": "We don't have confirmed details about parking or accessibility at FMSB Yaoundé yet. Open the map link to see the surroundings, and write to gdgyaounde@gmail.com if you have specific needs — we'll tell you what we can."
     }
   },
   {

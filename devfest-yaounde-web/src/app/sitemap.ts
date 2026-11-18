@@ -25,6 +25,7 @@ const ROUTES = [
   "/team",
   "/faqs",
   "/tickets",
+  "/reserve",
   "/shop",
   "/dp-generator",
   "/wall/terms",

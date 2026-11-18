@@ -3,6 +3,7 @@
 import { List, X } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
+import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import { Link, usePathname } from "@/i18n/navigation";
 import { visibleTextLinks, type NavSettings } from "@/lib/nav-tabs";
@@ -31,6 +32,21 @@ export function Navbar({
   nav: NavSettings;
 }) {
   const t = useTranslations("nav");
+  // The ticket button follows the end-game phase (ADR 0084): buy → reserve →
+  // pay at the venue (which points at the venue section on the home page).
+  const phase = useSalesPhase();
+  const ticketHref =
+    phase === "selling"
+      ? "/tickets"
+      : phase === "reserving"
+        ? "/reserve"
+        : "/#venue";
+  const ticketLabel =
+    phase === "selling"
+      ? t("tickets")
+      : phase === "reserving"
+        ? t("reserve")
+        : t("payAtVenue");
   const links = visibleTextLinks(nav);
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -106,10 +122,10 @@ export function Navbar({
           )}
           {nav.tickets && (
             <Link
-              href="/tickets"
+              href={ticketHref}
               className="whitespace-nowrap rounded-pill border-2 border-black02 bg-primary px-4 py-2 font-sans text-body-m font-bold text-black02 shadow-[0_3px_0_0_var(--color-black02)] transition-[transform,box-shadow,background-color] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-halftone hover:shadow-[0_5px_0_0_var(--color-black02)] active:translate-y-0.5 active:shadow-none"
             >
-              {t("tickets")}
+              {ticketLabel}
             </Link>
           )}
         </div>
@@ -178,12 +194,12 @@ export function Navbar({
               )}
               {nav.tickets && (
                 <Link
-                  href="/tickets"
+                  href={ticketHref}
                   onClick={() => setMobileOpen(false)}
                   tabIndex={mobileOpen ? undefined : -1}
                   className="rounded-pill border-2 border-black02 bg-primary px-4 py-2 font-sans text-body-m font-bold text-black02"
                 >
-                  {t("tickets")}
+                  {ticketLabel}
                 </Link>
               )}
             </div>

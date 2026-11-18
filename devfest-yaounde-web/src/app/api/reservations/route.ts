@@ -160,12 +160,23 @@ export async function GET(request: NextRequest) {
     console.error("[reservations] list failed", error.message);
     return Response.json({ reservations: [] }, { headers: NO_STORE });
   }
+  // Names come from the catalog at listing time, so a renamed product reads
+  // correctly; an id that no longer resolves simply has no name.
+  const [tiers, products] = await Promise.all([loadTiers(), loadProducts()]);
+  const tierName = new Map(tiers.map((t) => [t.id, t.name]));
+  const productName = new Map(products.map((p) => [p.id, p.name]));
   const reservations: MyReservation[] = (data ?? []).map((r) => ({
     id: r.id,
     reference: r.reference,
     status: r.status as MyReservation["status"],
-    tickets: r.tickets as unknown as MyReservation["tickets"],
-    items: r.items as unknown as MyReservation["items"],
+    tickets: (r.tickets as unknown as MyReservation["tickets"]).map((t) => ({
+      ...t,
+      tierName: tierName.get(t.tierId),
+    })),
+    items: (r.items as unknown as MyReservation["items"]).map((i) => ({
+      ...i,
+      productName: productName.get(i.productId),
+    })),
     totalXaf: r.total_xaf,
     createdAt: r.created_at,
     cashReceivedAt: r.cash_received_at,

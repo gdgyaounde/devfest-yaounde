@@ -225,6 +225,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
     "Detail",
     "From tickets",
     "From shop",
+    "From reservations",
     "Total / sold",
     "Revenue XAF",
   ];
@@ -235,7 +236,8 @@ function CommerceRecap({ data }: { data: AdminData }) {
       `${t.priceXAF} XAF base price`,
       t.sold,
       "",
-      t.sold,
+      t.reserved,
+      t.sold + t.reserved,
       "",
     ]),
     ...commerce.shop.map((s) => [
@@ -244,8 +246,19 @@ function CommerceRecap({ data }: { data: AdminData }) {
       s.variant,
       "",
       s.quantity,
+      "",
       s.quantity,
       s.revenue,
+    ]),
+    ...commerce.reservedShop.map((s) => [
+      "Shop (reserved)",
+      s.name,
+      s.variant,
+      "",
+      "",
+      s.quantity,
+      s.quantity,
+      "",
     ]),
     ...commerce.swag.map((s) => [
       "To account for",
@@ -253,6 +266,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
       "",
       s.fromTickets,
       s.fromShop,
+      s.fromReservations,
       s.total,
       "",
     ]),
@@ -260,12 +274,13 @@ function CommerceRecap({ data }: { data: AdminData }) {
   const nothing =
     commerce.tickets.length === 0 &&
     commerce.shop.length === 0 &&
+    commerce.reservedShop.length === 0 &&
     commerce.swag.length === 0;
 
   return (
     <Panel
       title="Commerce recap"
-      subtitle="Tickets and the shop, and every item to account for — the contents of each ticket's box plus what shop orders contain. Refunded and cancelled ones are left out."
+      subtitle="Tickets and the shop, and every item to account for — the contents of each ticket's box plus what shop orders and reservations contain. Refunded orders and cancelled orders and reservations are left out."
       action={
         <ExportButton
           filename="devfest-commerce-recap.csv"
@@ -285,18 +300,26 @@ function CommerceRecap({ data }: { data: AdminData }) {
               Items to account for
             </h3>
             <p className="mb-3 text-caption text-black02/70">
-              Ticket boxes + shop orders. Sizes and colours are in the apparel
-              panel and the shop table below.
+              Ticket boxes + shop orders + reservations (cash still to collect).
+              Sizes and colours are in the apparel panel and the shop table
+              below.
             </p>
             <DataTable
               compact
-              headers={["Item", "From tickets", "From shop", "Total"]}
+              headers={[
+                "Item",
+                "From tickets",
+                "From shop",
+                "Reserved",
+                "Total",
+              ]}
               empty="No items yet."
               rows={[
                 ...commerce.swag.map((s) => [
                   s.name,
                   String(s.fromTickets),
                   String(s.fromShop),
+                  String(s.fromReservations),
                   <strong key="t">{s.total}</strong>,
                 ]),
                 ...(commerce.swag.length
@@ -310,6 +333,12 @@ function CommerceRecap({ data }: { data: AdminData }) {
                         ),
                         String(
                           commerce.swag.reduce((n, s) => n + s.fromShop, 0),
+                        ),
+                        String(
+                          commerce.swag.reduce(
+                            (n, s) => n + s.fromReservations,
+                            0,
+                          ),
                         ),
                         <strong key="t">
                           {commerce.swag.reduce((n, s) => n + s.total, 0)}
@@ -328,7 +357,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
             <div className="mt-3">
               <DataTable
                 compact
-                headers={["Tier", "Base price", "Sold"]}
+                headers={["Tier", "Base price", "Sold", "Reserved"]}
                 empty="No tickets yet."
                 rows={[
                   ...commerce.tickets.map((t) => [
@@ -337,6 +366,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
                     </span>,
                     money(t.priceXAF, "XAF"),
                     String(t.sold),
+                    String(t.reserved),
                   ]),
                   ...(commerce.tickets.length
                     ? [
@@ -346,6 +376,7 @@ function CommerceRecap({ data }: { data: AdminData }) {
                           </span>,
                           "",
                           <strong key="t">{commerce.ticketsSold}</strong>,
+                          <strong key="r">{commerce.ticketsReserved}</strong>,
                         ],
                       ]
                     : []),

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { About } from "@/components/home/About";
-import { VenueCard } from "@/components/home/VenueCard";
+import { VenueBand } from "@/components/home/VenueCard";
 import { CommunityCta } from "@/components/home/CommunityCta";
 import { FaqPreview } from "@/components/home/FaqPreview";
 import { Hero } from "@/components/home/Hero";
@@ -89,6 +89,8 @@ export default async function HomePage({
         cannot both hug it — so the strip sits directly below the hero
         instead. Same strip, same position on screen, one section later.
       */}
+      {/* The section right after the hero: WHEN and WHERE (ADR 0084). */}
+      <VenueBand />
       <SponsorStrip sponsors={sponsors} call={settings.sponsorCall} />
       <About />
       <StatsInterstitial />
@@ -106,7 +108,6 @@ export default async function HomePage({
         </SectionContainer>
       )}
       <ScheduleOverviewPreview />
-      <VenueCard />
       <QuotesInterstitial quotes={quotes} />
       <MemoryLane />
       <CommunityCta />

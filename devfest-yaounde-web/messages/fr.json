@@ -49,7 +49,9 @@
     "switchToEnglish": "Passer en anglais",
     "switchToFrench": "Passer en français",
     "skipToContent": "Aller au contenu",
-    "home": "DevFest Yaoundé — accueil"
+    "home": "DevFest Yaoundé — accueil",
+    "reserve": "Réserver",
+    "payAtVenue": "Payer sur place"
   },
   "announcement": {
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
@@ -673,7 +675,26 @@
           "server_error": "Petit bug de notre côté — réessaie dans un instant ?"
         }
       },
-      "orderRef": "Commande #{ref}"
+      "orderRef": "Commande #{ref}",
+      "myReservations": "Mes réservations",
+      "reservations": {
+        "loading": "Chargement…",
+        "emptyTitle": "Aucune réservation pour l'instant",
+        "emptyReserving": "Les paiements en ligne sont clos. Réserve tes billets et tes articles de la boutique, et paie en espèces sur place.",
+        "emptySelling": "Les réservations ouvrent à la clôture des paiements en ligne, aujourd'hui à midi.",
+        "emptyDoor": "Les réservations sont closes. Viens à {venue} et paie en espèces sur place.",
+        "reserveCta": "Réserver ma place",
+        "status": {
+          "reserved": "Réservé",
+          "cash_received": "Payé en espèces",
+          "cancelled": "Annulé"
+        },
+        "toPay": "À payer en espèces : {total}",
+        "payAt": "À payer à {venue}, le jour J. Présente cette référence.",
+        "cancel": "Annuler la réservation",
+        "confirmCancel": "Annuler la réservation {reference} ? Cela libère les places et les articles.",
+        "cancelFailed": "Impossible d'annuler. Réessaie, ou demande sur place."
+      }
     },
     "claimTicket": {
       "title": "Récupérer ton billet",
@@ -1061,6 +1082,27 @@
       "buyerUnknown": "Nom de l'acheteur inconnu",
       "size": "taille {size}",
       "color": "couleur {color}"
+    },
+    "reservations": {
+      "title": "Réservé en ligne ? Retrouve la réservation",
+      "hint": "Saisis la référence (RES-XXXXXX) ou au moins 3 lettres du nom.",
+      "search": "Rechercher",
+      "searching": "Recherche…",
+      "empty": "Aucune réservation à ce nom. Les arrivées sans réservation paient à la table.",
+      "statusReserved": "Réservé",
+      "statusCash": "Espèces reçues",
+      "statusCancelled": "Annulé",
+      "owed": "À encaisser en espèces : {total}",
+      "paid": "Payé en espèces : {total}",
+      "alreadyIn": "Déjà entré·e.",
+      "cancelled": "Cette réservation a été annulée. N'encaisse rien — appelle un organisateur.",
+      "cashAndIn": "Espèces reçues & valider l'entrée",
+      "cashOnly": "Espèces reçues",
+      "checkInOnly": "Valider l'entrée seulement",
+      "doneCash": "{reference} : espèces enregistrées.",
+      "doneCheckIn": "{reference} : entrée validée.",
+      "doneBoth": "{reference} : espèces enregistrées et entrée validée.",
+      "notFound": "Réservation introuvable."
     }
   },
   "reservations": {
@@ -1097,8 +1139,9 @@
   },
   "venue": {
     "label": "Où nous trouver",
-    "openMaps": "Ouvrir le point exact dans Maps",
-    "knownMaps": "Lieu connu sur Maps",
-    "newTab": "(s'ouvre dans un nouvel onglet)"
+    "openMaps": "Ouvrir dans Maps",
+    "newTab": "(s'ouvre dans un nouvel onglet)",
+    "when": "Quand",
+    "where": "Où"
   }
 }

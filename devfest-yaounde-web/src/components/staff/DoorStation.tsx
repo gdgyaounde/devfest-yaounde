@@ -18,6 +18,7 @@ import {
   type Failure,
   type RecentRow,
 } from "./kit";
+import { ReservationDoor } from "./ReservationDoor";
 import { buzz, useQrScanner } from "./use-qr-scanner";
 
 /** How long a clean success stays up before the camera looks again. */
@@ -196,6 +197,8 @@ export function DoorStation({ tiers }: { tiers: Record<string, StationTier> }) {
           };
         }}
       />
+
+      <ReservationDoor />
 
       <RecentList rows={recent} />
     </StationShell>

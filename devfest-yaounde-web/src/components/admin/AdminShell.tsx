@@ -2,6 +2,7 @@
 
 import {
   ArrowCounterClockwise,
+  CalendarCheck,
   ArrowLeft,
   CalendarBlank,
   CaretDown,
@@ -42,6 +43,7 @@ import { AdminShop } from "./views/AdminShop";
 import { AdminTransactions } from "./views/AdminTransactions";
 import { AdminOrders } from "./views/AdminOrders";
 import { AdminRefundTracker } from "./views/AdminRefundTracker";
+import { AdminReservations } from "./views/AdminReservations";
 import { AdminDiscounts } from "./views/AdminDiscounts";
 import { AdminUsers } from "./views/AdminUsers";
 import { AdminContent } from "./views/AdminContent";
@@ -88,6 +90,7 @@ export type ViewId =
   | "transactions"
   | "orders"
   | "refunds"
+  | "reservations"
   | "discounts"
   | "wall"
   | "testimonials"
@@ -127,6 +130,7 @@ const GROUPS: {
         label: "Refunds & exchanges",
         Icon: ArrowCounterClockwise,
       },
+      { id: "reservations", label: "Reservations", Icon: CalendarCheck },
       { id: "discounts", label: "Discounts", Icon: Percent },
     ],
   },
@@ -248,6 +252,11 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
     title: "Refunds & exchanges",
     blurb:
       "Log a request that came in by email, and track it through to done. Tickets stay non-refundable; this does not move money.",
+  },
+  reservations: {
+    title: "Reservations",
+    blurb:
+      "What people reserved while online payments were closed — tickets and shop items to pay for in cash at the venue. Export it for the door and for stock.",
   },
   discounts: {
     title: "Discount codes",
@@ -728,6 +737,7 @@ export function AdminShell({
             {view === "transactions" && <AdminTransactions data={data} />}
             {view === "orders" && <AdminOrders data={data} />}
             {view === "refunds" && <AdminRefundTracker data={data} />}
+            {view === "reservations" && <AdminReservations data={data} />}
             {view === "discounts" && <AdminDiscounts data={data} />}
             {view === "wall" && <AdminWall data={data} />}
             {view === "stats" && <AdminStats rows={collections.stats} />}

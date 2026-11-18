@@ -194,4 +194,44 @@ describe("commerceRecap", () => {
     );
     assert.equal(variantLabel(null), "");
   });
+
+  it("counts reservations as their own column, boxes included, leaving out cancelled ones (ADR 0084)", () => {
+    const r = commerceRecap({
+      ...base,
+      reservations: [
+        {
+          status: "reserved",
+          tickets: [{ tierId: "sonnet" }, { tierId: "opus" }],
+          items: [{ productId: "mug", quantity: 2 }],
+        },
+        {
+          status: "cash_received",
+          tickets: [{ tierId: "sonnet" }],
+          items: [{ productId: "tee", quantity: 1, variant: { size: "M" } }],
+        },
+        {
+          status: "cancelled",
+          tickets: [{ tierId: "opus" }],
+          items: [{ productId: "mug", quantity: 9 }],
+        },
+      ],
+    });
+    assert.equal(r.ticketsReserved, 3);
+    assert.equal(r.tickets.find((t) => t.tierId === "sonnet")?.reserved, 2);
+    assert.equal(r.tickets.find((t) => t.tierId === "opus")?.reserved, 1);
+    const by = Object.fromEntries(r.swag.map((x) => [x.productId, x]));
+    // tee: 3 paid-ticket boxes + 3 reserved-ticket boxes + 1 reserved line.
+    assert.equal(by.tee.fromTickets, 3);
+    assert.equal(by.tee.fromReservations, 3 + 1);
+    assert.equal(by.tee.total, 3 + 4);
+    // mug: shop-only, reserved 2 (the cancelled 9 is ignored).
+    assert.equal(by.mug.fromReservations, 2);
+    assert.deepEqual(
+      r.reservedShop.map((x) => [x.productId, x.variant, x.quantity]),
+      [
+        ["mug", "", 2],
+        ["tee", "size M", 1],
+      ],
+    );
+  });
 });

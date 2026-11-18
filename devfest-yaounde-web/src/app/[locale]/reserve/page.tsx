@@ -101,7 +101,7 @@ export default async function ReservePage({
         </div>
 
         <div className="mt-16">
-          <VenueCard bare />
+          <VenueCard />
         </div>
       </SectionContainer>
     </main>
