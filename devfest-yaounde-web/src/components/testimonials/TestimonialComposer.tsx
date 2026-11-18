@@ -34,7 +34,7 @@ type Choice = { kind: "preset" | "other"; value: string } | null;
  * The intro, as a timeline (ms from landing). A storybook opening:
  *   "Once upon a time, in Yaoundé…" surfaces word by word,
  *   the years count up from the first edition to this one,
- *   "…a community began to write its story.",
+ *   "…a community grew, one story at a time.",
  *   and the question itself — "What has DevFest Yaoundé meant to you?" —
  *   which then shrinks into its place above the field.
  */
@@ -190,14 +190,14 @@ export function TestimonialComposer() {
   const intro = stage !== "done";
   const prompt = t("prompt");
   const promptUpper = prompt.toLocaleUpperCase(locale);
-  const promptScramble = useScramble<HTMLSpanElement>({
-    text: promptUpper,
-    from: prompt,
-    // ~55 frames: done as the prompt lands (SHRINK_MS), not after it.
-    stagger: 1,
-    churn: 16,
-  });
-  const startScramble = promptScramble.start;
+  const { ref: promptScrambleRef, start: startScramble } =
+    useScramble<HTMLSpanElement>({
+      text: promptUpper,
+      from: prompt,
+      // ~55 frames: done as the prompt lands (SHRINK_MS), not after it.
+      stagger: 1,
+      churn: 16,
+    });
   useEffect(() => {
     if (stage === "done") startScramble();
   }, [stage, startScramble]);
@@ -428,7 +428,7 @@ export function TestimonialComposer() {
                 scrambled into the uppercase label it settles as. Monospace,
                 so changing case never changes the width mid-flight. */}
             {stage === "done" ? (
-              <span ref={promptScramble.ref} aria-hidden>
+              <span ref={promptScrambleRef} aria-hidden>
                 {calm ? promptUpper : prompt}
               </span>
             ) : stage === "line3" ? (
