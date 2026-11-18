@@ -221,7 +221,10 @@
       "interest": "This interests me",
       "interestSignIn": "Sign in to save this session",
       "interestOn": "Saved to your account",
-      "interestFailed": "Couldn't save that — give it another shot?"
+      "interestFailed": "Couldn't save that — give it another shot?",
+      "viewModal": "Modal",
+      "readerHintKeys": "Tip: use the ← → arrow keys to move between sessions",
+      "readerHintSwipe": "Tip: swipe left or right to move between sessions"
     },
     "quotes": {
       "title": "What people are saying",

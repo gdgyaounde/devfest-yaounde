@@ -67,6 +67,16 @@ export function SessionReader({
   );
   const [index, setIndex] = useState(startIndex);
   const scroller = useRef<HTMLDivElement>(null);
+  // The "how to move" hint: shown on open, gone once they move, tap it, or
+  // a few seconds pass.
+  const [hint, setHint] = useState(true);
+  const touch = useMediaQuery("(pointer: coarse)");
+  useEffect(() => {
+    const id = window.setTimeout(() => setHint(false), 7000);
+    return () => window.clearTimeout(id);
+  }, []);
+  // Swipe: a mostly-horizontal drag of 60px+ moves a session.
+  const swipeFrom = useRef<{ x: number; y: number } | null>(null);
 
   const group = slots[index] ?? [];
   const last = slots.length - 1;
@@ -74,6 +84,7 @@ export function SessionReader({
     const next = Math.min(last, Math.max(0, index + delta));
     if (next === index) return;
     setIndex(next);
+    setHint(false);
     // A new slot starts at its top, not wherever the last one was scrolled.
     if (scroller.current) scroller.current.scrollTop = 0;
   };
@@ -168,7 +179,35 @@ export function SessionReader({
           </button>
         </div>
 
-        <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
+        {hint && (
+          <button
+            type="button"
+            onClick={() => setHint(false)}
+            className="shrink-0 border-b-2 border-black02/15 bg-primary/40 px-5 py-2 text-center font-mono text-caption font-bold text-black02"
+          >
+            {touch ? t("readerHintSwipe") : t("readerHintKeys")}
+          </button>
+        )}
+
+        <div
+          ref={scroller}
+          className="min-h-0 flex-1 touch-pan-y overflow-y-auto"
+          onTouchStart={(e) => {
+            const p = e.touches[0];
+            swipeFrom.current = p ? { x: p.clientX, y: p.clientY } : null;
+          }}
+          onTouchEnd={(e) => {
+            const from = swipeFrom.current;
+            const p = e.changedTouches[0];
+            swipeFrom.current = null;
+            if (!from || !p) return;
+            const dx = p.clientX - from.x;
+            const dy = p.clientY - from.y;
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+              go(dx < 0 ? 1 : -1);
+            }
+          }}
+        >
           <div key={index} className={fadeInUp}>
             {!parallel ? (
               <SessionView

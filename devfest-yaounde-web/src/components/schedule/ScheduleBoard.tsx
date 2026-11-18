@@ -1,6 +1,6 @@
 "use client";
 
-import { ListBullets, SquaresFour } from "@phosphor-icons/react";
+import { ArrowsOut, ListBullets, SquaresFour } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { FilterGroup } from "@/components/ui/FilterGroup";
@@ -277,6 +277,22 @@ export function ScheduleBoard({
                   {label}
                 </button>
               ))}
+              {/* The third way to read: the full-screen reader, opened on the
+                  day's first session. It is not a persistent view — closing
+                  it returns to whichever of the two above was on. */}
+              <button
+                type="button"
+                disabled={!slots[0]?.[1][0]}
+                aria-haspopup="dialog"
+                onClick={() => {
+                  const first = slots[0]?.[1][0];
+                  if (first) setReading(first.id);
+                }}
+                className="flex items-center gap-2 bg-transparent px-4 py-3.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02 transition-colors duration-200 hover:bg-pastel disabled:pointer-events-none disabled:opacity-40"
+              >
+                <ArrowsOut size={16} weight="bold" />
+                {t("viewModal")}
+              </button>
             </div>
           </div>
         </div>
