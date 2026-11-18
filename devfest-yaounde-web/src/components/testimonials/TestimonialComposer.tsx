@@ -3,12 +3,14 @@
 import { ArrowRight } from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import { PreloaderDots } from "@/components/global/PreloaderDots";
 import { Link } from "@/i18n/navigation";
 import {
   calmDelay,
   calmFade,
   calmIn,
+  storyDraw,
   storyGrow,
   storyWord,
   wordDelay,
@@ -23,6 +25,7 @@ import {
 } from "@/lib/testimonials/rules";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { ChoicePicker, OTHER } from "./ChoicePicker";
+import { IntroCursors } from "./IntroCursors";
 
 type Choice = { kind: "preset" | "other"; value: string } | null;
 
@@ -31,7 +34,8 @@ type Choice = { kind: "preset" | "other"; value: string } | null;
  *   "Once upon a time, in Yaoundé…" surfaces word by word,
  *   the years count up from the first edition to this one,
  *   "…a community began to write its story.",
- *   "Now, it's your turn." — and the page opens onto the blank one.
+ *   and the question itself — "What has DevFest Yaoundé meant to you?" —
+ *   which then shrinks into its place above the field.
  */
 const FIRST_YEAR = 2016;
 const LAST_YEAR = 2026;
@@ -41,11 +45,23 @@ const LAST_YEAR = 2026;
  */
 const IN_DELAY = 900;
 const T_YEARS = 2400;
-const YEAR_STEP = 150;
-const T_COUNT = T_YEARS + IN_DELAY + 200;
-const T_LINE2 = T_COUNT + (LAST_YEAR - FIRST_YEAR) * YEAR_STEP + 700;
-const T_LINE3 = T_LINE2 + IN_DELAY + 1800;
-const T_DONE = T_LINE3 + IN_DELAY + 1700;
+/**
+ * The years (from the moment their line starts to fade in):
+ *   COUNT  — 2016 → 2026, slow, then fast through the middle, then slow
+ *            again (ease-in-out), the digits drawing together as they go;
+ *   SQUEEZE — on the last year the digits pinch tight…
+ *   RELEASE — …and loosen gently back to normal.
+ */
+const COUNT_START = 300;
+const COUNT_MS = 3600;
+const SQUEEZE_MS = 260;
+const RELEASE_MS = 800;
+const T_LINE2 =
+  T_YEARS + IN_DELAY + COUNT_START + COUNT_MS + SQUEEZE_MS + RELEASE_MS + 500;
+const T_LINE3 = T_LINE2 + IN_DELAY + 1500;
+const T_DONE = T_LINE3 + IN_DELAY + 1900;
+/** How long the prompt takes to shrink into its place above the field. */
+const SHRINK_MS = 1500;
 
 type Stage = "line1" | "years" | "line2" | "line3" | "done";
 
@@ -72,10 +88,62 @@ export function TestimonialComposer() {
   const [website, setWebsite] = useState("");
   const [state, setState] = useState<"writing" | "sending" | "sent">("writing");
   const [error, setError] = useState<string | null>(null);
+  const [focused, setFocused] = useState(false);
 
   // ------------------------------------------------------------- the intro
   const [stage, setStage] = useState<Stage>("line1");
-  const [year, setYear] = useState(FIRST_YEAR);
+  // The year count is driven frame by frame on the element itself (text and
+  // letter-spacing), not through state: 60 renders a second for one number.
+  const yearRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (stage !== "years") return;
+    const el = yearRef.current;
+    if (!el) return;
+    const set = (year: number, spacing: number) => {
+      el.textContent = String(year);
+      el.style.letterSpacing = `${spacing}px`;
+      // letter-spacing also trails the LAST digit; cancel it so the year
+      // stays centred however wide it is spread.
+      el.style.marginRight = `${-spacing}px`;
+    };
+    set(FIRST_YEAR, 0);
+    // How far apart the digits can start, from the room this screen has.
+    const available = Math.min(window.innerWidth - 48, 896);
+    const tight = el.getBoundingClientRect().width;
+    const font = parseFloat(getComputedStyle(el).fontSize);
+    const widest = Math.max(0, (available - tight) / 4) * 0.92;
+    const pinch = -0.07 * font;
+    const inOut = (x: number) =>
+      x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const out = (x: number) => 1 - Math.pow(1 - x, 3);
+    set(FIRST_YEAR, widest);
+
+    const start = performance.now() + IN_DELAY + COUNT_START;
+    let frame = 0;
+    const tick = (now: number) => {
+      const t = now - start;
+      if (t < 0) {
+        // Fading in, wide and still on the first year.
+      } else if (t <= COUNT_MS) {
+        const e = inOut(t / COUNT_MS);
+        set(
+          FIRST_YEAR + Math.round(e * (LAST_YEAR - FIRST_YEAR)),
+          widest * (1 - e),
+        );
+      } else if (t <= COUNT_MS + SQUEEZE_MS) {
+        set(LAST_YEAR, pinch * out((t - COUNT_MS) / SQUEEZE_MS));
+      } else if (t <= COUNT_MS + SQUEEZE_MS + RELEASE_MS) {
+        const q = (t - COUNT_MS - SQUEEZE_MS) / RELEASE_MS;
+        set(LAST_YEAR, pinch * (1 - inOut(q)));
+      } else {
+        set(LAST_YEAR, 0);
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [stage]);
   useEffect(() => {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -87,10 +155,6 @@ export function TestimonialComposer() {
       at(0, () => setStage("done"));
     } else {
       at(T_YEARS, () => setStage("years"));
-      for (let y = FIRST_YEAR + 1; y <= LAST_YEAR; y++) {
-        const yy = y;
-        at(T_COUNT + (y - FIRST_YEAR) * YEAR_STEP, () => setYear(yy));
-      }
       at(T_LINE2, () => setStage("line2"));
       at(T_LINE3, () => setStage("line3"));
       at(T_DONE, () => setStage("done"));
@@ -98,7 +162,6 @@ export function TestimonialComposer() {
     // Any key or tap skips straight to the page.
     const skip = () => {
       timers.forEach((id) => window.clearTimeout(id));
-      setYear(LAST_YEAR);
       setStage("done");
     };
     window.addEventListener("keydown", skip, { once: true });
@@ -110,9 +173,61 @@ export function TestimonialComposer() {
     };
   }, []);
   const intro = stage !== "done";
+  // Focus once the prompt has settled above the field (SHRINK_MS).
   useEffect(() => {
-    if (!intro && state === "writing") textRef.current?.focus();
-  }, [intro, state]);
+    if (intro || state !== "writing") return;
+    const id = window.setTimeout(
+      () => textRef.current?.focus(),
+      calm ? 0 : SHRINK_MS - 200,
+    );
+    return () => window.clearTimeout(id);
+  }, [intro, state, calm]);
+
+  // ----------------------- the last line of the intro IS the prompt (FLIP)
+  // During "line3" the prompt sits large in the middle of the screen; on
+  // "done" it shrinks and glides into its real place above the field. Its
+  // real place is measured untransformed, then the transform is computed
+  // from there — so the landing is exact on any screen size.
+  const promptRef = useRef<HTMLHeadingElement>(null);
+  useLayoutEffect(() => {
+    const el = promptRef.current;
+    if (!el) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const centre = () => {
+      el.style.transition = "none";
+      el.style.transform = "none";
+      // Measure the TEXT, not the box — the heading may be wider than its
+      // words, and centring the box would leave the words off-centre.
+      const box = el.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const r = range.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const scale = Math.min(4.2, (window.innerWidth * 0.86) / r.width);
+      el.style.transformOrigin = `${cx - box.left}px ${cy - box.top}px`;
+      const dx = window.innerWidth / 2 - cx;
+      const dy = window.innerHeight / 2 - cy;
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+    };
+    if (stage === "done" || reduce) {
+      el.style.transition = reduce
+        ? "opacity 200ms linear"
+        : `transform ${SHRINK_MS}ms var(--ease-in-out-devfest), opacity 900ms var(--ease-out-devfest)`;
+      el.style.transform = "none";
+      el.style.opacity = state === "sent" ? "0" : "1";
+      return;
+    }
+    centre();
+    // Hidden until its turn; then it fades in, after the line before it.
+    void el.offsetWidth;
+    el.style.transition = `opacity 900ms var(--ease-out-devfest) ${IN_DELAY}ms`;
+    el.style.opacity = stage === "line3" ? "1" : "0";
+    window.addEventListener("resize", centre);
+    return () => window.removeEventListener("resize", centre);
+  }, [stage, state]);
 
   // ------------------------------------------- the field grows as you write
   useLayoutEffect(() => {
@@ -210,8 +325,9 @@ export function TestimonialComposer() {
       <header className="relative z-10 flex items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8">
         <Link
           href="/"
-          className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/55 transition-colors hover:text-black02"
+          className="flex items-center gap-2 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/55 transition-colors hover:text-black02"
         >
+          <DevFestLogo className="h-4 w-auto shrink-0" />
           DevFest Yaoundé
         </Link>
         {intro && (
@@ -239,9 +355,11 @@ export function TestimonialComposer() {
             style={{
               transitionDelay: stage === "years" ? `${IN_DELAY}ms` : "0ms",
             }}
-            className={`${calmFade} font-sans text-[clamp(5rem,18vw,14rem)] font-bold leading-none tabular-nums text-black02`}
+            className={`${calmFade} whitespace-nowrap font-sans text-[clamp(5rem,18vw,14rem)] font-bold leading-none tabular-nums text-black02`}
           >
-            {year}
+            <span ref={yearRef} className="inline-block">
+              {FIRST_YEAR}
+            </span>
           </p>
           <p
             data-shown={stage === "line2"}
@@ -254,128 +372,153 @@ export function TestimonialComposer() {
               ? words(t("introCommunity"), IN_DELAY, 130)
               : null}
           </p>
-          <p
-            data-shown={stage === "line3"}
-            style={{
-              transitionDelay: stage === "line3" ? `${IN_DELAY}ms` : "0ms",
-            }}
-            className={`${calmFade} font-sans text-[clamp(2.25rem,6vw,5rem)] font-bold leading-tight text-black02`}
-          >
-            {stage === "line3" ? words(t("introTurn"), IN_DELAY, 220) : null}
-          </p>
         </div>
       </div>
 
+      {/* Coloured cursors, one per role, drifting around the story. */}
+      {!calm && <IntroCursors visible={intro} />}
+
       {/* ---------------------------------------------------------- writing */}
-      <div
-        data-shown={!intro && state !== "sent"}
-        aria-hidden={intro || state === "sent"}
-        inert={intro || state === "sent"}
-        className={`${calmFade} relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-5 pb-6 sm:px-10`}
-      >
+      <div className="relative z-30 flex min-h-0 flex-1 flex-col items-center justify-center px-5 pb-6 sm:px-10">
         <div className="flex w-full max-w-3xl flex-col">
-          <h1 className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/60">
-            {t("prompt")}
+          <h1
+            ref={promptRef}
+            style={{ opacity: 0 }}
+            className="w-fit font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70 will-change-transform"
+          >
+            {stage === "line3" || stage === "done"
+              ? words(t("prompt"), IN_DELAY, 140)
+              : t("prompt")}
           </h1>
 
-          {/* The page: a bordered field that grows with the story. */}
           <div
-            className="mt-4 cursor-text rounded-lg border-2 border-black02/20 bg-offwhite/60 px-5 py-4 transition-[border-color,box-shadow,background-color] duration-300 focus-within:border-black02 focus-within:bg-offwhite focus-within:shadow-[0_5px_0_0_var(--color-black02)] sm:px-7 sm:py-6"
-            onClick={() => textRef.current?.focus()}
+            data-shown={!intro && state !== "sent"}
+            aria-hidden={intro || state === "sent"}
+            inert={intro || state === "sent"}
+            className={calmFade}
+            style={{ transitionDelay: !intro ? `${SHRINK_MS - 500}ms` : "0ms" }}
           >
-            <label htmlFor="testimonial-text" className="sr-only">
-              {t("label")}
-            </label>
-            <textarea
-              id="testimonial-text"
-              data-story-field
-              ref={textRef}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              maxLength={MESSAGE_MAX + 40}
-              rows={2}
-              placeholder={t("placeholder")}
-              aria-describedby={counterId}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) void send();
-              }}
-              className={`${storyGrow} block max-h-[48svh] min-h-[3.2em] w-full resize-none overflow-y-auto border-0 bg-transparent p-0 font-sans ${size} font-bold leading-[1.2] text-black02 caret-primary transition-[font-size] duration-500 placeholder:text-black02/30 focus:outline-none`}
-            />
-            <p
-              id={counterId}
-              aria-live="polite"
-              className={`mt-3 text-right font-mono text-caption transition-colors duration-500 ${
-                length > MESSAGE_MAX
-                  ? "text-black02"
-                  : length >= MESSAGE_MIN
-                    ? "text-black02/55"
-                    : "text-black02/35"
-              }`}
+            {/* The page: a bordered field that grows with the story. */}
+            <div
+              className="relative mt-4 cursor-text rounded-lg px-5 py-4 sm:px-7 sm:py-6"
+              onClick={() => textRef.current?.focus()}
             >
-              {length > MESSAGE_MAX
-                ? t("tooLong", { over: length - MESSAGE_MAX })
-                : t("counter", { count: length, max: MESSAGE_MAX })}
-            </p>
+              {/* One solid line, drawn around the field from start to finish
+                when it takes focus — and kept while it holds a story. */}
+              <svg
+                aria-hidden
+                className="pointer-events-none absolute left-px top-px h-[calc(100%-2px)] w-[calc(100%-2px)] overflow-visible"
+              >
+                <rect
+                  width="100%"
+                  height="100%"
+                  rx="23"
+                  pathLength={1}
+                  fill="none"
+                  stroke="var(--color-black02)"
+                  strokeWidth={2}
+                  strokeDasharray="1 1"
+                  strokeDashoffset={focused || message.length > 0 ? 0 : 1}
+                  className={storyDraw}
+                />
+              </svg>
+              <label htmlFor="testimonial-text" className="sr-only">
+                {t("label")}
+              </label>
+              <textarea
+                id="testimonial-text"
+                data-story-field
+                ref={textRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                maxLength={MESSAGE_MAX + 40}
+                rows={2}
+                placeholder={t("placeholder")}
+                aria-describedby={counterId}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey))
+                    void send();
+                }}
+                className={`${storyGrow} block max-h-[48svh] min-h-[3.2em] w-full resize-none overflow-y-auto border-0 bg-transparent p-0 font-sans ${size} font-bold leading-[1.2] text-black02 caret-primary transition-[font-size] duration-500 placeholder:text-black02/30 focus:outline-none`}
+              />
+              <p
+                id={counterId}
+                aria-live="polite"
+                className={`mt-3 text-right font-mono text-caption transition-colors duration-500 ${
+                  length > MESSAGE_MAX
+                    ? "text-black02"
+                    : length >= MESSAGE_MIN
+                      ? "text-black02/55"
+                      : "text-black02/35"
+                }`}
+              >
+                {length > MESSAGE_MAX
+                  ? t("tooLong", { over: length - MESSAGE_MAX })
+                  : t("counter", { count: length, max: MESSAGE_MAX })}
+              </p>
+            </div>
+
+            {/* Optional details, then send. */}
+            <div className="mt-5 flex flex-wrap items-center gap-2.5">
+              <ChoicePicker
+                label={t("roleLabel")}
+                placeholder={t("rolePlaceholder")}
+                options={TESTIMONIAL_ROLES.map((r) => ({
+                  value: r,
+                  label: tr(r),
+                }))}
+                value={role}
+                onChange={setRole}
+                otherLabel={t("other")}
+                otherValue={roleOther}
+                onOtherChange={setRoleOther}
+                otherMax={OTHER_MAX}
+              />
+              <ChoicePicker
+                label={t("editionLabel")}
+                placeholder={t("editionPlaceholder")}
+                options={TESTIMONIAL_EDITIONS.map((y) => ({
+                  value: y,
+                  label: y,
+                }))}
+                value={edition}
+                onChange={setEdition}
+                otherLabel={t("other")}
+                otherValue={editionOther}
+                onOtherChange={setEditionOther}
+                otherMax={OTHER_MAX}
+              />
+
+              {/* Honeypot: off-screen, unlabelled for people, skipped by tab. */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="absolute -left-[9999px] h-px w-px opacity-0"
+              />
+
+              <button
+                type="button"
+                onClick={() => void send()}
+                disabled={!ready || state === "sending"}
+                className="ml-auto inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-7 py-3 font-sans text-body-l font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-[opacity,transform,box-shadow] duration-500 ease-out-devfest hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none motion-reduce:transform-none"
+              >
+                {state === "sending" ? t("sending") : t("send")}
+                <ArrowRight size={20} weight="bold" aria-hidden />
+              </button>
+            </div>
+            {error && (
+              <p role="alert" className="mt-3 text-body-m text-black02/80">
+                {error}
+              </p>
+            )}
           </div>
-
-          {/* Optional details, then send. */}
-          <div className="mt-5 flex flex-wrap items-center gap-2.5">
-            <ChoicePicker
-              label={t("roleLabel")}
-              placeholder={t("rolePlaceholder")}
-              options={TESTIMONIAL_ROLES.map((r) => ({
-                value: r,
-                label: tr(r),
-              }))}
-              value={role}
-              onChange={setRole}
-              otherLabel={t("other")}
-              otherValue={roleOther}
-              onOtherChange={setRoleOther}
-              otherMax={OTHER_MAX}
-            />
-            <ChoicePicker
-              label={t("editionLabel")}
-              placeholder={t("editionPlaceholder")}
-              options={TESTIMONIAL_EDITIONS.map((y) => ({
-                value: y,
-                label: y,
-              }))}
-              value={edition}
-              onChange={setEdition}
-              otherLabel={t("other")}
-              otherValue={editionOther}
-              onOtherChange={setEditionOther}
-              otherMax={OTHER_MAX}
-            />
-
-            {/* Honeypot: off-screen, unlabelled for people, skipped by tab. */}
-            <input
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              className="absolute -left-[9999px] h-px w-px opacity-0"
-            />
-
-            <button
-              type="button"
-              onClick={() => void send()}
-              disabled={!ready || state === "sending"}
-              className="ml-auto inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-7 py-3 font-sans text-body-l font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-[opacity,transform,box-shadow] duration-500 ease-out-devfest hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none motion-reduce:transform-none"
-            >
-              {state === "sending" ? t("sending") : t("send")}
-              <ArrowRight size={20} weight="bold" aria-hidden />
-            </button>
-          </div>
-          {error && (
-            <p role="alert" className="mt-3 text-body-m text-black02/80">
-              {error}
-            </p>
-          )}
         </div>
       </div>
 

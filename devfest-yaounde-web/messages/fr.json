@@ -1196,7 +1196,7 @@
     "metaDesc": "Laisse quelques mots, anonymement, sur le DevFest Yaoundé.",
     "prompt": "Qu'est-ce que le DevFest Yaoundé a représenté pour toi ?",
     "label": "Tes mots",
-    "placeholder": "Touche n'importe où et commence à écrire…",
+    "placeholder": "Commence à écrire ton histoire…",
     "counter": "{count} / {max}",
     "tooLong": "{over} caractères de trop",
     "roleLabel": "Ton rôle (facultatif)",
@@ -1227,7 +1227,6 @@
     },
     "introOnce": "Il était une fois, à Yaoundé…",
     "introCommunity": "…une communauté a commencé à écrire son histoire.",
-    "introTurn": "À toi de raconter.",
     "skip": "Touche pour passer"
   }
 }

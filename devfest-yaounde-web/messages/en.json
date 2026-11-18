@@ -1196,7 +1196,7 @@
     "metaDesc": "Leave a few anonymous words about DevFest Yaoundé.",
     "prompt": "What has DevFest Yaoundé meant to you?",
     "label": "Your words",
-    "placeholder": "Tap anywhere and start writing…",
+    "placeholder": "Start writing your story…",
     "counter": "{count} / {max}",
     "tooLong": "{over} characters too many",
     "roleLabel": "Your role (optional)",
@@ -1227,7 +1227,6 @@
     },
     "introOnce": "Once upon a time, in Yaoundé…",
     "introCommunity": "…a community began to write its story.",
-    "introTurn": "Now, it's your turn.",
     "skip": "Tap to skip"
   }
 }

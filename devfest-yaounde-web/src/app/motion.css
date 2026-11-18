@@ -2081,3 +2081,13 @@ html:has([data-preloader="held"]) .hero-settle {
     transition: none !important;
   }
 }
+
+/* Storytime's field border, drawn around from start to finish on focus. */
+.story-draw {
+  transition: stroke-dashoffset 1100ms var(--ease-in-out-devfest);
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-draw {
+    transition: none !important;
+  }
+}

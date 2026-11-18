@@ -142,3 +142,5 @@ export function wordDelay(ms: number): CSSProperties {
 }
 /** Smooth height changes on an auto-growing field. */
 export const storyGrow = "story-grow";
+/** An SVG outline that draws itself (stroke-dashoffset 1 → 0, pathLength 1). */
+export const storyDraw = "story-draw";
