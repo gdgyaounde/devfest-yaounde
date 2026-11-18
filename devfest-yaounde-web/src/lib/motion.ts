@@ -127,3 +127,11 @@ export function confettiPieceStyle(
     "--confetti-r": `${r}deg`,
   } as CSSProperties;
 }
+
+/** Calm presets (ADR 0087): slow fade-up on mount, a slow swell, a long cross-fade. */
+export const calmIn = "anim-calm-in";
+export const calmBreathe = "anim-calm-breathe";
+export const calmFade = "calm-fade";
+export function calmDelay(ms: number): CSSProperties {
+  return { "--calm-delay": `${ms}ms` } as CSSProperties;
+}

@@ -2003,3 +2003,63 @@ html:has([data-preloader="held"]) .hero-settle {
     opacity: 1 !important;
   }
 }
+
+/* --- Calm: the testimonial page and the wall's Stories (ADR 0087) -------- */
+
+/*
+  Deliberately SLOW and soft — the one place on the site where motion should
+  feel like breathing, not bouncing. Long ease-out fades, small travel, and a
+  barely-there swell on the background shape. Nothing here is required to
+  read or to write.
+*/
+@keyframes calm-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes calm-breathe {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+.anim-calm-in {
+  animation: calm-in 1600ms var(--ease-out-devfest) both;
+  animation-delay: var(--calm-delay, 0ms);
+}
+.anim-calm-breathe {
+  animation: calm-breathe 9s ease-in-out infinite alternate;
+}
+/* A long cross-fade, toggled by a class rather than replayed by a key. */
+.calm-fade {
+  transition:
+    opacity 1400ms var(--ease-in-out-devfest),
+    transform 1400ms var(--ease-in-out-devfest);
+}
+.calm-fade[data-shown="false"] {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-calm-in,
+  .anim-calm-breathe {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .anim-calm-breathe {
+    transform: translate(-50%, -50%) !important;
+  }
+  .calm-fade,
+  .calm-fade[data-shown="false"] {
+    transition: opacity 200ms linear !important;
+    transform: none !important;
+  }
+}

@@ -6,6 +6,8 @@ import type { WallCard } from "@/data/wall-placeholders";
 import { mailtoHref } from "@/lib/mailto";
 import { CHAPTER_EMAIL } from "@/lib/site-config";
 import { readWallPage } from "@/lib/dp/gallery-server";
+import { WallStories } from "@/components/wall/WallStories";
+import { readApprovedTestimonials } from "@/lib/testimonials/server";
 
 export async function generateMetadata({
   params,
@@ -51,12 +53,30 @@ export const dynamic = "force-dynamic";
  */
 export default async function WallPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ view?: string | string[] }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.wall");
+
+  // Stories mode (ADR 0087): the approved testimonials, one at a time. The
+  // switch between the two lives in the navbar.
+  if ((await searchParams).view === "stories") {
+    return (
+      <main
+        id="main-content"
+        tabIndex={-1}
+        data-wall
+        className="relative h-[100svh] overflow-hidden"
+      >
+        <h1 className="sr-only">{t("stories.title")}</h1>
+        <WallStories initial={await readApprovedTestimonials()} />
+      </main>
+    );
+  }
   const tMail = await getTranslations("mail");
 
   let cards: WallCard[] = [];

@@ -32,7 +32,7 @@ const SETTLE_MS = 2600;
 const SETTLE_CALM_MS = 600;
 
 /** Where it never appears: the dashboard, the terms page itself, the wall. */
-const EXCLUDED = /^\/[a-z]{2}\/(admin|volunteer|terms|wall)(\/|$)/;
+const EXCLUDED = /^\/[a-z]{2}\/(admin|volunteer|terms|wall|testimonial)(\/|$)/;
 /** The reservation page already says everything step 2 would. */
 const RESERVE = /^\/[a-z]{2}\/reserve(\/|$)/;
 /** The agenda step has no business on the agenda itself. */

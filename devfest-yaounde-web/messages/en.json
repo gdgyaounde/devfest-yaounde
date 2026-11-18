@@ -753,7 +753,19 @@
       "emptyTitle": "The wall is waiting for you",
       "emptyBody": "Nobody has saved a card yet. Make one, download it, and you'll be first on the wall.",
       "emptyCta": "Make a card",
-      "takedownHint": "Need a card taken down? {email}"
+      "takedownHint": "Need a card taken down? {email}",
+      "stories": {
+        "title": "Stories from DevFest Yaoundé",
+        "anonymous": "A member of the community",
+        "emptyTitle": "The first stories are on their way",
+        "emptyBody": "Words people leave about DevFest appear here, one at a time.",
+        "addYours": "Add yours: {url}"
+      },
+      "switch": {
+        "label": "Wall view",
+        "wall": "Cards",
+        "stories": "Stories"
+      }
     },
     "wallTerms": {
       "title": "Community wall terms",
@@ -1177,5 +1189,42 @@
     "title": "Welcome to our new partners",
     "body": "A big thank you to Impact Hub Yaoundé, our incubator partner, who will welcome the two winners of the Pitch Contest into its programme, and to the Tech Innovation Center (TiC), our venue partner. This edition is better because of them.",
     "ok": "Thank you both!"
+  },
+  "testimonial": {
+    "metaTitle": "Tell your DevFest story",
+    "metaDesc": "Leave a few anonymous words about DevFest Yaoundé.",
+    "prompt": "What has DevFest Yaoundé meant to you?",
+    "label": "Your words",
+    "placeholder": "Tap anywhere and start writing…",
+    "counter": "{count} / {max}",
+    "tooLong": "{over} characters too many",
+    "roleLabel": "Your role (optional)",
+    "rolePlaceholder": "I was… (optional)",
+    "roleOtherLabel": "Your role",
+    "roleOtherPlaceholder": "Your role",
+    "editionLabel": "Edition (optional)",
+    "editionPlaceholder": "Which edition? (optional)",
+    "editionOtherLabel": "Edition",
+    "editionOtherPlaceholder": "Edition",
+    "other": "Other…",
+    "send": "Share",
+    "sending": "Sharing…",
+    "errorShort": "A few more words? At least {min} characters.",
+    "errorRate": "You've shared a lot already — take a breath and try again later.",
+    "errorGeneric": "Something glitched on our end — give it another shot?",
+    "thanksTitle": "Thank you. Your words are part of our story now.",
+    "thanksBody": "No name, no account — just what you wrote. Once the team has read it, it may appear on the wall.",
+    "again": "Write another",
+    "home": "Back to the site",
+    "roles": {
+      "attendee": "Attendee",
+      "speaker": "Speaker",
+      "volunteer": "Volunteer",
+      "organiser": "Organiser",
+      "sponsor": "Sponsor",
+      "partner": "Partner"
+    },
+    "welcomeTitle": "Welcome.",
+    "welcomeBody": "Let's look back at the road we've travelled together."
   }
 }

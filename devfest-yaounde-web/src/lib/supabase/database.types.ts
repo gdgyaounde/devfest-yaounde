@@ -592,6 +592,42 @@ export type Database = {
           },
         ]
       }
+      testimonials: {
+        Row: {
+          created_at: string
+          edition: string | null
+          id: string
+          locale: string
+          message: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          role: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          edition?: string | null
+          id?: string
+          locale?: string
+          message: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          edition?: string | null
+          id?: string
+          locale?: string
+          message?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       session_interests: {
         Row: {
           created_at: string

@@ -70,6 +70,14 @@ export const RATE_LIMITS = {
   staffOrder: { bucket: "staff-order", limit: 60, windowSeconds: 300 },
   /** Organisers adding or removing volunteers. */
   adminVolunteer: { bucket: "admin-volunteer", limit: 60, windowSeconds: 300 },
+  /** Anonymous testimonials (ADR 0087), by IP: a few an hour is plenty. */
+  testimonial: { bucket: "testimonial", limit: 5, windowSeconds: 3600 },
+  /** Organisers moderating testimonials. */
+  adminTestimonial: {
+    bucket: "admin-testimonial",
+    limit: 120,
+    windowSeconds: 300,
+  },
   /**
    * Community wall submissions, by IP. There is no account to attribute them
    * to (ADR 0015), so the address is all there is. Five an hour is generous

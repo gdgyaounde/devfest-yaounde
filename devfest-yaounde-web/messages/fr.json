@@ -753,7 +753,19 @@
       "emptyTitle": "Le mur t'attend",
       "emptyBody": "Personne n'a encore enregistré de carte. Fais-en une, télécharge-la, et tu seras le premier sur le mur.",
       "emptyCta": "Faire une carte",
-      "takedownHint": "Retirer une carte ? {email}"
+      "takedownHint": "Retirer une carte ? {email}",
+      "stories": {
+        "title": "Histoires du DevFest Yaoundé",
+        "anonymous": "Un membre de la communauté",
+        "emptyTitle": "Les premières histoires arrivent",
+        "emptyBody": "Les mots laissés sur le DevFest apparaissent ici, un à la fois.",
+        "addYours": "Ajoute la tienne : {url}"
+      },
+      "switch": {
+        "label": "Vue du mur",
+        "wall": "Cartes",
+        "stories": "Histoires"
+      }
     },
     "wallTerms": {
       "title": "Conditions du mur",
@@ -1177,5 +1189,42 @@
     "title": "Bienvenue à nos nouveaux partenaires",
     "body": "Un immense merci à Impact Hub Yaoundé, notre partenaire incubateur, qui accueillera les deux lauréats du Pitch Contest dans son programme, et au Tech Innovation Center (TiC), notre partenaire lieu. Cette édition est plus belle grâce à eux.",
     "ok": "Merci à eux !"
+  },
+  "testimonial": {
+    "metaTitle": "Raconte ton DevFest",
+    "metaDesc": "Laisse quelques mots, anonymement, sur le DevFest Yaoundé.",
+    "prompt": "Qu'est-ce que le DevFest Yaoundé a représenté pour toi ?",
+    "label": "Tes mots",
+    "placeholder": "Touche n'importe où et commence à écrire…",
+    "counter": "{count} / {max}",
+    "tooLong": "{over} caractères de trop",
+    "roleLabel": "Ton rôle (facultatif)",
+    "rolePlaceholder": "J'étais… (facultatif)",
+    "roleOtherLabel": "Ton rôle",
+    "roleOtherPlaceholder": "Ton rôle",
+    "editionLabel": "Édition (facultatif)",
+    "editionPlaceholder": "Quelle édition ? (facultatif)",
+    "editionOtherLabel": "Édition",
+    "editionOtherPlaceholder": "Édition",
+    "other": "Autre…",
+    "send": "Partager",
+    "sending": "Envoi…",
+    "errorShort": "Encore quelques mots ? Au moins {min} caractères.",
+    "errorRate": "Tu as déjà beaucoup partagé — respire un peu et réessaie plus tard.",
+    "errorGeneric": "Petit souci de notre côté — tu peux réessayer ?",
+    "thanksTitle": "Merci. Tes mots font désormais partie de notre histoire.",
+    "thanksBody": "Pas de nom, pas de compte — juste ce que tu as écrit. Une fois lu par l'équipe, il pourra apparaître sur le mur.",
+    "again": "En écrire un autre",
+    "home": "Retour au site",
+    "roles": {
+      "attendee": "Participant·e",
+      "speaker": "Speaker",
+      "volunteer": "Bénévole",
+      "organiser": "Organisateur·rice",
+      "sponsor": "Sponsor",
+      "partner": "Partenaire"
+    },
+    "welcomeTitle": "Bienvenue.",
+    "welcomeBody": "Regardons ensemble le chemin parcouru."
   }
 }

@@ -965,6 +965,22 @@ body:has([data-admin]) [data-floating-scrollbar] {
   display: none;
 }
 
+/*
+ * The testimonial page (ADR 0087) is a quiet room: one sentence and the
+ * person writing it. No navbar, no banner, no footer, no scrollbar, no scroll.
+ */
+body:has(main[data-quiet]) [data-site-chrome],
+body:has(main[data-quiet]) [data-site-footer],
+body:has(main[data-quiet]) footer,
+body:has(main[data-quiet]) [data-floating-scrollbar],
+body:has(main[data-quiet]) [data-preloader] {
+  display: none;
+}
+html:has(main[data-quiet]),
+html:has(main[data-quiet]) body {
+  overflow: hidden;
+}
+
 html:has([data-admin]),
 html:has([data-admin]) body {
   overflow: auto;

@@ -13,6 +13,7 @@ import {
 } from "../forms/fields";
 import { useToast } from "../forms/Toast";
 import { InfoBanner } from "./shared";
+import { TestimonialSubmissions } from "./TestimonialSubmissions";
 
 const EMPTY = { fr: "", en: "" };
 
@@ -78,6 +79,11 @@ export function AdminTestimonials({ rows }: { rows: Quote[] }) {
 
   return (
     <div className="flex flex-col gap-5">
+      <TestimonialSubmissions />
+
+      <h2 className="mt-4 font-sans text-heading-m font-bold text-black02">
+        Home page testimonials
+      </h2>
       <InfoBanner>
         Only publish words somebody actually said, with their permission. No
         name to put on it? Leave the name empty — the site shows

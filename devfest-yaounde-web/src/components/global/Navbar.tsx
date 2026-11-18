@@ -2,7 +2,8 @@
 
 import { List, X } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
+import { WallSwitch } from "@/components/wall/WallSwitch";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -49,6 +50,8 @@ export function Navbar({
         : t("payAtVenue");
   const links = visibleTextLinks(nav);
   const pathname = usePathname();
+  // This hook returns the path WITHOUT the locale prefix.
+  const onWall = pathname === "/wall";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const clickTimestamps = useRef<number[]>([]);
@@ -86,9 +89,20 @@ export function Navbar({
           className="logo-interactive relative flex shrink-0 items-center gap-2.5 whitespace-nowrap py-1.5 font-sans text-heading-m font-bold text-black02 transition-transform duration-200 ease-bouncy hover:scale-105"
         >
           <DevFestLogo className="h-6 w-auto shrink-0" />
-          DevFest Yaoundé
+          {/* On the wall the Cards/Stories switch needs the room on a phone. */}
+          <span className={onWall ? "hidden sm:inline" : undefined}>
+            DevFest Yaoundé
+          </span>
           {showConfetti && <ConfettiBurst />}
         </Link>
+
+        {/* The wall's Cards / Stories switch (ADR 0087). Suspense because it
+            reads the query string, and this bar is on every static page. */}
+        {onWall && (
+          <Suspense fallback={null}>
+            <WallSwitch />
+          </Suspense>
+        )}
 
         <div className="hidden min-w-0 items-center gap-4 lg:flex xl:gap-6">
           {links.map((link) => {
