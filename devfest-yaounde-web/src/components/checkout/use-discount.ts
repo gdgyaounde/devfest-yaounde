@@ -35,8 +35,7 @@ import type { AppliedDiscount } from "./OrderSummary";
 
 /** What the server came back with. `null` means a newer request superseded it. */
 type PriceOutcome =
-  | { ok: true; applied: AppliedDiscount }
-  | { ok: false; error: string };
+  { ok: true; applied: AppliedDiscount } | { ok: false; error: string };
 
 export function useDiscount(basket: QuoteBasket) {
   const [code, setCodeState] = useState("");

@@ -27,9 +27,11 @@ import {
   type AttendeeInput,
 } from "@/lib/checkout-client";
 import { useDiscount } from "@/components/checkout/use-discount";
-import { feeInclusiveAmount } from "@/lib/payments/fees";
 import { signInWithGoogle, useSession } from "@/lib/use-session";
-import { useBeforeInstant } from "@/lib/use-before-instant";
+import {
+  useDisplayPrice,
+  useSalesPhase,
+} from "@/components/global/SalesPhaseProvider";
 import type { Product, TicketTier } from "@/data/types";
 
 const APPAREL_SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
@@ -65,8 +67,6 @@ export function TicketCheckout({
   tiers,
   swagProducts,
   bevyUrl,
-  salesCloseAt,
-  salesOpenAtRender,
 }: {
   tiers: TicketTier[];
   /**
@@ -75,9 +75,6 @@ export function TicketCheckout({
    */
   swagProducts: Product[];
   bevyUrl: string;
-  /** The sales cutoff instant (ADR 0072) and what was true at render. */
-  salesCloseAt: string | null;
-  salesOpenAtRender: boolean;
 }) {
   const t = useTranslations("pages.tickets");
   const te = useTranslations("errors.checkout");
@@ -92,7 +89,8 @@ export function TicketCheckout({
    * the tier list, so nobody fills in attendee details for an order the
    * server will refuse. The free RSVP card is untouched: it lives on Bevy.
    */
-  const salesOpen = useBeforeInstant(salesCloseAt, salesOpenAtRender);
+  const salesOpen = useSalesPhase() === "selling";
+  const displayPrice = useDisplayPrice();
 
   /*
    * Tier id -> the products it bundles, in the order the admin arranged
@@ -465,7 +463,7 @@ export function TicketCheckout({
                       <p className="mt-4 font-sans text-display-l font-bold leading-none text-black02">
                         {tier.priceXAF === 0
                           ? t("free")
-                          : `${money(feeInclusiveAmount(tier.priceXAF))} XAF`}
+                          : `${money(displayPrice(tier.priceXAF))} XAF`}
                       </p>
                       <p className="mt-3 max-w-prose text-body-m text-black02/75">
                         {tier.description[locale as "fr" | "en"]}

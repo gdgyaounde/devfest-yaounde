@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { About } from "@/components/home/About";
+import { VenueCard } from "@/components/home/VenueCard";
 import { CommunityCta } from "@/components/home/CommunityCta";
 import { FaqPreview } from "@/components/home/FaqPreview";
 import { Hero } from "@/components/home/Hero";
@@ -20,7 +21,7 @@ import {
   getSpeakers,
   getSponsors,
 } from "@/lib/content/store";
-import { eventJsonLd, ticketSalesOpen } from "@/lib/event";
+import { eventJsonLd } from "@/lib/event";
 import { pickSpotlight, spotlightDateKey } from "@/lib/spotlight";
 
 /*
@@ -81,8 +82,6 @@ export default async function HomePage({
         eventDate={settings.eventDate}
         backdropUrl={settings.hero.imageUrl}
         currentGalleryUrl={settings.memoryLane.currentGalleryUrl}
-        salesCloseAt={settings.ticketing.salesCloseAt}
-        salesOpen={ticketSalesOpen(new Date(), settings)}
       />
       {/*
         The sponsor strip used to be layer 4 INSIDE the hero. The redesign
@@ -107,6 +106,7 @@ export default async function HomePage({
         </SectionContainer>
       )}
       <ScheduleOverviewPreview />
+      <VenueCard />
       <QuotesInterstitial quotes={quotes} />
       <MemoryLane />
       <CommunityCta />

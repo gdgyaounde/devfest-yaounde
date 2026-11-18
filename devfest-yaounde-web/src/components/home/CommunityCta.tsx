@@ -4,7 +4,6 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
 import { TicketCta } from "@/components/tickets/TicketCta";
-import { ticketSalesOpen } from "@/lib/event";
 
 /**
  * Pre-footer CTA (PHASE5 §7) — the page's final, loudest "star" moment.
@@ -41,8 +40,6 @@ export async function CommunityCta() {
             {/* Gone after the sales cutoff (ADR 0072) — the community
                 link beside it is still a real next step. */}
             <TicketCta
-              salesCloseAt={settings.ticketing.salesCloseAt}
-              salesOpenAtRender={ticketSalesOpen(new Date(), settings)}
               label={t("ticketsCta")}
               closed="hide"
               tone="black02"

@@ -55,9 +55,11 @@
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
     "dismiss": "Fermer l'annonce",
     "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous.",
-    "salesClose": "La vente de billets ferme le {date} à {time} — prends le tien avant la fermeture. Déjà un billet ? Nom et taille de T-shirt modifiables depuis ton compte jusque-là.",
+    "salesClose": "Les paiements en ligne ferment {date} à {time} — ensuite, réserve ta place et paie en espèces sur place. Tu as déjà un billet ? Tu peux modifier ton nom et ta taille de T-shirt depuis ton compte jusque-là.",
     "salesCloseCta": "Billets",
-    "afterSales": "On se voit le {date} 🎉 La vente de billets est close — la boutique, elle, reste ouverte."
+    "afterSales": "Les réservations sont closes — rendez-vous le {date} à {venue} ! Paiement en espèces sur place 🎉",
+    "reservationsOpen": "Les paiements en ligne sont clos — réserve ta place (billets ou boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
+    "reserveCta": "Réserver"
   },
   "offline": {
     "banner": "Tu es hors ligne — {pages} restent disponibles."
@@ -356,8 +358,8 @@
       "refundAck": "Je comprends que les billets ne sont pas remboursables, et j'ai lu les conditions de participation : le repas, le swag et les identifiants de l'événement sont réservés aux pass payants, selon le palier.",
       "metaDesc": "Choisis ton pass et paie en Mobile Money. Tous les tarifs, ce qu'ils incluent, et comment entrer.",
       "myTicketsLink": "Déjà commandé ? Voir mes billets",
-      "salesNoticeTitle": "La vente de billets ferme le {date} à {time}",
-      "salesNoticeBody": "Heure de Yaoundé. Après, c'est fermé pour de bon — si tu viens, c'est maintenant.",
+      "salesNoticeTitle": "Les paiements en ligne ferment {date} à {time}",
+      "salesNoticeBody": "Heure de Yaoundé. Ensuite, plus rien ne se paie sur le site : tu réserves ta place jusqu'à vendredi et tu paies en espèces sur place. Si tu préfères payer en ligne, c'est maintenant.",
       "salesCountdown": "Fin des ventes dans",
       "salesClosed": "Ventes closes",
       "salesClosedTitle": "La vente de billets est close.",
@@ -365,7 +367,13 @@
       "salesClosedShop": "Voir la boutique",
       "termsLink": "Lire les conditions de participation",
       "salesNoticeEdits": "Déjà un billet ? Tu peux changer son nom et sa taille de T-shirt depuis ton compte jusqu'au {date} à {time}.",
-      "salesNoticeEditsCta": "Mes billets"
+      "salesNoticeEditsCta": "Mes billets",
+      "reservingTitle": "Les paiements en ligne sont clos — tu peux encore réserver",
+      "reservingBody": "Plus rien ne se paie sur le site. Réserve tes billets (et tes articles de la boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
+      "reservingCta": "Réserver ma place",
+      "doorTitle": "Les réservations sont closes — paiement sur place",
+      "doorBody": "Rendez-vous à {venue} le {date} et paie en espèces sur place. Les pass gratuits se réservent toujours sur la page de la communauté.",
+      "doorCta": "Voir le lieu"
     },
     "shop": {
       "title": "Boutique",
@@ -989,5 +997,43 @@
       "size": "taille {size}",
       "color": "couleur {color}"
     }
+  },
+  "reservations": {
+    "cta": "Réserver ma place",
+    "doorCta": "Payer sur place",
+    "phaseSelling": "Paiements en ligne",
+    "phaseReserving": "Réservations",
+    "phaseDoor": "Sur place",
+    "addToReservation": "Ajouter à ma réservation",
+    "viewReservation": "Voir ma réservation",
+    "myReservation": "Ma réservation",
+    "shopReserving": "Les paiements en ligne sont clos. Réserve tes articles maintenant — tu paies en espèces en les récupérant sur place.",
+    "shopDoor": "Les réservations sont closes. Paie en espèces sur place — articles disponibles dans la limite des stocks.",
+    "bagTitleReserving": "Ton panier est maintenant une réservation",
+    "bagBodyReserving": "Les paiements en ligne sont clos : rien ne se paie sur le site. Indique ton nom et choisis tes billets et articles sur la page de réservation — tu paies en espèces sur place.",
+    "bagTitleDoor": "Les réservations sont closes",
+    "bagBodyDoor": "Rendez-vous à {venue} et paie en espèces sur place — articles disponibles dans la limite des stocks.",
+    "continueToReservation": "Continuer vers ma réservation",
+    "seeVenue": "Voir le lieu"
+  },
+  "salesPopup": {
+    "stepOf": "Étape {step} sur {total}",
+    "next": "Suivant",
+    "sellingTitle": "Les paiements en ligne ferment aujourd'hui à {time}",
+    "sellingBody": "Billets et boutique ne se paient sur le site que jusque-là ({date}). Ensuite, plus rien ne se paie en ligne : tu réserves ta place jusqu'au {reserveDate} à {reserveTime}, et tu paies en espèces sur place.",
+    "sellingCta": "Prendre mon billet",
+    "reservingTitle": "Les paiements en ligne sont clos — réserve ta place",
+    "reservingBody": "Plus rien ne se paie sur le site. Réserve tes billets et tes articles de la boutique jusqu'au {date} à {time}, puis paie en espèces sur place.",
+    "reservingCta": "Réserver ma place",
+    "doorTitle": "Paiement sur place",
+    "doorBody": "Les réservations sont closes. Rendez-vous à {venue} le {date} et paie en espèces sur place.",
+    "doorCta": "Voir le lieu",
+    "ok": "Compris"
+  },
+  "venue": {
+    "label": "Où nous trouver",
+    "openMaps": "Ouvrir le point exact dans Maps",
+    "knownMaps": "Lieu connu sur Maps",
+    "newTab": "(s'ouvre dans un nouvel onglet)"
   }
 }

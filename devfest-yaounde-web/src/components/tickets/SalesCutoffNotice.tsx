@@ -1,10 +1,15 @@
 "use client";
 
-import { HourglassMedium, Prohibit, Storefront } from "@phosphor-icons/react";
+import {
+  CalendarCheck,
+  HourglassMedium,
+  MapPinLine,
+} from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Countdown } from "@/components/ui/Countdown";
-import { useBeforeInstant } from "@/lib/use-before-instant";
+import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
+import { EVENT } from "@/lib/event";
 
 /** The countdown only appears in the final stretch (ADR 0072). */
 const COUNTDOWN_WINDOW_MS = 48 * 60 * 60 * 1000;
@@ -26,25 +31,26 @@ const COUNTDOWN_WINDOW_MS = 48 * 60 * 60 * 1000;
  */
 export function SalesCutoffNotice({
   salesCloseAt,
-  salesOpenAtRender,
   closeDate,
   closeTime,
   eventDate,
+  reservationsDeadline,
   editsDeadline,
 }: {
   salesCloseAt: string | null;
-  salesOpenAtRender: boolean;
   closeDate: string | null;
   closeTime: string | null;
   eventDate: string;
+  /** When reservations end (ADR 0084); null = no deadline set. */
+  reservationsDeadline?: { date: string; time: string } | null;
   /** When holders stop being able to edit (ADR 0075); null = not shown. */
   editsDeadline?: { date: string; time: string } | null;
 }) {
   const t = useTranslations("pages.tickets");
   const tc = useTranslations("countdown");
-  const open = useBeforeInstant(salesCloseAt, salesOpenAtRender);
+  const phase = useSalesPhase();
 
-  if (open) {
+  if (phase === "selling") {
     // No cutoff configured = nothing to announce.
     if (!salesCloseAt || !closeDate || !closeTime) return null;
     return (
@@ -99,13 +105,18 @@ export function SalesCutoffNotice({
     );
   }
 
+  const reserving = phase === "reserving";
+  const Icon = reserving ? CalendarCheck : MapPinLine;
+  const cta =
+    "inline-flex shrink-0 items-center gap-2 self-start rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none sm:self-center";
+
   return (
     <section
       aria-labelledby="sales-closed-title"
       className="mt-10 flex flex-col gap-5 rounded-lg border-2 border-black02 bg-offwhite p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
     >
       <div className="flex items-start gap-4">
-        <Prohibit
+        <Icon
           size={40}
           weight="duotone"
           aria-hidden
@@ -116,20 +127,37 @@ export function SalesCutoffNotice({
             id="sales-closed-title"
             className="font-sans text-heading-l font-bold leading-tight text-black02"
           >
-            {t("salesClosedTitle")}
+            {reserving ? t("reservingTitle") : t("doorTitle")}
           </h2>
           <p className="mt-2 max-w-prose text-body-m text-black02/80">
-            {t("salesClosedBody", { date: eventDate })}
+            {reserving
+              ? t("reservingBody", {
+                  date: reservationsDeadline?.date ?? "",
+                  time: reservationsDeadline?.time ?? "",
+                })
+              : t("doorBody", {
+                  venue: EVENT.venue ?? EVENT.city,
+                  date: eventDate,
+                })}
           </p>
         </div>
       </div>
-      <Link
-        href="/shop"
-        className="inline-flex shrink-0 items-center gap-2 self-start rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none sm:self-center"
-      >
-        <Storefront size={18} weight="bold" aria-hidden />
-        {t("salesClosedShop")}
-      </Link>
+      {reserving ? (
+        <Link href="/reserve" className={cta}>
+          <CalendarCheck size={18} weight="bold" aria-hidden />
+          {t("reservingCta")}
+        </Link>
+      ) : (
+        <a
+          href={EVENT.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cta}
+        >
+          <MapPinLine size={18} weight="bold" aria-hidden />
+          {t("doorCta")}
+        </a>
+      )}
     </section>
   );
 }

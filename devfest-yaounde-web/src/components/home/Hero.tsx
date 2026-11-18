@@ -47,8 +47,6 @@ export async function Hero({
   backdropUrl,
   currentGalleryUrl,
   eventDate,
-  salesCloseAt,
-  salesOpen,
 }: {
   locale: string;
   /**
@@ -66,8 +64,6 @@ export async function Hero({
   currentGalleryUrl: string;
   eventDate: string;
   /** The ticket sales cutoff (ADR 0072), and whether it was open at render. */
-  salesCloseAt: string | null;
-  salesOpen: boolean;
 }) {
   const t = await getTranslations("home.hero");
   const lang = locale === "en" ? "en" : "fr";
@@ -127,13 +123,7 @@ export async function Hero({
                 /* Past the sales cutoff (ADR 0072) the slot SAYS so, as a
                    disabled button, until the event ends and it becomes the
                    album link below. */
-                <TicketCta
-                  salesCloseAt={salesCloseAt}
-                  salesOpenAtRender={salesOpen}
-                  label={t("ctaPrimary")}
-                  closedLabel={t("ctaSalesClosed")}
-                  closed="disabled"
-                />
+                <TicketCta label={t("ctaPrimary")} closed="disabled" />
               ) : hasGallery ? (
                 <Button tone="primary" href={gallery} external size="lg">
                   {t("ctaGallery", { year: EVENT.year })}

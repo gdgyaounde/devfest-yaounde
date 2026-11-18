@@ -87,7 +87,9 @@ export async function SponsorStrip({
             the row lands on it exactly the way it would land on an open
             seat.
           */}
-          {asking && <SponsorCtaSeat url={call.prospectusUrl} label={t("cta")} />}
+          {asking && (
+            <SponsorCtaSeat url={call.prospectusUrl} label={t("cta")} />
+          )}
         </div>
       </div>
 

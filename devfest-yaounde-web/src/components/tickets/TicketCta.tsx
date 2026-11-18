@@ -1,57 +1,68 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Button,
   type ButtonTone,
   type ButtonVariant,
 } from "@/components/ui/Button";
-import { useBeforeInstant } from "@/lib/use-before-instant";
+import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 
 /**
- * A "get a ticket" button that knows about the sales cutoff (ADR 0072).
+ * The "get a ticket" button, and what it becomes (ADR 0072, 0084).
  *
- * Before the cutoff it is the ordinary link to `/tickets`. After it, it is
- * never a dead link: `closed="disabled"` keeps the slot as a disabled button
- * that SAYS sales are closed (the hero, where an empty slot would unbalance
- * the cluster); `closed="hide"` removes it where another call to action
- * already sits beside it (the community band, the footer).
+ *   selling   — the ordinary link to `/tickets`;
+ *   reserving — "Reserve your spot", linking to `/reserve` (payments are
+ *               closed; nothing is paid on the site any more);
+ *   door      — never a dead link: `closed="disabled"` keeps the slot as a
+ *               disabled button that says "Pay at the venue" (the hero,
+ *               where an empty slot would unbalance the cluster);
+ *               `closed="hide"` removes it where another call to action
+ *               already sits beside it (the community band, the footer).
  *
- * The flip happens on the client at the minute (`useBeforeInstant`), because
- * the pages that carry this are static; `salesOpenAtRender` is what the
- * server saw, used for hydration.
+ * The phase comes from `SalesPhaseProvider`, which follows the clock at the
+ * minute — the pages that carry this are static.
  */
 export function TicketCta({
-  salesCloseAt,
-  salesOpenAtRender,
   label,
+  reserveLabel,
   closedLabel,
   closed,
   tone = "primary",
   variant = "primary",
   size = "lg",
 }: {
-  salesCloseAt: string | null;
-  salesOpenAtRender: boolean;
   label: string;
+  /** Defaults to `reservations.cta`. */
+  reserveLabel?: string;
+  /** Defaults to `reservations.doorCta`. */
   closedLabel?: string;
   closed: "disabled" | "hide";
   tone?: ButtonTone;
   variant?: ButtonVariant;
   size?: "lg" | "md";
 }) {
-  const open = useBeforeInstant(salesCloseAt, salesOpenAtRender);
+  const t = useTranslations("reservations");
+  const phase = useSalesPhase();
 
-  if (open) {
+  if (phase === "selling") {
     return (
       <Button tone={tone} variant={variant} href="/tickets" size={size}>
         {label}
       </Button>
     );
   }
+  if (phase === "reserving") {
+    return (
+      <Button tone={tone} variant={variant} href="/reserve" size={size}>
+        {reserveLabel ?? t("cta")}
+      </Button>
+    );
+  }
   if (closed === "hide") return null;
   return (
     <Button tone={tone} variant={variant} size={size} disabled>
-      {closedLabel ?? label}
+      {closedLabel ?? t("doorCta")}
     </Button>
   );
 }

@@ -1,27 +1,37 @@
-import { Package } from "@phosphor-icons/react/dist/ssr";
+"use client";
+
+import { Package } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
+import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 
 /**
- * "You can still order, but items ordered now may not be ready by event day"
- * (ADR 0072).
+ * What to know before ordering from the shop (ADR 0072, 0084).
  *
- * The shop stays open after the ticket sales cutoff, on purpose — but a
- * T-shirt ordered on Thursday is unlikely to be printed by Saturday, and
- * saying so up front is kinder than a disappointed pickup. Shown on the
- * listing, the product page and every checkout step; the same promise is in
- * the consent line the buyer ticks (`pages.shop.returnsAck`).
+ *   selling   — "items ordered now may not be ready by event day" (the
+ *               server-resolved text, or nothing once the event is over);
+ *   reserving — nothing is paid on the site any more: items are RESERVED and
+ *               paid in cash when collected at the venue;
+ *   door      — reservations are over: it is cash at the venue.
  *
- * Plain markup, no hooks, so server pages and the client checkout share it.
- * The text arrives resolved (with the event's date), or not at all once the
- * event is over — see `shopLateNotice()`.
+ * Shown on the listing, the product page and the bag/reservation page.
  */
 export function ShopLateNotice({
   text,
   className = "",
 }: {
+  /** The selling-phase text (resolved with the event's date), or null. */
   text: string | null;
   className?: string;
 }) {
-  if (!text) return null;
+  const t = useTranslations("reservations");
+  const phase = useSalesPhase();
+  const message =
+    phase === "selling"
+      ? text
+      : phase === "reserving"
+        ? t("shopReserving")
+        : t("shopDoor");
+  if (!message) return null;
   return (
     <p
       role="note"
@@ -33,7 +43,7 @@ export function ShopLateNotice({
         aria-hidden
         className="mt-0.5 shrink-0"
       />
-      <span>{text}</span>
+      <span>{message}</span>
     </p>
   );
 }

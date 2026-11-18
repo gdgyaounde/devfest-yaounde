@@ -86,6 +86,15 @@ export function useSeenOnce(key: string | null): [boolean, () => void] {
   return [seen, markSeen];
 }
 
+/**
+ * The key the pop-up's SECOND step is remembered under (ADR 0084), one per
+ * phase: someone who saw "payments close at noon" must see "reservations are
+ * open" once the phase changes, and nothing else re-shows it.
+ */
+export function salesNoticeSeenKey(phase: string): string {
+  return `devfest:sales-notice-seen:${phase}`;
+}
+
 /** The localStorage key the terms pop-up is remembered under. */
 export function termsSeenKey(version: string): string {
   return `devfest:terms-seen:${version}`;

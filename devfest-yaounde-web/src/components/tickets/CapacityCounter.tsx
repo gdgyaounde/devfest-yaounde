@@ -34,9 +34,11 @@ export function CapacityCounter({
     const id = window.setInterval(() => {
       fetch("/api/tickets/capacity")
         .then((res) => (res.ok ? res.json() : null))
-        .then((body: { total: number | null; remaining: number | null } | null) => {
-          if (!cancelled && body) setState(body);
-        })
+        .then(
+          (body: { total: number | null; remaining: number | null } | null) => {
+            if (!cancelled && body) setState(body);
+          },
+        )
         .catch(() => {
           // A stale number beats a broken banner — just skip this tick.
         });

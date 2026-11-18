@@ -41,9 +41,22 @@ export const EVENT = {
   city: "Yaoundé",
   region: "Centre",
   country: "CM",
-  /** No venue has been announced. Filled in, this appears in rich results. */
-  venue: null as string | null,
+  /**
+   * The venue (ADR 0084), as the organisers gave it: FMSB Yaoundé, Amphi 350.
+   * The abbreviation is deliberately NOT expanded and there is no invented
+   * street address: `venueStreet` stays empty until someone confirms one.
+   * Appears in rich results, the hero, the OG card and the venue block.
+   */
+  venue: "FMSB Yaoundé" as string | null,
+  /** The room inside the venue. */
+  venueRoom: "Amphi 350" as string | null,
   venueStreet: null as string | null,
+  /** The venue's exact position, from the organisers (WGS84). */
+  venueGeo: { latitude: 3.861431332755392, longitude: 11.496877341937122 },
+  /** "Accurate" — the pin the organisers say is exact. */
+  mapUrl: "https://maps.app.goo.gl/MqCKKPkbyaSkbLa46",
+  /** "Known location" — how most people find it on Google Maps. */
+  mapKnownUrl: "https://maps.app.goo.gl/C17CMEMM7V2B6YUc8",
 } as const;
 
 /**
@@ -346,7 +359,15 @@ export function eventJsonLd(
     image: [`${SITE_URL}/og?title=${encodeURIComponent(EVENT.name)}`],
     location: {
       "@type": "Place",
-      name: EVENT.venue ?? EVENT.city,
+      name: EVENT.venue
+        ? [EVENT.venue, EVENT.venueRoom].filter(Boolean).join(" — ")
+        : EVENT.city,
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: EVENT.venueGeo.latitude,
+        longitude: EVENT.venueGeo.longitude,
+      },
+      hasMap: EVENT.mapUrl,
       address: {
         "@type": "PostalAddress",
         ...(EVENT.venueStreet ? { streetAddress: EVENT.venueStreet } : {}),

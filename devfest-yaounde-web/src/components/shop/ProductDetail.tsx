@@ -5,7 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/navigation";
-import { feeInclusiveAmount } from "@/lib/payments/fees";
+import {
+  useDisplayPrice,
+  useSalesPhase,
+} from "@/components/global/SalesPhaseProvider";
 import { MAX_LINE_QTY, useCart } from "@/lib/use-cart";
 import { ProductImage } from "./ProductImage";
 import { BUYABLE, StatusPill } from "./StatusPill";
@@ -28,6 +31,9 @@ import type { Product, ProductStatus } from "@/data/types";
  */
 export function ProductDetail({ product }: { product: Product }) {
   const t = useTranslations("pages.shop");
+  const tr = useTranslations("reservations");
+  const phase = useSalesPhase();
+  const displayPrice = useDisplayPrice();
   const locale = useLocale() as "fr" | "en";
   const { add } = useCart();
 
@@ -94,7 +100,7 @@ export function ProductDetail({ product }: { product: Product }) {
             {product.name[locale]}
           </h2>
           <p className="mt-4 font-mono text-heading-m font-bold text-black02">
-            {money(feeInclusiveAmount(product.priceXAF))} XAF
+            {money(displayPrice(product.priceXAF))} XAF
           </p>
           <p className="mt-5 max-w-prose text-body-l text-black02/80">
             {product.description[locale]}
@@ -189,7 +195,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <div className="mt-8">
                 <Button
                   size="md"
-                  disabled={!ready}
+                  disabled={!ready || phase === "door"}
                   onClick={() => {
                     add({
                       productId: product.id,
@@ -215,7 +221,11 @@ export function ProductDetail({ product }: { product: Product }) {
                   ) : (
                     <>
                       <ShoppingBag size={18} weight="bold" />
-                      {t("addToBag")}
+                      {phase === "selling"
+                        ? t("addToBag")
+                        : phase === "reserving"
+                          ? tr("addToReservation")
+                          : tr("doorCta")}
                     </>
                   )}
                 </Button>
@@ -229,10 +239,10 @@ export function ProductDetail({ product }: { product: Product }) {
                 <p role="status" className="mt-4 text-body-m text-black02/80">
                   {t("addedHint")}{" "}
                   <Link
-                    href="/shop/cart"
+                    href={phase === "selling" ? "/shop/cart" : "/reserve"}
                     className="font-bold underline decoration-2 underline-offset-4"
                   >
-                    {t("viewBag")}
+                    {phase === "selling" ? t("viewBag") : tr("viewReservation")}
                   </Link>
                 </p>
               )}

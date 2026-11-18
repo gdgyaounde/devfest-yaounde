@@ -91,9 +91,13 @@ export function Odometer({
                 }`}
                 style={{
                   transform: `translateY(-${stop}em)`,
-                  transitionDuration: reduceMotion ? undefined : `${durationMs}ms`,
+                  transitionDuration: reduceMotion
+                    ? undefined
+                    : `${durationMs}ms`,
                   transitionDelay:
-                    reduceMotion || !staggerMs ? undefined : `${i * staggerMs}ms`,
+                    reduceMotion || !staggerMs
+                      ? undefined
+                      : `${i * staggerMs}ms`,
                 }}
               >
                 {strip.map((d, k) => (

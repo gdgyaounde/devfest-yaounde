@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ShopCartGate } from "@/components/shop/ShopCartGate";
 import { ShopCheckout } from "@/components/shop/ShopCheckout";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
@@ -45,7 +46,9 @@ export default async function CartPage({
           <ScrambleText text={t("bagTitle")} />
         </h1>
         <div className="mt-14">
-          <ShopCheckout products={products} lateNotice={lateNotice} />
+          <ShopCartGate>
+            <ShopCheckout products={products} lateNotice={lateNotice} />
+          </ShopCartGate>
         </div>
       </SectionContainer>
     </main>

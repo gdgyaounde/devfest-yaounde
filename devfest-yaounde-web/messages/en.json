@@ -55,9 +55,11 @@
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
     "dismiss": "Dismiss announcement",
     "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot.",
-    "salesClose": "Ticket sales close {date} at {time} — grab yours before the doors shut. Already have one? You can update the name and T-shirt size from your account until then.",
+    "salesClose": "Online payments close {date} at {time} — after that, reserve your spot and pay cash at the venue. Already have a ticket? You can update the name and T-shirt size from your account until then.",
     "salesCloseCta": "Get tickets",
-    "afterSales": "See you on {date} 🎉 Ticket sales are closed — the shop is still open."
+    "afterSales": "Reservations are closed — see you on {date} at {venue}! Pay cash on the spot 🎉",
+    "reservationsOpen": "Online payments are closed — reserve your spot (tickets or shop) until {date} at {time}, then pay cash at the venue.",
+    "reserveCta": "Reserve"
   },
   "offline": {
     "banner": "You're offline — {pages} still work."
@@ -356,8 +358,8 @@
       "refundAck": "I understand tickets are non-refundable, and I've read the participation terms: food, swag and event identifiers come with paid passes, as each tier lists.",
       "metaDesc": "Pick your pass and pay with Mobile Money. Every tier, what's included, and how to get in.",
       "myTicketsLink": "Already bought? See my tickets",
-      "salesNoticeTitle": "Ticket sales close {date} at {time}",
-      "salesNoticeBody": "Yaoundé time. After that the doors are shut for good — so if you're coming, now's the moment.",
+      "salesNoticeTitle": "Online payments close {date} at {time}",
+      "salesNoticeBody": "Yaoundé time. After that nothing is paid on the site any more: you reserve your spot until Friday and pay in cash at the venue. If you'd rather pay online, now's the moment.",
       "salesCountdown": "Sales close in",
       "salesClosed": "Sales closed",
       "salesClosedTitle": "Ticket sales are closed.",
@@ -365,7 +367,13 @@
       "salesClosedShop": "Visit the shop",
       "termsLink": "Read the participation terms",
       "salesNoticeEdits": "Already have a ticket? You can change its name and T-shirt size from your account until {date} at {time}.",
-      "salesNoticeEditsCta": "My tickets"
+      "salesNoticeEditsCta": "My tickets",
+      "reservingTitle": "Online payments are closed — you can still reserve",
+      "reservingBody": "Nothing is paid on the site any more. Reserve your tickets (and any shop items) until {date} at {time}, then pay in cash at the venue.",
+      "reservingCta": "Reserve my spot",
+      "doorTitle": "Reservations are closed — pay at the venue",
+      "doorBody": "Come to {venue} on {date} and pay in cash on the spot. Free passes are still reserved on our community page.",
+      "doorCta": "See the venue"
     },
     "shop": {
       "title": "Shop",
@@ -989,5 +997,43 @@
       "size": "size {size}",
       "color": "colour {color}"
     }
+  },
+  "reservations": {
+    "cta": "Reserve your spot",
+    "doorCta": "Pay at the venue",
+    "phaseSelling": "Online payments",
+    "phaseReserving": "Reservations",
+    "phaseDoor": "At the venue",
+    "addToReservation": "Add to my reservation",
+    "viewReservation": "View my reservation",
+    "myReservation": "My reservation",
+    "shopReserving": "Online payments are closed. Reserve your items now — you pay in cash when you collect them at the venue.",
+    "shopDoor": "Reservations are closed. Pay in cash at the venue — items are available while stock lasts.",
+    "bagTitleReserving": "Your bag is now a reservation",
+    "bagBodyReserving": "Online payments are closed, so nothing is paid on the site. Add your name and pick your tickets and items on the reservation page — you pay in cash at the venue.",
+    "bagTitleDoor": "Reservations are closed",
+    "bagBodyDoor": "Come to {venue} and pay in cash on the spot — items are available while stock lasts.",
+    "continueToReservation": "Continue to my reservation",
+    "seeVenue": "See the venue"
+  },
+  "salesPopup": {
+    "stepOf": "Step {step} of {total}",
+    "next": "Next",
+    "sellingTitle": "Online payments close today at {time}",
+    "sellingBody": "Tickets and the shop can only be paid on the site until then ({date}). After that, nothing is paid online: you reserve your spot until {reserveDate} at {reserveTime}, and pay in cash at the venue.",
+    "sellingCta": "Get my ticket",
+    "reservingTitle": "Online payments are closed — reserve your spot",
+    "reservingBody": "Nothing is paid on the site any more. Reserve your tickets and any shop items until {date} at {time}, then pay in cash at the venue.",
+    "reservingCta": "Reserve my spot",
+    "doorTitle": "Pay at the venue",
+    "doorBody": "Reservations are closed. Come to {venue} on {date} and pay in cash on the spot.",
+    "doorCta": "See the venue",
+    "ok": "Got it"
+  },
+  "venue": {
+    "label": "Where to find us",
+    "openMaps": "Open the exact spot in Maps",
+    "knownMaps": "Known location on Maps",
+    "newTab": "(opens in a new tab)"
   }
 }

@@ -11,13 +11,15 @@ import { GlobalChrome } from "@/components/global/GlobalChrome";
 import { OfflineIndicator } from "@/components/global/OfflineIndicator";
 import { Preloader } from "@/components/global/Preloader";
 import { ServiceWorkerRegistration } from "@/components/global/ServiceWorkerRegistration";
+import { SalesPhaseProvider } from "@/components/global/SalesPhaseProvider";
 import { TermsUpdatedPopup } from "@/components/global/TermsUpdatedPopup";
 import { routing } from "@/i18n/routing";
 import {
+  EVENT,
   formatCutoff,
+  salesPhase,
   formatEventDates,
   organizationJsonLd,
-  ticketSalesOpen,
 } from "@/lib/event";
 import { JsonLd } from "@/lib/seo";
 import { loadSettings } from "@/lib/content/settings";
@@ -124,11 +126,23 @@ export default async function LocaleLayout({
     sweep rebuilds this layout shortly after, and `announcementExpiresAt`
     makes the client hide it at the minute itself, before that rebuild lands.
   */
-  const salesOpen = ticketSalesOpen(new Date(), settings);
+  const phase = salesPhase(new Date(), settings);
+  const salesOpen = phase === "selling";
   const salesCutoff = salesOpen
     ? formatCutoff(l, settings.ticketing.salesCloseAt)
     : null;
   const salesBanner = !custom && salesCutoff !== null && settings.nav.tickets;
+  /*
+    THIRD and FOURTH (ADR 0084): once payments close, the banner says so —
+    reservations until Friday, then cash at the venue. Derived from the same
+    `salesPhase` as checkout and every button, so it cannot disagree with them.
+  */
+  const reservationsCutoff =
+    phase === "reserving"
+      ? formatCutoff(l, settings.ticketing.reservationsCloseAt)
+      : null;
+  const reserveBanner =
+    !custom && phase === "reserving" && settings.nav.tickets;
 
   const cfs = cfsView(settings.cfs, speakers.length);
   const cfsBanner = !custom && !salesBanner && cfsAcceptsSubmissions(cfs);
@@ -143,6 +157,7 @@ export default async function LocaleLayout({
     ? undefined
     : tAnnouncement("afterSales", {
         date: formatEventDates(l, [settings.eventDate]) ?? "",
+        venue: EVENT.venue ?? EVENT.city,
       });
 
   const announcementMessage =
@@ -152,18 +167,29 @@ export default async function LocaleLayout({
           date: salesCutoff!.date,
           time: salesCutoff!.time,
         })
-      : cfsBanner
-        ? tCfs("banner")
-        : fallback);
+      : reserveBanner
+        ? tAnnouncement("reservationsOpen", {
+            date: reservationsCutoff?.date ?? "",
+            time: reservationsCutoff?.time ?? "",
+          })
+        : cfsBanner
+          ? tCfs("banner")
+          : fallback);
   const announcementCta = salesBanner
     ? {
         href: `/${locale}/tickets`,
         label: tAnnouncement("salesCloseCta"),
         external: false,
       }
-    : cfsBanner
-      ? { href: cfs.url, label: tCfs("bannerCta"), external: true }
-      : undefined;
+    : reserveBanner
+      ? {
+          href: `/${locale}/reserve`,
+          label: tAnnouncement("reserveCta"),
+          external: false,
+        }
+      : cfsBanner
+        ? { href: cfs.url, label: tCfs("bannerCta"), external: true }
+        : undefined;
 
   return (
     <html
@@ -198,8 +224,13 @@ export default async function LocaleLayout({
       */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <NextIntlClientProvider>
-          <EventDateProvider date={settings.eventDate}>
-            {/*
+          <SalesPhaseProvider
+            salesCloseAt={settings.ticketing.salesCloseAt}
+            reservationsCloseAt={settings.ticketing.reservationsCloseAt}
+            initial={salesPhase(new Date(), settings)}
+          >
+            <EventDateProvider date={settings.eventDate}>
+              {/*
             Every page's `<main id="main-content">` also carries
             `tabIndex={-1}` (PHASE22 §G a11y audit) — without it, jumping the
             URL hash here scrolls `<main>` into view but does NOT move
@@ -207,43 +238,56 @@ export default async function LocaleLayout({
             have resumed from the skip link itself rather than from inside
             the content the link exists to reach.
           */}
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-black02 focus:px-4 focus:py-2 focus:text-offwhite"
-            >
-              {t("skipToContent")}
-            </a>
-            {/* First paint, and only on a real load — the root layout does not
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-black02 focus:px-4 focus:py-2 focus:text-offwhite"
+              >
+                {t("skipToContent")}
+              </a>
+              {/* First paint, and only on a real load — the root layout does not
               remount on client navigation, so moving between pages never
               shows it again. */}
-            <Preloader />
-            <GlobalChrome
-              announcementMessage={announcementMessage}
-              announcementCta={announcementCta}
-              announcementExpiresAt={
-                salesBanner ? settings.ticketing.salesCloseAt : undefined
-              }
-              nav={settings.nav}
-            />
-            {/* "Our participation terms have changed", once per browser per
-                `legal.termsVersion` (ADR 0074). Waits for the preloader and
-                the hero entrance before it opens. */}
-            <TermsUpdatedPopup
-              version={settings.legal.termsVersion}
-              eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
-            />
-            <FloatingScrollbar />
-            <CustomCursor />
-            <ServiceWorkerRegistration />
-            <OfflineIndicator />
-            {/*
+              <Preloader />
+              <GlobalChrome
+                announcementMessage={announcementMessage}
+                announcementCta={announcementCta}
+                announcementExpiresAt={
+                  salesBanner
+                    ? settings.ticketing.salesCloseAt
+                    : reserveBanner
+                      ? settings.ticketing.reservationsCloseAt
+                      : undefined
+                }
+                nav={settings.nav}
+              />
+              {/* First-visit pop-up in up to two steps (ADR 0074, 0084): the terms
+                update (once per `legal.termsVersion`), then where payments
+                stand (once per phase). Waits for the preloader and the hero
+                entrance before it opens. */}
+              <TermsUpdatedPopup
+                version={settings.legal.termsVersion}
+                eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
+                salesClose={formatCutoff(l, settings.ticketing.salesCloseAt)}
+                reservationsClose={formatCutoff(
+                  l,
+                  settings.ticketing.reservationsCloseAt,
+                )}
+                venue={EVENT.venue ?? EVENT.city}
+                mapUrl={EVENT.mapUrl}
+              />
+              <FloatingScrollbar />
+              <CustomCursor />
+              <ServiceWorkerRegistration />
+              <OfflineIndicator />
+              {/*
             The chrome is fixed-position, so page content needs its own top
             offset. Hero sections apply their own generous top padding
             (§7b spacing), so this only needs to clear the bar itself.
           */}
-            <div className="flex flex-1 flex-col">{children}</div>
-            <Footer />
-          </EventDateProvider>
+              <div className="flex flex-1 flex-col">{children}</div>
+              <Footer />
+            </EventDateProvider>
+          </SalesPhaseProvider>
         </NextIntlClientProvider>
       </body>
     </html>

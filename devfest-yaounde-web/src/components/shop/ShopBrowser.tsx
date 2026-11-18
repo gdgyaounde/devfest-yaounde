@@ -8,7 +8,10 @@ import { FilterLayout } from "@/components/ui/FilterLayout";
 import { Reveal } from "@/components/ui/Reveal";
 import { useCart } from "@/lib/use-cart";
 import { Modal } from "@/components/ui/Modal";
-import { feeInclusiveAmount } from "@/lib/payments/fees";
+import {
+  useDisplayPrice,
+  useSalesPhase,
+} from "@/components/global/SalesPhaseProvider";
 import { ProductDetail } from "./ProductDetail";
 import { ProductImage } from "./ProductImage";
 import { BUYABLE, StatusPill } from "./StatusPill";
@@ -35,6 +38,9 @@ export function ShopBrowser({
   initialProductId?: string | null;
 }) {
   const t = useTranslations("pages.shop");
+  const tr = useTranslations("reservations");
+  const phase = useSalesPhase();
+  const displayPrice = useDisplayPrice();
   const tc = useTranslations("common.filters");
   const locale = useLocale() as "fr" | "en";
   const { count } = useCart();
@@ -136,18 +142,20 @@ export function ShopBrowser({
         setStatus(null);
       }}
       toolbar={
-        <a
-          href={`/${locale}/shop/cart`}
-          className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
-        >
-          <ShoppingBag size={18} weight="bold" aria-hidden />
-          {t("bag")}
-          {count > 0 && (
-            <span className="rounded-pill bg-offwhite px-2 py-0.5 font-mono text-mono-tag">
-              {count}
-            </span>
-          )}
-        </a>
+        phase === "door" ? undefined : (
+          <a
+            href={`/${locale}/${phase === "selling" ? "shop/cart" : "reserve"}`}
+            className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"
+          >
+            <ShoppingBag size={18} weight="bold" aria-hidden />
+            {phase === "selling" ? t("bag") : tr("myReservation")}
+            {count > 0 && (
+              <span className="rounded-pill bg-offwhite px-2 py-0.5 font-mono text-mono-tag">
+                {count}
+              </span>
+            )}
+          </a>
+        )
       }
     >
       <p className="mb-8 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65">
@@ -208,7 +216,7 @@ export function ShopBrowser({
                   <p className="mt-auto pt-4 font-mono text-body-l font-bold text-black02">
                     {new Intl.NumberFormat(
                       locale === "fr" ? "fr-CM" : "en-CM",
-                    ).format(feeInclusiveAmount(product.priceXAF))}{" "}
+                    ).format(displayPrice(product.priceXAF))}{" "}
                     XAF
                   </p>
                   {!BUYABLE.includes(product.status as ProductStatus) && (

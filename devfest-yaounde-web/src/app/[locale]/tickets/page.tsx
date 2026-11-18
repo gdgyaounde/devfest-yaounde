@@ -9,13 +9,9 @@ import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
 import { getSwagProducts, getTiers } from "@/lib/content/store";
 import { getTicketCapacity } from "@/lib/payments/capacity";
+import { VenueCard } from "@/components/home/VenueCard";
 import { SalesCutoffNotice } from "@/components/tickets/SalesCutoffNotice";
-import {
-  formatCutoff,
-  formatEventDates,
-  ticketEditsOpen,
-  ticketSalesOpen,
-} from "@/lib/event";
+import { formatCutoff, formatEventDates, ticketEditsOpen } from "@/lib/event";
 
 export async function generateMetadata({
   params,
@@ -78,9 +74,11 @@ export default async function TicketsPage({
    * late purchase on the server whatever this page says.
    */
   const l = locale === "en" ? "en" : "fr";
-  const salesCloseAt = settings.ticketing.salesCloseAt;
-  const salesOpen = ticketSalesOpen(new Date(), settings);
-  const cutoff = formatCutoff(l, salesCloseAt);
+  const cutoff = formatCutoff(l, settings.ticketing.salesCloseAt);
+  const reservationsCutoff = formatCutoff(
+    l,
+    settings.ticketing.reservationsCloseAt,
+  );
   const eventDateLabel = formatEventDates(l, [settings.eventDate]) ?? "";
 
   return (
@@ -101,11 +99,11 @@ export default async function TicketsPage({
         )}
 
         <SalesCutoffNotice
-          salesCloseAt={salesCloseAt}
-          salesOpenAtRender={salesOpen}
+          salesCloseAt={settings.ticketing.salesCloseAt}
           closeDate={cutoff?.date ?? null}
           closeTime={cutoff?.time ?? null}
           eventDate={eventDateLabel}
+          reservationsDeadline={reservationsCutoff}
           editsDeadline={
             ticketEditsOpen(new Date(), settings)
               ? formatCutoff(l, settings.ticketing.editsCloseAt)
@@ -113,13 +111,15 @@ export default async function TicketsPage({
           }
         />
 
+        <div className="mt-10">
+          <VenueCard bare />
+        </div>
+
         <div className="mt-16">
           <TicketCheckout
             tiers={tiers}
             swagProducts={swagProducts}
             bevyUrl={settings.bevyUrl}
-            salesCloseAt={salesCloseAt}
-            salesOpenAtRender={salesOpen}
           />
         </div>
       </SectionContainer>

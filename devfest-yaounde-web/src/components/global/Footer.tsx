@@ -16,7 +16,6 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { Link } from "@/i18n/navigation";
 import { loadSettings } from "@/lib/content/settings";
 import { TicketCta } from "@/components/tickets/TicketCta";
-import { ticketSalesOpen } from "@/lib/event";
 import {
   CHAPTER_EMAIL,
   isPlaceholderUrl,
@@ -272,12 +271,7 @@ export async function Footer() {
             </div>
             {nav.tickets && (
               /* Hidden after the sales cutoff (ADR 0072), never a dead link. */
-              <TicketCta
-                salesCloseAt={settings.ticketing.salesCloseAt}
-                salesOpenAtRender={ticketSalesOpen(new Date(), settings)}
-                label={t("ticketsCta")}
-                closed="hide"
-              />
+              <TicketCta label={t("ticketsCta")} closed="hide" />
             )}
           </div>
         </Reveal>

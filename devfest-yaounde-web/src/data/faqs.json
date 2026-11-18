@@ -50,15 +50,15 @@
       "en": "When and where is it happening?"
     },
     "answer": {
-      "fr": "DevFest Yaoundé 2026 se déroule le 21 novembre 2026, à Yaoundé, au Cameroun. Les détails du lieu et le programme complet sont sur la page Programme — reviens un peu avant la date pour les infos définitives.",
-      "en": "DevFest Yaoundé 2026 takes place on November 21, 2026, in Yaoundé, Cameroon. Full venue details and the day's schedule are on the Schedule page — check back as we get closer to the date."
+      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026 à FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroun). Le bloc « Où nous trouver » de la page d'accueil donne deux liens Maps — le point exact et le lieu connu — et le programme de la journée est sur la page Programme.",
+      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026 at FMSB Yaoundé, Amphi 350 (Yaoundé, Cameroon). The venue block on the home page has two map links — the exact spot and the known location — and the day's schedule is on the Schedule page."
     },
     "cta": {
       "label": {
-        "fr": "Voir le programme",
-        "en": "See the schedule"
+        "fr": "Voir le lieu",
+        "en": "See the venue"
       },
-      "href": "/schedule"
+      "href": "/#venue"
     }
   },
   {
@@ -108,8 +108,8 @@
       "en": "What ticket types are available?"
     },
     "answer": {
-      "fr": "Cinq paliers, nommés d'après les versions de Claude (oui, vraiment). Haikyu est gratuit : il te fait entrer aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le repas et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier.",
-      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag."
+      "fr": "Cinq paliers, nommés d'après les versions de Claude (oui, vraiment). Haikyu est gratuit : il te fait entrer aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le repas et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier. Les pass payants se réservent désormais sur le site et se paient en espèces sur place, à leur prix de base.",
+      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag. Paid passes are now reserved on the site and paid in cash at the venue, at their base price."
     },
     "cta": {
       "label": {
@@ -142,12 +142,57 @@
     "id": "faq-payment-method",
     "category": "tickets",
     "question": {
-      "fr": "Comment je paie un billet payant ?",
+      "fr": "Comment payer un billet payant ?",
       "en": "How do I pay for a paid ticket?"
     },
     "answer": {
-      "fr": "On accepte uniquement le Mobile Money — MTN MoMo et Orange Money. Pas encore de paiement par carte.",
-      "en": "We currently accept Mobile Money only — MTN MoMo and Orange Money. We don't support card payments yet."
+      "fr": "Les paiements en ligne ont fermé le mercredi 18 novembre à 12h00 — plus rien ne se paie sur le site. Réserve ta place (billets ou articles de la boutique) jusqu'au vendredi 20 novembre à 23h59, puis paie en espèces sur place. Avant la clôture, nous n'acceptions que le Mobile Money (MTN MoMo et Orange Money).",
+      "en": "Online payments closed on Wednesday 18 November at 12:00 — nothing is paid on the site any more. Reserve your spot (tickets or shop items) until Friday 20 November at 23:59, then pay in cash at the venue. Before the cutoff we accepted Mobile Money only (MTN MoMo and Orange Money)."
+    },
+    "cta": {
+      "label": {
+        "fr": "Réserver ma place",
+        "en": "Reserve my spot"
+      },
+      "href": "/reserve"
+    }
+  },
+  {
+    "id": "faq-reservation",
+    "category": "tickets",
+    "question": {
+      "fr": "Que veut dire « réserver » ?",
+      "en": "What does it mean to reserve?"
+    },
+    "answer": {
+      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix de base (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 23h59.",
+      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at base price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 23:59."
+    },
+    "cta": {
+      "label": {
+        "fr": "Réserver ma place",
+        "en": "Reserve my spot"
+      },
+      "href": "/reserve"
+    }
+  },
+  {
+    "id": "faq-pay-at-venue",
+    "category": "tickets",
+    "question": {
+      "fr": "Puis-je venir directement et payer le jour J ?",
+      "en": "Can I just show up and pay on the day?"
+    },
+    "answer": {
+      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 23h59), viens à FMSB Yaoundé, Amphi 350 et paie en espèces sur place. Les pass gratuits se réservent toujours sur notre page communautaire.",
+      "en": "Yes. After reservations close (Friday 20 November, 23:59), come to FMSB Yaoundé, Amphi 350 and pay in cash on the spot. Free passes are still reserved on our community page."
+    },
+    "cta": {
+      "label": {
+        "fr": "Voir le lieu",
+        "en": "See the venue"
+      },
+      "href": "/#venue"
     }
   },
   {
@@ -158,8 +203,8 @@
       "en": "Can I buy a ticket for someone else?"
     },
     "answer": {
-      "fr": "Oui — achète autant de billets payants que tu veux et remplis les infos de chaque participant séparément, y compris en te marquant toi-même si tu assistes aussi. Il nous faut juste un moyen d'identifier chaque participant (téléphone et/ou email).",
-      "en": "Yes — buy any number of paid tickets and fill in each attendee's details separately, including marking one as your own if you're attending too. We just need a way to identify each attendee (phone and/or email)."
+      "fr": "Oui — réserve autant de billets payants que tu veux et renseigne le nom de chaque participant (et la taille de T-shirt quand son pass en inclut un), en cochant le tien si tu viens aussi. Les billets déjà achetés en ligne fonctionnent comme avant.",
+      "en": "Yes — reserve as many paid tickets as you like and fill in each attendee's name (and T-shirt size where their tier includes one), including marking one as your own if you're attending too. Tickets already bought online keep working as before."
     }
   },
   {
@@ -170,8 +215,8 @@
       "en": "Do you offer discount codes?"
     },
     "answer": {
-      "fr": "Si tu as un code (donné par un sponsor ou un partenaire, par exemple), ajoute-le dans le récapitulatif de commande au moment du paiement, avant de payer.",
-      "en": "If you have a code (from a sponsor or partner, say), add it in the order summary during checkout, before you pay."
+      "fr": "Les codes de réduction ne fonctionnaient qu'en ligne, avant la clôture des paiements le mercredi 18 novembre à 12h00. Pour un paiement en espèces sur place, écris à gdgyaounde@gmail.com si tu as un code d'un sponsor ou d'un partenaire.",
+      "en": "Discount codes only worked online, before payments closed on Wednesday 18 November at 12:00. For cash at the venue, write to gdgyaounde@gmail.com if you have a code from a sponsor or partner."
     }
   },
   {
@@ -182,8 +227,8 @@
       "en": "Are tickets refundable?"
     },
     "answer": {
-      "fr": "Non — les billets ne sont pas remboursables une fois achetés. On le précise clairement au moment du paiement, avant que tu paies, pour qu'il n'y ait pas de surprise.",
-      "en": "No — tickets are non-refundable once purchased. We flag this clearly at checkout before you pay, so there are no surprises."
+      "fr": "Les billets achetés en ligne avant la clôture ne sont pas remboursables — c'était indiqué au paiement. Les réservations ne coûtent rien tant que tu ne paies pas en espèces sur place, et tu peux annuler la tienne depuis ton compte jusqu'au vendredi 20 novembre à 23h59.",
+      "en": "Tickets bought online before the cutoff are non-refundable — we flagged this at checkout. Reservations cost nothing until you pay in cash at the venue, and you can cancel yours from your account until Friday 20 November at 23:59."
     }
   },
   {
@@ -194,8 +239,8 @@
       "en": "I bought a ticket but haven't received a confirmation email."
     },
     "answer": {
-      "fr": "Tu dois recevoir une confirmation avec ton billet et ton QR code peu après le paiement. Si rien n'arrive après quelques minutes, vérifie tes spams, puis écris-nous à gdgyaounde@gmail.com et on règle ça.",
-      "en": "You should get a confirmation with your ticket and QR code shortly after payment. If it hasn't arrived after a few minutes, check spam, then email gdgyaounde@gmail.com and we'll sort it out."
+      "fr": "Tu dois recevoir une confirmation avec ton billet et ton QR code peu après le paiement. Si rien n'arrive après quelques minutes, vérifie tes spams, puis écris-nous à gdgyaounde@gmail.com et on règle ça. Tu as réservé au lieu d'acheter ? Les réservations ne sont pas envoyées par e-mail : ta référence est sur l'écran de confirmation et dans « Mes réservations » de ton compte — garde-la et apporte-la le jour J.",
+      "en": "You should get a confirmation with your ticket and QR code shortly after payment. If it hasn't arrived after a few minutes, check spam, then email gdgyaounde@gmail.com and we'll sort it out. Reserved instead of buying? Reservations aren't emailed: your reference is on the confirmation screen and under \"My reservations\" in your account — keep it and bring it on the day."
     },
     "cta": {
       "label": {
@@ -264,8 +309,8 @@
       "en": "Is there parking / is the venue accessible?"
     },
     "answer": {
-      "fr": "Les détails seront publiés sur la page Événement une fois le lieu confirmé — reviens à l'approche de la date.",
-      "en": "Details will be posted on the Event page once the venue is finalized — check back closer to the date."
+      "fr": "Nous n'avons pas encore de détails confirmés sur le parking ou l'accessibilité à FMSB Yaoundé. Ouvre les liens Maps pour voir les alentours, et écris à gdgyaounde@gmail.com si tu as des besoins particuliers — nous te dirons ce que nous pouvons.",
+      "en": "We don't have confirmed details about parking or accessibility at FMSB Yaoundé yet. Open the map links to see the surroundings, and write to gdgyaounde@gmail.com if you have specific needs — we'll tell you what we can."
     }
   },
   {
@@ -295,8 +340,8 @@
       "en": "Will there be food for free-pass holders?"
     },
     "answer": {
-      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 23h59.",
-      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes are on sale until Wednesday 18 November at 23:59."
+      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 12h00 en ligne, et tu peux encore en réserver un jusqu'au vendredi 20 novembre à 23h59 puis payer en espèces sur place.",
+      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes could be bought online until Wednesday 18 November at 12:00, and you can still reserve one until Friday 20 November at 23:59 and pay in cash at the venue."
     },
     "cta": {
       "label": {

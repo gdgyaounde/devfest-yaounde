@@ -12,7 +12,7 @@ import { CHAPTER_EMAIL, GDG_CODE_OF_CONDUCT_URL } from "@/lib/site-config";
 import { loadSettings } from "@/lib/content/settings";
 import { getSwagProducts, getTiers } from "@/lib/content/store";
 import { feeInclusiveAmount } from "@/lib/payments/fees";
-import { formatCutoff } from "@/lib/event";
+import { formatCutoff, salesPhase } from "@/lib/event";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 
@@ -83,6 +83,9 @@ export default async function TermsPage({
     `${settings.legal.termsUpdatedAt}T12:00:00+01:00`,
   );
   const editsClose = formatCutoff(l, settings.ticketing.editsCloseAt);
+  // Online the 1.5 % fee is part of the price; once payments close it is cash
+  // at the venue, at the base price (ADR 0084). Rebuilt by the cron at noon.
+  const selling = salesPhase(new Date(), settings) === "selling";
   const money = (value: number) =>
     new Intl.NumberFormat(l === "fr" ? "fr-CM" : "en-CM").format(value);
 
@@ -181,7 +184,11 @@ export default async function TermsPage({
                       <td className="whitespace-nowrap px-5 py-4 font-mono text-body-m font-bold text-black02 max-sm:block max-sm:p-0 max-sm:pt-1">
                         {free
                           ? t("free")
-                          : `${money(feeInclusiveAmount(tier.priceXAF))} XAF`}
+                          : `${money(
+                              selling
+                                ? feeInclusiveAmount(tier.priceXAF)
+                                : tier.priceXAF,
+                            )} XAF`}
                         {tier.rsvpExternal && (
                           <span className="block font-sans text-caption font-normal text-black02/65">
                             {t("rsvp")}
