@@ -209,7 +209,10 @@
       "groupLightning": "Lightning talks",
       "groupOther": "Talks",
       "groupMore": "{count, plural, one {+# more session} other {+# more sessions}} in the full programme",
-      "fullDetails": "Full details"
+      "fullDetails": "Full details",
+      "addToCalendar": "Add to your calendar",
+      "google": "Google Calendar",
+      "ics": "Apple / Outlook (.ics)"
     },
     "quotes": {
       "title": "What people are saying",
