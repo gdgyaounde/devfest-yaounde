@@ -760,7 +760,8 @@
         "anonymous": "Un membre de la communauté",
         "emptyTitle": "Les premières histoires arrivent",
         "emptyBody": "Les mots laissés sur le DevFest apparaissent ici, un à la fois.",
-        "addYours": "Ajoute la tienne : {url}"
+        "addYours": "Ajoute la tienne : {url}",
+        "welcome": "Notre histoire, avec vos mots."
       },
       "switch": {
         "label": "Vue du mur",

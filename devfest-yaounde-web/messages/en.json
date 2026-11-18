@@ -760,7 +760,8 @@
         "anonymous": "A member of the community",
         "emptyTitle": "The first stories are on their way",
         "emptyBody": "Words people leave about DevFest appear here, one at a time.",
-        "addYours": "Add yours: {url}"
+        "addYours": "Add yours: {url}",
+        "welcome": "Our story, in your words."
       },
       "switch": {
         "label": "Wall view",

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { PreloaderDots } from "@/components/global/PreloaderDots";
-import { calmAppear, calmFade } from "@/lib/motion";
+import { calmAppear, calmFade, storyWord, wordDelay } from "@/lib/motion";
 import { useMediaQuery } from "@/lib/use-media-query";
 import {
   TESTIMONIAL_ROLES,
@@ -17,6 +17,28 @@ const FADE_MS = 1400;
 const holdFor = (text: string) => Math.min(16_000, 6_500 + text.length * 35);
 /** New approvals join the reel without anyone reloading the display. */
 const REFRESH_MS = 60_000;
+/** The one-line welcome before the first story: on screen this long. */
+const WELCOME_MS = 3800;
+
+/**
+ * Type size in proportion to length: the shorter the story, the bigger it is
+ * set — continuously, not in steps — so a one-liner fills the room and a
+ * long story still sits in a few wide lines. Each bound of the clamp slides
+ * with the length, so the screen size still decides the final value.
+ */
+const MIN_LEN = 20;
+const MAX_LEN = 280;
+const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
+const sizeFor = (text: string) => {
+  const k = Math.min(
+    1,
+    Math.max(0, (text.length - MIN_LEN) / (MAX_LEN - MIN_LEN)),
+  );
+  const min = lerp(2.2, 1.4, k).toFixed(3);
+  const fluid = lerp(5, 2.5, k).toFixed(3);
+  const max = lerp(5, 2.5, k).toFixed(3);
+  return `clamp(${min}rem, ${fluid}vw, ${max}rem)`;
+};
 
 /**
  * The wall's "Stories" mode (ADR 0087): approved anonymous testimonials, one
@@ -32,26 +54,37 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
   const [stories, setStories] = useState(initial);
   const [index, setIndex] = useState(0);
   const [shown, setShown] = useState(true);
-
-  // Refresh the reel from time to time.
+  // A single welcoming line first, then the stories.
+  const [welcome, setWelcome] = useState(true);
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const id = window.setTimeout(
+      () => setWelcome(false),
+      calm ? 600 : WELCOME_MS,
+    );
+    return () => window.clearTimeout(id);
+  }, [calm]);
+
+  // Refresh the reel as it starts, then from time to time.
+  useEffect(() => {
+    if (welcome) return;
+    const load = () =>
       fetch("/api/testimonials", { cache: "no-store" })
         .then((r) => (r.ok ? r.json() : null))
         .then((body: { testimonials?: PublicTestimonial[] } | null) => {
           if (body?.testimonials) setStories(body.testimonials);
         })
         .catch(() => {});
-    }, REFRESH_MS);
+    void load();
+    const id = window.setInterval(load, REFRESH_MS);
     return () => window.clearInterval(id);
-  }, []);
+  }, [welcome]);
 
   const count = stories.length;
   const story = count ? stories[index % count] : null;
 
   // Hold, fade out, move on, fade in.
   useEffect(() => {
-    if (!story || count < 2) return;
+    if (welcome || !story || count < 2) return;
     const out = window.setTimeout(
       () => setShown(false),
       holdFor(story.message),
@@ -67,7 +100,7 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
       window.clearTimeout(out);
       window.clearTimeout(next);
     };
-  }, [story, count]);
+  }, [story, count, welcome]);
 
   const roleLabel = (role: string | null) =>
     role && (TESTIMONIAL_ROLES as readonly string[]).includes(role)
@@ -98,7 +131,27 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
         <PreloaderDots calm={calm} base={0.05} peak={0.3} />
       </div>
 
-      {story ? (
+      {/* ------------------------------------------------- the welcome */}
+      <p
+        aria-hidden={!welcome}
+        data-shown={welcome}
+        className={`${calmFade} pointer-events-none absolute inset-x-6 top-1/2 -translate-y-1/2 text-center font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[1.05] tracking-[-0.02em] text-black02`}
+      >
+        {t("welcome")
+          .split(" ")
+          .map((w, i, list) => (
+            <span
+              key={i}
+              className={storyWord}
+              style={wordDelay(250 + i * 180)}
+            >
+              {w}
+              {i < list.length - 1 ? "\u00A0" : null}
+            </span>
+          ))}
+      </p>
+
+      {welcome ? null : story ? (
         <>
           {/* The year, enormous and faint: where in the story we are. */}
           <span
@@ -112,15 +165,16 @@ export function WallStories({ initial }: { initial: PublicTestimonial[] }) {
           <figure
             data-shown={shown}
             aria-live="polite"
-            className={`${calmFade} relative max-w-5xl text-center`}
+            className={`${calmFade} relative w-full max-w-6xl text-center`}
           >
             <blockquote
               lang={story.locale}
-              className="whitespace-pre-line font-sans text-[clamp(1.75rem,4vw,3.75rem)] font-bold leading-[1.2] text-black02"
+              className="whitespace-pre-line text-balance font-sans font-bold leading-[1.14] tracking-[-0.02em] text-black02"
+              style={{ fontSize: sizeFor(story.message) }}
             >
               &ldquo;{story.message}&rdquo;
             </blockquote>
-            <figcaption className="mt-8 font-mono text-body-m text-black02/65">
+            <figcaption className="mt-6 font-mono text-body-m text-black02/65">
               {attribution || t("anonymous")}
             </figcaption>
           </figure>
