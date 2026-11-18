@@ -53,11 +53,19 @@ describe("the launch update renders as a self-contained bilingual email", () => 
       }
     });
 
-    it(`${name}: states the day and the cutoff in both languages`, () => {
+    it(`${name}: states the day and BOTH deadlines in both languages (ADR 0084)`, () => {
       assert.match(email.text, /samedi 21 novembre 2026/);
       assert.match(email.text, /Saturday 21 November 2026/);
-      assert.match(email.text, /mercredi 18 novembre à 23h59/);
-      assert.match(email.text, /Wednesday 18 November at 23:59/);
+      // Payments close at noon — never the old 23:59.
+      assert.match(email.text, /mercredi 18 novembre à 12h00/);
+      assert.match(email.text, /Wednesday 18 November at 12:00/);
+      assert.doesNotMatch(
+        email.text,
+        /(?:payer|pay|Payments|paiements)[^\n]*18 (?:novembre|November) (?:à|at) 23[h:]59/,
+      );
+      // Then reservations until Friday, then cash at the venue.
+      assert.match(email.text, /vendredi 20 novembre à 23h59/);
+      assert.match(email.text, /Friday 20 November at 23:59/);
     });
   }
 

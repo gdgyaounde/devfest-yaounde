@@ -51,6 +51,19 @@ export const RATE_LIMITS = {
    * the alphabet to list every attendee needs hundreds.
    */
   staffSearch: { bucket: "staff-search", limit: 60, windowSeconds: 300 },
+  /** Reservations (ADR 0084), per account: a few tries, not a script. */
+  reservation: { bucket: "reservation", limit: 12, windowSeconds: 300 },
+  reservationRead: {
+    bucket: "reservation-read",
+    limit: 60,
+    windowSeconds: 300,
+  },
+  /** Door staff looking reservations up and recording cash (ADR 0084). */
+  staffReservation: {
+    bucket: "staff-reservation",
+    limit: 120,
+    windowSeconds: 300,
+  },
   staffPerk: { bucket: "staff-perk", limit: 300, windowSeconds: 300 },
   staffOrder: { bucket: "staff-order", limit: 60, windowSeconds: 300 },
   /** Organisers adding or removing volunteers. */

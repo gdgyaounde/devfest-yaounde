@@ -8,7 +8,8 @@ Salut ! Merci d'avoir pris ton pass pour DevFest Yaoundé 2026 — ça compte vr
 
 1. Une seule journée. DevFest Yaoundé 2026, c'est le samedi 21 novembre 2026. Une journée, toute la communauté.
 
-2. La vente de billets ferme le mercredi 18 novembre à 23h59 (heure de Yaoundé). Si des amis hésitent encore, c'est le moment de leur faire signe.
+2. Les paiements en ligne ferment le mercredi 18 novembre à 12h00 (heure de Yaoundé). Ensuite, plus rien ne se paie sur le site : on réserve jusqu'au vendredi 20 novembre à 23h59 et on paie en espèces sur place, à FMSB Yaoundé, Amphi 350. Si des amis hésitent encore, c'est le moment de leur faire signe.
+   Réserver une place : https://devfest.gdgyaounde.com/fr/reserve
 
 3. Ce que comprend ton pass. En plus des talks, des ateliers et des stands, ton pass payant comprend le déjeuner et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de ton palier.
 
@@ -33,7 +34,8 @@ Hi! Thank you for getting a pass to DevFest Yaoundé 2026 — it genuinely matte
 
 1. One day. DevFest Yaoundé 2026 is on Saturday 21 November 2026. One day, the whole community.
 
-2. Ticket sales close on Wednesday 18 November at 23:59 (Yaoundé time). If friends are still on the fence, now's the time to nudge them.
+2. Online payments close on Wednesday 18 November at 12:00 (Yaoundé time). After that nothing is paid on the site: you reserve until Friday 20 November at 23:59 and pay in cash at the venue, FMSB Yaoundé, Amphi 350. If friends are still on the fence, now's the time to nudge them.
+   Reserve a spot: https://devfest.gdgyaounde.com/en/reserve
 
 3. What your pass includes. On top of the talks, workshops and stands, your paid pass includes lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and your tier's swag.
 

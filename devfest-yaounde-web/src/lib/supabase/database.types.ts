@@ -592,6 +592,60 @@ export type Database = {
           },
         ]
       }
+      reservations: {
+        Row: {
+          cancelled_at: string | null
+          cash_received_at: string | null
+          cash_received_by: string | null
+          checked_in_at: string | null
+          contact_email: string | null
+          contact_name: string
+          contact_phone: string
+          created_at: string
+          id: string
+          items: Json
+          reference: string
+          status: string
+          tickets: Json
+          total_xaf: number
+          user_id: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          cash_received_at?: string | null
+          cash_received_by?: string | null
+          checked_in_at?: string | null
+          contact_email?: string | null
+          contact_name: string
+          contact_phone: string
+          created_at?: string
+          id?: string
+          items?: Json
+          reference: string
+          status?: string
+          tickets?: Json
+          total_xaf: number
+          user_id: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          cash_received_at?: string | null
+          cash_received_by?: string | null
+          checked_in_at?: string | null
+          contact_email?: string | null
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          items?: Json
+          reference?: string
+          status?: string
+          tickets?: Json
+          total_xaf?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       volunteers: {
         Row: {
           added_at: string
@@ -624,6 +678,30 @@ export type Database = {
       apply_paid_deposit: {
         Args: { p_badge_codes?: string[]; p_deposit_id: string }
         Returns: string
+      }
+      cancel_reservation: {
+        Args: { p_id: string; p_user_id: string }
+        Returns: string
+      }
+      check_in_reservation: { Args: { p_id: string }; Returns: Json }
+      create_reservation: {
+        Args: {
+          p_caps: Json
+          p_contact_email: string
+          p_contact_name: string
+          p_contact_phone: string
+          p_items: Json
+          p_max_active?: number
+          p_reference: string
+          p_tickets: Json
+          p_total_xaf: number
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      set_reservation_cash: {
+        Args: { p_actor: string; p_id: string }
+        Returns: Json
       }
       collect_ticket_perk: {
         Args: { p_perk: string; p_ticket_id: string }

@@ -394,3 +394,35 @@ describe("pricing enforces the cutoff on the server (tickets AND shop)", () => {
     );
   });
 });
+
+/**
+ * One time everywhere (ADR 0084): payments close at 12:00, so no message or
+ * FAQ may still say the sales close at 23:59 (that is the EDITS deadline).
+ */
+describe("the payments cutoff reads 12:00 everywhere", () => {
+  const STALE =
+    /(payments?|sales?|paiements?|vente)[^.]{0,80}(18 novembre|18 November)[^.]{0,10}23[h:]59/i;
+  const walk = (value: unknown, out: string[] = []): string[] => {
+    if (typeof value === "string") out.push(value);
+    else if (Array.isArray(value)) value.forEach((v) => walk(v, out));
+    else if (value && typeof value === "object") {
+      Object.values(value).forEach((v) => walk(v, out));
+    }
+    return out;
+  };
+
+  it("in the UI messages and the FAQs", async () => {
+    const { readFileSync } = await import("node:fs");
+    const files = [
+      "messages/en.json",
+      "messages/fr.json",
+      "src/data/faqs.json",
+    ];
+    for (const file of files) {
+      const strings = walk(JSON.parse(readFileSync(file, "utf8")));
+      for (const text of strings) {
+        assert.doesNotMatch(text, STALE, `${file}: ${text.slice(0, 80)}`);
+      }
+    }
+  });
+});

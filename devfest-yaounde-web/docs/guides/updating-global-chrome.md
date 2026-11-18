@@ -9,14 +9,16 @@ These three pieces appear on every page of the site. This guide is for changing 
 The banner shows the FIRST of these that applies:
 
 1. **Whatever is typed in Admin → Config → Announcement.** Always wins.
-2. **The ticket sales cutoff** — "Ticket sales close Wednesday 18 November at
-   23:59", with a "Get tickets" button. Built from Config → Ticket sales &
+2. **The payments cutoff** — "Online payments close Wednesday 18 November at
+   12:00", with a "Get tickets" button. Once it passes, the banner moves on to
+   **"Reservations are open until Friday 20 November at 23:59"** (with a
+   "Reserve" button) and, after Friday, to **"pay cash at the venue"**. Built from Config → Ticket sales &
    edits, so it always matches what checkout enforces. It disappears by
    itself at the cutoff (the open page folds it away at the minute; the
    static pages are rebuilt by the cron sweep shortly after).
 3. **The call for speakers**, while it is accepting submissions.
-4. **The fallback** below — or, once ticket sales have closed, "See you on
-   21 November 2026 — ticket sales are closed, the shop is still open"
+4. **The fallback** below — or, once ticket sales have closed, "Reservations are
+   closed — see you on 21 November 2026 at FMSB Yaoundé! Pay cash on the spot"
    (`announcement.afterSales`), because the fallback sells tickets.
 
 **Dismissing is per message.** A visitor who closes the banner only hides

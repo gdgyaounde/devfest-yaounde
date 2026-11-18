@@ -23,23 +23,25 @@ rules as `updating-content.md` apply to what you type:
 
 ---
 
-## When ticket sales close (ADR 0072)
+## When payments close — and reservations take over (ADR 0072, 0084)
 
-Ticket sales close at the instant set in **Admin → Config → Ticket sales &
-edits** — for 2026, **Wednesday 18 November at 23:59 (Yaoundé time)**. From
-then on:
+**Payments close at 12:00 on Wednesday 18 November 2026 (Yaoundé time) — for
+tickets AND the shop.** The instant is set in **Admin → Config → Ticket sales
+& edits** ("Payments close"). From then on **nothing is paid on the site**:
 
-- **Checkout refuses tickets on the server**, whatever a page or a stale tab
-  shows. A buyer who was already on the Mobile Money prompt before 23:59 still
-  gets their ticket.
-- The tickets page swaps its "Sales close Wednesday…" notice (with a
-  countdown in the final 48 hours) for "Ticket sales are closed", and every
-  paid tier shows "Sales closed". The free (Haikyu) card still links to Bevy.
-- **Ticket-only products close too** — they only ever come with a ticket.
-- **The shop stays open.** Every shop page (and each checkout step) says that
-  items ordered now may not be ready by event day; the consent line buyers
-  tick says the same thing, so it is part of what they accepted. That notice
-  disappears once the event is over.
+- **Checkout refuses new payments on the server** (tickets and shop), whatever
+  a page or a stale tab shows. A buyer who was already on the Mobile Money
+  prompt before 12:00 still gets their ticket or order.
+- People **reserve instead** on `/reserve` — tickets and shop items, at base
+  price (cash has no online fee) — until **Friday 20 November, 23:59**
+  ("Reservations close" in Config). They pay **in cash at FMSB Yaoundé,
+  Amphi 350**. See [reservations.md](reservations.md).
+- After Friday 23:59 there is no more reserving: people simply come and pay
+  cash on the spot.
+- The tickets page, the shop, the banner, the pop-up and the buttons all follow
+  these two instants through one shared phase (selling → reserving → door).
+- **Ticket edits** (name, T-shirt size) have their own instant, "Edits close",
+  still Wednesday 23:59.
 
 To move the cutoff, change the date in Config. Nothing else needs editing.
 

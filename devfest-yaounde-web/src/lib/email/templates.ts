@@ -720,6 +720,8 @@ function launchCopy(
     event: string;
     salesDate: string;
     salesTime: string;
+    reserveDate: string;
+    reserveTime: string;
     editsDate: string;
     editsTime: string;
   },
@@ -763,8 +765,9 @@ function launchCopy(
           items: [
             oneDay,
             {
-              lead: `La vente de billets ferme le ${d.salesDate} à ${d.salesTime}`,
-              body: "(heure de Yaoundé). Si des amis hésitent encore, c'est le moment de leur faire signe.",
+              lead: `Les paiements en ligne ferment le ${d.salesDate} à ${d.salesTime}`,
+              body: `(heure de Yaoundé). Ensuite, plus rien ne se paie sur le site : on réserve jusqu'au ${d.reserveDate} à ${d.reserveTime} et on paie en espèces sur place, à FMSB Yaoundé, Amphi 350. Si des amis hésitent encore, c'est le moment de leur faire signe.`,
+              cta: { label: "Réserver une place", path: "/reserve" },
             },
             {
               lead: "Ce que comprend ton pass.",
@@ -796,8 +799,9 @@ function launchCopy(
           items: [
             oneDay,
             {
-              lead: `Ticket sales close on ${d.salesDate} at ${d.salesTime}`,
-              body: "(Yaoundé time). If friends are still on the fence, now's the time to nudge them.",
+              lead: `Online payments close on ${d.salesDate} at ${d.salesTime}`,
+              body: `(Yaoundé time). After that nothing is paid on the site: you reserve until ${d.reserveDate} at ${d.reserveTime} and pay in cash at the venue, FMSB Yaoundé, Amphi 350. If friends are still on the fence, now's the time to nudge them.`,
+              cta: { label: "Reserve a spot", path: "/reserve" },
             },
             {
               lead: "What your pass includes.",
@@ -841,7 +845,7 @@ function launchCopy(
           },
           {
             lead: "Envie du pack complet ?",
-            body: `Tu peux encore prendre un pass payant jusqu'au ${d.salesDate} à ${d.salesTime} (heure de Yaoundé).`,
+            body: `Tu peux encore payer un pass en ligne jusqu'au ${d.salesDate} à ${d.salesTime} (heure de Yaoundé). Ensuite, réserve-le jusqu'au ${d.reserveDate} à ${d.reserveTime} et paie en espèces sur place.`,
             cta: { label: "Voir les pass", path: "/tickets" },
           },
           speakers,
@@ -872,7 +876,7 @@ function launchCopy(
           },
           {
             lead: "Fancy the full package?",
-            body: `You can still get a paid pass until ${d.salesDate} at ${d.salesTime} (Yaoundé time).`,
+            body: `You can still pay for a pass online until ${d.salesDate} at ${d.salesTime} (Yaoundé time). After that, reserve it until ${d.reserveDate} at ${d.reserveTime} and pay in cash at the venue.`,
             cta: { label: "See the passes", path: "/tickets" },
           },
           speakers,
@@ -957,25 +961,30 @@ function launchSectionText(l: Locale, c: LaunchCopy): string[] {
 export function renderLaunchUpdate({
   audience,
   eventDate = EVENT_DATES[0] ?? "2026-11-21",
-  salesCloseAt = "2026-11-18T23:59:00+01:00",
+  salesCloseAt = "2026-11-18T12:00:00+01:00",
   editsCloseAt = "2026-11-18T23:59:00+01:00",
+  reservationsCloseAt = "2026-11-20T23:59:00+01:00",
 }: {
   audience: LaunchAudience;
   eventDate?: string;
   salesCloseAt?: string | null;
   editsCloseAt?: string | null;
+  reservationsCloseAt?: string | null;
 }): RenderedEmail {
   const dates = (l: Locale) => {
     const event = formatCutoff(l, `${eventDate}T12:00:00+01:00`);
-    const sales = formatCutoff(l, salesCloseAt ?? "2026-11-18T23:59:00+01:00");
-    const edits = formatCutoff(
+    const sales = formatCutoff(l, salesCloseAt ?? "2026-11-18T12:00:00+01:00");
+    const reserve = formatCutoff(
       l,
-      editsCloseAt ?? salesCloseAt ?? "2026-11-18T23:59:00+01:00",
+      reservationsCloseAt ?? "2026-11-20T23:59:00+01:00",
     );
+    const edits = formatCutoff(l, editsCloseAt ?? "2026-11-18T23:59:00+01:00");
     return {
       event: `${event?.date ?? ""} ${eventDate.slice(0, 4)}`.trim(),
       salesDate: sales?.date ?? "",
       salesTime: sales?.time ?? "",
+      reserveDate: reserve?.date ?? "",
+      reserveTime: reserve?.time ?? "",
       editsDate: edits?.date ?? "",
       editsTime: edits?.time ?? "",
     };

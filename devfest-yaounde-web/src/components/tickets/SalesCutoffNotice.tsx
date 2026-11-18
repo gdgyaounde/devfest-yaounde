@@ -18,11 +18,11 @@ const COUNTDOWN_WINDOW_MS = 48 * 60 * 60 * 1000;
  * The ticket sales cutoff, stated where people buy (ADR 0072).
  *
  * Before the cutoff: a loud yellow notice — "Ticket sales close Wednesday
- * 18 November at 23:59" — plus a live countdown once fewer than 48 hours are
+ * 18 November at 12:00" — plus a live countdown once fewer than 48 hours are
  * left. After it: a calm closed panel pointing at the shop, which stays open.
  *
  * Flips on its own at the cutoff (`useBeforeInstant`), so a tab left open
- * across 23:59 changes without a reload. The server refuses a late purchase
+ * across 12:00 changes without a reload. The server refuses a late purchase
  * either way; this is so nobody fills in a form that cannot go through.
  *
  * `closeDate` / `closeTime` / `eventDate` arrive already formatted in Yaoundé

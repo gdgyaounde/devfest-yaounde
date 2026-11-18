@@ -48,6 +48,9 @@ export function AdminConfig({
   const [editsCloseAt, setEditsCloseAt] = useState(
     isoToWatLocal(settings.ticketing.editsCloseAt),
   );
+  const [reservationsCloseAt, setReservationsCloseAt] = useState(
+    isoToWatLocal(settings.ticketing.reservationsCloseAt),
+  );
   const [heroUrl, setHeroUrl] = useState(settings.hero.imageUrl);
   const [heroBusy, setHeroBusy] = useState(false);
   const [sponsorCall, setSponsorCall] = useState(settings.sponsorCall);
@@ -78,13 +81,16 @@ export function AdminConfig({
 
   const ticketingChanged =
     salesCloseAt !== isoToWatLocal(settings.ticketing.salesCloseAt) ||
-    editsCloseAt !== isoToWatLocal(settings.ticketing.editsCloseAt);
+    editsCloseAt !== isoToWatLocal(settings.ticketing.editsCloseAt) ||
+    reservationsCloseAt !==
+      isoToWatLocal(settings.ticketing.reservationsCloseAt);
   /* What the public site would do with the form as it stands — the same
      helpers checkout and the account page call. */
   const draftTicketing = {
     ticketing: {
       salesCloseAt: watLocalToIso(salesCloseAt),
       editsCloseAt: watLocalToIso(editsCloseAt),
+      reservationsCloseAt: watLocalToIso(reservationsCloseAt),
     },
   };
   const salesOpenNow = ticketSalesOpen(new Date(), draftTicketing);
@@ -143,6 +149,7 @@ export function AdminConfig({
               ticketing: {
                 salesCloseAt: watLocalToIso(salesCloseAt),
                 editsCloseAt: watLocalToIso(editsCloseAt),
+                reservationsCloseAt: watLocalToIso(reservationsCloseAt),
               },
             }
           : {}),
@@ -298,14 +305,16 @@ export function AdminConfig({
               After &ldquo;Sales close&rdquo;, checkout refuses tickets (and the
               swag that only comes with one), the tickets page shows
               &ldquo;Sales closed&rdquo; and the banner&rsquo;s countdown line
-              goes away. The shop stays open. After &ldquo;Edits close&rdquo;,
+              goes away. The shop closes with the tickets: after this moment
+              nothing is paid on the site and people reserve instead, until
+              &ldquo;Reservations close&rdquo;. After &ldquo;Edits close&rdquo;,
               holders can no longer change their ticket&rsquo;s name or T-shirt
               size.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <label className="block text-body-m font-bold text-black02">
-              Sales close
+              Payments close (tickets + shop)
               <input
                 type="datetime-local"
                 className={field}
@@ -328,6 +337,19 @@ export function AdminConfig({
               <span className="mt-1 block text-caption font-normal text-black02/65">
                 Yaoundé time. Empty = no cutoff. Now:{" "}
                 <strong>{editsOpenNow ? "open" : "closed"}</strong>.
+              </span>
+            </label>
+            <label className="block text-body-m font-bold text-black02">
+              Reservations close
+              <input
+                type="datetime-local"
+                className={field}
+                value={reservationsCloseAt}
+                onChange={(e) => setReservationsCloseAt(e.target.value)}
+              />
+              <span className="mt-1 block text-caption font-normal text-black02/65">
+                Yaoundé time. Empty = reservations never close. After it, it is
+                cash at the venue.
               </span>
             </label>
           </div>

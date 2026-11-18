@@ -156,8 +156,8 @@ function cutoffInstant(value: string | null | undefined): number | null {
  *
  * Closed FROM the cutoff instant on — `now >= salesCloseAt` is closed, the
  * same boundary as `eventHasEnded` and the call for speakers. With the
- * default `2026-11-18T23:59:00+01:00` that means 23:58:59 Yaoundé time is
- * the last second a purchase goes through.
+ * default `2026-11-18T12:00:00+01:00` that means 11:59:59 Yaoundé time is
+ * the last second a purchase goes through (ADR 0084; it was 23:59).
  *
  * The instant carries its own offset, so this is independent of the server's
  * timezone. Pure, `now` an argument: checkout, the tickets page, the banner,
@@ -251,7 +251,7 @@ export function withinPostEventRevalidateWindow(
  * The same one-day window, after the ticket SALES cutoff (ADR 0072).
  *
  * The tickets page, the hero, the footer and the banner are all static HTML
- * that says "sales close Wednesday at 23:59". Their client components flip at
+ * that says "payments close Wednesday at 12:00". Their client components flip at
  * the minute on their own, but the HTML itself — what a crawler, a no-JS
  * visitor or a link preview sees — only changes when something rebuilds it.
  * This is that something: the cron sweep rebuilds the whole site while this
@@ -504,8 +504,8 @@ export function eventDateParts(
 
 /**
  * A cutoff instant as people read it, in YAOUNDÉ time whatever the server's
- * or the visitor's timezone: `{ date: "mercredi 18 novembre", time: "23h59" }`
- * / `{ date: "Wednesday 18 November", time: "23:59" }`, plus a `short` date
+ * or the visitor's timezone: `{ date: "mercredi 18 novembre", time: "12h00" }`
+ * / `{ date: "Wednesday 18 November", time: "12:00" }`, plus a `short` date
  * ("mer. 18 nov." / "Wed 18 Nov") for tight spaces like the banner.
  *
  * Null for an empty or unparseable instant — the caller then says nothing

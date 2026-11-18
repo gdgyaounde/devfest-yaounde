@@ -121,7 +121,7 @@ export default async function LocaleLayout({
   /*
     SECOND in line, after the dashboard text: the ticket sales cutoff
     (ADR 0072). Derived, not typed — "Ticket sales close Wednesday
-    18 November at 23:59" — so it cannot disagree with what checkout
+    18 November at 12:00" — so it cannot disagree with what checkout
     enforces, and it disappears on its own once the cutoff passes: the cron
     sweep rebuilds this layout shortly after, and `announcementExpiresAt`
     makes the client hide it at the minute itself, before that rebuild lands.

@@ -55,6 +55,7 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
         eventDate: settings.eventDate,
         salesCloseAt: settings.ticketing.salesCloseAt,
         editsCloseAt: settings.ticketing.editsCloseAt,
+        reservationsCloseAt: settings.ticketing.reservationsCloseAt,
       }),
     [audience, settings],
   );
