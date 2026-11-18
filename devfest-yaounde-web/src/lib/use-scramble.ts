@@ -33,6 +33,16 @@ export interface UseScrambleOptions {
    * stagger, which is how two things that should look identical drift apart.
    */
   loop?: boolean;
+  /**
+   * What each character shows BEFORE its turn to churn — Storytime's prompt
+   * scrambles from sentence case into uppercase, so the line reads as the
+   * question the whole way. Defaults to the resolved text.
+   */
+  from?: string;
+  /** Frames between one character starting and the next (default 4). */
+  stagger?: number;
+  /** Frames each character churns for (default 26). */
+  churn?: number;
 }
 
 /**
@@ -49,6 +59,9 @@ export interface UseScrambleOptions {
 export function useScramble<T extends Element>({
   text,
   loop = false,
+  from,
+  stagger = STAGGER_FRAMES,
+  churn = CHURN_FRAMES,
 }: UseScrambleOptions) {
   const nodeRef = useRef<T>(null);
   const frameRef = useRef<number | null>(null);
@@ -59,11 +72,12 @@ export function useScramble<T extends Element>({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const chars = [...text];
+    const before = from ? [...from] : chars;
     // Each character gets its own start/end frame, so the resolve sweeps
     // across the word instead of every letter locking at once.
     const schedule = chars.map((_, i) => ({
-      start: i * STAGGER_FRAMES,
-      end: i * STAGGER_FRAMES + CHURN_FRAMES,
+      start: i * stagger,
+      end: i * stagger + churn,
     }));
     const total = schedule[schedule.length - 1]?.end ?? 0;
     const held = chars.map(() => GLYPHS[0]);
@@ -74,7 +88,8 @@ export function useScramble<T extends Element>({
         // Whitespace never churns — scrambling the gaps makes the word lose
         // its shape and reads as noise rather than as decoding.
         if (c.trim() === "") return c;
-        if (frame < schedule[i].start || frame >= schedule[i].end) return c;
+        if (frame < schedule[i].start) return before[i] ?? c;
+        if (frame >= schedule[i].end) return c;
         if (frame % GLYPH_HOLD === 0) {
           held[i] = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
         }
@@ -96,7 +111,7 @@ export function useScramble<T extends Element>({
     };
 
     frameRef.current = requestAnimationFrame(tick);
-  }, [text, loop]);
+  }, [text, loop, from, stagger, churn]);
 
   // Cancel an in-flight scramble if the node unmounts mid-decode, and put the
   // real text back so a remount never inherits a half-decoded string.

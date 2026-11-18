@@ -24,6 +24,7 @@ import {
   cleanMessage,
 } from "@/lib/testimonials/rules";
 import { useMediaQuery } from "@/lib/use-media-query";
+import { useScramble } from "@/lib/use-scramble";
 import { ChoicePicker, OTHER } from "./ChoicePicker";
 import { IntroCursors } from "./IntroCursors";
 
@@ -187,12 +188,27 @@ export function TestimonialComposer() {
     };
   }, []);
   const intro = stage !== "done";
+  const prompt = t("prompt");
+  const promptUpper = prompt.toLocaleUpperCase(locale);
+  const promptScramble = useScramble<HTMLSpanElement>({
+    text: promptUpper,
+    from: prompt,
+    // ~55 frames: done as the prompt lands (SHRINK_MS), not after it.
+    stagger: 1,
+    churn: 16,
+  });
+  const startScramble = promptScramble.start;
+  useEffect(() => {
+    if (stage === "done") startScramble();
+  }, [stage, startScramble]);
   // Focus once the prompt has settled above the field (SHRINK_MS).
   useEffect(() => {
     if (intro || state !== "writing") return;
     const id = window.setTimeout(
       () => textRef.current?.focus(),
-      calm ? 0 : SHRINK_MS - 200,
+      // After the field has faded in, so the border is seen drawing from
+      // its very first stroke, accelerating and then settling.
+      calm ? 0 : SHRINK_MS + 500,
     );
     return () => window.clearTimeout(id);
   }, [intro, state, calm]);
@@ -316,13 +332,18 @@ export function TestimonialComposer() {
     setState("writing");
   }
 
-  const words = (text: string, start = 0, step = 160) =>
-    text.split(" ").map((w, i) => (
+  // A space only BETWEEN words, never after the last: a trailing one would
+  // make the line a character wider than its plain-text twin, and the prompt
+  // swaps from these spans to plain text mid-flight.
+  const words = (text: string, start = 0, step = 160) => {
+    const list = text.split(" ");
+    return list.map((w, i) => (
       <span key={i} className={storyWord} style={wordDelay(start + i * step)}>
         {w}
-        {" "}
+        {i < list.length - 1 ? "\u00A0" : null}
       </span>
     ));
+  };
 
   return (
     <main
@@ -400,11 +421,21 @@ export function TestimonialComposer() {
           <h1
             ref={promptRef}
             style={{ opacity: 0 }}
-            className="w-fit font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70 will-change-transform"
+            aria-label={prompt}
+            className="w-fit font-mono text-mono-tag font-bold tracking-wide text-black02/70 will-change-transform"
           >
-            {stage === "line3" || stage === "done"
-              ? words(t("prompt"), IN_DELAY, 140)
-              : t("prompt")}
+            {/* Told in the story's own case, then — as it glides into place —
+                scrambled into the uppercase label it settles as. Monospace,
+                so changing case never changes the width mid-flight. */}
+            {stage === "done" ? (
+              <span ref={promptScramble.ref} aria-hidden>
+                {calm ? promptUpper : prompt}
+              </span>
+            ) : stage === "line3" ? (
+              <span aria-hidden>{words(prompt, IN_DELAY, 140)}</span>
+            ) : (
+              <span aria-hidden>{prompt}</span>
+            )}
           </h1>
 
           <div

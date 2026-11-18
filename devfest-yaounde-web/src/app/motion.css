@@ -2083,8 +2083,10 @@ html:has([data-preloader="held"]) .hero-settle {
 }
 
 /* Storytime's field border, drawn around from start to finish on focus. */
+/* A strong ease-in-out (quart): it gathers speed round the first corners and
+   settles gently into the last, rather than drawing at one even pace. */
 .story-draw {
-  transition: stroke-dashoffset 1100ms var(--ease-in-out-devfest);
+  transition: stroke-dashoffset 1500ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 @media (prefers-reduced-motion: reduce) {
   .story-draw {
