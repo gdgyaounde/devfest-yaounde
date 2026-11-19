@@ -1,6 +1,11 @@
 "use client";
 
-import { ArrowsOut, ListBullets, SquaresFour } from "@phosphor-icons/react";
+import {
+  ArrowsOut,
+  Heart,
+  ListBullets,
+  SquaresFour,
+} from "@phosphor-icons/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { FilterGroup } from "@/components/ui/FilterGroup";
@@ -12,7 +17,7 @@ import {
   isScheduled,
   type ProgrammeGroup,
 } from "@/lib/sessions";
-import { InterestProvider } from "./InterestProvider";
+import { InterestProvider, useInterest } from "./InterestProvider";
 import { SessionCard } from "./SessionCard";
 import { SessionReader } from "./SessionReader";
 import type { Session, Speaker, Sponsor } from "@/data/types";
@@ -53,7 +58,7 @@ export interface ScheduleBoardProps {
  * semantic list (no tilts, no spine) and is a first-class option, not an
  * afterthought; session kind always carries an icon + text label.
  */
-export function ScheduleBoard({
+function ScheduleBoardInner({
   sessions,
   speakers = [],
   partners = [],
@@ -61,7 +66,6 @@ export function ScheduleBoard({
   showCalendar = false,
   previewLimit,
   programmeHeading = "h2",
-  showInterest = false,
 }: ScheduleBoardProps) {
   const t = useTranslations("home.schedule");
   const locale = useLocale() as "fr" | "en";
@@ -95,6 +99,9 @@ export function ScheduleBoard({
   const [openId, setOpenId] = useState<string | null>(null);
   // The session the full-screen reader is on, or null while it is closed.
   const [reading, setReading] = useState<string | null>(null);
+  // Only the sessions this signed-in person marked (works offline too).
+  const interest = useInterest();
+  const [onlyMine, setOnlyMine] = useState(false);
 
   /*
    * Deep links (`/schedule?session=<id>`), which the home preview's "Full
@@ -131,6 +138,7 @@ export function ScheduleBoard({
     .filter((s) => s.day === activeDay)
     .filter((s) => !track || s.track[locale] === track)
     .filter((s) => !room || s.room?.[locale] === room)
+    .filter((s) => !onlyMine || interest?.has(s.id))
     .sort((a, b) => a.time.localeCompare(b.time));
 
   // A room filter can only ever match a slotted session.
@@ -138,7 +146,8 @@ export function ScheduleBoard({
     sessions
       .filter((s) => !isScheduled(s))
       .filter((s) => !track || s.track[locale] === track)
-      .filter(() => !room),
+      .filter(() => !room)
+      .filter((s) => !onlyMine || interest?.has(s.id)),
     previewLimit,
   );
   const ProgrammeHeading = programmeHeading;
@@ -173,7 +182,7 @@ export function ScheduleBoard({
     return [...byTime.entries()];
     // `visible` is derived fresh each render; the deps that actually change it
     // are the day, the two filters and the locale.
-  }, [sessions, activeDay, track, room, locale]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sessions, activeDay, track, room, locale, onlyMine, interest]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeCount = (track ? 1 : 0) + (room ? 1 : 0);
 
@@ -244,7 +253,24 @@ export function ScheduleBoard({
             <span aria-hidden />
           )}
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* The favourites filter: only for someone signed in (online, or
+                from the copy kept on the device when there is no signal). */}
+            {interest?.signedIn && (
+              <button
+                type="button"
+                aria-pressed={onlyMine}
+                onClick={() => setOnlyMine((v) => !v)}
+                className={`flex items-center gap-2 rounded-pill border-2 border-black02 px-4 py-3.5 font-mono text-mono-tag font-bold uppercase tracking-wide transition-colors duration-200 ${
+                  onlyMine
+                    ? "bg-primary text-black02"
+                    : "bg-transparent text-black02 hover:bg-pastel"
+                }`}
+              >
+                <Heart size={16} weight={onlyMine ? "fill" : "bold"} />
+                {t("mySessions", { count: interest.count })}
+              </button>
+            )}
             <span
               id="schedule-view-label"
               className="hidden font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/65 sm:inline"
@@ -300,12 +326,12 @@ export function ScheduleBoard({
 
       {/* key remounts on day/view/filter change so the stagger replays */}
       <div
-        key={`${activeDay}-${view}-${track ?? ""}-${room ?? ""}`}
+        key={`${activeDay}-${view}-${track ?? ""}-${room ?? ""}-${onlyMine}`}
         className="mt-12"
       >
         {visible.length === 0 && programme.length === 0 ? (
           <p className="rounded-lg border-2 border-dashed border-black02/30 px-7 py-12 text-center text-body-l text-black02/70">
-            {t("empty")}
+            {onlyMine ? t("emptyMine") : t("empty")}
           </p>
         ) : visible.length === 0 ? null : view === "structured" ? (
           <ol className="relative flex flex-col gap-6 border-l-4 border-dashed border-black02/25 pl-6 sm:pl-10">
@@ -530,20 +556,33 @@ export function ScheduleBoard({
 
   // The Home preview has no filters, so it skips the sidebar layout entirely
   // rather than rendering an empty one.
-  const wrap = (node: React.ReactNode) =>
-    showInterest ? <InterestProvider>{node}</InterestProvider> : node;
-  if (!showFilters) return wrap(board);
+  if (!showFilters) return board;
 
-  return wrap(
+  return (
     <FilterLayout
       filters={filters}
       activeCount={activeCount}
       onClearAll={() => {
         setTrack(null);
         setRoom(null);
+        setOnlyMine(false);
       }}
     >
       {board}
-    </FilterLayout>,
+    </FilterLayout>
+  );
+}
+
+/**
+ * The board, with "This interests me" (ADR 0086) around it on /schedule. The
+ * provider has to sit OUTSIDE the board for the board itself to read it (the
+ * "My sessions" filter), hence the split.
+ */
+export function ScheduleBoard(props: ScheduleBoardProps) {
+  const board = <ScheduleBoardInner {...props} />;
+  return props.showInterest ? (
+    <InterestProvider>{board}</InterestProvider>
+  ) : (
+    board
   );
 }

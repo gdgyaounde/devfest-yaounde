@@ -1,6 +1,11 @@
 "use client";
 
 import { Heart } from "@phosphor-icons/react";
+import {
+  clearInterestCache,
+  readInterestCache,
+  writeInterestCache,
+} from "@/lib/interest-cache";
 import { useTranslations } from "next-intl";
 import {
   createContext,
@@ -21,6 +26,10 @@ import {
  */
 interface InterestContext {
   signedIn: boolean | null;
+  /** Showing the device's copy because the server could not be reached. */
+  offline: boolean;
+  /** How many sessions are marked. */
+  count: number;
   has: (id: string) => boolean;
   toggle: (id: string) => Promise<boolean>;
 }
@@ -30,17 +39,38 @@ const Ctx = createContext<InterestContext | null>(null);
 export function InterestProvider({ children }: { children: React.ReactNode }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [ids, setIds] = useState<ReadonlySet<string>>(new Set());
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     let live = true;
+    // The server is the truth; the device keeps a copy of it (ADR 0088) so
+    // favourites still show with no signal. Only when the server cannot be
+    // REACHED is the copy used — an answer of "not signed in" clears it.
+    const fromDevice = () => {
+      const cached = readInterestCache(window.localStorage);
+      if (!live) return;
+      if (cached) {
+        setSignedIn(true);
+        setIds(new Set(cached.ids));
+        setOffline(true);
+      } else {
+        setSignedIn(false);
+      }
+    };
     fetch("/api/interests", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((body: { signedIn?: boolean; sessionIds?: string[] } | null) => {
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("down"))))
+      .then((body: { signedIn?: boolean; sessionIds?: string[] }) => {
         if (!live) return;
-        setSignedIn(Boolean(body?.signedIn));
-        setIds(new Set(body?.sessionIds ?? []));
+        setOffline(false);
+        setSignedIn(Boolean(body.signedIn));
+        setIds(new Set(body.sessionIds ?? []));
+        if (body.signedIn) {
+          writeInterestCache(window.localStorage, body.sessionIds ?? []);
+        } else {
+          clearInterestCache(window.localStorage);
+        }
       })
-      .catch(() => live && setSignedIn(false));
+      .catch(fromDevice);
     return () => {
       live = false;
     };
@@ -48,6 +78,9 @@ export function InterestProvider({ children }: { children: React.ReactNode }) {
 
   const toggle = useCallback(
     async (id: string) => {
+      // Read-only without a connection: a change the server never saw would
+      // quietly disagree with it later.
+      if (offline) return false;
       const next = !ids.has(id);
       // Optimistic: the tap answers instantly, a failure puts it back.
       setIds((cur) => {
@@ -65,6 +98,7 @@ export function InterestProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) throw new Error(String(response.status));
         const body = (await response.json()) as { sessionIds: string[] };
         setIds(new Set(body.sessionIds));
+        writeInterestCache(window.localStorage, body.sessionIds);
         return true;
       } catch {
         setIds((cur) => {
@@ -76,12 +110,18 @@ export function InterestProvider({ children }: { children: React.ReactNode }) {
         return false;
       }
     },
-    [ids],
+    [ids, offline],
   );
 
   const value = useMemo<InterestContext>(
-    () => ({ signedIn, has: (id) => ids.has(id), toggle }),
-    [signedIn, ids, toggle],
+    () => ({
+      signedIn,
+      offline,
+      count: ids.size,
+      has: (id) => ids.has(id),
+      toggle,
+    }),
+    [signedIn, offline, ids, toggle],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
@@ -117,8 +157,18 @@ export function InterestButton({
         type="button"
         aria-pressed={on}
         aria-label={t("interest")}
-        title={failed ? t("interestFailed") : t("interest")}
-        onClick={async () => setFailed(!(await ctx.toggle(sessionId)))}
+        aria-disabled={ctx.offline || undefined}
+        title={
+          ctx.offline
+            ? t("interestOffline")
+            : failed
+              ? t("interestFailed")
+              : t("interest")
+        }
+        onClick={async () => {
+          if (ctx.offline) return;
+          setFailed(!(await ctx.toggle(sessionId)));
+        }}
         className={`${ICON} ${on ? "bg-primary" : "bg-offwhite hover:bg-primary/60"} ${className}`}
       >
         <Heart size={20} weight={on ? "fill" : "bold"} aria-hidden />
@@ -128,4 +178,9 @@ export function InterestButton({
       </span>
     </>
   );
+}
+
+/** The marked sessions, for filtering (null outside the schedule's provider). */
+export function useInterest(): InterestContext | null {
+  return useContext(Ctx);
 }

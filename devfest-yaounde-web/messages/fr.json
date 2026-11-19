@@ -225,7 +225,10 @@
       "interestFailed": "Impossible d'enregistrer — tu peux réessayer ?",
       "viewModal": "Diaporama",
       "readerHintKeys": "Astuce : utilise les flèches ← → pour passer d'une session à l'autre",
-      "readerHintSwipe": "Astuce : glisse vers la gauche ou la droite pour passer d'une session à l'autre"
+      "readerHintSwipe": "Astuce : glisse vers la gauche ou la droite pour passer d'une session à l'autre",
+      "mySessions": "Mes sessions · {count}",
+      "emptyMine": "Rien ici pour l'instant — touche le cœur d'une session pour la garder dans ta liste.",
+      "interestOffline": "Tu es hors ligne — ta liste s'affiche telle qu'elle était ; reconnecte-toi pour la modifier."
     },
     "quotes": {
       "title": "Ce qu'on en dit",
@@ -1229,5 +1232,16 @@
     "introOnce": "Il était une fois, à Yaoundé…",
     "introCommunity": "…une communauté a grandi, une histoire à la fois.",
     "skip": "Touche pour passer"
+  },
+  "offlinePopup": {
+    "title": "Garde le programme avec toi",
+    "body": "Enregistre le programme sur cet appareil et il s'ouvre sans internet le jour J — tout le programme, les salles et les horaires. Les sessions marquées d'un cœur viennent avec.",
+    "cta": "Enregistrer le programme hors ligne",
+    "saving": "Enregistrement… {done} / {total}",
+    "doneTitle": "Le programme est sur ton appareil",
+    "doneBody": "Tu peux l'ouvrir à tout moment, même sans réseau. Il se met à jour tout seul dès que tu es en ligne, et tes sessions favorites sont gardées aussi.",
+    "failed": "Impossible de l'enregistrer pour l'instant — vérifie ta connexion et réessaie.",
+    "retry": "Réessayer",
+    "ok": "C'est noté"
   }
 }

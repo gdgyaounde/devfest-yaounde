@@ -3,19 +3,23 @@
 import {
   CalendarCheck,
   CalendarDots,
+  CheckCircle,
+  DownloadSimple,
   Handshake,
   MapPinLine,
   Scroll,
   Ticket,
 } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Link } from "@/i18n/navigation";
 import { Modal } from "@/components/ui/Modal";
+import { offlineSupported, saveAgendaOffline } from "@/lib/offline";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import {
   AGENDA_SEEN_KEY,
+  OFFLINE_SEEN_KEY,
   PARTNERS_SEEN_KEY,
   salesNoticeSeenKey,
   termsSeenKey,
@@ -43,7 +47,7 @@ const PRIMARY =
 const SECONDARY =
   "inline-flex items-center rounded-pill border-2 border-black02 bg-offwhite px-6 py-3 font-sans text-body-m font-bold text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-pastel motion-reduce:transform-none";
 
-type Step = "terms" | "notice" | "partners" | "agenda";
+type Step = "terms" | "notice" | "partners" | "agenda" | "offline";
 
 /** Our two newest partners, thanked in step 3 (ADR 0085). */
 const PARTNER_LOGOS = [
@@ -109,6 +113,14 @@ export function TermsUpdatedPopup({
   const [noticeSeen, markNoticeSeen] = useSeenOnce(salesNoticeSeenKey(phase));
   const [agendaSeen, markAgendaSeen] = useSeenOnce(AGENDA_SEEN_KEY);
   const [partnersSeen, markPartnersSeen] = useSeenOnce(PARTNERS_SEEN_KEY);
+  const [offlineSeen, markOfflineSeen] = useSeenOnce(OFFLINE_SEEN_KEY);
+  // Only where a service worker can exist at all (not in `next dev`'s tab on
+  // an old browser, not in private modes that refuse it).
+  const canSave = useSyncExternalStore(
+    () => () => {},
+    offlineSupported,
+    () => false,
+  );
   const [ready, setReady] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -120,8 +132,9 @@ export function TermsUpdatedPopup({
   const wantsNotice = !noticeSeen && !onReserve;
   const wantsAgenda = !agendaSeen && !SCHEDULE.test(pathname) && !onReserve;
   const wantsPartners = !partnersSeen && !onReserve;
+  const wantsOffline = !offlineSeen && canSave && !onReserve;
   const wantsAnything =
-    !termsSeen || wantsNotice || wantsPartners || wantsAgenda;
+    !termsSeen || wantsNotice || wantsPartners || wantsAgenda || wantsOffline;
 
   useEffect(() => {
     if (!wantsAnything || excluded || ready) return;
@@ -151,6 +164,7 @@ export function TermsUpdatedPopup({
     ...(wantsNotice ? (["notice"] as const) : []),
     ...(wantsPartners ? (["partners"] as const) : []),
     ...(wantsAgenda ? (["agenda"] as const) : []),
+    ...(wantsOffline ? (["offline"] as const) : []),
   ];
   const open = ready && !excluded && wantsAnything;
   const [plan, setPlan] = useState<Step[] | null>(null);
@@ -175,20 +189,24 @@ export function TermsUpdatedPopup({
         ? markNoticeSeen
         : step === "partners"
           ? markPartnersSeen
-          : markAgendaSeen;
+          : step === "offline"
+            ? markOfflineSeen
+            : markAgendaSeen;
 
   const Icon =
     step === "terms"
       ? Scroll
-      : step === "agenda"
-        ? CalendarDots
-        : step === "partners"
-          ? Handshake
-          : phase === "selling"
-            ? Ticket
-            : phase === "reserving"
-              ? CalendarCheck
-              : MapPinLine;
+      : step === "offline"
+        ? DownloadSimple
+        : step === "agenda"
+          ? CalendarDots
+          : step === "partners"
+            ? Handshake
+            : phase === "selling"
+              ? Ticket
+              : phase === "reserving"
+                ? CalendarCheck
+                : MapPinLine;
 
   return (
     <Modal
@@ -275,6 +293,8 @@ export function TermsUpdatedPopup({
               </button>
             </div>
           </>
+        ) : step === "offline" ? (
+          <OfflineStep onDone={markOfflineSeen} />
         ) : step === "agenda" ? (
           <>
             <h2
@@ -375,5 +395,81 @@ export function TermsUpdatedPopup({
         )}
       </div>
     </Modal>
+  );
+}
+
+/**
+ * Step "keep the agenda with you" (ADR 0088): one button that downloads the
+ * agenda to this device, says so when it worked, and says what to do if it
+ * did not. Favourites are kept too (they are saved on the device whenever
+ * the schedule loads while signed in).
+ */
+function OfflineStep({ onDone }: { onDone: () => void }) {
+  const t = useTranslations("offlinePopup");
+  const tn = useTranslations("salesPopup");
+  const locale = useLocale() === "en" ? "en" : "fr";
+  const [state, setState] = useState<"idle" | "saving" | "done" | "failed">(
+    "idle",
+  );
+  const [progress, setProgress] = useState<[number, number]>([0, 0]);
+
+  async function save() {
+    setState("saving");
+    const result = await saveAgendaOffline(locale, (done, total) =>
+      setProgress([done, total]),
+    );
+    setState(result.ok ? "done" : "failed");
+  }
+
+  return (
+    <>
+      <h2
+        id="terms-popup-title"
+        className="font-sans text-heading-l font-bold leading-tight text-black02"
+      >
+        {state === "done" ? t("doneTitle") : t("title")}
+      </h2>
+      <p role="status" className="text-body-m leading-relaxed text-black02/85">
+        {state === "done"
+          ? t("doneBody")
+          : state === "failed"
+            ? t("failed")
+            : state === "saving"
+              ? t("saving", {
+                  done: progress[0],
+                  total: Math.max(progress[1], progress[0]),
+                })
+              : t("body")}
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        {state === "done" ? (
+          <button
+            type="button"
+            data-autofocus
+            onClick={onDone}
+            className={PRIMARY}
+          >
+            <CheckCircle size={20} weight="bold" aria-hidden />
+            {t("ok")}
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              data-autofocus
+              disabled={state === "saving"}
+              onClick={() => void save()}
+              className={`${PRIMARY} disabled:opacity-60`}
+            >
+              <DownloadSimple size={20} weight="bold" aria-hidden />
+              {state === "failed" ? t("retry") : t("cta")}
+            </button>
+            <button type="button" onClick={onDone} className={SECONDARY}>
+              {tn("ok")}
+            </button>
+          </>
+        )}
+      </div>
+    </>
   );
 }

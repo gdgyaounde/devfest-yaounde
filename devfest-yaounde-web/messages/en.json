@@ -225,7 +225,10 @@
       "interestFailed": "Couldn't save that — give it another shot?",
       "viewModal": "Modal",
       "readerHintKeys": "Tip: use the ← → arrow keys to move between sessions",
-      "readerHintSwipe": "Tip: swipe left or right to move between sessions"
+      "readerHintSwipe": "Tip: swipe left or right to move between sessions",
+      "mySessions": "My sessions · {count}",
+      "emptyMine": "Nothing here yet — tap the heart on a session to keep it in your list.",
+      "interestOffline": "You're offline — your list is shown as it was; reconnect to change it."
     },
     "quotes": {
       "title": "What people are saying",
@@ -1229,5 +1232,16 @@
     "introOnce": "Once upon a time, in Yaoundé…",
     "introCommunity": "…a community grew, one story at a time.",
     "skip": "Tap to skip"
+  },
+  "offlinePopup": {
+    "title": "Keep the agenda with you",
+    "body": "Save the agenda on this device and it opens with no internet on the day — the full programme, the rooms and the times. Sessions you've marked with a heart come along too.",
+    "cta": "Save the agenda offline",
+    "saving": "Saving… {done} / {total}",
+    "doneTitle": "The agenda is on your device",
+    "doneBody": "You can open it any time, even with no signal. It refreshes itself whenever you're online, and your favourite sessions are kept too.",
+    "failed": "We couldn't save it just now — check your connection and try again.",
+    "retry": "Try again",
+    "ok": "Got it"
   }
 }
