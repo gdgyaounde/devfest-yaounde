@@ -779,8 +779,8 @@ describe("event structured data", () => {
     const data = eventJsonLd("en", "Two days in Yaoundé", ["2026-11-14"]);
     assert.ok(data, "a dated event must produce a block");
     assert.equal(data!["@type"], "Event");
-    assert.equal(data!.startDate, "2026-11-14T09:00:00");
-    assert.equal(data!.endDate, "2026-11-14T18:00:00");
+    assert.equal(data!.startDate, "2026-11-14T08:00:00");
+    assert.equal(data!.endDate, "2026-11-14T19:00:00");
     assert.ok(String(data!.url).endsWith("/en"));
   });
 
@@ -790,12 +790,12 @@ describe("event structured data", () => {
     // on its own it reads as one continuous eight-day event, so each real
     // day is listed as a subEvent.
     const data = eventJsonLd("en", "x", ["2026-11-21", "2026-11-28"]);
-    assert.equal(data!.startDate, "2026-11-21T09:00:00");
-    assert.equal(data!.endDate, "2026-11-28T18:00:00");
+    assert.equal(data!.startDate, "2026-11-21T08:00:00");
+    assert.equal(data!.endDate, "2026-11-28T19:00:00");
     const sub = (data as { subEvent?: { startDate: string }[] }).subEvent;
     assert.equal(sub?.length, 2);
-    assert.equal(sub![0].startDate, "2026-11-21T09:00:00");
-    assert.equal(sub![1].startDate, "2026-11-28T09:00:00");
+    assert.equal(sub![0].startDate, "2026-11-21T08:00:00");
+    assert.equal(sub![1].startDate, "2026-11-28T08:00:00");
   });
 
   it("writes the dates the way a person says them, not as a range", () => {
@@ -880,9 +880,9 @@ describe("event structured data", () => {
 
 describe("whether the event has ended (ADR 0058)", () => {
   const DATES = ["2026-11-21", "2026-11-28"] as const;
-  // 18:00 is Yaoundé local time (WAT, UTC+1, no DST) — the real closing
-  // instant is therefore 17:00 UTC, not 18:00 UTC.
-  const END_MS = new Date("2026-11-28T18:00:00+01:00").getTime();
+  // 19:00 is Yaoundé local time (WAT, UTC+1, no DST) — the real closing
+  // instant is therefore 18:00 UTC, not 19:00 UTC. (The agenda runs to 19:00.)
+  const END_MS = new Date("2026-11-28T19:00:00+01:00").getTime();
 
   it("is false with time to spare", () => {
     assert.equal(eventHasEnded(new Date("2026-11-21T09:00:00Z"), DATES), false);

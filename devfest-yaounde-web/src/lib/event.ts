@@ -35,9 +35,9 @@ export const EVENT = {
   get days() {
     return EVENT_DATES.length;
   },
-  /** Local start/end times, used only when a real date exists. */
-  startTime: "09:00",
-  endTime: "18:00",
+  /** Local start/end times (agenda: check-in 08:00, close 19:00), used only when a real date exists. */
+  startTime: "08:00",
+  endTime: "19:00",
   city: "Yaoundé",
   region: "Centre",
   country: "CM",

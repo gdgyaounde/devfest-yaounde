@@ -66,8 +66,8 @@ describe("the 2026 edition is one day (ADR 0071)", () => {
 
   it("publishes a plain start and end — no subEvent for a single day", () => {
     const data = eventJsonLd("en", "x", EVENT_DATES) as Record<string, unknown>;
-    assert.equal(data.startDate, "2026-11-21T09:00:00");
-    assert.equal(data.endDate, "2026-11-21T18:00:00");
+    assert.equal(data.startDate, "2026-11-21T08:00:00");
+    assert.equal(data.endDate, "2026-11-21T19:00:00");
     assert.equal("subEvent" in data, false);
   });
 });
