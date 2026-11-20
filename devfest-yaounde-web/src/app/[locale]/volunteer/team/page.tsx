@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { StaffTitle } from "@/components/staff/StaffTitle";
 import { currentStaff } from "@/lib/security/staff";
+import { requireGuide } from "@/lib/staff/guide-ack";
 import { loadTeam, type TeamMember } from "@/lib/staff/team";
 
 /** First letters of the first two words, for someone with no photo. */
@@ -29,6 +30,7 @@ export default async function VolunteerTeam({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("staff.team");
+  await requireGuide(locale);
   const staff = await currentStaff();
   if (!staff) return null;
   const team = await loadTeam();

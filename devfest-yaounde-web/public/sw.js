@@ -41,6 +41,16 @@ const ALLOWED_PATHS = new Set(
   ),
 );
 
+/**
+ * The volunteer backup list's page shell (ADR 0090), the ONE staff page kept
+ * for offline use. It is a data-free shell — the roster is fetched into the
+ * phone and drawn client-side — and a visitor who is not staff gets a 404 for
+ * it, which is never cached (only successful responses are).
+ */
+const STAFF_OFFLINE_PATHS = new Set(
+  LOCALES.map((locale) => `/${locale}/volunteer/backup`),
+);
+
 /** The home page in either locale — the only other URL given an offline answer. */
 const HOME_PATHS = new Set(["/", "/en", "/en/", "/fr", "/fr/"]);
 
@@ -311,7 +321,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (ALLOWED_PATHS.has(url.pathname)) {
+  if (ALLOWED_PATHS.has(url.pathname) || STAFF_OFFLINE_PATHS.has(url.pathname)) {
     event.respondWith(staleWhileRevalidate(request));
     return;
   }

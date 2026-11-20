@@ -95,3 +95,16 @@ station hours).
 
 `/volunteer/team` lists the organisers and the active volunteers by **name and
 photo only** (no email or phone), so volunteers can find each other on the day.
+
+## The offline backup list and the guide gate (ADR 0090)
+
+- **Guide first:** a volunteer who opens `/volunteer` lands on the guide and
+  must tick *I have read and understood the guide* and press **Unlock the
+  tools** before the tools open. Organisers skip it. Each confirmation is in
+  the audit log (`staff.guide_ack`).
+- **Backup list:** the tools page now has **Backup list — works offline**. It
+  saves itself to the phone whenever the tools page is open with signal, and
+  searches by name, ticket code or reservation reference with none. It is a
+  read-only snapshot (it shows who was in at the last save) and removes itself
+  when the volunteer's access ends. Ask volunteers to open the tools page once
+  with signal before the doors open.

@@ -1018,11 +1018,13 @@
       "guideTile": "Start here: the volunteer guide",
       "guideTileBody": "How the day works and what to do at each station.",
       "teamTile": "The volunteer team",
-      "teamTileBody": "See who else is helping today."
+      "teamTileBody": "See who else is helping today.",
+      "backupTile": "Backup list — works offline",
+      "backupTileBody": "Look people up even with no signal."
     },
     "common": {
       "tools": "Tools",
-      "offline": "You're offline — nothing can be checked. Use the printed list until the connection is back.",
+      "offline": "You're offline — nothing can be checked. Open the Backup list on the tools page until the connection is back.",
       "scanNext": "Next",
       "retry": "Retry",
       "checking": "Checking…",
@@ -1171,7 +1173,8 @@
             "b": "Open the Door check-in once and tap Start camera, then Allow when the browser asks. Do it now, not at the door.",
             "c": "Add this page to your home screen (browser menu → Add to Home screen) so it opens in one tap.",
             "d": "Charge your phone, bring a power bank, and turn the screen timeout up if you can.",
-            "e": "Save your organiser's number. If anything looks odd, you call — you never guess."
+            "e": "Save your organiser's number. If anything looks odd, you call — you never guess.",
+            "f": "The Backup list saves itself to your phone whenever the tools page is open with a connection. Open the tools page once while you have signal, before the doors open."
           },
           "tip": "Your access ends by itself on the night after the event. Nothing to do on your side."
         },
@@ -1240,7 +1243,7 @@
             "c": "\"That's not a ticket code\" / \"That QR isn't a DevFest ticket\" — ask them to open the ticket itself (in their account, or the receipt email).",
             "d": "\"Unknown code\" — type it again carefully; if it still fails, find them by name; if not found, call an organiser.",
             "e": "\"Too many at once\" — wait the few seconds shown, then continue.",
-            "f": "No internet — nothing can be checked right now, on purpose: a scan with no connection can't know whether a badge or a meal was already used. Use the printed list your organiser has, and keep notes; everything is settled afterwards."
+            "f": "No internet — nothing can be checked or ticked off right now, on purpose: a scan with no connection can't know whether a badge or a meal was already used. Open the Backup list (on the tools page): it works offline and lets you find anyone by name, ticket code or reservation reference. It shows who was in when it was last saved, so check with an organiser before refusing anyone. Keep notes; everything is settled afterwards."
           },
           "tip": "Golden rule: when in doubt, don't guess — call an organiser."
         },
@@ -1252,7 +1255,16 @@
             "c": "Be warm: a smile at the door is part of the job."
           }
         }
-      }
+      },
+      "firstNote": "Start here: read the guide, then confirm at the bottom. The tools unlock once you have.",
+      "confirmTitle": "Ready?",
+      "confirmBody": "Take your time. Once you confirm, the day-of tools open on this phone — and you can come back to this guide any time.",
+      "confirmLabel": "I have read and understood the guide",
+      "unlock": "Unlock the tools",
+      "confirming": "Unlocking…",
+      "confirmFailed": "That didn't go through — check your connection and try again.",
+      "confirmed": "You've confirmed the guide — the tools are open.",
+      "toTools": "Open the tools"
     },
     "team": {
       "title": "The volunteer team",
@@ -1263,6 +1275,42 @@
       "empty": "No volunteers have been added yet.",
       "back": "Back to the tools",
       "count": "{count} helping today"
+    },
+    "backup": {
+      "title": "Backup list",
+      "back": "Back to the tools",
+      "intro": "If the connection drops, search the list your phone saved. It's read-only: it can't check anyone in.",
+      "loading": "Loading…",
+      "online": "You're online",
+      "offline": "You're offline — using the saved list",
+      "savedAt": "Saved at {time}.",
+      "counts": "{tickets} tickets, {reservations} reservations.",
+      "none": "Nothing saved on this phone yet — one moment…",
+      "noneOffline": "No saved list on this phone. Open this page once while you have signal.",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
+      "notLive": "This is a snapshot, not live: who was already checked in is as of the save time. If someone shows as not checked in, they may have been scanned since.",
+      "searchLabel": "Search by name, ticket code or reference",
+      "searchPlaceholder": "Name, DFY-… code or RES-… reference",
+      "noMatch": "No match. Free passes taken on Bevy aren't on this list — they get entry only.",
+      "tickets": "Tickets",
+      "reservations": "Reservations",
+      "wasIn": "Was checked in",
+      "notYet": "Not checked in yet",
+      "refunded": "Refunded — entry only",
+      "refundOpen": "Refund request open — tell an organiser",
+      "freePass": "Free pass — entry only",
+      "resCancelled": "Cancelled — don't take cash",
+      "resPaid": "Paid in cash: {total}",
+      "resOwed": "Cash to collect: {total}",
+      "freeNote": "Free passes taken on Bevy aren't in this list.",
+      "clear": "Remove the list from this phone",
+      "fail": {
+        "offline": "Couldn't reach the server — showing what's saved.",
+        "denied": "You're signed out, or your access has ended. The saved list was removed from this phone.",
+        "limited": "Too many refreshes — wait a little and try again.",
+        "failed": "Couldn't refresh just now — showing what's saved."
+      }
     }
   },
   "reservations": {

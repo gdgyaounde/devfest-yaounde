@@ -51,6 +51,12 @@ export const RATE_LIMITS = {
    * the alphabet to list every attendee needs hundreds.
    */
   staffSearch: { bucket: "staff-search", limit: 60, windowSeconds: 300 },
+  /**
+   * The offline backup list (ADR 0090): a whole roster in one response, so it
+   * is deliberately scarce — a few downloads an hour per staff member is
+   * plenty to keep a phone fresh, and nothing like what a scraper needs.
+   */
+  staffBackup: { bucket: "staff-backup", limit: 8, windowSeconds: 3600 },
   /** "This interests me" (ADR 0086): a tap each, per account. */
   interest: { bucket: "interest", limit: 60, windowSeconds: 300 },
   /** Reservations (ADR 0084), per account: a few tries, not a script. */

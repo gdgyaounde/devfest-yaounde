@@ -1018,11 +1018,13 @@
       "guideTile": "Commence ici : le guide du bénévole",
       "guideTileBody": "Comment se déroule la journée et quoi faire à chaque poste.",
       "teamTile": "L'équipe de bénévoles",
-      "teamTileBody": "Vois qui d'autre aide aujourd'hui."
+      "teamTileBody": "Vois qui d'autre aide aujourd'hui.",
+      "backupTile": "Liste de secours — fonctionne hors ligne",
+      "backupTileBody": "Retrouve les gens même sans réseau."
     },
     "common": {
       "tools": "Outils",
-      "offline": "Tu es hors ligne — rien ne peut être vérifié. Utilise la liste imprimée jusqu'au retour de la connexion.",
+      "offline": "Tu es hors ligne — rien ne peut être vérifié. Ouvre la Liste de secours depuis la page des outils en attendant le retour de la connexion.",
       "scanNext": "Suivant",
       "retry": "Réessayer",
       "checking": "Vérification…",
@@ -1171,7 +1173,8 @@
             "b": "Ouvre une fois l'Accueil, touche Démarrer la caméra puis Autoriser quand le navigateur le demande. Fais-le maintenant, pas à la porte.",
             "c": "Ajoute cette page à ton écran d'accueil (menu du navigateur → Ajouter à l'écran d'accueil) pour l'ouvrir en un geste.",
             "d": "Charge ton téléphone, prends une batterie externe, et allonge la mise en veille de l'écran si possible.",
-            "e": "Enregistre le numéro de ton organisateur. Au moindre doute, tu appelles — tu ne devines jamais."
+            "e": "Enregistre le numéro de ton organisateur. Au moindre doute, tu appelles — tu ne devines jamais.",
+            "f": "La Liste de secours s'enregistre toute seule sur ton téléphone dès que la page des outils est ouverte avec du réseau. Ouvre la page des outils une fois avec du signal, avant l'ouverture des portes."
           },
           "tip": "Ton accès se termine tout seul la nuit qui suit l'événement. Rien à faire de ton côté."
         },
@@ -1240,7 +1243,7 @@
             "c": "« Ce n'est pas un code de billet » / « Ce QR n'est pas un billet DevFest » — demande d'ouvrir le billet lui-même (dans son compte, ou l'e-mail de reçu).",
             "d": "« Code inconnu » — retape-le soigneusement ; si ça échoue, cherche par nom ; si introuvable, appelle un organisateur.",
             "e": "« Trop de scans d'un coup » — attends les quelques secondes indiquées, puis continue.",
-            "f": "Pas d'internet — rien ne peut être vérifié pour l'instant, volontairement : un scan sans connexion ne peut pas savoir si un badge ou un repas a déjà été utilisé. Utilise la liste imprimée de ton organisateur et note tout ; on règle ça après."
+            "f": "Pas d'internet — rien ne peut être vérifié ni coché pour l'instant, volontairement : un scan sans connexion ne peut pas savoir si un badge ou un repas a déjà été utilisé. Ouvre la Liste de secours (sur la page des outils) : elle fonctionne hors ligne et te permet de retrouver quelqu'un par nom, code de billet ou référence de réservation. Elle montre qui était entré à son dernier enregistrement, donc vérifie avec un organisateur avant de refuser qui que ce soit. Note tout ; on règle ça après."
           },
           "tip": "Règle d'or : au moindre doute, ne devine pas — appelle un organisateur."
         },
@@ -1252,7 +1255,16 @@
             "c": "Sois chaleureux : un sourire à la porte fait partie du travail."
           }
         }
-      }
+      },
+      "firstNote": "Commence ici : lis le guide, puis confirme en bas. Les outils s'ouvrent une fois que c'est fait.",
+      "confirmTitle": "Prêt·e ?",
+      "confirmBody": "Prends ton temps. Dès que tu confirmes, les outils du jour J s'ouvrent sur ce téléphone — et tu peux revenir à ce guide quand tu veux.",
+      "confirmLabel": "J'ai lu et compris le guide",
+      "unlock": "Débloquer les outils",
+      "confirming": "Déblocage…",
+      "confirmFailed": "Ça n'a pas abouti — vérifie ta connexion et réessaie.",
+      "confirmed": "Tu as confirmé le guide — les outils sont ouverts.",
+      "toTools": "Ouvrir les outils"
     },
     "team": {
       "title": "L'équipe de bénévoles",
@@ -1263,6 +1275,42 @@
       "empty": "Aucun bénévole n'a encore été ajouté.",
       "back": "Retour aux outils",
       "count": "{count} personnes aident aujourd'hui"
+    },
+    "backup": {
+      "title": "Liste de secours",
+      "back": "Retour aux outils",
+      "intro": "Si la connexion coupe, cherche dans la liste enregistrée sur ton téléphone. Elle est en lecture seule : elle ne peut valider personne.",
+      "loading": "Chargement…",
+      "online": "Tu es en ligne",
+      "offline": "Tu es hors ligne — liste enregistrée utilisée",
+      "savedAt": "Enregistrée à {time}.",
+      "counts": "{tickets} billets, {reservations} réservations.",
+      "none": "Rien d'enregistré sur ce téléphone pour l'instant — un instant…",
+      "noneOffline": "Aucune liste enregistrée sur ce téléphone. Ouvre cette page une fois quand tu as du réseau.",
+      "refresh": "Actualiser",
+      "refreshing": "Actualisation…",
+      "notLive": "C'est un instantané, pas du direct : qui était déjà entré date de l'enregistrement. Si quelqu'un apparaît comme non entré, il a peut-être été scanné depuis.",
+      "searchLabel": "Chercher par nom, code de billet ou référence",
+      "searchPlaceholder": "Nom, code DFY-… ou référence RES-…",
+      "noMatch": "Aucun résultat. Les pass gratuits pris sur Bevy ne sont pas dans cette liste — ils donnent l'entrée seulement.",
+      "tickets": "Billets",
+      "reservations": "Réservations",
+      "wasIn": "Était entré·e",
+      "notYet": "Pas encore entré·e",
+      "refunded": "Remboursé — entrée seulement",
+      "refundOpen": "Demande de remboursement ouverte — préviens un organisateur",
+      "freePass": "Pass gratuit — entrée seulement",
+      "resCancelled": "Annulée — ne prends pas d'espèces",
+      "resPaid": "Payé en espèces : {total}",
+      "resOwed": "À encaisser en espèces : {total}",
+      "freeNote": "Les pass gratuits pris sur Bevy ne sont pas dans cette liste.",
+      "clear": "Retirer la liste de ce téléphone",
+      "fail": {
+        "offline": "Serveur injoignable — la liste enregistrée est affichée.",
+        "denied": "Tu es déconnecté·e, ou ton accès a pris fin. La liste enregistrée a été retirée de ce téléphone.",
+        "limited": "Trop d'actualisations — attends un peu et réessaie.",
+        "failed": "Actualisation impossible pour l'instant — la liste enregistrée est affichée."
+      }
     }
   },
   "reservations": {

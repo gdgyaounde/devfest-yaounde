@@ -2,6 +2,7 @@ import {
   ArrowRight,
   BookOpenText,
   ForkKnife,
+  ListMagnifyingGlass,
   Package,
   QrCode,
   UsersThree,
@@ -9,13 +10,22 @@ import {
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { currentStaff } from "@/lib/security/staff";
+import { guideAcknowledged } from "@/lib/staff/guide-ack";
+import { redirect } from "@/i18n/navigation";
 import { DevFestLogo } from "@/components/brand/DevFestLogo";
+import { BackupSync } from "@/components/staff/BackupSync";
 import { StaffTitle } from "@/components/staff/StaffTitle";
 
 /** First, and most important for a first-timer: how it all works, and who else is here. */
 const START = [
   { href: "/volunteer/guide", key: "guide", Icon: BookOpenText, accent: true },
   { href: "/volunteer/team", key: "team", Icon: UsersThree, accent: false },
+  {
+    href: "/volunteer/backup",
+    key: "backup",
+    Icon: ListMagnifyingGlass,
+    accent: false,
+  },
 ] as const;
 
 const TILES = [
@@ -40,6 +50,11 @@ export default async function VolunteerHub({
   // The layout already gated this; a null here is a session that ended
   // between the two reads.
   if (!staff) return null;
+  // A volunteer opens the guide first and confirms it; then the tools unlock
+  // (ADR 0090). Organisers are exempt.
+  if (!(await guideAcknowledged(staff))) {
+    redirect({ href: "/volunteer/guide", locale });
+  }
 
   const until = staff.expiresAt ? new Date(staff.expiresAt) : null;
   const fmt = (opts: Intl.DateTimeFormatOptions) =>
@@ -55,6 +70,7 @@ export default async function VolunteerHub({
       className="min-h-dvh bg-pastel px-4 pb-12 pt-6 sm:px-6"
     >
       <StaffTitle title={t("title")} />
+      <BackupSync />
       <div className="mx-auto flex max-w-md flex-col gap-5">
         <div className="flex items-center justify-between gap-3">
           <Link
