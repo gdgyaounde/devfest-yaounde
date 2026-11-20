@@ -1086,7 +1086,20 @@
       "statusAgain": "Already checked in",
       "statusUnknown": "Unknown code",
       "searchAction": "Check in",
-      "searchDone": "Already in"
+      "searchDone": "Already in",
+      "pack": {
+        "title": "Their pack",
+        "entry": "Entry",
+        "meal": "Meal — send them to the meal table",
+        "noMeal": "No meal",
+        "swag": "Swag — send them to the swag table",
+        "noSwag": "No swag",
+        "bag": "In the bag:",
+        "size": "T-shirt size: {size}",
+        "noSize": "No T-shirt size on file — ask them.",
+        "freeNote": "Free pass: entry only.",
+        "refundedNote": "Refunded: entry only, no meal or swag."
+      }
     },
     "perks": {
       "title": "Meal & swag",
@@ -1199,7 +1212,7 @@
             "b": "The phone buzzes and the panel turns green: Checked in. That's it — tap Next if it doesn't move on by itself.",
             "c": "No QR? Type the code printed under it (DFY-XXXXX-XXXXX). Capitals, dashes and spaces don't matter.",
             "d": "No ticket at all? Use Find by name: type at least three letters, find them, tap Check in.",
-            "e": "The panel tells you the pass: Paid pass (meal and swag included), Free pass (entry only), or Refunded (entry only)."
+            "e": "The panel tells you the pass (Paid pass, Free pass or Refunded) and, under Their pack, exactly what they get: entry, meal, swag, what's in the bag and their T-shirt size. Read it out and send them to the right table."
           },
           "warn": "Yellow \"Already checked in\": it shows the time of the first scan. If it might not be the same person, ask for ID and call an organiser. Don't send anyone away on your own."
         },

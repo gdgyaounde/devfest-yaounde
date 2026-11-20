@@ -71,6 +71,8 @@ export function refundStanding(
   return null;
 }
 
+import type { Pack } from "@/lib/staff/pack";
+
 /** Every answer the scanner can get back from `POST /api/check-in`. */
 export type CheckInResult =
   | {
@@ -78,6 +80,8 @@ export type CheckInResult =
       attendeeName: string;
       tierId: string;
       refund?: RefundStanding;
+      /** What their pack offers (ADR 0091). */
+      pack?: Pack;
     }
   | {
       status: "already_checked_in";
@@ -85,5 +89,6 @@ export type CheckInResult =
       tierId: string;
       checkedInAt: string;
       refund?: RefundStanding;
+      pack?: Pack;
     }
   | { status: "not_found" };

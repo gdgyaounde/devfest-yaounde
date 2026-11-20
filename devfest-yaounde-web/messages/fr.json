@@ -1086,7 +1086,20 @@
       "statusAgain": "Déjà entré·e",
       "statusUnknown": "Code inconnu",
       "searchAction": "Valider",
-      "searchDone": "Déjà entré·e"
+      "searchDone": "Déjà entré·e",
+      "pack": {
+        "title": "Leur pack",
+        "entry": "Entrée",
+        "meal": "Repas — oriente-les vers la table repas",
+        "noMeal": "Pas de repas",
+        "swag": "Goodies — oriente-les vers la table goodies",
+        "noSwag": "Pas de goodies",
+        "bag": "Dans le sac :",
+        "size": "Taille de T-shirt : {size}",
+        "noSize": "Pas de taille de T-shirt enregistrée — demande-la.",
+        "freeNote": "Pass gratuit : entrée seulement.",
+        "refundedNote": "Remboursé : entrée seulement, ni repas ni goodies."
+      }
     },
     "perks": {
       "title": "Repas & goodies",
@@ -1199,7 +1212,7 @@
             "b": "Le téléphone vibre et le panneau passe au vert : Entrée validée. C'est tout — touche Suivant s'il ne passe pas au suivant tout seul.",
             "c": "Pas de QR ? Tape le code imprimé dessous (DFY-XXXXX-XXXXX). Majuscules, tirets et espaces n'ont pas d'importance.",
             "d": "Pas de billet du tout ? Utilise la recherche par nom : au moins trois lettres, trouve la personne, touche Valider.",
-            "e": "Le panneau t'indique le pass : Pass payant (repas et goodies inclus), Pass gratuit (entrée seulement), ou Remboursé (entrée seulement)."
+            "e": "Le panneau t'indique le pass (Pass payant, Pass gratuit ou Remboursé) et, sous Leur pack, exactement ce qu'ils ont : entrée, repas, goodies, contenu du sac et taille de T-shirt. Lis-le à voix haute et oriente-les vers la bonne table."
           },
           "warn": "« Déjà entré·e » en jaune : l'heure du premier scan est indiquée. Si ce n'est peut-être pas la même personne, demande une pièce d'identité et appelle un organisateur. Ne renvoie personne de ton propre chef."
         },

@@ -24,6 +24,8 @@ import { currentStaff } from "@/lib/security/staff";
 import { createAdminSupabase } from "@/lib/supabase/server";
 import { RATE_LIMITS, rateLimit } from "@/lib/security/rate-limit";
 import type { CheckInResult } from "@/lib/tickets/check-in";
+import { buildPack } from "@/lib/staff/pack";
+import { loadProducts, loadTiers } from "@/lib/payments/catalog";
 import {
   findTicket,
   refundStandingFor,
@@ -63,9 +65,11 @@ export async function POST(request: NextRequest) {
   if (!ticket) {
     result = { status: "not_found" };
   } else {
-    const [rpc, refund] = await Promise.all([
+    const [rpc, refund, tiers, products] = await Promise.all([
       supabase.rpc("check_in_ticket", { p_badge_code: ticket.badge_code }),
       refundStandingFor(supabase, ticket),
+      loadTiers(),
+      loadProducts(),
     ]);
     if (rpc.error) {
       console.error("[check-in] rpc failed", rpc.error.message);
@@ -76,6 +80,14 @@ export async function POST(request: NextRequest) {
       checkedInAt?: string;
     };
     const flag = refund && refund !== "error" ? { refund } : {};
+    // What their pack offers (ADR 0091) — the same rule the meal and swag
+    // tables enforce, so the door never promises what a table will refuse.
+    const pack = buildPack({
+      tier: tiers.find((t) => t.id === ticket.tier_id) ?? null,
+      products,
+      refund: refund && refund !== "error" ? refund : null,
+      apparelSize: ticket.apparel_size,
+    });
     result =
       raw.status === "not_found"
         ? { status: "not_found" }
@@ -85,12 +97,14 @@ export async function POST(request: NextRequest) {
               attendeeName: ticket.attendee_name,
               tierId: ticket.tier_id,
               checkedInAt: raw.checkedInAt ?? ticket.checked_in_at ?? "",
+              pack,
               ...flag,
             }
           : {
               status: "checked_in",
               attendeeName: ticket.attendee_name,
               tierId: ticket.tier_id,
+              pack,
               ...flag,
             };
   }

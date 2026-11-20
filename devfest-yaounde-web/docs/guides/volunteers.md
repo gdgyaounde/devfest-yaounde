@@ -99,7 +99,7 @@ photo only** (no email or phone), so volunteers can find each other on the day.
 ## The offline backup list and the guide gate (ADR 0090)
 
 - **Guide first:** a volunteer who opens `/volunteer` lands on the guide and
-  must tick *I have read and understood the guide* and press **Unlock the
+  must tick _I have read and understood the guide_ and press **Unlock the
   tools** before the tools open. Organisers skip it. Each confirmation is in
   the audit log (`staff.guide_ack`).
 - **Backup list:** the tools page now has **Backup list — works offline**. It

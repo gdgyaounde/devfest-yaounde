@@ -1,6 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Check, X as XIcon } from "@phosphor-icons/react";
+import type { Pack } from "@/lib/staff/pack";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { StationTier, StaffTicketHit } from "@/lib/staff/results";
 import { normaliseBadgeCode, type CheckInResult } from "@/lib/tickets/check-in";
@@ -22,7 +24,7 @@ import { ReservationDoor } from "./ReservationDoor";
 import { buzz, useQrScanner } from "./use-qr-scanner";
 
 /** How long a clean success stays up before the camera looks again. */
-const AUTO_RESUME_MS = 2200;
+const AUTO_RESUME_MS = 6000;
 
 type Selector = { badgeCode: string } | { ticketId: string };
 
@@ -238,6 +240,7 @@ function DoorResult({
   }
 
   const tier = tiers[result.tierId];
+  const packBlock = result.pack ? <PackPanel pack={result.pack} /> : null;
   const passLine = (
     <p className="mt-3 flex flex-wrap items-center gap-2">
       <span className="rounded-pill border-2 border-black02 bg-offwhite px-3 py-1 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02">
@@ -274,6 +277,7 @@ function DoorResult({
           })}
         </p>
         {passLine}
+        {packBlock}
         {refundNote}
         <div className="mt-4">
           <NextButton onNext={onNext} />
@@ -292,12 +296,71 @@ function DoorResult({
         {result.attendeeName}
       </p>
       {passLine}
+      {packBlock}
       {refundNote}
-      {attention && (
-        <div className="mt-4">
-          <NextButton onNext={onNext} />
-        </div>
-      )}
+      <div className="mt-4">
+        <NextButton onNext={onNext} />
+      </div>
     </ResultPanel>
+  );
+}
+
+/**
+ * What their pack offers (ADR 0091): the volunteer reads it out, and sends
+ * the person to the right table. Icon AND words, never colour alone.
+ */
+function PackPanel({ pack }: { pack: Pack }) {
+  const t = useTranslations("staff.door.pack");
+  const locale = useLocale() === "en" ? "en" : "fr";
+  const row = (on: boolean, label: string) => (
+    <li className="flex items-center gap-2 text-body-m font-bold text-black02">
+      {on ? (
+        <Check size={18} weight="bold" aria-hidden className="shrink-0" />
+      ) : (
+        <XIcon
+          size={18}
+          weight="bold"
+          aria-hidden
+          className="shrink-0 text-black02/60"
+        />
+      )}
+      <span className={on ? "" : "text-black02/70"}>{label}</span>
+    </li>
+  );
+  return (
+    <div className="mt-4 rounded-md border-2 border-black02 bg-offwhite px-4 py-3">
+      <p className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70">
+        {t("title")}
+      </p>
+      <ul className="mt-2 flex flex-col gap-1.5">
+        {row(true, t("entry"))}
+        {row(pack.meal, pack.meal ? t("meal") : t("noMeal"))}
+        {row(pack.swag, pack.swag ? t("swag") : t("noSwag"))}
+      </ul>
+      {pack.swag && pack.items.length > 0 && (
+        <p className="mt-2 text-body-m text-black02/85">
+          <span className="font-bold">{t("bag")}</span>{" "}
+          {pack.items.map((i) => i[locale]).join(" · ")}
+        </p>
+      )}
+      {pack.swag && pack.apparelSize !== undefined && (
+        <p className="mt-1 text-body-m text-black02/85">
+          {pack.apparelSize
+            ? t("size", { size: pack.apparelSize })
+            : t("noSize")}
+        </p>
+      )}
+      {pack.meal && pack.perks.length > 0 && (
+        <p className="mt-2 text-caption text-black02/70">
+          {pack.perks.map((p) => p[locale]).join(" · ")}
+        </p>
+      )}
+      {!pack.meal && pack.reason === "free_pass" && (
+        <p className="mt-2 text-caption text-black02/70">{t("freeNote")}</p>
+      )}
+      {!pack.meal && pack.reason === "refunded" && (
+        <p className="mt-2 text-caption text-black02/70">{t("refundedNote")}</p>
+      )}
+    </div>
   );
 }
