@@ -658,37 +658,6 @@
     }
   },
   {
-    "id": "noemie-youbissi",
-    "name": "Noémie Youbissi",
-    "role": {
-      "fr": "Étudiante ingénieure en systèmes réseaux et télécommunications · Saint Jean Ingénieur",
-      "en": "Engineering student, Network Systems & Telecommunications · Saint Jean Ingénieur"
-    },
-    "company": "",
-    "photoUrl": "/speakers/noemie-youbissi.webp",
-    "bio": {
-      "fr": "Je suis actuellement en quatrième année d'école d'ingénieurs, en systèmes réseaux et télécommunications. Je suis aussi vice-leader de l'AWS Student Builder Group de l'IUSJC.",
-      "en": "I'm currently a fourth year engineering student in Network Systems and Telecommunications. Moreover, I'm also the AWS Student Builder Group IUSJC's vice leader."
-    },
-    "track": {
-      "fr": "Cybersécurité",
-      "en": "Cybersecurity"
-    },
-    "day": 1,
-    "sessionIds": ["sz-1376670"],
-    "social": {
-      "linkedin": "https://www.linkedin.com/in/no%C3%A9mie-amanda-n/"
-    },
-    "icebreakerQuestion": {
-      "fr": "—",
-      "en": "—"
-    },
-    "icebreakerAnswer": {
-      "fr": "—",
-      "en": "—"
-    }
-  },
-  {
     "id": "raissa-wokmeni",
     "name": "Raïssa Wokmeni",
     "role": {

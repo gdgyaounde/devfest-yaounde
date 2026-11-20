@@ -225,39 +225,6 @@
     }
   },
   {
-    "id": "sz-1376670",
-    "day": 1,
-    "kind": "workshop",
-    "level": "introductory",
-    "language": ["fr", "en"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "Build a Telegram Agent to Configure Ubuntu Servers",
-      "en": "Build a Telegram Agent to Configure Ubuntu Servers"
-    },
-    "description": {
-      "fr": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely.",
-      "en": "Discover how to turn your instant messaging app into a true command center for your infrastructure. This hands-on workshop will guide you step by step through the creation of a Telegram bot capable of performing systems administration tasks securely."
-    },
-    "track": {
-      "fr": "Cybersécurité",
-      "en": "Cybersecurity"
-    },
-    "tags": [
-      {
-        "fr": "Cybersécurité",
-        "en": "Cybersecurity"
-      }
-    ],
-    "speakerIds": ["noemie-youbissi"],
-    "time": "09:50",
-    "durationMin": 85,
-    "room": {
-      "fr": "Salle 2",
-      "en": "Room 2"
-    }
-  },
-  {
     "id": "sz-1350359",
     "day": 1,
     "kind": "workshop",
@@ -639,7 +606,7 @@
   {
     "id": "agenda-pitch",
     "time": "12:40",
-    "durationMin": 85,
+    "durationMin": 90,
     "day": 1,
     "kind": "panel",
     "title": {

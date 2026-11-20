@@ -14,3 +14,7 @@ The agenda is the authority. The three speakers are added as visible profiles (n
 ## Follow-up
 
 "Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script" is in neither export. Its speaker is Cyprien Tankeu (GDE Google Workspace, former GDG Yaoundé lead; photo and LinkedIn supplied by the organisers), added by migration 0044. The GenUI session (15:50, Room 5) was removed because Yunwen Eric is no longer speaking (migration 0045; the live row is backed up first).
+
+## Synced to the live site (2026-11-20)
+
+The organisers removed the Telegram Agent workshop and its speaker (Noémie Youbissi) from the live data on purpose, and lengthened the pitch to 90 minutes (12:40–14:10). The code's data files now match: the workshop, the speaker and her photo are gone, and the pitch is 90.

@@ -31,6 +31,10 @@ import {
 const speakers = (speakersJson as Speaker[]).filter((s) => !s.hidden);
 const sessions = (sessionsJson as Session[]).filter((s) => !s.hidden);
 
+// Withdrawn on purpose by the organisers (ADR 0095): the Telegram Agent
+// workshop and its speaker.
+const WITHDRAWN = ["sz-1376670", "noemie-youbissi"];
+
 const people = (n: number, featured: number[] = []) =>
   Array.from({ length: n }, (_, i) => ({
     id: `p${String(i).padStart(2, "0")}`,
@@ -184,13 +188,14 @@ describe("the published lineup data", () => {
   it("matches the accepted roster: 24 speakers, 24 accepted sessions, 6 workshops", () => {
     // The 24 accepted speakers, plus the four (the three the agenda schedules although the export lists them as Declined, and Cyprien Tankeu, absent from both exports) whose sessions the agenda
     // schedules although the export lists them as Declined (ADR 0095).
-    assert.equal(speakers.length, 28);
+    assert.equal(speakers.length, 27);
     // 0036 added the agenda's own entries (breaks, opening, four title-only
     // talks) around the 24 accepted sessions.
-    assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);
-    assert.equal(sessions.length, 35);
+    // 23: one accepted workshop (and its speaker) was withdrawn on purpose.
+    assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 23);
+    assert.equal(sessions.length, 34);
     // The four accepted workshops, plus the two agenda-only 85-minute ones.
-    assert.equal(sessions.filter((s) => s.kind === "workshop").length, 6);
+    assert.equal(sessions.filter((s) => s.kind === "workshop").length, 5);
     assert.equal(sessions.filter((s) => s.lightning).length, 20);
   });
 
@@ -260,10 +265,12 @@ describe("the lineup migration (0030)", () => {
     assert.equal(collectionSchemas.sessions.safeParse(se).success, true);
     // Superseded by 0041/0043: every speaker 0030 published is still there.
     const nowSpeakers = new Set(ids(speakers));
-    for (const id of ids(sp)) assert.ok(nowSpeakers.has(id), id);
+    for (const id of ids(sp))
+      assert.ok(nowSpeakers.has(id) || WITHDRAWN.includes(id), id);
     // Superseded by 0036: every session 0030 published is still there.
     const now = new Set(ids(sessions));
-    for (const id of ids(se)) assert.ok(now.has(id), id);
+    for (const id of ids(se))
+      assert.ok(now.has(id) || WITHDRAWN.includes(id), id);
   });
 
   it("refuses to overwrite hand-entered rows", () => {
@@ -359,18 +366,18 @@ describe("the agenda's merged cells (ADR 0094)", () => {
   const by = (id: string) =>
     (sessionsJson as Session[]).find((s) => s.id === id)!;
 
-  it("runs the four workshops, the two Room 1 workshops and the pitch for 85 minutes", () => {
+  it("runs the three remaining 09:50 workshops and the two Room 1 workshops for 85 minutes, the pitch for 90", () => {
     for (const id of [
-      "sz-1376670",
       "sz-1350359",
       "sz-1373948",
       "sz-1339016",
       "agenda-automatisez-la-gestion-des-admissions-de-vos-eve",
       "agenda-is-your-sign-in-with-button-really-safe",
-      "agenda-pitch",
     ]) {
       assert.equal(by(id).durationMin, 85, id);
     }
+    // The pitch was lengthened to 90 in the dashboard (12:40 to 14:10).
+    assert.equal(by("agenda-pitch").durationMin, 90);
     assert.equal(by("agenda-pitch").time, "12:40");
   });
 
