@@ -1311,6 +1311,18 @@
         "limited": "Trop d'actualisations — attends un peu et réessaie.",
         "failed": "Actualisation impossible pour l'instant — la liste enregistrée est affichée."
       }
+    },
+    "welcome": {
+      "title": "Bienvenue dans l'équipe des bénévoles du DevFest Yaoundé 2026 🎉",
+      "intro": "Félicitations : tu as levé la main, et on l'a bien noté. Pas de retour en arrière. Tu fais officiellement partie de celles et ceux qui font tourner 350 personnes, pas mal de repas et un très long samedi. Quatre choses, le sérieux d'abord :",
+      "points": {
+        "a": "Lis d'abord le guide (5 minutes, promis). Coche la case en bas et les outils s'ouvrent. On ne peut pas les ouvrir à ta place — on a essayé d'en faire une blague, c'est juste vrai.",
+        "b": "Ce téléphone est ton outil. Autorise la caméra, charge-le, et prends une batterie externe. Un téléphone vide est le seul problème qu'on ne règle pas à coups d'enthousiasme.",
+        "c": "Un doute ? Ne devine pas — appelle un organisateur. Personne n'a jamais été grondé pour avoir demandé, et plusieurs ont regretté de ne pas l'avoir fait.",
+        "d": "Tu ne verras que des noms et des types de billets. Gardons ça comme ça : pas de captures d'écran, pas de partage de ta connexion. Ton accès se termine tout seul après l'événement."
+      },
+      "outro": "Souris à la porte. C'est l'essentiel du travail, et c'est gratuit.",
+      "cta": "C'est noté — montre-moi le guide"
     }
   },
   "reservations": {

@@ -55,6 +55,14 @@ describe("the volunteer guide copy", () => {
     }
   });
 
+  it("has the volunteer welcome pop-up in both languages", () => {
+    for (const lang of [en, fr]) {
+      for (const k of ["title", "intro", "outro", "cta"])
+        assert.ok(lang.welcome[k], k);
+      assert.deepEqual(Object.keys(lang.welcome.points), ["a", "b", "c", "d"]);
+    }
+  });
+
   it("has the hub tiles and the team page in both languages", () => {
     for (const lang of [en, fr]) {
       for (const k of [

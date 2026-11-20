@@ -108,3 +108,6 @@ export const PARTNERS_SEEN_KEY = "devfest:partners-welcome-seen:2026";
 
 /** The pop-up's "keep the agenda on your phone" step: shown once (ADR 0088). Bumped on 2026-11-20 so everyone sees it again with the announcement. */
 export const OFFLINE_SEEN_KEY = "devfest:offline-agenda-seen:2026-11-20";
+
+/** The volunteers' welcome pop-up: shown once per browser (ADR 0090). */
+export const VOLUNTEER_WELCOME_KEY = "devfest:volunteer-welcome:2026";

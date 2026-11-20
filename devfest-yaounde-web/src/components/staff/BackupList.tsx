@@ -35,8 +35,12 @@ export function BackupList() {
   const [note, setNote] = useState<SyncOutcome | null>(null);
 
   useEffect(() => {
-    setStored(readBackup());
-    setOnline(navigator.onLine);
+    // Read the phone's storage after mount (it does not exist on the server),
+    // one tick later so it is not a synchronous state change inside the effect.
+    const first = window.setTimeout(() => {
+      setStored(readBackup());
+      setOnline(navigator.onLine);
+    }, 0);
     const on = () => setOnline(true);
     const off = () => setOnline(false);
     window.addEventListener("online", on);
@@ -44,6 +48,7 @@ export function BackupList() {
     // Top up straight away when there is a connection.
     if (navigator.onLine) void refresh();
     return () => {
+      window.clearTimeout(first);
       window.removeEventListener("online", on);
       window.removeEventListener("offline", off);
     };

@@ -1,6 +1,7 @@
 import { ArrowLeft, Lightbulb, Warning } from "@phosphor-icons/react/dist/ssr";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { VolunteerWelcome } from "@/components/staff/VolunteerWelcome";
 import { GuideConfirm } from "@/components/staff/GuideConfirm";
 import { GuideToc } from "@/components/staff/GuideToc";
 import { StaffTitle } from "@/components/staff/StaffTitle";
@@ -53,6 +54,7 @@ export default async function VolunteerGuide({
       className="min-h-dvh bg-pastel px-4 pb-16 pt-6 sm:px-6"
     >
       <StaffTitle title={t("title")} />
+      {!done && <VolunteerWelcome />}
       <div className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-x-10 lg:gap-y-6">
         {done && (
           <Link

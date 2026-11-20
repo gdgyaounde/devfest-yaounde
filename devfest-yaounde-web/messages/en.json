@@ -1311,6 +1311,18 @@
         "limited": "Too many refreshes — wait a little and try again.",
         "failed": "Couldn't refresh just now — showing what's saved."
       }
+    },
+    "welcome": {
+      "title": "Welcome to the DevFest Yaoundé 2026 volunteer crew 🎉",
+      "intro": "Congratulations: you put your hand up, and we have noted it. No take-backs. You're now officially part of the people who make 350 humans, a lot of lunches and one very long Saturday run smoothly. Four things, the serious bits first:",
+      "points": {
+        "a": "Read the guide first (5 minutes, promise). Tick the box at the bottom and the tools unlock. We can't open them for you — we tried to make that a joke and it's just true.",
+        "b": "This phone is your tool. Allow the camera, charge it, and bring a power bank. A dead phone is the one problem we can't fix with enthusiasm.",
+        "c": "Not sure? Don't guess — call an organiser. Nobody has ever been told off for asking, and several people have been very sorry they didn't.",
+        "d": "You'll only see names and ticket types. Keep it that way: no screenshots, no sharing your login. Your access ends by itself after the event."
+      },
+      "outro": "Smile at the door. It's most of the job, and it's free.",
+      "cta": "Got it — show me the guide"
     }
   },
   "reservations": {
