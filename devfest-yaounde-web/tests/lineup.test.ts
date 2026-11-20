@@ -399,3 +399,31 @@ describe("the agenda's merged cells (ADR 0094)", () => {
     }
   });
 });
+
+describe("speakers of a live session are shown (ADR 0096)", () => {
+  it("shows a hidden speaker only while one of their sessions is live", async () => {
+    const { visibleSpeakers } = await import("@/lib/content/store");
+    const person = (id: string, hidden?: boolean) =>
+      ({ id, name: id, hidden }) as unknown as Speaker;
+    const people = [person("a"), person("b", true), person("c", true)];
+    const sessionsOf = [
+      { hidden: undefined, speakerIds: ["a"] },
+      { hidden: undefined, speakerIds: ["b"] }, // b's session goes live
+      { hidden: true, speakerIds: ["c"] }, // c's stays hidden
+    ];
+    assert.deepEqual(
+      visibleSpeakers(people, sessionsOf).map((p) => p.id),
+      ["a", "b"],
+    );
+  });
+
+  it("the repo's lineup has no live session without a visible speaker", () => {
+    const live = (sessionsJson as Session[]).filter((s) => !s.hidden);
+    const shown = new Set(
+      (speakersJson as Speaker[]).filter((p) => !p.hidden).map((p) => p.id),
+    );
+    for (const s of live)
+      for (const id of s.speakerIds)
+        assert.ok(shown.has(id), `${s.id} → ${id}`);
+  });
+});

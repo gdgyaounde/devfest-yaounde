@@ -151,10 +151,32 @@ export async function collectionCounts(): Promise<
  *
  * The admin wants the whole list and says so — `getAllSpeakers`.
  */
-export const getSpeakers = async () =>
-  (await loadCollection<Speaker[]>("speakers")).filter((row) => !row.hidden);
+export const getSpeakers = async () => {
+  const [speakers, sessions] = await Promise.all([
+    loadCollection<Speaker[]>("speakers"),
+    loadCollection<Session[]>("sessions"),
+  ]);
+  return visibleSpeakers(speakers, sessions);
+};
 export const getTeam = async () =>
   (await loadCollection<TeamMember[]>("team")).filter((row) => !row.hidden);
+
+/**
+ * Who the public site shows (ADR 0096): everyone not hidden, PLUS anyone whose
+ * session is live on the schedule. A session on the programme with its speaker
+ * missing from /speakers is a hole nobody wants, so showing a session (for
+ * example a waitlisted one that gets a slot) brings its speakers with it; to
+ * keep somebody off, hide their session too. Pure, so it is tested.
+ */
+export function visibleSpeakers(
+  speakers: Speaker[],
+  sessions: Pick<Session, "hidden" | "speakerIds">[],
+): Speaker[] {
+  const onTheSchedule = new Set(
+    sessions.filter((s) => !s.hidden).flatMap((s) => s.speakerIds),
+  );
+  return speakers.filter((row) => !row.hidden || onTheSchedule.has(row.id));
+}
 
 /** Everything, hidden included. For the dashboard, which edits what it hides. */
 export const getAllSpeakers = () => loadCollection<Speaker[]>("speakers");
