@@ -968,5 +968,135 @@
       "en": "The language of human experience. AI can translate our words, but understanding the culture, emotions and realities behind them is another challenge entirely."
     },
     "hidden": true
+  },
+  {
+    "id": "forlan-noumechi",
+    "name": "Forlan Noumechi",
+    "role": {
+      "fr": "CEO of Kroma",
+      "en": "CEO of Kroma"
+    },
+    "company": "",
+    "photoUrl": "/speakers/forlan-noumechi.webp",
+    "bio": {
+      "fr": "Je suis designer et entrepreneur, et fondateur de Kroma, une startup spécialisée dans l’identité visuelle et le design web. Je m’intéresse à l’intersection entre design, technologie et entrepreneuriat, avec une conviction : la valeur d’un produit doit être aussi bien construite que perçue.",
+      "en": "Je suis designer et entrepreneur, et fondateur de Kroma, une startup spécialisée dans l’identité visuelle et le design web. Je m’intéresse à l’intersection entre design, technologie et entrepreneuriat, avec une conviction : la valeur d’un produit doit être aussi bien construite que perçue."
+    },
+    "track": {
+      "fr": "UX/UI Design",
+      "en": "UX/UI Design"
+    },
+    "day": 1,
+    "sessionIds": ["agenda-au-dela-de-la-technologie-construire-des-startup"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/forlan-djoumegni-481145385",
+      "website": "https://kroma-agence.com"
+    },
+    "icebreakerQuestion": {
+      "fr": "",
+      "en": ""
+    },
+    "icebreakerAnswer": {
+      "fr": "",
+      "en": ""
+    }
+  },
+  {
+    "id": "yunwen-eric",
+    "name": "Yunwen Eric",
+    "role": {
+      "fr": "Building the Future with Flutter | Web Developer | Community Lead | STEM Advocate",
+      "en": "Building the Future with Flutter | Web Developer | Community Lead | STEM Advocate"
+    },
+    "company": "",
+    "photoUrl": "/speakers/yunwen-eric.webp",
+    "bio": {
+      "fr": "Software developer with a keen interest in both Flutter and web development. Originating from Africa, I'm deeply passionate about leveraging technology to make a difference, particularly in Africa's development. Beyond coding, I actively engage in community initiatives, striving to foster growth and collaboration within the tech ecosystem. I'm particularly passionate about promoting STEM education in Africa. Whether it's through building software, community engagements, or advocating for STEM education, I'm dedicated to making a positive impact in the world.",
+      "en": "Software developer with a keen interest in both Flutter and web development. Originating from Africa, I'm deeply passionate about leveraging technology to make a difference, particularly in Africa's development. Beyond coding, I actively engage in community initiatives, striving to foster growth and collaboration within the tech ecosystem. I'm particularly passionate about promoting STEM education in Africa. Whether it's through building software, community engagements, or advocating for STEM education, I'm dedicated to making a positive impact in the world."
+    },
+    "track": {
+      "fr": "Mobile",
+      "en": "Mobile"
+    },
+    "day": 1,
+    "sessionIds": ["agenda-genui-making-mobile-interfaces-dynamic-with-ai"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/yunweneric",
+      "x": "https://x.com/yunweneric",
+      "website": "https://neero.io/"
+    },
+    "icebreakerQuestion": {
+      "fr": "",
+      "en": ""
+    },
+    "icebreakerAnswer": {
+      "fr": "",
+      "en": ""
+    }
+  },
+  {
+    "id": "steeve-zali",
+    "name": "Steeve Zali",
+    "role": {
+      "fr": "TEKMEN REVOLUTION,C.E.O",
+      "en": "TEKMEN REVOLUTION,C.E.O"
+    },
+    "company": "",
+    "photoUrl": "/speakers/steeve-zali.webp",
+    "bio": {
+      "fr": "Steeve Zali is a Cameroonian tech entrepreneur, Computer Science student at the University of Buea, and aspiring Data Scientist passionate about innovation and technology-driven solutions. He is the CEO of Tekmen Revolution, a technology company and community dedicated to empowering tech enthusiasts, fostering collaboration, and promoting digital skills and innovation. He also serves as Project Manager and Frontend Engineer for RAYDAR, a child-safety initiative leveraging technology to help protect children. With over 4,000 followers on LinkedIn, Steeve shares his tech journey, connects with emerging innovators, and inspires young people to use technology to create meaningful social impact.",
+      "en": "Steeve Zali is a Cameroonian tech entrepreneur, Computer Science student at the University of Buea, and aspiring Data Scientist passionate about innovation and technology-driven solutions. He is the CEO of Tekmen Revolution, a technology company and community dedicated to empowering tech enthusiasts, fostering collaboration, and promoting digital skills and innovation. He also serves as Project Manager and Frontend Engineer for RAYDAR, a child-safety initiative leveraging technology to help protect children. With over 4,000 followers on LinkedIn, Steeve shares his tech journey, connects with emerging innovators, and inspires young people to use technology to create meaningful social impact."
+    },
+    "track": {
+      "fr": "Communication",
+      "en": "Communication"
+    },
+    "day": 1,
+    "sessionIds": ["agenda-networking-and-visibility"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/steeve-zali-5a70b6379",
+      "website": "https://tekmenrevolution.com/"
+    },
+    "icebreakerQuestion": {
+      "fr": "Is it really about what you know, or who you know?",
+      "en": "Is it really about what you know, or who you know?"
+    },
+    "icebreakerAnswer": {
+      "fr": "Skills get you ready. Networking opens doors. Visibility gets you noticed.",
+      "en": "Skills get you ready. Networking opens doors. Visibility gets you noticed."
+    }
+  },
+  {
+    "id": "hypolit-zeuchieu",
+    "name": "Hypolit Zeuchieu",
+    "role": {
+      "fr": "Trust Consulting, Backend Developer",
+      "en": "Trust Consulting, Backend Developer"
+    },
+    "company": "",
+    "photoUrl": "/speakers/hypolit-zeuchieu.webp",
+    "bio": {
+      "fr": "I'm a self-taught Python developer based in Yaoundé, Cameroon. With a background in mathematics, I came to programming through curiosity, wanting to understand the simulation tools I used during my undergraduate studies at the University of Dschang. Over the past two years, I have built web projects, automation scripts, and personal tools documented on GitHub. I'm currently working in the tech industry and am passionate about making Python more accessible to developers worldwide.",
+      "en": "I'm a self-taught Python developer based in Yaoundé, Cameroon. With a background in mathematics, I came to programming through curiosity, wanting to understand the simulation tools I used during my undergraduate studies at the University of Dschang. Over the past two years, I have built web projects, automation scripts, and personal tools documented on GitHub. I'm currently working in the tech industry and am passionate about making Python more accessible to developers worldwide."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "day": 1,
+    "sessionIds": ["agenda-is-your-sign-in-with-button-really-safe"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/hypolit-zeuchieu-a159392b7",
+      "x": "https://x.com/HZeuchieu",
+      "website": "https://trustconsulting.tech/"
+    },
+    "icebreakerQuestion": {
+      "fr": "",
+      "en": ""
+    },
+    "icebreakerAnswer": {
+      "fr": "",
+      "en": ""
+    }
   }
 ]

@@ -777,26 +777,32 @@
     "durationMin": 25,
     "day": 1,
     "kind": "talk",
-    "language": ["en"],
+    "language": ["en", "fr"],
     "originalLanguage": "en",
     "title": {
       "fr": "Networking and Visibility",
       "en": "Networking and Visibility"
     },
     "description": {
-      "fr": "Comment développer son réseau et rendre son travail visible dans la communauté tech.",
-      "en": "How to grow your network and make your work visible in the tech community."
+      "fr": "This session will help students and young tech professionals understand what networking really means, why it matters, and how intentional relationships can accelerate their personal and professional growth. Participants will also explore the importance of visibility, from building a strong professional presence online to showcasing projects, sharing knowledge, and contributing to the tech community._x000D_\n_x000D_\nIn today's tech ecosystem, technical skills alone are not always enough to unlock opportunities. Knowing how to build meaningful relationships, communicate your value, and make your work visible can open doors to internships, collaborations, mentorship, jobs, and entrepreneurial opportunities._x000D_\n_x000D_\nThrough practical exercises, interactive discussions, and real-life scenarios, attendees will learn how to introduce themselves confidently, initiate meaningful conversations, follow up with new connections, and turn their skills and projects into visible opportunities._x000D_\n_x000D_\nBy the end of the session, participants will leave with actionable strategies to build their network, strengthen their personal brand, and become more intentional about creating opportunities rather than simply waiting for them.",
+      "en": "This session will help students and young tech professionals understand what networking really means, why it matters, and how intentional relationships can accelerate their personal and professional growth. Participants will also explore the importance of visibility, from building a strong professional presence online to showcasing projects, sharing knowledge, and contributing to the tech community._x000D_\n_x000D_\nIn today's tech ecosystem, technical skills alone are not always enough to unlock opportunities. Knowing how to build meaningful relationships, communicate your value, and make your work visible can open doors to internships, collaborations, mentorship, jobs, and entrepreneurial opportunities._x000D_\n_x000D_\nThrough practical exercises, interactive discussions, and real-life scenarios, attendees will learn how to introduce themselves confidently, initiate meaningful conversations, follow up with new connections, and turn their skills and projects into visible opportunities._x000D_\n_x000D_\nBy the end of the session, participants will leave with actionable strategies to build their network, strengthen their personal brand, and become more intentional about creating opportunities rather than simply waiting for them."
     },
     "track": {
-      "fr": "Général",
-      "en": "General"
+      "fr": "Communication",
+      "en": "Communication"
     },
     "room": {
       "fr": "Salle 3",
       "en": "Room 3"
     },
-    "tags": [],
-    "speakerIds": []
+    "tags": [
+      {
+        "fr": "Communication",
+        "en": "Communication"
+      }
+    ],
+    "speakerIds": ["steeve-zali"],
+    "level": "advanced"
   },
   {
     "id": "sz-1371401",
@@ -887,19 +893,29 @@
       "en": "Is Your “Sign in with…” Button Really Safe?"
     },
     "description": {
-      "fr": "Un regard sur la sécurité des boutons « Se connecter avec… » : sont-ils vraiment sûrs, et que vérifier avant de les ajouter à son application.",
-      "en": "A look at the security of “Sign in with…” buttons: how safe they really are, and what to check before adding one to your app."
+      "fr": "Signing in or linking an account with Google, GitHub, or Facebook has become second nature for both users and developers. Yet behind that single button lies a complex logic (OAuth 2.0, OpenID Connect, account merging, email handling) that many applications implement poorly._x000D_\n_x000D_\nIn this talk, we will show, through live demos on a deliberately vulnerable application, how a flawed implementation of social account linking can lead to account takeover and data leaks. We will walk through the most common mistakes: missing validation of the state parameter (OAuth CSRF), automatic account linking based on unverified emails, weak redirect_uri handling, exposed or poorly stored tokens, and “pre-account takeover” scenarios._x000D_\n_x000D_\nFor each vulnerability, we will explain the attacker’s reasoning, then show how to fix it in code. You will leave with a practical checklist to audit and secure social authentication in your own applications._x000D_\n_x000D_\nWhat attendees will learn:_x000D_\n_x000D_\n-How the OAuth 2.0 / OpenID Connect flow works, and where it can break_x000D_\n-How to recognize the most common implementation mistakes_x000D_\n-How these flaws are exploited, demonstrated in a controlled environment_x000D_\n-Best practices and a checklist to secure account linking",
+      "en": "Signing in or linking an account with Google, GitHub, or Facebook has become second nature for both users and developers. Yet behind that single button lies a complex logic (OAuth 2.0, OpenID Connect, account merging, email handling) that many applications implement poorly._x000D_\n_x000D_\nIn this talk, we will show, through live demos on a deliberately vulnerable application, how a flawed implementation of social account linking can lead to account takeover and data leaks. We will walk through the most common mistakes: missing validation of the state parameter (OAuth CSRF), automatic account linking based on unverified emails, weak redirect_uri handling, exposed or poorly stored tokens, and “pre-account takeover” scenarios._x000D_\n_x000D_\nFor each vulnerability, we will explain the attacker’s reasoning, then show how to fix it in code. You will leave with a practical checklist to audit and secure social authentication in your own applications._x000D_\n_x000D_\nWhat attendees will learn:_x000D_\n_x000D_\n-How the OAuth 2.0 / OpenID Connect flow works, and where it can break_x000D_\n-How to recognize the most common implementation mistakes_x000D_\n-How these flaws are exploited, demonstrated in a controlled environment_x000D_\n-Best practices and a checklist to secure account linking"
     },
     "track": {
-      "fr": "Général",
-      "en": "General"
+      "fr": "Web",
+      "en": "Web"
     },
     "room": {
       "fr": "Salle 1 · Principale",
       "en": "Room 1 · Main"
     },
-    "tags": [],
-    "speakerIds": []
+    "tags": [
+      {
+        "fr": "Web",
+        "en": "Web"
+      },
+      {
+        "fr": "Cybersecurity",
+        "en": "Cybersecurity"
+      }
+    ],
+    "speakerIds": ["hypolit-zeuchieu"],
+    "level": "intermediate"
   },
   {
     "id": "sz-1368723",
@@ -948,19 +964,29 @@
       "en": "Au-delà de la technologie : construire des startups africaines qui inspirent confiance"
     },
     "description": {
-      "fr": "Comment bâtir des startups africaines qui inspirent confiance, au-delà de la technologie.",
-      "en": "How to build African startups people can trust, beyond the technology."
+      "fr": "Une bonne technologie ne suffit pas à construire une grande startup. Le produit doit aussi être compris, bien présenté et inspirer confiance._x000D_\n_x000D_\nCette session explore le rôle du design, de l’identité visuelle, de l’expérience utilisateur et de la communication dans la construction de startups africaines crédibles et mémorables.",
+      "en": "Une bonne technologie ne suffit pas à construire une grande startup. Le produit doit aussi être compris, bien présenté et inspirer confiance._x000D_\n_x000D_\nCette session explore le rôle du design, de l’identité visuelle, de l’expérience utilisateur et de la communication dans la construction de startups africaines crédibles et mémorables."
     },
     "track": {
-      "fr": "Général",
-      "en": "General"
+      "fr": "UX/UI Design",
+      "en": "UX/UI Design"
     },
     "room": {
       "fr": "Salle 3",
       "en": "Room 3"
     },
-    "tags": [],
-    "speakerIds": []
+    "tags": [
+      {
+        "fr": "UX/UI Design",
+        "en": "UX/UI Design"
+      },
+      {
+        "fr": "Business",
+        "en": "Business"
+      }
+    ],
+    "speakerIds": ["forlan-noumechi"],
+    "level": "intermediate"
   },
   {
     "id": "sz-1352359",
@@ -1189,19 +1215,29 @@
       "en": "GenUI: Making Mobile Interfaces Dynamic with AI"
     },
     "description": {
-      "fr": "Comment l'IA générative permet de rendre les interfaces mobiles dynamiques et adaptatives.",
-      "en": "How generative AI can make mobile interfaces dynamic and adaptive."
+      "fr": "What if mobile interfaces could adapt to users' needs instead of relying on developers to hardcode every screen? Generative UI (GenUI) is changing how we think about mobile app development by enabling AI to generate dynamic, context-aware user interfaces in response to user requests and real-time context._x000D_\n_x000D_\nIn this session, we will explore the concept of GenUI, how it works, and how AI can move mobile experiences beyond static layouts toward more adaptive and personalized interactions. Through practical examples and demonstrations, attendees will discover the possibilities, challenges, and design considerations of integrating generative UI into mobile applications._x000D_\n_x000D_\nWhether you are a mobile developer, UI/UX designer, or AI enthusiast, this talk will help you understand how GenUI could shape the next generation of mobile experiences.",
+      "en": "What if mobile interfaces could adapt to users' needs instead of relying on developers to hardcode every screen? Generative UI (GenUI) is changing how we think about mobile app development by enabling AI to generate dynamic, context-aware user interfaces in response to user requests and real-time context._x000D_\n_x000D_\nIn this session, we will explore the concept of GenUI, how it works, and how AI can move mobile experiences beyond static layouts toward more adaptive and personalized interactions. Through practical examples and demonstrations, attendees will discover the possibilities, challenges, and design considerations of integrating generative UI into mobile applications._x000D_\n_x000D_\nWhether you are a mobile developer, UI/UX designer, or AI enthusiast, this talk will help you understand how GenUI could shape the next generation of mobile experiences."
     },
     "track": {
-      "fr": "Général",
-      "en": "General"
+      "fr": "Mobile",
+      "en": "Mobile"
     },
     "room": {
       "fr": "Salle 5",
       "en": "Room 5"
     },
-    "tags": [],
-    "speakerIds": []
+    "tags": [
+      {
+        "fr": "Mobile",
+        "en": "Mobile"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["yunwen-eric"],
+    "level": "introductory"
   },
   {
     "id": "agenda-closing",

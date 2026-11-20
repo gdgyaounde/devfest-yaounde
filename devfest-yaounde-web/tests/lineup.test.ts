@@ -182,7 +182,9 @@ describe("the published lineup data", () => {
   });
 
   it("matches the accepted roster: 24 speakers, 24 accepted sessions, 6 workshops", () => {
-    assert.equal(speakers.length, 24);
+    // The 24 accepted speakers, plus the four whose sessions the agenda
+    // schedules although the export lists them as Declined (ADR 0095).
+    assert.equal(speakers.length, 28);
     // 0036 added the agenda's own entries (breaks, opening, five title-only
     // talks) around the 24 accepted sessions.
     assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);
@@ -256,7 +258,9 @@ describe("the lineup migration (0030)", () => {
     const [sp, se] = payloads;
     assert.equal(collectionSchemas.speakers.safeParse(sp).success, true);
     assert.equal(collectionSchemas.sessions.safeParse(se).success, true);
-    assert.deepEqual(ids(sp), ids(speakers));
+    // Superseded by 0041/0043: every speaker 0030 published is still there.
+    const nowSpeakers = new Set(ids(speakers));
+    for (const id of ids(sp)) assert.ok(nowSpeakers.has(id), id);
     // Superseded by 0036: every session 0030 published is still there.
     const now = new Set(ids(sessions));
     for (const id of ids(se)) assert.ok(now.has(id), id);
