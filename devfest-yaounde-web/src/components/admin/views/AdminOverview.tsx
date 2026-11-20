@@ -5,6 +5,7 @@ import type { ContentCounts, ViewId } from "../AdminShell";
 import { useEventDates } from "@/components/global/EventDateProvider";
 import { EVENT, eventDates } from "@/lib/event";
 import { AdminChart } from "./AdminChart";
+import { StaffNotes } from "./StaffNotes";
 import { DataTable, ExportButton, InfoBanner, Panel, money } from "./shared";
 
 function Stat({
@@ -235,6 +236,8 @@ export function AdminOverview({
       <CommerceRecap data={data} />
 
       <SessionInterest data={data} />
+
+      <StaffNotes />
 
       <div className="flex flex-wrap gap-2.5">
         {(

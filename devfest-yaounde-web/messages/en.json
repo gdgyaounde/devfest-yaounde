@@ -228,7 +228,10 @@
       "readerHintSwipe": "Tip: swipe left or right to move between sessions",
       "mySessions": "My sessions · {count}",
       "emptyMine": "Nothing here yet — tap the heart on a session to keep it in your list.",
-      "interestOffline": "You're offline — your list is shown as it was; reconnect to change it."
+      "interestOffline": "You're offline — your list is shown as it was; reconnect to change it.",
+      "yourTime": "{time} your time ({zone})",
+      "nextDay": "next day",
+      "prevDay": "previous day"
     },
     "quotes": {
       "title": "What people are saying",
@@ -1020,7 +1023,11 @@
       "teamTile": "The volunteer team",
       "teamTileBody": "See who else is helping today.",
       "backupTile": "Backup list — works offline",
-      "backupTileBody": "Look people up even with no signal."
+      "backupTileBody": "Look people up even with no signal.",
+      "reservationsTitle": "Reservations",
+      "reservationsBody": "Find someone who reserved online, take the cash, check them in.",
+      "speakersTitle": "Speakers",
+      "speakersBody": "Mark speakers as arrived and whether they've collected their swag."
     },
     "common": {
       "tools": "Tools",
@@ -1124,7 +1131,13 @@
       "statusNo": "Not included",
       "statusUnknown": "Unknown code",
       "searchAction": "Hand out",
-      "searchDone": "Already taken"
+      "searchDone": "Already taken",
+      "noteLabel": "Missing something from the bag?",
+      "notePlaceholder": "e.g. no pen — out of stock",
+      "noteSave": "Save note",
+      "noteSaving": "Saving…",
+      "noteSaved": "Note saved.",
+      "noteFailed": "Couldn't save the note — try again, or tell an organiser."
     },
     "merch": {
       "title": "Merch pickup",
@@ -1162,7 +1175,9 @@
       "doneCash": "{reference}: cash recorded.",
       "doneCheckIn": "{reference}: checked in.",
       "doneBoth": "{reference}: cash recorded and checked in.",
-      "notFound": "Reservation not found."
+      "notFound": "Reservation not found.",
+      "stationTitle": "Reservations",
+      "stationIntro": "For people who reserved online. Search by reference (RES-XXXXXX) or name, take the cash, check them in."
     },
     "guide": {
       "title": "Volunteer guide",
@@ -1174,7 +1189,7 @@
           "title": "Welcome — what you're here to do",
           "intro": "DevFest Yaoundé is on Saturday 21 November 2026 at the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350. You're part of the team that makes the doors, the lunch and the merch run smoothly. You don't need any technical skill: this phone is your tool, and every screen tells you what to do.",
           "steps": {
-            "a": "Three stations: Door check-in, Meal & swag, Merch pickup. An organiser will tell you which one is yours, and for which hours.",
+            "a": "Five stations: Door check-in, Reservations, Meal & swag, Merch pickup and Speakers. An organiser will tell you which one is yours, and for which hours.",
             "b": "Everything works the same way: scan a ticket (or type its code, or find the person by name) and read the big panel.",
             "c": "Green means go. Yellow means read first. Red means stop and call an organiser."
           }
@@ -1217,8 +1232,8 @@
           "warn": "Yellow \"Already checked in\": it shows the time of the first scan. If it might not be the same person, ask for ID and call an organiser. Don't send anyone away on your own."
         },
         "cash": {
-          "title": "Reserved online? Pay at the venue",
-          "intro": "Online payments are closed. People who reserved pay cash here; the Door check-in has a section called Reserved online? Find the reservation.",
+          "title": "Reservations: reserved online, paying at the venue",
+          "intro": "Online payments are closed. People who reserved pay cash here. This is its own station: open Reservations from the tools page.",
           "steps": {
             "a": "Ask for their reference (RES-XXXXXX) or their name, and search (3 letters are enough).",
             "b": "The card shows what they reserved and Cash to collect: the amount. Take that exact amount.",
@@ -1234,7 +1249,8 @@
             "a": "At the top, choose what THIS table hands out: Meal or Swag. The phone remembers it.",
             "b": "Scan the ticket (or type the code, or find by name). Green \"go ahead\" means hand it over.",
             "c": "Swag shows the T-shirt size and what goes in the bag. If there's no size on file, ask the person.",
-            "d": "\"Already collected\" shows when it was taken. One per pass: call an organiser if there's a dispute."
+            "d": "\"Already collected\" shows when it was taken. One per pass: call an organiser if there's a dispute.",
+            "e": "Swag table only: if part of the bag ran out (someone got everything except the pen), write it in the note box under the result and save it. No need to tell the person off, or us."
           },
           "warn": "\"Not included\": a free pass, a refunded ticket, or a pass without that perk. Free passes get entry only. Be kind, explain, and call an organiser if they disagree."
         },
@@ -1247,6 +1263,16 @@
             "c": "Tap Mark as handed over. It can't be undone from here."
           },
           "tip": "Items reserved for cash are paid and collected at the merch table: the organiser there will tell you how."
+        },
+        "speakers": {
+          "title": "Speakers",
+          "intro": "Speakers have no QR ticket, so there's nothing to scan.",
+          "steps": {
+            "a": "Open Speakers and find them by name.",
+            "b": "Tap Arrived when they get here.",
+            "c": "Tap Swag collected when they take their swag. A wrong tap? Tap the green button again to undo it.",
+            "d": "Something missing from their bag? Add a note."
+          }
         },
         "wrong": {
           "title": "When something goes wrong",
@@ -1336,6 +1362,25 @@
       },
       "outro": "Smile at the door. It's most of the job, and it's free.",
       "cta": "Got it — show me the guide"
+    },
+    "speakers": {
+      "title": "Speakers",
+      "intro": "Speakers have no QR ticket: find them, tap Arrived, and tap Swag collected when they take it. A wrong tap can be undone by tapping again.",
+      "counter": "{arrived} / {total} arrived",
+      "search": "Search speakers",
+      "searchPlaceholder": "Find a speaker by name",
+      "loading": "Loading…",
+      "none": "No speaker by that name.",
+      "arrived": "Arrived",
+      "swag": "Swag collected",
+      "arrivedAt": "Arrived {time}",
+      "swagAt": "Swag {time}",
+      "undoHint": "Tap a green button again to undo it.",
+      "addNote": "Add a note (e.g. missing item)",
+      "noteLabel": "Note",
+      "notePlaceholder": "e.g. got everything except the pen — out of stock",
+      "unavailable": "The speaker list isn't available yet (an organiser still has to switch it on). Use a paper list for now.",
+      "error": "That didn't save — check your connection and try again."
     }
   },
   "reservations": {

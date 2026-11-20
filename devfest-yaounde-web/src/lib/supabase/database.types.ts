@@ -547,6 +547,7 @@ export type Database = {
           is_self: boolean
           meal_collected_at: string | null
           swag_collected_at: string | null
+          swag_note: string | null
           tier_id: string
           user_id: string
         }
@@ -563,6 +564,7 @@ export type Database = {
           is_self?: boolean
           meal_collected_at?: string | null
           swag_collected_at?: string | null
+          swag_note?: string | null
           tier_id: string
           user_id: string
         }
@@ -579,6 +581,7 @@ export type Database = {
           is_self?: boolean
           meal_collected_at?: string | null
           swag_collected_at?: string | null
+          swag_note?: string | null
           tier_id?: string
           user_id?: string
         }
@@ -591,6 +594,33 @@ export type Database = {
             referencedColumns: ["deposit_id"]
           },
         ]
+      }
+      speaker_checkins: {
+        Row: {
+          checked_in_at: string | null
+          note: string | null
+          speaker_id: string
+          swag_collected_at: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          checked_in_at?: string | null
+          note?: string | null
+          speaker_id: string
+          swag_collected_at?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          checked_in_at?: string | null
+          note?: string | null
+          speaker_id?: string
+          swag_collected_at?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       testimonials: {
         Row: {

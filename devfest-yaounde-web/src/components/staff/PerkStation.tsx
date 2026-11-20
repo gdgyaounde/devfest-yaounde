@@ -380,6 +380,9 @@ function PerkResultView({
             ago: clock.ago(result.collectedAt, now),
           })}
         </p>
+        {result.perk === "swag" && result.ticketId && (
+          <SwagNote ticketId={result.ticketId} />
+        )}
         {next}
       </ResultPanel>
     );
@@ -412,9 +415,76 @@ function PerkResultView({
               </ul>
             </div>
           )}
+          {result.ticketId && <SwagNote ticketId={result.ticketId} />}
           {next}
         </>
       )}
     </ResultPanel>
+  );
+}
+
+/**
+ * "Something from the bag ran out" (ADR 0092): a free-text note on the ticket,
+ * for the case where someone got everything but the pen. Optional — leave it
+ * empty and nothing is written.
+ */
+function SwagNote({ ticketId }: { ticketId: string }) {
+  const t = useTranslations("staff.perks");
+  const [note, setNote] = useState("");
+  const [state, setState] = useState<"idle" | "saving" | "saved" | "failed">(
+    "idle",
+  );
+
+  async function save() {
+    setState("saving");
+    const response = await staffRequest<{ ok: true }>(
+      "/api/staff/perks/note",
+      { method: "POST", body: JSON.stringify({ ticketId, note }) },
+      [200],
+    );
+    setState(response.kind === "ok" ? "saved" : "failed");
+  }
+
+  return (
+    <div className="mt-4 rounded-md border-2 border-black02 bg-offwhite px-3 py-3">
+      <label
+        htmlFor={`swag-note-${ticketId}`}
+        className="font-mono text-mono-tag font-bold uppercase tracking-wide text-black02/70"
+      >
+        {t("noteLabel")}
+      </label>
+      <textarea
+        id={`swag-note-${ticketId}`}
+        value={note}
+        maxLength={500}
+        rows={2}
+        onChange={(e) => {
+          setNote(e.target.value);
+          setState("idle");
+        }}
+        placeholder={t("notePlaceholder")}
+        className="mt-1.5 w-full resize-none rounded-md border-2 border-black02/30 bg-transparent px-3 py-2 text-body-m text-black02 focus:border-black02 focus:outline-none"
+      />
+      <div className="mt-2 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={() => void save()}
+          disabled={state === "saving" || note.trim() === ""}
+          className="rounded-pill border-2 border-black02 bg-primary px-4 py-1.5 font-sans text-caption font-bold text-black02 disabled:opacity-40"
+        >
+          {state === "saving" ? t("noteSaving") : t("noteSave")}
+        </button>
+        {state === "saved" && (
+          <span role="status" className="text-caption font-bold text-black02">
+            {t("noteSaved")}
+          </span>
+        )}
+        {state === "failed" && (
+          <span role="alert" className="text-caption text-black02">
+            {t("noteFailed")}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }

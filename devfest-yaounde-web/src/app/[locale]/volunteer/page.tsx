@@ -3,8 +3,10 @@ import {
   BookOpenText,
   ForkKnife,
   ListMagnifyingGlass,
+  Microphone,
   Package,
   QrCode,
+  Receipt,
   UsersThree,
 } from "@phosphor-icons/react/dist/ssr";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -30,6 +32,8 @@ const START = [
 
 const TILES = [
   { href: "/volunteer/check-in", key: "door", Icon: QrCode },
+  { href: "/volunteer/reservations", key: "reservations", Icon: Receipt },
+  { href: "/volunteer/speakers", key: "speakers", Icon: Microphone },
   { href: "/volunteer/perks", key: "perks", Icon: ForkKnife },
   { href: "/volunteer/merch", key: "merch", Icon: Package },
 ] as const;

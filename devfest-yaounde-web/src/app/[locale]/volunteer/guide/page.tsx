@@ -17,6 +17,7 @@ const ORDER = [
   "cash",
   "perks",
   "merch",
+  "speakers",
   "wrong",
   "care",
 ] as const;

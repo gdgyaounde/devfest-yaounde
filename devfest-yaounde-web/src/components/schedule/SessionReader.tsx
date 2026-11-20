@@ -17,6 +17,7 @@ import { fadeInUp } from "@/lib/motion";
 import type { Session, Speaker, Sponsor } from "@/data/types";
 import { InterestButton } from "./InterestProvider";
 import { SessionExtras } from "./SessionExtras";
+import { LocalTime } from "./LocalTime";
 import { SessionMeta } from "./SessionMeta";
 
 /** Tailwind `lg`: wide enough for parallel sessions to sit in one row. */
@@ -347,6 +348,7 @@ function SessionView({
   const chips = (
     <div className="flex flex-wrap items-center gap-2.5">
       <SessionMeta session={session} />
+      <LocalTime time={session.time} />
       {session.durationMin !== undefined && (
         <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
           <Clock size={14} weight="bold" aria-hidden />

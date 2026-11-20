@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
         result = {
           status: raw.status,
           perk,
+          ticketId: ticket.id,
           attendeeName: ticket.attendee_name,
           tierId: ticket.tier_id,
           collectedAt: raw.collectedAt ?? new Date().toISOString(),

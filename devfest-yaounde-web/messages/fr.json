@@ -228,7 +228,10 @@
       "readerHintSwipe": "Astuce : glisse vers la gauche ou la droite pour passer d'une session à l'autre",
       "mySessions": "Mes sessions · {count}",
       "emptyMine": "Rien ici pour l'instant — touche le cœur d'une session pour la garder dans ta liste.",
-      "interestOffline": "Tu es hors ligne — ta liste s'affiche telle qu'elle était ; reconnecte-toi pour la modifier."
+      "interestOffline": "Tu es hors ligne — ta liste s'affiche telle qu'elle était ; reconnecte-toi pour la modifier.",
+      "yourTime": "{time} heure locale ({zone})",
+      "nextDay": "jour suivant",
+      "prevDay": "jour précédent"
     },
     "quotes": {
       "title": "Ce qu'on en dit",
@@ -1020,7 +1023,11 @@
       "teamTile": "L'équipe de bénévoles",
       "teamTileBody": "Vois qui d'autre aide aujourd'hui.",
       "backupTile": "Liste de secours — fonctionne hors ligne",
-      "backupTileBody": "Retrouve les gens même sans réseau."
+      "backupTileBody": "Retrouve les gens même sans réseau.",
+      "reservationsTitle": "Réservations",
+      "reservationsBody": "Retrouve quelqu'un qui a réservé en ligne, encaisse les espèces, valide l'entrée.",
+      "speakersTitle": "Speakers",
+      "speakersBody": "Marque les speakers comme arrivés et s'ils ont récupéré leurs goodies."
     },
     "common": {
       "tools": "Outils",
@@ -1124,7 +1131,13 @@
       "statusNo": "Non inclus",
       "statusUnknown": "Code inconnu",
       "searchAction": "Remettre",
-      "searchDone": "Déjà récupéré"
+      "searchDone": "Déjà récupéré",
+      "noteLabel": "Il manque quelque chose dans le sac ?",
+      "notePlaceholder": "ex. pas de stylo — rupture de stock",
+      "noteSave": "Enregistrer la note",
+      "noteSaving": "Enregistrement…",
+      "noteSaved": "Note enregistrée.",
+      "noteFailed": "Impossible d'enregistrer la note — réessaie, ou préviens un organisateur."
     },
     "merch": {
       "title": "Retrait boutique",
@@ -1162,7 +1175,9 @@
       "doneCash": "{reference} : espèces enregistrées.",
       "doneCheckIn": "{reference} : entrée validée.",
       "doneBoth": "{reference} : espèces enregistrées et entrée validée.",
-      "notFound": "Réservation introuvable."
+      "notFound": "Réservation introuvable.",
+      "stationTitle": "Réservations",
+      "stationIntro": "Pour celles et ceux qui ont réservé en ligne. Cherche par référence (RES-XXXXXX) ou par nom, encaisse les espèces, valide l'entrée."
     },
     "guide": {
       "title": "Guide du bénévole",
@@ -1174,7 +1189,7 @@
           "title": "Bienvenue — ce que tu viens faire",
           "intro": "DevFest Yaoundé a lieu le samedi 21 novembre 2026 à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350. Tu fais partie de l'équipe qui fait tourner les portes, le déjeuner et le merch. Aucune compétence technique n'est nécessaire : ce téléphone est ton outil, et chaque écran te dit quoi faire.",
           "steps": {
-            "a": "Trois postes : Accueil, Repas & goodies, Retrait boutique. Un organisateur te dira lequel est le tien, et à quelles heures.",
+            "a": "Cinq postes : Accueil, Réservations, Repas & goodies, Retrait boutique et Speakers. Un organisateur te dira lequel est le tien, et à quelles heures.",
             "b": "Tout fonctionne pareil : scanne un billet (ou tape son code, ou cherche la personne par nom) et lis le grand panneau.",
             "c": "Vert : tu peux y aller. Jaune : lis d'abord. Rouge : stop, appelle un organisateur."
           }
@@ -1217,8 +1232,8 @@
           "warn": "« Déjà entré·e » en jaune : l'heure du premier scan est indiquée. Si ce n'est peut-être pas la même personne, demande une pièce d'identité et appelle un organisateur. Ne renvoie personne de ton propre chef."
         },
         "cash": {
-          "title": "Réservé en ligne ? Paiement sur place",
-          "intro": "Les paiements en ligne sont clos. Ceux qui ont réservé paient en espèces ici ; l'Accueil a une section « Réservé en ligne ? Retrouve la réservation ».",
+          "title": "Réservations : réservé en ligne, paiement sur place",
+          "intro": "Les paiements en ligne sont clos. Ceux qui ont réservé paient en espèces ici. C'est un poste à part : ouvre Réservations depuis la page des outils.",
           "steps": {
             "a": "Demande leur référence (RES-XXXXXX) ou leur nom, et lance la recherche (3 lettres suffisent).",
             "b": "La fiche montre ce qui a été réservé et l'À encaisser en espèces : le montant. Prends exactement ce montant.",
@@ -1234,7 +1249,8 @@
             "a": "En haut, choisis ce que CETTE table distribue : Repas ou Goodies. Le téléphone s'en souvient.",
             "b": "Scanne le billet (ou tape le code, ou cherche par nom). Le vert « c'est bon » veut dire : tu peux donner.",
             "c": "Les goodies affichent la taille de T-shirt et le contenu du sac. Sans taille enregistrée, demande-la à la personne.",
-            "d": "« Déjà récupéré » indique quand. Un par pass : appelle un organisateur en cas de désaccord."
+            "d": "« Déjà récupéré » indique quand. Un par pass : appelle un organisateur en cas de désaccord.",
+            "e": "Table goodies uniquement : si une partie du sac est épuisée (quelqu'un a tout reçu sauf le stylo), écris-le dans la zone de note sous le résultat et enregistre. Inutile de blâmer la personne, ou nous."
           },
           "warn": "« Non inclus » : pass gratuit, billet remboursé, ou pass sans cet avantage. Les pass gratuits donnent l'entrée seulement. Sois aimable, explique, et appelle un organisateur en cas de désaccord."
         },
@@ -1247,6 +1263,16 @@
             "c": "Touche Marquer comme remise. On ne peut pas l'annuler d'ici."
           },
           "tip": "Les articles réservés en espèces se paient et se retirent à la table merch : l'organisateur sur place t'expliquera."
+        },
+        "speakers": {
+          "title": "Speakers",
+          "intro": "Les speakers n'ont pas de billet QR, donc rien à scanner.",
+          "steps": {
+            "a": "Ouvre Speakers et trouve-les par nom.",
+            "b": "Touche Arrivé quand ils arrivent.",
+            "c": "Touche Goodies récupérés quand ils prennent leurs goodies. Un faux geste ? Retouche le bouton vert pour l'annuler.",
+            "d": "Il manque quelque chose dans leur sac ? Ajoute une note."
+          }
         },
         "wrong": {
           "title": "Quand quelque chose ne va pas",
@@ -1336,6 +1362,25 @@
       },
       "outro": "Souris à la porte. C'est l'essentiel du travail, et c'est gratuit.",
       "cta": "C'est noté — montre-moi le guide"
+    },
+    "speakers": {
+      "title": "Speakers",
+      "intro": "Les speakers n'ont pas de billet QR : trouve-les, touche Arrivé, et touche Goodies récupérés quand ils les prennent. Un faux geste s'annule en retouchant.",
+      "counter": "{arrived} / {total} arrivés",
+      "search": "Chercher un speaker",
+      "searchPlaceholder": "Trouver un speaker par nom",
+      "loading": "Chargement…",
+      "none": "Aucun speaker à ce nom.",
+      "arrived": "Arrivé",
+      "swag": "Goodies récupérés",
+      "arrivedAt": "Arrivé à {time}",
+      "swagAt": "Goodies à {time}",
+      "undoHint": "Retouche un bouton vert pour l'annuler.",
+      "addNote": "Ajouter une note (ex. article manquant)",
+      "noteLabel": "Note",
+      "notePlaceholder": "ex. a tout reçu sauf le stylo — rupture de stock",
+      "unavailable": "La liste des speakers n'est pas encore disponible (un organisateur doit encore l'activer). Utilise une liste papier pour l'instant.",
+      "error": "Ça n'a pas été enregistré — vérifie ta connexion et réessaie."
     }
   },
   "reservations": {

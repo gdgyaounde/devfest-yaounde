@@ -108,3 +108,10 @@ photo only** (no email or phone), so volunteers can find each other on the day.
   read-only snapshot (it shows who was in at the last save) and removes itself
   when the volunteer's access ends. Ask volunteers to open the tools page once
   with signal before the doors open.
+
+## Speakers, reservations and swag notes (ADR 0092)
+
+The tools page now has **Reservations** (its own station) and **Speakers**.
+Speakers are marked _Arrived_ and _Swag collected_ by hand (no QR). At the swag
+table a volunteer can save a note when part of a bag ran out. All of it shows
+under **Admin → Overview → Day-of notes**. Apply migration `0040` first.

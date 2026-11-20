@@ -23,6 +23,8 @@ export type PerkResult =
   | {
       status: "collected" | "already_collected";
       perk: PerkKind;
+      /** The ticket, so a swag note can be attached to it (ADR 0092). */
+      ticketId?: string;
       attendeeName: string;
       tierId: string;
       collectedAt: string;

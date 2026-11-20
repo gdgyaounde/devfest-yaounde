@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { InterestButton } from "./InterestProvider";
 import { SessionExtras, isLongText } from "./SessionExtras";
+import { LocalTime } from "./LocalTime";
 import { SessionMeta } from "./SessionMeta";
 import type { Session, Speaker, Sponsor } from "@/data/types";
 
@@ -103,6 +104,7 @@ export function SessionCard({
               exist: an unscheduled session (ADR 0073) has neither yet. */}
           <div className="flex flex-wrap items-center gap-2.5">
             <SessionMeta session={session} />
+            <LocalTime time={session.time} />
             {session.durationMin !== undefined && (
               <span className="flex items-center gap-1.5 font-mono text-caption text-black02/65">
                 <Clock size={14} weight="bold" aria-hidden />
