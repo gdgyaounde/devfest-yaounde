@@ -1203,33 +1203,6 @@
     }
   },
   {
-    "id": "agenda-genui-making-mobile-interfaces-dynamic-with-ai",
-    "time": "15:50",
-    "durationMin": 25,
-    "day": 1,
-    "kind": "talk",
-    "language": ["en"],
-    "originalLanguage": "en",
-    "title": {
-      "fr": "GenUI: Making Mobile Interfaces Dynamic with AI",
-      "en": "GenUI: Making Mobile Interfaces Dynamic with AI"
-    },
-    "description": {
-      "fr": "Comment l'IA générative permet de rendre les interfaces mobiles dynamiques et adaptatives.",
-      "en": "How generative AI can make mobile interfaces dynamic and adaptive."
-    },
-    "track": {
-      "fr": "Général",
-      "en": "General"
-    },
-    "room": {
-      "fr": "Salle 5",
-      "en": "Room 5"
-    },
-    "tags": [],
-    "speakerIds": []
-  },
-  {
     "id": "agenda-closing",
     "time": "17:00",
     "durationMin": 120,

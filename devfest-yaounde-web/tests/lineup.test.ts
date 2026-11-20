@@ -185,10 +185,10 @@ describe("the published lineup data", () => {
     // The 24 accepted speakers, plus the four (the three the agenda schedules although the export lists them as Declined, and Cyprien Tankeu, absent from both exports) whose sessions the agenda
     // schedules although the export lists them as Declined (ADR 0095).
     assert.equal(speakers.length, 28);
-    // 0036 added the agenda's own entries (breaks, opening, five title-only
+    // 0036 added the agenda's own entries (breaks, opening, four title-only
     // talks) around the 24 accepted sessions.
     assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);
-    assert.equal(sessions.length, 36);
+    assert.equal(sessions.length, 35);
     // The four accepted workshops, plus the two agenda-only 85-minute ones.
     assert.equal(sessions.filter((s) => s.kind === "workshop").length, 6);
     assert.equal(sessions.filter((s) => s.lightning).length, 20);
