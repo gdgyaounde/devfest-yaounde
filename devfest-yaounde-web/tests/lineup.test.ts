@@ -182,9 +182,9 @@ describe("the published lineup data", () => {
   });
 
   it("matches the accepted roster: 24 speakers, 24 accepted sessions, 6 workshops", () => {
-    // The 24 accepted speakers, plus the four whose sessions the agenda
+    // The 24 accepted speakers, plus the three whose sessions the agenda
     // schedules although the export lists them as Declined (ADR 0095).
-    assert.equal(speakers.length, 28);
+    assert.equal(speakers.length, 27);
     // 0036 added the agenda's own entries (breaks, opening, five title-only
     // talks) around the 24 accepted sessions.
     assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);

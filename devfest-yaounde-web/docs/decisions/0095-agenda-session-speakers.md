@@ -5,11 +5,11 @@ Status: Accepted
 
 ## Context
 
-Four sessions on the agenda ("Networking and Visibility", "Is Your 'Sign in with…' Button Really Safe?", "Au-delà de la technologie…", "GenUI: Making Mobile Interfaces Dynamic with AI") were on the site title-only, with no speaker, because they were not in the accepted export. The all-submissions export has their speakers (Steeve Zali, Hypolit Zeuchieu, Forlan Noumechi, Yunwen Eric) under the status Declined, yet the organisers' agenda schedules them.
+Four sessions on the agenda (three are fixed here) ("Networking and Visibility", "Is Your 'Sign in with…' Button Really Safe?", "Au-delà de la technologie…", "GenUI: Making Mobile Interfaces Dynamic with AI") were on the site title-only, with no speaker, because they were not in the accepted export. The all-submissions export has their speakers (Steeve Zali, Hypolit Zeuchieu, Forlan Noumechi (a fourth, for GenUI, is no longer speaking)) under the status Declined, yet the organisers' agenda schedules them.
 
 ## Decision
 
-The agenda is the authority. The four speakers are added as visible profiles (name, role, bio, links, photo; no contact details) and linked to their sessions, which also get the real abstract, level, language and tags. Migration 0043 is add-only and only fills a session that still has no speaker.
+The agenda is the authority. The three speakers are added as visible profiles (name, role, bio, links, photo; no contact details) and linked to their sessions, which also get the real abstract, level, language and tags. Migration 0043 is add-only and only fills a session that still has no speaker.
 
 ## Open
 

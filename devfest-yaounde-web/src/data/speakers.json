@@ -1002,39 +1002,6 @@
     }
   },
   {
-    "id": "yunwen-eric",
-    "name": "Yunwen Eric",
-    "role": {
-      "fr": "Building the Future with Flutter | Web Developer | Community Lead | STEM Advocate",
-      "en": "Building the Future with Flutter | Web Developer | Community Lead | STEM Advocate"
-    },
-    "company": "",
-    "photoUrl": "/speakers/yunwen-eric.webp",
-    "bio": {
-      "fr": "Software developer with a keen interest in both Flutter and web development. Originating from Africa, I'm deeply passionate about leveraging technology to make a difference, particularly in Africa's development. Beyond coding, I actively engage in community initiatives, striving to foster growth and collaboration within the tech ecosystem. I'm particularly passionate about promoting STEM education in Africa. Whether it's through building software, community engagements, or advocating for STEM education, I'm dedicated to making a positive impact in the world.",
-      "en": "Software developer with a keen interest in both Flutter and web development. Originating from Africa, I'm deeply passionate about leveraging technology to make a difference, particularly in Africa's development. Beyond coding, I actively engage in community initiatives, striving to foster growth and collaboration within the tech ecosystem. I'm particularly passionate about promoting STEM education in Africa. Whether it's through building software, community engagements, or advocating for STEM education, I'm dedicated to making a positive impact in the world."
-    },
-    "track": {
-      "fr": "Mobile",
-      "en": "Mobile"
-    },
-    "day": 1,
-    "sessionIds": ["agenda-genui-making-mobile-interfaces-dynamic-with-ai"],
-    "social": {
-      "linkedin": "https://www.linkedin.com/in/yunweneric",
-      "x": "https://x.com/yunweneric",
-      "website": "https://neero.io/"
-    },
-    "icebreakerQuestion": {
-      "fr": "",
-      "en": ""
-    },
-    "icebreakerAnswer": {
-      "fr": "",
-      "en": ""
-    }
-  },
-  {
     "id": "steeve-zali",
     "name": "Steeve Zali",
     "role": {

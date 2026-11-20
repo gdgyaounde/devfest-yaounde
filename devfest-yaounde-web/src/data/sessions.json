@@ -1215,29 +1215,19 @@
       "en": "GenUI: Making Mobile Interfaces Dynamic with AI"
     },
     "description": {
-      "fr": "What if mobile interfaces could adapt to users' needs instead of relying on developers to hardcode every screen? Generative UI (GenUI) is changing how we think about mobile app development by enabling AI to generate dynamic, context-aware user interfaces in response to user requests and real-time context._x000D_\n_x000D_\nIn this session, we will explore the concept of GenUI, how it works, and how AI can move mobile experiences beyond static layouts toward more adaptive and personalized interactions. Through practical examples and demonstrations, attendees will discover the possibilities, challenges, and design considerations of integrating generative UI into mobile applications._x000D_\n_x000D_\nWhether you are a mobile developer, UI/UX designer, or AI enthusiast, this talk will help you understand how GenUI could shape the next generation of mobile experiences.",
-      "en": "What if mobile interfaces could adapt to users' needs instead of relying on developers to hardcode every screen? Generative UI (GenUI) is changing how we think about mobile app development by enabling AI to generate dynamic, context-aware user interfaces in response to user requests and real-time context._x000D_\n_x000D_\nIn this session, we will explore the concept of GenUI, how it works, and how AI can move mobile experiences beyond static layouts toward more adaptive and personalized interactions. Through practical examples and demonstrations, attendees will discover the possibilities, challenges, and design considerations of integrating generative UI into mobile applications._x000D_\n_x000D_\nWhether you are a mobile developer, UI/UX designer, or AI enthusiast, this talk will help you understand how GenUI could shape the next generation of mobile experiences."
+      "fr": "Comment l'IA générative permet de rendre les interfaces mobiles dynamiques et adaptatives.",
+      "en": "How generative AI can make mobile interfaces dynamic and adaptive."
     },
     "track": {
-      "fr": "Mobile",
-      "en": "Mobile"
+      "fr": "Général",
+      "en": "General"
     },
     "room": {
       "fr": "Salle 5",
       "en": "Room 5"
     },
-    "tags": [
-      {
-        "fr": "Mobile",
-        "en": "Mobile"
-      },
-      {
-        "fr": "AI",
-        "en": "AI"
-      }
-    ],
-    "speakerIds": ["yunwen-eric"],
-    "level": "introductory"
+    "tags": [],
+    "speakerIds": []
   },
   {
     "id": "agenda-closing",
