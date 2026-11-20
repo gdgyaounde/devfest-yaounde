@@ -26,8 +26,10 @@ import {
   spotlightDateKey,
 } from "@/lib/spotlight";
 
-const speakers = speakersJson as Speaker[];
-const sessions = sessionsJson as Session[];
+// The PUBLIC lineup: waitlisted speakers and their sessions sit in the same
+// files, hidden (ADR 0093), and are not part of what the site announces.
+const speakers = (speakersJson as Speaker[]).filter((s) => !s.hidden);
+const sessions = (sessionsJson as Session[]).filter((s) => !s.hidden);
 
 const people = (n: number, featured: number[] = []) =>
   Array.from({ length: n }, (_, i) => ({
@@ -281,5 +283,69 @@ describe("saving speakers or sessions refreshes every page that shows them", () 
   it("sessions → /schedule, home, /speakers, both locales", () => {
     for (const p of all)
       assert.ok(revalidationPaths("sessions").includes(p), p);
+  });
+});
+
+describe("the waitlisted speakers (ADR 0093)", () => {
+  const allSpeakers = speakersJson as Speaker[];
+  const allSessions = sessionsJson as Session[];
+  const hiddenSpeakers = allSpeakers.filter((s) => s.hidden);
+  const hiddenSessions = allSessions.filter((s) => s.hidden);
+
+  it("are six sessions and seven people, all hidden", () => {
+    assert.equal(hiddenSessions.length, 6);
+    assert.equal(hiddenSpeakers.length, 7);
+  });
+
+  it("never schedule, so a switched-on session is the admin's explicit choice", () => {
+    for (const s of hiddenSessions) {
+      assert.equal(s.time, undefined, s.id);
+      assert.equal(s.room, undefined, s.id);
+    }
+  });
+
+  it("link to each other, with a photo on disk", () => {
+    for (const sp of hiddenSpeakers) {
+      for (const id of sp.sessionIds)
+        assert.ok(
+          hiddenSessions.some((s) => s.id === id),
+          id,
+        );
+      assert.ok(
+        existsSync(join(process.cwd(), "public", sp.photoUrl)),
+        sp.photoUrl,
+      );
+    }
+    for (const s of hiddenSessions)
+      for (const id of s.speakerIds)
+        assert.ok(
+          hiddenSpeakers.some((p) => p.id === id),
+          id,
+        );
+  });
+
+  it("carry no contact details", () => {
+    const blob = JSON.stringify([hiddenSpeakers, hiddenSessions]);
+    assert.doesNotMatch(blob, /mailto:|\+237|[\w.-]+@[\w-]+\.\w{2,}/);
+  });
+});
+
+describe("what the public site is handed (ADR 0093)", () => {
+  it("never includes a hidden speaker or session, while the dashboard sees them", async () => {
+    const store = await import("@/lib/content/store");
+    const [pub, all] = await Promise.all([
+      store.getSessions(),
+      store.getAllSessions(),
+    ]);
+    assert.ok(all.some((s) => s.hidden));
+    assert.equal(
+      pub.some((s) => s.hidden),
+      false,
+    );
+    assert.equal(
+      (await store.getSpeakers()).some((s) => s.hidden),
+      false,
+    );
+    assert.ok((await store.getAllSpeakers()).some((s) => s.hidden));
   });
 });

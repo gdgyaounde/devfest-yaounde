@@ -6,7 +6,7 @@ import { isPlaceholderPhoto } from "@/lib/content/photos";
 import { loadSettings } from "@/lib/content/settings";
 import {
   collectionCounts,
-  getSessions,
+  getAllSessions,
   getAllSpeakers,
   getSponsors,
   getAllTeam,
@@ -56,7 +56,7 @@ export default async function AdminPage() {
     getAllSpeakers(),
     getAllTeam(),
     getSponsors(),
-    getSessions(),
+    getAllSessions(),
     getAllProducts(),
     getTiers(),
     getAllQuotes(),

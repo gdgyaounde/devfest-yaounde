@@ -56,6 +56,13 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
         addLabel="Add a session"
         emptyLabel="Nothing scheduled yet."
         reorderable
+        rowToggle={{
+          value: (row) => !row.hidden,
+          apply: (row, next) => ({ ...row, hidden: next ? undefined : true }),
+          label: (on) => (on ? "Hide" : "Show"),
+          saved: (on) =>
+            on ? "Back on the schedule." : "Hidden from the site — still here.",
+        }}
         /* A new session starts UNSCHEDULED (ADR 0073): it shows under
            "time slots coming soon" until somebody gives it a start time. */
         blank={() => ({
@@ -82,6 +89,7 @@ export function AdminSchedule({ rows }: { rows: Session[] }) {
                 row.durationMin ? `${row.durationMin} min` : null,
                 row.room?.en || null,
                 row.online ? "online" : null,
+                row.hidden ? "hidden (waitlist)" : null,
               ]
                 .filter(Boolean)
                 .join(" · ")}

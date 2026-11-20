@@ -46,8 +46,10 @@ export const speakerSchema = z.object({
   day: z.number().int().min(1).max(14),
   sessionIds: z.array(slug).max(40),
   social,
-  icebreakerQuestion: localizedRequired,
-  icebreakerAnswer: localizedRequired,
+  // May be blank: a speaker who did not answer the icebreaker (PersonDetail
+  // already shows nothing for a blank one).
+  icebreakerQuestion: localized,
+  icebreakerAnswer: localized,
   funnyMoment: localized.optional(),
   featured: z.boolean().optional(),
   // Absent means visible, so every payload written before this is valid.
@@ -122,6 +124,7 @@ export const sessionSchema = z.object({
   provided: localized.optional(),
   speakerIds: z.array(slug).max(20),
   partnerIds: z.array(slug).max(10).optional(),
+  hidden: z.boolean().optional(),
 });
 
 /**

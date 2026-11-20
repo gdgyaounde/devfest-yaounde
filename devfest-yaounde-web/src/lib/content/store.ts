@@ -159,7 +159,14 @@ export const getTeam = async () =>
 /** Everything, hidden included. For the dashboard, which edits what it hides. */
 export const getAllSpeakers = () => loadCollection<Speaker[]>("speakers");
 export const getAllTeam = () => loadCollection<TeamMember[]>("team");
-export const getSessions = () => loadCollection<Session[]>("sessions");
+/**
+ * Sessions as the PUBLIC SITE should see them — hidden ones (a waitlisted
+ * session, kept ready) removed. Same safe-by-default naming as
+ * `getSpeakers`; the dashboard asks for `getAllSessions`.
+ */
+export const getSessions = async () =>
+  (await loadCollection<Session[]>("sessions")).filter((row) => !row.hidden);
+export const getAllSessions = () => loadCollection<Session[]>("sessions");
 export const getSponsors = () => loadCollection<Sponsor[]>("sponsors");
 export const getFaqs = async () => {
   const [faqs, settings] = await Promise.all([

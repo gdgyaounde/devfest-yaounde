@@ -234,6 +234,12 @@ export interface Session {
   /** e.g. "we provide the boards" — only rendered when present. */
   provided?: LocalizedString;
   /** Ids into speakers.json; empty for breaks. */
+  /**
+   * Hidden from the public site, but kept (a waitlisted session, ready to be
+   * switched on if a slot opens). Absent means visible. Admin → Schedule shows
+   * it with a Show toggle.
+   */
+  hidden?: boolean;
   speakerIds: string[];
   /** Ids into sponsors.json whose logos the card shows (partner words, pitch). */
   partnerIds?: string[];

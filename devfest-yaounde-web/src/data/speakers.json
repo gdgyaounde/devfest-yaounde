@@ -750,5 +750,223 @@
       "fr": "En lui imposant une constitution stricte et des spécifications claires grâce à GitHub Spec Kit, plutôt que de lui confier du code à l'aveugle !",
       "en": "By giving it a strict constitution and clear specifications with GitHub Spec Kit, rather than handing it code blindly!"
     }
+  },
+  {
+    "id": "akana-signing-josias-aaron",
+    "name": "Akana Signing Josias Aaron",
+    "role": {
+      "fr": "Co-founder & CTO at XyberClan | Software Developer | AI & Cybersecurity Enthusiast | Tech Community Builder",
+      "en": "Co-founder & CTO at XyberClan | Software Developer | AI & Cybersecurity Enthusiast | Tech Community Builder"
+    },
+    "company": "",
+    "photoUrl": "/speakers/akana-signing-josias-aaron.webp",
+    "bio": {
+      "fr": "I am a Tech Enthusiast, Software Developer, CTO at XyberClan, aspiring Red Team Operator, and student at the University of Yaoundé I. My journey in technology is driven by curiosity, hands-on learning, and a growing focus on AI, cybersecurity and offensive security._x000D_\n_x000D_\nBeyond my technical journey, I actively contribute to building and growing tech communities, creating opportunities for young people to learn, connect, and explore technology. I volunteered at PyCon Cameroon, and I organised and spoke on cloud and cloud security at an AWS x XyberClan x ENSPY event. I also served as a mentor in the GEHMIT PAEI Program pole Cybersecurity, taking learners in the Offensive Security track, where I supported learners in developing practical cybersecurity skills._x000D_\n_x000D_\nThrough XyberClan and my involvement in community initiatives, I aim to make AI and cybersecurity more accessible to young people and encourage them to move beyond theory into hands-on experimentation, continuous learning, and real-world problem solving._x000D_\n_x000D_\nAt DevFest Yaoundé, I will share how young Cameroonians can use free  AI tools to build and ship real products, start a business, and turn an idea into something people can use.",
+      "en": "I am a Tech Enthusiast, Software Developer, CTO at XyberClan, aspiring Red Team Operator, and student at the University of Yaoundé I. My journey in technology is driven by curiosity, hands-on learning, and a growing focus on AI, cybersecurity and offensive security._x000D_\n_x000D_\nBeyond my technical journey, I actively contribute to building and growing tech communities, creating opportunities for young people to learn, connect, and explore technology. I volunteered at PyCon Cameroon, and I organised and spoke on cloud and cloud security at an AWS x XyberClan x ENSPY event. I also served as a mentor in the GEHMIT PAEI Program pole Cybersecurity, taking learners in the Offensive Security track, where I supported learners in developing practical cybersecurity skills._x000D_\n_x000D_\nThrough XyberClan and my involvement in community initiatives, I aim to make AI and cybersecurity more accessible to young people and encourage them to move beyond theory into hands-on experimentation, continuous learning, and real-world problem solving._x000D_\n_x000D_\nAt DevFest Yaoundé, I will share how young Cameroonians can use free  AI tools to build and ship real products, start a business, and turn an idea into something people can use."
+    },
+    "track": {
+      "fr": "Gemini",
+      "en": "Gemini"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1345194"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/akana-signing-josias-aaron/",
+      "website": "https://www.xyberclan.dev"
+    },
+    "icebreakerQuestion": {
+      "fr": "Vibe coding: genius or cheating?",
+      "en": "Vibe coding: genius or cheating?"
+    },
+    "icebreakerAnswer": {
+      "fr": "Genius, if you can still explain and fix what the AI wrote.",
+      "en": "Genius, if you can still explain and fix what the AI wrote."
+    },
+    "hidden": true
+  },
+  {
+    "id": "bahanack-georges-yvan",
+    "name": "Bahanack Georges Yvan",
+    "role": {
+      "fr": "Co-founder of SIMBTECH SAS, Bachelor in AI, Computer Engineer",
+      "en": "Co-founder of SIMBTECH SAS, Bachelor in AI, Computer Engineer"
+    },
+    "company": "",
+    "photoUrl": "/speakers/bahanack-georges-yvan.webp",
+    "bio": {
+      "fr": "**Bahanack Georges Yvan** is a young technology entrepreneur and CEO of **SIMBTECH SAS**, a France-based technology company specializing in Artificial Intelligence, Machine Learning, and software and mobile/web application development._x000D_\n_x000D_\nHe holds a **Bachelor’s degree in Artificial Intelligence** from the **École Supérieure d’Informatique et d’Intelligence Artificielle de Paris (ESIIA Paris)** and is currently a **4th-year Computer Science Engineering student** at the **École Nationale Supérieure Polytechnique de Yaoundé (ENSPY)**._x000D_\n_x000D_\nPassionate about technology and innovation, Georges Yvan focuses on building practical digital solutions and exploring how AI and software engineering can address real-world challenges. Through SIMBTECH, he works at the intersection of **AI, software engineering, entrepreneurship, and digital innovation**._x000D_",
+      "en": "**Bahanack Georges Yvan** is a young technology entrepreneur and CEO of **SIMBTECH SAS**, a France-based technology company specializing in Artificial Intelligence, Machine Learning, and software and mobile/web application development._x000D_\n_x000D_\nHe holds a **Bachelor’s degree in Artificial Intelligence** from the **École Supérieure d’Informatique et d’Intelligence Artificielle de Paris (ESIIA Paris)** and is currently a **4th-year Computer Science Engineering student** at the **École Nationale Supérieure Polytechnique de Yaoundé (ENSPY)**._x000D_\n_x000D_\nPassionate about technology and innovation, Georges Yvan focuses on building practical digital solutions and exploring how AI and software engineering can address real-world challenges. Through SIMBTECH, he works at the intersection of **AI, software engineering, entrepreneurship, and digital innovation**._x000D_"
+    },
+    "track": {
+      "fr": "AI & ML",
+      "en": "AI & ML"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1351431"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/georges-yvan-bahanack-a78497250/",
+      "website": "https://www.simbtech.fr"
+    },
+    "icebreakerQuestion": {
+      "fr": "If AI can already write a complete application in seconds, why should you still spend years learning how to code?",
+      "en": "If AI can already write a complete application in seconds, why should you still spend years learning how to code?"
+    },
+    "icebreakerAnswer": {
+      "fr": "Because the future doesn't belong to developers who can type code the fastest. It belongs to developers who know what to build, why to build it, and how to tell whether what AI built is actually good.",
+      "en": "Because the future doesn't belong to developers who can type code the fastest. It belongs to developers who know what to build, why to build it, and how to tell whether what AI built is actually good."
+    },
+    "hidden": true
+  },
+  {
+    "id": "manuel-sokoudjou",
+    "name": "Manuel Sokoudjou",
+    "role": {
+      "fr": "Software Engineer & Founder of SCMCHOST & Creator of AlgoML",
+      "en": "Software Engineer & Founder of SCMCHOST & Creator of AlgoML"
+    },
+    "company": "",
+    "photoUrl": "/speakers/manuel-sokoudjou.webp",
+    "bio": {
+      "fr": "Manuel Sokoudjou is a Tech Entrepreneur and Software Engineer from Cameroon. He is the founder of SCMCHOST, a professional web hosting and enterprise SMS platform, and the creator of both AlgoML (a custom algorithmic language for seamless code generation) and DjangoForge. Specializing in software language tooling and infrastructure automation, Manuel builds reliable, high-performance systems that empower both businesses and developers across the region.",
+      "en": "Manuel Sokoudjou is a Tech Entrepreneur and Software Engineer from Cameroon. He is the founder of SCMCHOST, a professional web hosting and enterprise SMS platform, and the creator of both AlgoML (a custom algorithmic language for seamless code generation) and DjangoForge. Specializing in software language tooling and infrastructure automation, Manuel builds reliable, high-performance systems that empower both businesses and developers across the region."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1351517"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/manuel-sokoudjou-0a659a2a2",
+      "website": "https://algoml.scmchost.com"
+    },
+    "icebreakerQuestion": {
+      "fr": "What is your spiciest or funniest developer opinion?",
+      "en": "What is your spiciest or funniest developer opinion?"
+    },
+    "icebreakerAnswer": {
+      "fr": "Designing a custom programming language and a dedicated VS Code extension is way easier than understanding someone else's undocumented CSS grid!",
+      "en": "Designing a custom programming language and a dedicated VS Code extension is way easier than understanding someone else's undocumented CSS grid!"
+    },
+    "hidden": true
+  },
+  {
+    "id": "flora-tsakeu",
+    "name": "Flora Tsakeu",
+    "role": {
+      "fr": "Développeuse web",
+      "en": "Développeuse web"
+    },
+    "company": "",
+    "photoUrl": "/speakers/flora-tsakeu.webp",
+    "bio": {
+      "fr": "Développeuse backend passionnée par l'écosystème Java Spring Boot, j'aime concevoir des architectures logicielles adaptées aux réalités du terrain. C'est durant mon cursus de formation que j'ai découvert la puissance de l'Ingénierie Dirigée par les Modèles (IDM). Cette révélation m'a poussée à participer à la création initiale d'un outil d'automatisation capable de transformer une logique algorithmique directement en code. Je viens partager ce retour d'expérience pour montrer comment  l'approche par les modèles aide à structurer sa pensée pour franchir plus facilement le cap de l'écriture de code.",
+      "en": "Développeuse backend passionnée par l'écosystème Java Spring Boot, j'aime concevoir des architectures logicielles adaptées aux réalités du terrain. C'est durant mon cursus de formation que j'ai découvert la puissance de l'Ingénierie Dirigée par les Modèles (IDM). Cette révélation m'a poussée à participer à la création initiale d'un outil d'automatisation capable de transformer une logique algorithmique directement en code. Je viens partager ce retour d'expérience pour montrer comment  l'approche par les modèles aide à structurer sa pensée pour franchir plus facilement le cap de l'écriture de code."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1351517"],
+    "icebreakerQuestion": {
+      "fr": "Quelle est la phrase de développeur que tu as le plus prononcée en situation de crise dans tes débuts d'apprentissage ?",
+      "en": "Quelle est la phrase de développeur que tu as le plus prononcée en situation de crise dans tes débuts d'apprentissage ?"
+    },
+    "icebreakerAnswer": {
+      "fr": "Je ne sais pas vous, mais moi c'était : « Mais... ça marchait très bien en local ! »",
+      "en": "Je ne sais pas vous, mais moi c'était : « Mais... ça marchait très bien en local ! »"
+    },
+    "hidden": true
+  },
+  {
+    "id": "brice-ludovic",
+    "name": "Brice Ludovic",
+    "role": {
+      "fr": "Program Manager at Youth Access",
+      "en": "Program Manager at Youth Access"
+    },
+    "company": "",
+    "photoUrl": "/speakers/brice-ludovic.webp",
+    "bio": {
+      "fr": "Serial social entrepreneurs with passion to solve the most challenging African challenges : unemployment, hunger and poverty",
+      "en": "Serial social entrepreneurs with passion to solve the most challenging African challenges : unemployment, hunger and poverty"
+    },
+    "track": {
+      "fr": "Cloud",
+      "en": "Cloud"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1360167"],
+    "icebreakerQuestion": {
+      "fr": "How will AI impact the job market in Africa ?",
+      "en": "How will AI impact the job market in Africa ?"
+    },
+    "icebreakerAnswer": {
+      "fr": "For the incompetent the game is over. For the talented and entrepreneurs the sky will be the limit",
+      "en": "For the incompetent the game is over. For the talented and entrepreneurs the sky will be the limit"
+    },
+    "hidden": true
+  },
+  {
+    "id": "prosper-nsisse-ihloumam",
+    "name": "Prosper Nsisse Ihloumam",
+    "role": {
+      "fr": "Software & IT Support Engineer Intern, IUSJ Cameroon",
+      "en": "Software & IT Support Engineer Intern, IUSJ Cameroon"
+    },
+    "company": "",
+    "photoUrl": "/speakers/prosper-nsisse-ihloumam.webp",
+    "bio": {
+      "fr": "Je suis NSISSE IHLOUMAM Prosper, jeune ingénieur logiciel avec un parcours assez constitué. Alors, avec un grand amour pour l'informatique j'ai toujours aimer travailler seul. En progressant, j'ai appris une notion importante : le partage. C'est dans cette optique que j'ai décidé de partager désormais et apprendre des autres.",
+      "en": "Je suis NSISSE IHLOUMAM Prosper, jeune ingénieur logiciel avec un parcours assez constitué. Alors, avec un grand amour pour l'informatique j'ai toujours aimer travailler seul. En progressant, j'ai appris une notion importante : le partage. C'est dans cette optique que j'ai décidé de partager désormais et apprendre des autres."
+    },
+    "track": {
+      "fr": "AI & ML",
+      "en": "AI & ML"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1376595"],
+    "icebreakerQuestion": {
+      "fr": "",
+      "en": ""
+    },
+    "icebreakerAnswer": {
+      "fr": "",
+      "en": ""
+    },
+    "hidden": true
+  },
+  {
+    "id": "yufenyuy-fiora-leinyuy",
+    "name": "Yufenyuy Fiora Leinyuy",
+    "role": {
+      "fr": "Educator / Educational Psychology / Philosophy of Education / Research and Flourishing enthusiast",
+      "en": "Educator / Educational Psychology / Philosophy of Education / Research and Flourishing enthusiast"
+    },
+    "company": "",
+    "photoUrl": "/speakers/yufenyuy-fiora-leinyuy.webp",
+    "bio": {
+      "fr": "A Cameroon-based educator and researcher with a bachelor degree in Educational Psychology and  Master's degree in Philosophy of Education, whose interests span human behaviour, language, social inequality and human flourishing._x000D_\n_x000D_\nWith experience in teaching, research and professional event volunteering, including the Cameroon International Tech Summit 2026, she is interested in exploring the human dimensions of emerging technologies._x000D_\n_x000D_\nHer current intellectual interests focus on how artificial intelligence interacts with language, culture and social conditions, and how technological innovation can expand meaningful opportunities for individuals and communities across Africa._x000D_\n_x000D_\nShe brings an interdisciplinary perspective to conversations about inclusive, responsible and human-centred technological development.",
+      "en": "A Cameroon-based educator and researcher with a bachelor degree in Educational Psychology and  Master's degree in Philosophy of Education, whose interests span human behaviour, language, social inequality and human flourishing._x000D_\n_x000D_\nWith experience in teaching, research and professional event volunteering, including the Cameroon International Tech Summit 2026, she is interested in exploring the human dimensions of emerging technologies._x000D_\n_x000D_\nHer current intellectual interests focus on how artificial intelligence interacts with language, culture and social conditions, and how technological innovation can expand meaningful opportunities for individuals and communities across Africa._x000D_\n_x000D_\nShe brings an interdisciplinary perspective to conversations about inclusive, responsible and human-centred technological development."
+    },
+    "track": {
+      "fr": "UX/UI Design",
+      "en": "UX/UI Design"
+    },
+    "day": 1,
+    "sessionIds": ["sz-1376615"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/fiora-leinyuy-118504403"
+    },
+    "icebreakerQuestion": {
+      "fr": "What is one language that artificial intelligence still struggles to understand?",
+      "en": "What is one language that artificial intelligence still struggles to understand?"
+    },
+    "icebreakerAnswer": {
+      "fr": "The language of human experience. AI can translate our words, but understanding the culture, emotions and realities behind them is another challenge entirely.",
+      "en": "The language of human experience. AI can translate our words, but understanding the culture, emotions and realities behind them is another challenge entirely."
+    },
+    "hidden": true
   }
 ]

@@ -1227,5 +1227,241 @@
     },
     "tags": [],
     "speakerIds": []
+  },
+  {
+    "id": "sz-1345194",
+    "day": 1,
+    "kind": "workshop",
+    "level": "intermediate",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Build and Ship Your Product Today: Start Your Business with Free AI Tools",
+      "en": "Build and Ship Your Product Today: Start Your Business with Free AI Tools"
+    },
+    "description": {
+      "fr": "Everyone has an idea. Few people ship it. In this session, I'll show you how to go from idea to a working product using free AI tools, live on stage._x000D_\n_x000D_\nYou'll see three skills in action:_x000D_\n_x000D_\nPrompt engineering: getting reliable, usable results _x000D_\nVibe coding: building a working app by directing AI_x000D_\nAgentic engineering: an introduction to AI agents, and how to build a simple first agent that automates one task in your business_x000D_\n_x000D_\nThen we'll cover the business side: how to test your product with real users and what to do in your first week._x000D_\n_x000D_\nYou will leave with a clear workflow and a first project to start tomorrow. No prior AI experience needed._x000D_\n_x000D_\nTout le monde a une idée. Peu la concrétisent. Dans cette session, je vous montre comment passer de l'idée à un produit fonctionnel avec les outils d'IA gratuits de Google, en direct : prompt engineering , vibe coding et une introduction aux agents IA, avec un premier agent simple qui automatise une tâche de votre business. Puis nous verrons comment tester votre produit avec de vrais utilisateurs. Vous repartez avec un workflow clair et un premier projet à lancer dès demain.",
+      "en": "Everyone has an idea. Few people ship it. In this session, I'll show you how to go from idea to a working product using free AI tools, live on stage._x000D_\n_x000D_\nYou'll see three skills in action:_x000D_\n_x000D_\nPrompt engineering: getting reliable, usable results _x000D_\nVibe coding: building a working app by directing AI_x000D_\nAgentic engineering: an introduction to AI agents, and how to build a simple first agent that automates one task in your business_x000D_\n_x000D_\nThen we'll cover the business side: how to test your product with real users and what to do in your first week._x000D_\n_x000D_\nYou will leave with a clear workflow and a first project to start tomorrow. No prior AI experience needed._x000D_\n_x000D_\nTout le monde a une idée. Peu la concrétisent. Dans cette session, je vous montre comment passer de l'idée à un produit fonctionnel avec les outils d'IA gratuits de Google, en direct : prompt engineering , vibe coding et une introduction aux agents IA, avec un premier agent simple qui automatise une tâche de votre business. Puis nous verrons comment tester votre produit avec de vrais utilisateurs. Vous repartez avec un workflow clair et un premier projet à lancer dès demain."
+    },
+    "track": {
+      "fr": "Gemini",
+      "en": "Gemini"
+    },
+    "tags": [
+      {
+        "fr": "Gemini",
+        "en": "Gemini"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      },
+      {
+        "fr": "Web",
+        "en": "Web"
+      },
+      {
+        "fr": "Mobile",
+        "en": "Mobile"
+      },
+      {
+        "fr": "UX/UI Design",
+        "en": "UX/UI Design"
+      },
+      {
+        "fr": "DevOps",
+        "en": "DevOps"
+      }
+    ],
+    "speakerIds": ["akana-signing-josias-aaron"],
+    "hidden": true
+  },
+  {
+    "id": "sz-1351431",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "advanced",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "AI Is Changing the Developer: What Should We Learn Now?",
+      "en": "AI Is Changing the Developer: What Should We Learn Now?"
+    },
+    "description": {
+      "fr": "How AI is changing software development._x000D_\nWhy knowing how to code still matters._x000D_\nAI-assisted development vs. understanding fundamentals._x000D_\nPrompt engineering, AI APIs, local models and agents._x000D_\nHow students and young developers can use AI without becoming dependent on it._x000D_\nWhat skills will differentiate developers in the next 5 years.",
+      "en": "How AI is changing software development._x000D_\nWhy knowing how to code still matters._x000D_\nAI-assisted development vs. understanding fundamentals._x000D_\nPrompt engineering, AI APIs, local models and agents._x000D_\nHow students and young developers can use AI without becoming dependent on it._x000D_\nWhat skills will differentiate developers in the next 5 years."
+    },
+    "track": {
+      "fr": "AI & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "AI & ML",
+        "en": "AI & ML"
+      },
+      {
+        "fr": "Mobile",
+        "en": "Mobile"
+      },
+      {
+        "fr": "UX/UI Design",
+        "en": "UX/UI Design"
+      },
+      {
+        "fr": "Gemini",
+        "en": "Gemini"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      },
+      {
+        "fr": "Web",
+        "en": "Web"
+      }
+    ],
+    "speakerIds": ["bahanack-georges-yvan"],
+    "hidden": true
+  },
+  {
+    "id": "sz-1351517",
+    "day": 1,
+    "kind": "workshop",
+    "level": "introductory",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "AlgoML: An algorithmic language for seamless logic design and instant code generation",
+      "en": "AlgoML: An algorithmic language for seamless logic design and instant code generation"
+    },
+    "description": {
+      "fr": "Learning how to program can be tough, especially when transitioning from theoretical pseudo-code to rigid programming syntax. To solve this, I created AlgoML—a custom language designed to accelerate how we learn and compile programming logic._x000D_\nIn this practical, demo-driven session, you will discover how to use AlgoML to:_x000D_\n1. Design Clean Logic: Write clear, human-readable algorithms using a syntax built specifically for learning._x000D_\n2. Get Real-Time Guidance: Use a dedicated VS Code extension that guides you with autocompletion and instant feedback._x000D_\n3. Generate Production Code: Compile your algorithms instantly into clean, ready-to-run Python, C, and Java code with a single command._x000D_\nIf you are a student looking to master programming logic, an educator seeking better teaching tools, or a developer curious about custom dev tools, this session will show you how AlgoML bridges the gap between pure logic and executable code.",
+      "en": "Learning how to program can be tough, especially when transitioning from theoretical pseudo-code to rigid programming syntax. To solve this, I created AlgoML—a custom language designed to accelerate how we learn and compile programming logic._x000D_\nIn this practical, demo-driven session, you will discover how to use AlgoML to:_x000D_\n1. Design Clean Logic: Write clear, human-readable algorithms using a syntax built specifically for learning._x000D_\n2. Get Real-Time Guidance: Use a dedicated VS Code extension that guides you with autocompletion and instant feedback._x000D_\n3. Generate Production Code: Compile your algorithms instantly into clean, ready-to-run Python, C, and Java code with a single command._x000D_\nIf you are a student looking to master programming logic, an educator seeking better teaching tools, or a developer curious about custom dev tools, this session will show you how AlgoML bridges the gap between pure logic and executable code."
+    },
+    "track": {
+      "fr": "Web",
+      "en": "Web"
+    },
+    "tags": [
+      {
+        "fr": "Web",
+        "en": "Web"
+      }
+    ],
+    "speakerIds": ["manuel-sokoudjou", "flora-tsakeu"],
+    "hidden": true
+  },
+  {
+    "id": "sz-1360167",
+    "day": 1,
+    "kind": "workshop",
+    "online": true,
+    "level": "intermediate",
+    "language": ["fr", "en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Scaling an AI powered ERP for SMBs in Cameroon - Our experience @Genuka",
+      "en": "Scaling an AI powered ERP for SMBs in Cameroon - Our experience @Genuka"
+    },
+    "description": {
+      "fr": "Genuka CTO will share his experience, architecture, tech stack, key datas, GTM, challenges and tips on how we grew our AI powered ERP adoption amongst 100+ SMB owners in Cameroon",
+      "en": "Genuka CTO will share his experience, architecture, tech stack, key datas, GTM, challenges and tips on how we grew our AI powered ERP adoption amongst 100+ SMB owners in Cameroon"
+    },
+    "track": {
+      "fr": "Cloud",
+      "en": "Cloud"
+    },
+    "tags": [
+      {
+        "fr": "Cloud",
+        "en": "Cloud"
+      },
+      {
+        "fr": "DevOps",
+        "en": "DevOps"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["brice-ludovic"],
+    "hidden": true
+  },
+  {
+    "id": "sz-1376595",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["fr"],
+    "originalLanguage": "fr",
+    "title": {
+      "fr": "Qui est le véritable développeur à l'ère de l'IA ? L'imposture du temps et le piège de la vitesse.",
+      "en": "Qui est le véritable développeur à l'ère de l'IA ? L'imposture du temps et le piège de la vitesse."
+    },
+    "description": {
+      "fr": "Alors, je me suis surpris moi-même à ne plus relire 100 % du code généré par l'IA avant de push en prod. Et autour de moi, la crainte est bien réelle. Je vois arriver une génération de juniors capables de sortir une application complexe en trois heures grâce aux LLMs, mais totalement démunis, les yeux écarquillés, quand le système pète et qu'il faut expliquer un stack trace de base._x000D_\n_x000D_\nDans notre industrie, la vitesse est devenue un dogme. Pire encore, nous détruisons le temps générationnel. En privant les débutants des \"temps morts\" et des galères formatrices, là où se forge la mémoire musculaire du code, nous créons une fracture irréparable entre des seniors bâtis sur les fondations et des juniors condamnés à être de simples exécutants sous assistance algorithmique._x000D_\n_x000D_\nCe talk propose une remise en question sans filtre de notre métier à l'ère de l'IA générative. L'IA est en train de créer une génération de développeurs handicapés mentaux sous prétexte de productivité, en nous faisant croire que le véritable développeur est le Prompt Engineer.",
+      "en": "Alors, je me suis surpris moi-même à ne plus relire 100 % du code généré par l'IA avant de push en prod. Et autour de moi, la crainte est bien réelle. Je vois arriver une génération de juniors capables de sortir une application complexe en trois heures grâce aux LLMs, mais totalement démunis, les yeux écarquillés, quand le système pète et qu'il faut expliquer un stack trace de base._x000D_\n_x000D_\nDans notre industrie, la vitesse est devenue un dogme. Pire encore, nous détruisons le temps générationnel. En privant les débutants des \"temps morts\" et des galères formatrices, là où se forge la mémoire musculaire du code, nous créons une fracture irréparable entre des seniors bâtis sur les fondations et des juniors condamnés à être de simples exécutants sous assistance algorithmique._x000D_\n_x000D_\nCe talk propose une remise en question sans filtre de notre métier à l'ère de l'IA générative. L'IA est en train de créer une génération de développeurs handicapés mentaux sous prétexte de productivité, en nous faisant croire que le véritable développeur est le Prompt Engineer."
+    },
+    "track": {
+      "fr": "AI & ML",
+      "en": "AI & ML"
+    },
+    "tags": [
+      {
+        "fr": "AI & ML",
+        "en": "AI & ML"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      },
+      {
+        "fr": "Business",
+        "en": "Business"
+      }
+    ],
+    "speakerIds": ["prosper-nsisse-ihloumam"],
+    "hidden": true
+  },
+  {
+    "id": "sz-1376615",
+    "day": 1,
+    "kind": "talk",
+    "lightning": true,
+    "level": "introductory",
+    "language": ["en"],
+    "originalLanguage": "en",
+    "title": {
+      "fr": "Beyond the algorithm: who's language? Who's future",
+      "en": "Beyond the algorithm: who's language? Who's future"
+    },
+    "description": {
+      "fr": "What happens when an AI system produces the right answer, but the people it was designed to serve cannot meaningfully benefit from it?_x000D_\n_x000D_\nAs artificial intelligence transforms education, healthcare and everyday life, technological performance is increasingly celebrated. Yet important questions remain: Whose language does AI understand? Whose experiences shape its design? And who ultimately benefits from its advancement?_x000D_\n_x000D_\nIn linguistically and culturally diverse African societies, these questions are particularly important. Language is more than a means of communication. It shapes identity, learning, participation and access to knowledge. Beyond language, psychological and social factors such as confidence, trust, digital literacy and inequality influence how people interact with emerging technologies._x000D_\n_x000D_\nDrawing on educational psychology and philosophy of education, this session explores the relationship between language, human behaviour and human flourishing in AI development._x000D_\n_x000D_\nThrough relatable examples from African educational and social contexts, participants will explore a practical three-part framework for evaluating human-centred AI: Understanding, Participation and Flourishing._x000D_\n_x000D_\nThe session will demonstrate how developers can incorporate linguistic inclusion, user experiences and meaningful human outcomes into their design and evaluation processes._x000D_\n_x000D_\nUltimately, the presentation challenges us to look beyond what AI can accomplish technologically and consider what it enables people to understand, become and achieve._x000D_\n_x000D_\nBecause the real measure of intelligent innovation is not simply how well our machines perform, but how meaningfully they improve human lives.",
+      "en": "What happens when an AI system produces the right answer, but the people it was designed to serve cannot meaningfully benefit from it?_x000D_\n_x000D_\nAs artificial intelligence transforms education, healthcare and everyday life, technological performance is increasingly celebrated. Yet important questions remain: Whose language does AI understand? Whose experiences shape its design? And who ultimately benefits from its advancement?_x000D_\n_x000D_\nIn linguistically and culturally diverse African societies, these questions are particularly important. Language is more than a means of communication. It shapes identity, learning, participation and access to knowledge. Beyond language, psychological and social factors such as confidence, trust, digital literacy and inequality influence how people interact with emerging technologies._x000D_\n_x000D_\nDrawing on educational psychology and philosophy of education, this session explores the relationship between language, human behaviour and human flourishing in AI development._x000D_\n_x000D_\nThrough relatable examples from African educational and social contexts, participants will explore a practical three-part framework for evaluating human-centred AI: Understanding, Participation and Flourishing._x000D_\n_x000D_\nThe session will demonstrate how developers can incorporate linguistic inclusion, user experiences and meaningful human outcomes into their design and evaluation processes._x000D_\n_x000D_\nUltimately, the presentation challenges us to look beyond what AI can accomplish technologically and consider what it enables people to understand, become and achieve._x000D_\n_x000D_\nBecause the real measure of intelligent innovation is not simply how well our machines perform, but how meaningfully they improve human lives."
+    },
+    "track": {
+      "fr": "UX/UI Design",
+      "en": "UX/UI Design"
+    },
+    "tags": [
+      {
+        "fr": "UX/UI Design",
+        "en": "UX/UI Design"
+      },
+      {
+        "fr": "Data Science",
+        "en": "Data Science"
+      },
+      {
+        "fr": "AI",
+        "en": "AI"
+      }
+    ],
+    "speakerIds": ["yufenyuy-fiora-leinyuy"],
+    "hidden": true
   }
 ]
