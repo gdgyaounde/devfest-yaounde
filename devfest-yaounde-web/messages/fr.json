@@ -1014,7 +1014,11 @@
       "perksBody": "Remets le déjeuner et les goodies inclus dans les pass payants.",
       "merchTitle": "Retrait boutique",
       "merchBody": "Remets les commandes de la boutique à retirer sur place.",
-      "help": "Un doute ? Ne devine pas — appelle un organisateur."
+      "help": "Un doute ? Ne devine pas — appelle un organisateur.",
+      "guideTile": "Commence ici : le guide du bénévole",
+      "guideTileBody": "Comment se déroule la journée et quoi faire à chaque poste.",
+      "teamTile": "L'équipe de bénévoles",
+      "teamTileBody": "Vois qui d'autre aide aujourd'hui."
     },
     "common": {
       "tools": "Outils",
@@ -1144,6 +1148,121 @@
       "doneCheckIn": "{reference} : entrée validée.",
       "doneBoth": "{reference} : espèces enregistrées et entrée validée.",
       "notFound": "Réservation introuvable."
+    },
+    "guide": {
+      "title": "Guide du bénévole",
+      "body": "Tout ce qu'il te faut pour la journée, sur une seule page. Lis-le une fois, reviens-y quand tu veux.",
+      "back": "Retour aux outils",
+      "jump": "Aller à",
+      "sections": {
+        "welcome": {
+          "title": "Bienvenue — ce que tu viens faire",
+          "intro": "DevFest Yaoundé a lieu le samedi 21 novembre 2026 à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350. Tu fais partie de l'équipe qui fait tourner les portes, le déjeuner et le merch. Aucune compétence technique n'est nécessaire : ce téléphone est ton outil, et chaque écran te dit quoi faire.",
+          "steps": {
+            "a": "Trois postes : Accueil, Repas & goodies, Retrait boutique. Un organisateur te dira lequel est le tien, et à quelles heures.",
+            "b": "Tout fonctionne pareil : scanne un billet (ou tape son code, ou cherche la personne par nom) et lis le grand panneau.",
+            "c": "Vert : tu peux y aller. Jaune : lis d'abord. Rouge : stop, appelle un organisateur."
+          }
+        },
+        "before": {
+          "title": "Avant le jour — 5 minutes",
+          "steps": {
+            "a": "Ouvre ce site sur ton téléphone et connecte-toi avec le même compte Google que celui ajouté par un organisateur. Si tu lis cette page, c'est bon.",
+            "b": "Ouvre une fois l'Accueil, touche Démarrer la caméra puis Autoriser quand le navigateur le demande. Fais-le maintenant, pas à la porte.",
+            "c": "Ajoute cette page à ton écran d'accueil (menu du navigateur → Ajouter à l'écran d'accueil) pour l'ouvrir en un geste.",
+            "d": "Charge ton téléphone, prends une batterie externe, et allonge la mise en veille de l'écran si possible.",
+            "e": "Enregistre le numéro de ton organisateur. Au moindre doute, tu appelles — tu ne devines jamais."
+          },
+          "tip": "Ton accès se termine tout seul la nuit qui suit l'événement. Rien à faire de ton côté."
+        },
+        "day": {
+          "title": "La journée, heure par heure",
+          "intro": "Les horaires viennent du programme. Ton organisateur te confirmera les heures exactes de ton poste au briefing.",
+          "steps": {
+            "a": "08h00 — Ouverture des portes. Le check-in est la grosse heure : l'Accueil compte le plus.",
+            "b": "09h00 — Mot d'ouverture dans la salle principale. La plupart sont entrés ; la file raccourcit.",
+            "c": "11h50 — Pause et rencontres. Les tables Repas & goodies seront très demandées.",
+            "d": "12h25–13h05 — Mots des partenaires et concours de pitch. Plus calme aux tables.",
+            "e": "14h10 — Deuxième pause.",
+            "f": "17h00–19h00 — Clôture et au revoir. Le retrait merch est souvent à son maximum ici.",
+            "g": "À la fin : dis à un organisateur que tu as terminé, et ne garde aucune liste de participants sur ton téléphone."
+          }
+        },
+        "door": {
+          "title": "Accueil",
+          "intro": "Objectif : faire entrer les bonnes personnes, une seule fois.",
+          "steps": {
+            "a": "Ouvre Accueil. Touche Activer la caméra et vise le QR code du billet (sur son téléphone, ou imprimé).",
+            "b": "Le téléphone vibre et le panneau passe au vert : Entrée validée. C'est tout — touche Suivant s'il ne passe pas au suivant tout seul.",
+            "c": "Pas de QR ? Tape le code imprimé dessous (DFY-XXXXX-XXXXX). Majuscules, tirets et espaces n'ont pas d'importance.",
+            "d": "Pas de billet du tout ? Utilise la recherche par nom : au moins trois lettres, trouve la personne, touche Valider.",
+            "e": "Le panneau t'indique le pass : Pass payant (repas et goodies inclus), Pass gratuit (entrée seulement), ou Remboursé (entrée seulement)."
+          },
+          "warn": "« Déjà entré·e » en jaune : l'heure du premier scan est indiquée. Si ce n'est peut-être pas la même personne, demande une pièce d'identité et appelle un organisateur. Ne renvoie personne de ton propre chef."
+        },
+        "cash": {
+          "title": "Réservé en ligne ? Paiement sur place",
+          "intro": "Les paiements en ligne sont clos. Ceux qui ont réservé paient en espèces ici ; l'Accueil a une section « Réservé en ligne ? Retrouve la réservation ».",
+          "steps": {
+            "a": "Demande leur référence (RES-XXXXXX) ou leur nom, et lance la recherche (3 lettres suffisent).",
+            "b": "La fiche montre ce qui a été réservé et l'À encaisser en espèces : le montant. Prends exactement ce montant.",
+            "c": "Touche Espèces reçues & valider l'entrée — un seul geste fait les deux. Si l'argent a déjà été pris, utilise Valider l'entrée seulement.",
+            "d": "Aucune réservation à ce nom ? La personne vient sans réservation et paie à la table : appelle un organisateur si tu hésites."
+          },
+          "warn": "Une réservation marquée Annulé : ne prends aucun espèce pour elle. Appelle un organisateur."
+        },
+        "perks": {
+          "title": "Repas & goodies",
+          "intro": "Objectif : un repas et un sachet de goodies par pass payant — jamais deux.",
+          "steps": {
+            "a": "En haut, choisis ce que CETTE table distribue : Repas ou Goodies. Le téléphone s'en souvient.",
+            "b": "Scanne le billet (ou tape le code, ou cherche par nom). Le vert « c'est bon » veut dire : tu peux donner.",
+            "c": "Les goodies affichent la taille de T-shirt et le contenu du sac. Sans taille enregistrée, demande-la à la personne.",
+            "d": "« Déjà récupéré » indique quand. Un par pass : appelle un organisateur en cas de désaccord."
+          },
+          "warn": "« Non inclus » : pass gratuit, billet remboursé, ou pass sans cet avantage. Les pass gratuits donnent l'entrée seulement. Sois aimable, explique, et appelle un organisateur en cas de désaccord."
+        },
+        "merch": {
+          "title": "Retrait boutique",
+          "intro": "Pour les commandes de la boutique choisies en retrait sur place (les commandes expédiées n'apparaissent pas).",
+          "steps": {
+            "a": "Cherche par le nom de l'acheteur, ou le numéro de commande de son compte (#XXXXXXXX).",
+            "b": "Vérifie avec lui les articles, tailles et couleurs.",
+            "c": "Touche Marquer comme remise. On ne peut pas l'annuler d'ici."
+          },
+          "tip": "Les articles réservés en espèces se paient et se retirent à la table merch : l'organisateur sur place t'expliquera."
+        },
+        "wrong": {
+          "title": "Quand quelque chose ne va pas",
+          "steps": {
+            "a": "« Tu es déconnecté·e, ou ton accès a pris fin » — reconnecte-toi avec le même compte Google. Toujours bloqué ? Appelle un organisateur.",
+            "b": "La caméra ne démarre pas — vérifie les réglages du site dans le navigateur (autorise la Caméra), ou tape le code.",
+            "c": "« Ce n'est pas un code de billet » / « Ce QR n'est pas un billet DevFest » — demande d'ouvrir le billet lui-même (dans son compte, ou l'e-mail de reçu).",
+            "d": "« Code inconnu » — retape-le soigneusement ; si ça échoue, cherche par nom ; si introuvable, appelle un organisateur.",
+            "e": "« Trop de scans d'un coup » — attends les quelques secondes indiquées, puis continue.",
+            "f": "Pas d'internet — rien ne peut être vérifié pour l'instant, volontairement : un scan sans connexion ne peut pas savoir si un badge ou un repas a déjà été utilisé. Utilise la liste imprimée de ton organisateur et note tout ; on règle ça après."
+          },
+          "tip": "Règle d'or : au moindre doute, ne devine pas — appelle un organisateur."
+        },
+        "care": {
+          "title": "Respecter les données des gens",
+          "steps": {
+            "a": "Tu ne vois que des noms et des types de billets — c'est tout ce qu'il te faut. Ne photographie ni ne partage rien de ton écran.",
+            "b": "Ne partage pas ta connexion. Déconnecte-toi des téléphones partagés.",
+            "c": "Sois chaleureux : un sourire à la porte fait partie du travail."
+          }
+        }
+      }
+    },
+    "team": {
+      "title": "L'équipe de bénévoles",
+      "intro": "Les personnes qui aident avec toi aujourd'hui. Des noms uniquement — si tu as besoin de quelqu'un, retrouve-le sur place.",
+      "organisers": "Organisateurs",
+      "volunteers": "Bénévoles",
+      "you": "Toi",
+      "empty": "Aucun bénévole n'a encore été ajouté.",
+      "back": "Retour aux outils",
+      "count": "{count} personnes aident aujourd'hui"
     }
   },
   "reservations": {

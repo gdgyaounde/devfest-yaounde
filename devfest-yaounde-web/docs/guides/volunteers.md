@@ -82,3 +82,16 @@ columns on `tickets`, and the `set_volunteer` / `collect_ticket_perk`
 functions. Until it is applied: the door keeps working for admins, volunteers
 can't get in (their membership check fails closed), meal & swag and "Make
 volunteer" return an error and change nothing.
+
+## The in-app volunteer guide and team list (ADR 0089)
+
+Volunteers no longer need this document: `/volunteer` has a **Start here: the
+volunteer guide** tile (`/volunteer/guide`) — a bilingual, phone-friendly page
+covering the day hour by hour, each station step by step (door, pay-at-the-venue
+reservations, meal & goodies, merch), what to do when something goes wrong, and
+how to look after people's data. The copy lives in `messages/{en,fr}.json` under
+`staff.guide.sections`; edit it there if the day's plan changes (for example the
+station hours).
+
+`/volunteer/team` lists the organisers and the active volunteers by **name and
+photo only** (no email or phone), so volunteers can find each other on the day.

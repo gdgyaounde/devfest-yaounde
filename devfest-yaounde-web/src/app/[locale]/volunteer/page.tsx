@@ -1,14 +1,22 @@
 import {
   ArrowRight,
+  BookOpenText,
   ForkKnife,
   Package,
   QrCode,
+  UsersThree,
 } from "@phosphor-icons/react/dist/ssr";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { currentStaff } from "@/lib/security/staff";
 import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import { StaffTitle } from "@/components/staff/StaffTitle";
+
+/** First, and most important for a first-timer: how it all works, and who else is here. */
+const START = [
+  { href: "/volunteer/guide", key: "guide", Icon: BookOpenText, accent: true },
+  { href: "/volunteer/team", key: "team", Icon: UsersThree, accent: false },
+] as const;
 
 const TILES = [
   { href: "/volunteer/check-in", key: "door", Icon: QrCode },
@@ -92,6 +100,40 @@ export default async function VolunteerHub({
                 : null}
           </p>
         </div>
+
+        <ul className="flex flex-col gap-3">
+          {START.map(({ href, key, Icon, accent }) => (
+            <li key={key}>
+              <Link
+                href={href}
+                className={`group flex items-center gap-4 rounded-lg border-2 border-black02 p-4 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-1 active:shadow-none motion-reduce:transform-none ${
+                  accent ? "bg-primary" : "bg-offwhite"
+                }`}
+              >
+                <Icon
+                  size={30}
+                  weight="duotone"
+                  aria-hidden
+                  className="shrink-0"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block font-sans text-body-l font-bold leading-tight text-black02">
+                    {t(`${key}Tile`)}
+                  </span>
+                  <span className="mt-0.5 block text-body-m text-black02/80">
+                    {t(`${key}TileBody`)}
+                  </span>
+                </span>
+                <ArrowRight
+                  size={22}
+                  weight="bold"
+                  aria-hidden
+                  className="shrink-0"
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
 
         <ul className="flex flex-col gap-4">
           {TILES.map(({ href, key, Icon }) => (

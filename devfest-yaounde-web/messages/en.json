@@ -1014,7 +1014,11 @@
       "perksBody": "Hand out the lunch and goodies that come with paid passes.",
       "merchTitle": "Merch pickup",
       "merchBody": "Hand over shop orders bought for pickup at the venue.",
-      "help": "Something odd? Don't guess — call an organiser."
+      "help": "Something odd? Don't guess — call an organiser.",
+      "guideTile": "Start here: the volunteer guide",
+      "guideTileBody": "How the day works and what to do at each station.",
+      "teamTile": "The volunteer team",
+      "teamTileBody": "See who else is helping today."
     },
     "common": {
       "tools": "Tools",
@@ -1144,6 +1148,121 @@
       "doneCheckIn": "{reference}: checked in.",
       "doneBoth": "{reference}: cash recorded and checked in.",
       "notFound": "Reservation not found."
+    },
+    "guide": {
+      "title": "Volunteer guide",
+      "body": "Everything you need for the day, in one page. Read it once, come back to it any time.",
+      "back": "Back to the tools",
+      "jump": "Jump to",
+      "sections": {
+        "welcome": {
+          "title": "Welcome — what you're here to do",
+          "intro": "DevFest Yaoundé is on Saturday 21 November 2026 at the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350. You're part of the team that makes the doors, the lunch and the merch run smoothly. You don't need any technical skill: this phone is your tool, and every screen tells you what to do.",
+          "steps": {
+            "a": "Three stations: Door check-in, Meal & swag, Merch pickup. An organiser will tell you which one is yours, and for which hours.",
+            "b": "Everything works the same way: scan a ticket (or type its code, or find the person by name) and read the big panel.",
+            "c": "Green means go. Yellow means read first. Red means stop and call an organiser."
+          }
+        },
+        "before": {
+          "title": "Before the day — 5 minutes",
+          "steps": {
+            "a": "Open this site on your phone and sign in with the same Google account an organiser added. If you can read this page, you're in.",
+            "b": "Open the Door check-in once and tap Start camera, then Allow when the browser asks. Do it now, not at the door.",
+            "c": "Add this page to your home screen (browser menu → Add to Home screen) so it opens in one tap.",
+            "d": "Charge your phone, bring a power bank, and turn the screen timeout up if you can.",
+            "e": "Save your organiser's number. If anything looks odd, you call — you never guess."
+          },
+          "tip": "Your access ends by itself on the night after the event. Nothing to do on your side."
+        },
+        "day": {
+          "title": "The day, hour by hour",
+          "intro": "Times are from the agenda. Your organiser will confirm the exact hours of your station at the briefing.",
+          "steps": {
+            "a": "08:00 — Doors open. Check-in is the busiest hour: the Door check-in station matters most now.",
+            "b": "09:00 — Opening remarks in the main room. Most people are in; the queue gets short.",
+            "c": "11:50 — Break and networking. Expect the Meal & swag tables to be busy.",
+            "d": "12:25–13:05 — Partner words and the Pitch Contest. Calmer at the tables.",
+            "e": "14:10 — Second break.",
+            "f": "17:00–19:00 — Closing and goodbyes. Merch pickup often peaks here.",
+            "g": "At the end: tell an organiser you're done, and don't keep any attendee list on your phone."
+          }
+        },
+        "door": {
+          "title": "Door check-in",
+          "intro": "Goal: let the right people in, once.",
+          "steps": {
+            "a": "Open Door check-in. Tap Start camera and point it at the QR code on the attendee's ticket (on their phone, or printed).",
+            "b": "The phone buzzes and the panel turns green: Checked in. That's it — tap Next if it doesn't move on by itself.",
+            "c": "No QR? Type the code printed under it (DFY-XXXXX-XXXXX). Capitals, dashes and spaces don't matter.",
+            "d": "No ticket at all? Use Find by name: type at least three letters, find them, tap Check in.",
+            "e": "The panel tells you the pass: Paid pass (meal and swag included), Free pass (entry only), or Refunded (entry only)."
+          },
+          "warn": "Yellow \"Already checked in\": it shows the time of the first scan. If it might not be the same person, ask for ID and call an organiser. Don't send anyone away on your own."
+        },
+        "cash": {
+          "title": "Reserved online? Pay at the venue",
+          "intro": "Online payments are closed. People who reserved pay cash here; the Door check-in has a section called Reserved online? Find the reservation.",
+          "steps": {
+            "a": "Ask for their reference (RES-XXXXXX) or their name, and search (3 letters are enough).",
+            "b": "The card shows what they reserved and Cash to collect: the amount. Take that exact amount.",
+            "c": "Tap Cash received & check in — one tap does both. If the cash was already taken earlier, use Check in only.",
+            "d": "No reservation under that name? They walk in and pay at the table: call an organiser if you're unsure."
+          },
+          "warn": "A reservation marked Cancelled: don't take any cash for it. Call an organiser."
+        },
+        "perks": {
+          "title": "Meal & swag",
+          "intro": "Goal: one meal and one bag per paid pass — never two.",
+          "steps": {
+            "a": "At the top, choose what THIS table hands out: Meal or Swag. The phone remembers it.",
+            "b": "Scan the ticket (or type the code, or find by name). Green \"go ahead\" means hand it over.",
+            "c": "Swag shows the T-shirt size and what goes in the bag. If there's no size on file, ask the person.",
+            "d": "\"Already collected\" shows when it was taken. One per pass: call an organiser if there's a dispute."
+          },
+          "warn": "\"Not included\": a free pass, a refunded ticket, or a pass without that perk. Free passes get entry only. Be kind, explain, and call an organiser if they disagree."
+        },
+        "merch": {
+          "title": "Merch pickup",
+          "intro": "For shop orders bought for pickup at the venue (shipped orders aren't listed).",
+          "steps": {
+            "a": "Search by the buyer's name, or the order number from their account page (#XXXXXXXX).",
+            "b": "Check the items, sizes and colours with them.",
+            "c": "Tap Mark as handed over. It can't be undone from here."
+          },
+          "tip": "Items reserved for cash are paid and collected at the merch table: the organiser there will tell you how."
+        },
+        "wrong": {
+          "title": "When something goes wrong",
+          "steps": {
+            "a": "\"You're signed out, or your access has ended\" — sign in again with the same Google account. Still stuck? Call an organiser.",
+            "b": "Camera won't start — check the browser's site settings (allow Camera), or type the code instead.",
+            "c": "\"That's not a ticket code\" / \"That QR isn't a DevFest ticket\" — ask them to open the ticket itself (in their account, or the receipt email).",
+            "d": "\"Unknown code\" — type it again carefully; if it still fails, find them by name; if not found, call an organiser.",
+            "e": "\"Too many at once\" — wait the few seconds shown, then continue.",
+            "f": "No internet — nothing can be checked right now, on purpose: a scan with no connection can't know whether a badge or a meal was already used. Use the printed list your organiser has, and keep notes; everything is settled afterwards."
+          },
+          "tip": "Golden rule: when in doubt, don't guess — call an organiser."
+        },
+        "care": {
+          "title": "Looking after people's data",
+          "steps": {
+            "a": "You see names and ticket types only — that's all you need. Don't photograph or share anything on your screen.",
+            "b": "Don't share your login. Sign out of shared phones.",
+            "c": "Be warm: a smile at the door is part of the job."
+          }
+        }
+      }
+    },
+    "team": {
+      "title": "The volunteer team",
+      "intro": "The people helping with you today. Names only — if you need someone, find them on site.",
+      "organisers": "Organisers",
+      "volunteers": "Volunteers",
+      "you": "You",
+      "empty": "No volunteers have been added yet.",
+      "back": "Back to the tools",
+      "count": "{count} helping today"
     }
   },
   "reservations": {
