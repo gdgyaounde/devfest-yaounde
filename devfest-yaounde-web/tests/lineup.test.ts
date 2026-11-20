@@ -181,13 +181,14 @@ describe("the published lineup data", () => {
     assert.equal(collectionSchemas.sessions.safeParse(sessions).success, true);
   });
 
-  it("matches the accepted roster: 24 speakers, 24 accepted sessions, 4 workshops", () => {
+  it("matches the accepted roster: 24 speakers, 24 accepted sessions, 6 workshops", () => {
     assert.equal(speakers.length, 24);
     // 0036 added the agenda's own entries (breaks, opening, five title-only
     // talks) around the 24 accepted sessions.
     assert.equal(sessions.filter((s) => s.id.startsWith("sz-")).length, 24);
     assert.equal(sessions.length, 36);
-    assert.equal(sessions.filter((s) => s.kind === "workshop").length, 4);
+    // The four accepted workshops, plus the two agenda-only 85-minute ones.
+    assert.equal(sessions.filter((s) => s.kind === "workshop").length, 6);
     assert.equal(sessions.filter((s) => s.lightning).length, 20);
   });
 
@@ -347,5 +348,43 @@ describe("what the public site is handed (ADR 0093)", () => {
       false,
     );
     assert.ok((await store.getAllSpeakers()).some((s) => s.hidden));
+  });
+});
+
+describe("the agenda's merged cells (ADR 0094)", () => {
+  const by = (id: string) =>
+    (sessionsJson as Session[]).find((s) => s.id === id)!;
+
+  it("runs the four workshops, the two Room 1 workshops and the pitch for 85 minutes", () => {
+    for (const id of [
+      "sz-1376670",
+      "sz-1350359",
+      "sz-1373948",
+      "sz-1339016",
+      "agenda-automatisez-la-gestion-des-admissions-de-vos-eve",
+      "agenda-is-your-sign-in-with-button-really-safe",
+      "agenda-pitch",
+    ]) {
+      assert.equal(by(id).durationMin, 85, id);
+    }
+    assert.equal(by("agenda-pitch").time, "12:40");
+  });
+
+  it("never lets a session overrun the next one in the same room", () => {
+    const rows = (sessionsJson as Session[]).filter(
+      (s) => !s.hidden && s.time && s.room && s.durationMin,
+    );
+    const mins = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3));
+    for (const a of rows) {
+      for (const b of rows) {
+        if (a.id === b.id || a.room!.en !== b.room!.en) continue;
+        if (mins(b.time!) > mins(a.time!)) {
+          assert.ok(
+            mins(a.time!) + a.durationMin! <= mins(b.time!),
+            `${a.id} runs into ${b.id}`,
+          );
+        }
+      }
+    }
   });
 });

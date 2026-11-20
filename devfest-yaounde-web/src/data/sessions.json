@@ -48,9 +48,9 @@
   {
     "id": "agenda-automatisez-la-gestion-des-admissions-de-vos-eve",
     "time": "09:20",
-    "durationMin": 25,
+    "durationMin": 85,
     "day": 1,
-    "kind": "talk",
+    "kind": "workshop",
     "language": ["fr"],
     "originalLanguage": "fr",
     "title": {
@@ -251,7 +251,7 @@
     ],
     "speakerIds": ["noemie-youbissi"],
     "time": "09:50",
-    "durationMin": 25,
+    "durationMin": 85,
     "room": {
       "fr": "Salle 2",
       "en": "Room 2"
@@ -288,7 +288,7 @@
     ],
     "speakerIds": ["egbe-michel"],
     "time": "09:50",
-    "durationMin": 25,
+    "durationMin": 85,
     "room": {
       "fr": "Salle 3",
       "en": "Room 3"
@@ -321,7 +321,7 @@
     ],
     "speakerIds": ["marie-ipouk"],
     "time": "09:50",
-    "durationMin": 25,
+    "durationMin": 85,
     "room": {
       "fr": "Salle 4",
       "en": "Room 4"
@@ -358,7 +358,7 @@
     ],
     "speakerIds": ["cabrel-domfang"],
     "time": "09:50",
-    "durationMin": 25,
+    "durationMin": 85,
     "room": {
       "fr": "Salle 5",
       "en": "Room 5"
@@ -639,7 +639,7 @@
   {
     "id": "agenda-pitch",
     "time": "12:40",
-    "durationMin": 25,
+    "durationMin": 85,
     "day": 1,
     "kind": "panel",
     "title": {
@@ -877,9 +877,9 @@
   {
     "id": "agenda-is-your-sign-in-with-button-really-safe",
     "time": "15:20",
-    "durationMin": 25,
+    "durationMin": 85,
     "day": 1,
-    "kind": "talk",
+    "kind": "workshop",
     "language": ["en"],
     "originalLanguage": "en",
     "title": {
