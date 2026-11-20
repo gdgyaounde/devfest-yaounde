@@ -1065,5 +1065,37 @@
       "fr": "",
       "en": ""
     }
+  },
+  {
+    "id": "cyprien-tankeu",
+    "name": "Cyprien Tankeu",
+    "role": {
+      "fr": "GDE Google Workspace",
+      "en": "GDE Google Workspace"
+    },
+    "company": "",
+    "photoUrl": "/speakers/cyprien-tankeu.webp",
+    "bio": {
+      "fr": "Google Developer Expert (GDE) en Google Workspace et ancien lead de GDG Yaoundé.",
+      "en": "Google Developer Expert (GDE) in Google Workspace and former lead of GDG Yaoundé."
+    },
+    "track": {
+      "fr": "Google Workspace",
+      "en": "Google Workspace"
+    },
+    "day": 1,
+    "sessionIds": ["agenda-automatisez-la-gestion-des-admissions-de-vos-eve"],
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/cyprientankeu/",
+      "x": "https://x.com/Cyprien_T"
+    },
+    "icebreakerQuestion": {
+      "fr": "",
+      "en": ""
+    },
+    "icebreakerAnswer": {
+      "fr": "",
+      "en": ""
+    }
   }
 ]

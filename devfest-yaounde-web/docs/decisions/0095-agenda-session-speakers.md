@@ -11,6 +11,6 @@ Four sessions on the agenda (three are fixed here) ("Networking and Visibility",
 
 The agenda is the authority. The three speakers are added as visible profiles (name, role, bio, links, photo; no contact details) and linked to their sessions, which also get the real abstract, level, language and tags. Migration 0043 is add-only and only fills a session that still has no speaker.
 
-## Open
+## Follow-up
 
-"Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script" (Room 1, 09:20) is in neither export, so it still has no speaker.
+"Automatisez la gestion des admissions de vos événements avec Gemini et Google Apps Script" is in neither export. Its speaker is Cyprien Tankeu (GDE Google Workspace, former GDG Yaoundé lead; photo and LinkedIn supplied by the organisers), added by migration 0044. GenUI (15:50, Room 5) has no speaker: Yunwen Eric is no longer speaking.

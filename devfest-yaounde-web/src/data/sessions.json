@@ -62,15 +62,15 @@
       "en": "How to automate your events' check-in and admissions with Gemini and Google Apps Script."
     },
     "track": {
-      "fr": "Général",
-      "en": "General"
+      "fr": "Google Workspace",
+      "en": "Google Workspace"
     },
     "room": {
       "fr": "Salle 1 · Principale",
       "en": "Room 1 · Main"
     },
     "tags": [],
-    "speakerIds": []
+    "speakerIds": ["cyprien-tankeu"]
   },
   {
     "id": "sz-1354849",
