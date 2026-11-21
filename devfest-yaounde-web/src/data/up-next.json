@@ -1,20 +1,6 @@
 {
   "now": [
     {
-      "sessionId": "sz-1372444",
-      "room": 1
-    },
-    {
-      "sessionId": "sz-1369967",
-      "room": 2
-    },
-    {
-      "sessionId": "sz-1354849",
-      "room": 3
-    }
-  ],
-  "next": [
-    {
       "sessionId": "sz-1350359",
       "room": 1
     },
@@ -24,6 +10,20 @@
     },
     {
       "sessionId": "sz-1353994",
+      "room": 3
+    }
+  ],
+  "next": [
+    {
+      "sessionId": "sz-1371413",
+      "room": 1
+    },
+    {
+      "sessionId": "sz-1350410",
+      "room": 2
+    },
+    {
+      "sessionId": "sz-1376783",
       "room": 3
     }
   ]

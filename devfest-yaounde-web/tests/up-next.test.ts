@@ -23,19 +23,19 @@ describe("the Going on now / Coming up next rows (ADR 0097)", () => {
     }
   });
 
-  it("is going on now: Hubert (R1), Anita (R2), Manuel (R3)", () => {
+  it("is going on now: Egbe (R1), Marie (R2), Folong (R3)", () => {
     assert.deepEqual(rows("now"), [
-      ["Hubert Nang", "Room 1"],
-      ["Anita Dongmo", "Room 2"],
-      ["Manuel Karim Abolo", "Room 3"],
-    ]);
-  });
-
-  it("is coming up next: Egbe (R1), Marie (R2), Folong (R3)", () => {
-    assert.deepEqual(rows("next"), [
       ["Egbe Michel", "Room 1"],
       ["Marie Ipouk", "Room 2"],
       ["Emerson Folong", "Room 3"],
+    ]);
+  });
+
+  it("is coming up next: Naomy (R1), Linda (R2), Raïssa (R3)", () => {
+    assert.deepEqual(rows("next"), [
+      ["Ange Naomy Kengne Takoumbo", "Room 1"],
+      ["Linda Ebete", "Room 2"],
+      ["Raïssa Wokmeni", "Room 3"],
     ]);
   });
 
