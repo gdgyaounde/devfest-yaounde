@@ -267,7 +267,11 @@
       "metaDesc": "The full DevFest Yaoundé schedule — talks, workshops, panels and breaks, all in one day.",
       "addToCalendar": "Add to calendar",
       "google": "Google",
-      "ics": "Others (.ics)"
+      "ics": "Others (.ics)",
+      "upNext": {
+        "now": "Going on now",
+        "next": "Coming up next"
+      }
     },
     "speakers": {
       "title": "Speakers",

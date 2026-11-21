@@ -1,0 +1,12 @@
+{
+  "now": [
+    { "sessionId": "sz-1372444", "room": 1 },
+    { "sessionId": "sz-1369967", "room": 2 },
+    { "sessionId": "sz-1354849", "room": 3 }
+  ],
+  "next": [
+    { "sessionId": "sz-1372498", "room": 1 },
+    { "sessionId": "sz-1350359", "room": 2 },
+    { "sessionId": "sz-1373948", "room": 3 }
+  ]
+}

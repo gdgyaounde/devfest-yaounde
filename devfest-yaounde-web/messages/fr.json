@@ -267,7 +267,11 @@
       "metaDesc": "Le programme complet de DevFest Yaoundé — conférences, ateliers, tables rondes et pauses sur la journée.",
       "addToCalendar": "Ajouter au calendrier",
       "google": "Google",
-      "ics": "Autres (.ics)"
+      "ics": "Autres (.ics)",
+      "upNext": {
+        "now": "En ce moment",
+        "next": "À suivre"
+      }
     },
     "speakers": {
       "title": "Intervenants",
