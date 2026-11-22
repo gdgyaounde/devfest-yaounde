@@ -2,7 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { AdminSettings } from "@/lib/admin/shape";
-import { renderLaunchUpdate, type LaunchAudience } from "@/lib/email/templates";
+import {
+  renderLaunchUpdate,
+  renderVoteAnnouncement,
+  type LaunchAudience,
+} from "@/lib/email/templates";
 import { InfoBanner, Panel } from "./shared";
 
 const AUDIENCES: {
@@ -25,6 +29,19 @@ const AUDIENCES: {
   },
 ];
 
+/** The hand-sent emails, newest first. */
+const EMAILS = [
+  { id: "vote", label: "Pitch vote is open" },
+  { id: "launch", label: "Launch update (18 Nov)" },
+] as const;
+type EmailId = (typeof EMAILS)[number]["id"];
+
+const VOTE_META = {
+  label: "Every site account",
+  who: "Everyone with an account on the site — all of them can vote (ADR 0099). Send from Gmail, BCC, in batches — the recipient list is below.",
+  file: "vote-open-2026-11.html",
+};
+
 const BTN =
   "inline-flex items-center rounded-pill border-2 border-black02 px-4 py-2 font-sans text-body-m font-bold text-black02 transition-colors hover:bg-pastel";
 
@@ -40,6 +57,7 @@ const BTN =
  * the same text.
  */
 export function AdminEmails({ settings }: { settings: AdminSettings }) {
+  const [which, setWhich] = useState<EmailId>("vote");
   const [audience, setAudience] = useState<LaunchAudience>("paid");
   const [copied, setCopied] = useState<string | null>(null);
   const [counts, setCounts] = useState<{
@@ -50,24 +68,34 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
 
   const email = useMemo(
     () =>
-      renderLaunchUpdate({
-        audience,
-        eventDate: settings.eventDate,
-        salesCloseAt: settings.ticketing.salesCloseAt,
-        editsCloseAt: settings.ticketing.editsCloseAt,
-        reservationsCloseAt: settings.ticketing.reservationsCloseAt,
-      }),
-    [audience, settings],
+      which === "vote"
+        ? renderVoteAnnouncement()
+        : renderLaunchUpdate({
+            audience,
+            eventDate: settings.eventDate,
+            salesCloseAt: settings.ticketing.salesCloseAt,
+            editsCloseAt: settings.ticketing.editsCloseAt,
+            reservationsCloseAt: settings.ticketing.reservationsCloseAt,
+          }),
+    [which, audience, settings],
   );
-  const meta = AUDIENCES.find((a) => a.id === audience)!;
+  const meta =
+    which === "vote" ? VOTE_META : AUDIENCES.find((a) => a.id === audience)!;
+  const list = which === "vote" ? "accounts" : "launch";
+  const showRecipients = which === "vote" || audience === "paid";
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/admin/emails/recipients?format=json", { cache: "no-store" })
+    fetch(`/api/admin/emails/recipients?format=json&list=${list}`, {
+      cache: "no-store",
+    })
       .then(async (res) => {
         if (!res.ok) throw new Error(String(res.status));
         const json = await res.json();
-        if (!cancelled) setCounts(json);
+        if (!cancelled) {
+          setCounts(json);
+          setCountsError(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setCountsError(true);
@@ -75,7 +103,7 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [list]);
 
   async function copy(label: string, value: string) {
     try {
@@ -101,33 +129,61 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
     <div className="flex flex-col gap-6">
       <InfoBanner>
         Nothing on this page sends email. There is no sending domain yet, so the
-        update goes out by hand: Gmail (BCC) for paid holders and site users,
-        Bevy for free passes. The same files are committed under{" "}
+        emails go out by hand: Gmail (BCC) for site users and paid holders, Bevy
+        for free passes. The same files are committed under{" "}
         <code>docs/content/emails/</code>.
       </InfoBanner>
 
       <div
         role="tablist"
-        aria-label="Audience"
-        className="flex w-fit overflow-hidden rounded-pill border-2 border-black02"
+        aria-label="Email"
+        className="flex w-fit flex-wrap overflow-hidden rounded-pill border-2 border-black02"
       >
-        {AUDIENCES.map((a) => (
+        {EMAILS.map((e) => (
           <button
-            key={a.id}
+            key={e.id}
             role="tab"
             type="button"
-            aria-selected={audience === a.id}
-            onClick={() => setAudience(a.id)}
+            aria-selected={which === e.id}
+            onClick={() => {
+              setWhich(e.id);
+              setCounts(null);
+            }}
             className={`px-4 py-2 font-mono text-mono-tag font-bold uppercase tracking-wide ${
-              audience === a.id
-                ? "bg-black02 text-offwhite"
+              which === e.id
+                ? "bg-primary text-black02"
                 : "bg-transparent text-black02 hover:bg-pastel"
             }`}
           >
-            {a.label}
+            {e.label}
           </button>
         ))}
       </div>
+
+      {which === "launch" && (
+        <div
+          role="tablist"
+          aria-label="Audience"
+          className="flex w-fit overflow-hidden rounded-pill border-2 border-black02"
+        >
+          {AUDIENCES.map((a) => (
+            <button
+              key={a.id}
+              role="tab"
+              type="button"
+              aria-selected={audience === a.id}
+              onClick={() => setAudience(a.id)}
+              className={`px-4 py-2 font-mono text-mono-tag font-bold uppercase tracking-wide ${
+                audience === a.id
+                  ? "bg-black02 text-offwhite"
+                  : "bg-transparent text-black02 hover:bg-pastel"
+              }`}
+            >
+              {a.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <Panel title="The email" subtitle={meta.who}>
         <dl className="mb-4 grid gap-1 text-body-m">
@@ -182,13 +238,21 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
         />
       </Panel>
 
-      {audience === "paid" && (
+      {showRecipients && (
         <Panel
-          title="Recipients (paid)"
-          subtitle="Ticket holders, buyers of activated ticket orders and signed-in site users — lower-cased, each address once. Personal data: keep the file off shared drives and delete it after sending."
+          title={
+            which === "vote"
+              ? "Recipients (every account)"
+              : "Recipients (paid)"
+          }
+          subtitle={
+            which === "vote"
+              ? "Every account on the site — lower-cased, each address once. Personal data: keep the file off shared drives and delete it after sending."
+              : "Ticket holders, buyers of activated ticket orders and signed-in site users — lower-cased, each address once. Personal data: keep the file off shared drives and delete it after sending."
+          }
           action={
             <a
-              href="/api/admin/emails/recipients?format=csv"
+              href={`/api/admin/emails/recipients?format=csv&list=${list}`}
               download
               className={`${BTN} bg-primary`}
             >
@@ -253,11 +317,13 @@ export function AdminEmails({ settings }: { settings: AdminSettings }) {
             message — the formatting comes with it. Paste the subject from
             &ldquo;Copy subject&rdquo;. Send yourself a test first.
           </li>
-          <li>
-            <strong>Free passes go through Bevy</strong> (attendee messaging):
-            use the &ldquo;Free passes&rdquo; tab, paste the HTML if the editor
-            accepts it, or the plain text if not.
-          </li>
+          {which === "launch" && (
+            <li>
+              <strong>Free passes go through Bevy</strong> (attendee messaging):
+              use the &ldquo;Free passes&rdquo; tab, paste the HTML if the
+              editor accepts it, or the plain text if not.
+            </li>
+          )}
           <li>
             Check the test in Gmail on a phone, in dark mode, and with images
             off — the text carries the whole message without the logo.

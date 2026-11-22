@@ -17,6 +17,17 @@ Anyone who signs in with Google, since migration `0047_pitch_vote_any_account.sq
 
 The vote first started limited to people checked in at the site's door (migration 0046). It was opened to every account the same day, because most attendees were checked in on Bevy and the Bevy export had their emails hidden. To narrow it again, a new migration can restore the 0046 version of `pitch_vote_eligible`.
 
+## Emailing everyone that the vote is open
+
+**Dashboard → Emails → "Pitch vote is open"** has the email ready: one message, French then English. It credits Impact Hub, gives the closing time and has a "Vote now" button. Nothing on that page sends anything:
+
+1. **Download recipients CSV**: every account on the site, each address once. Each download is written to the audit log.
+2. **Download .html**, open it in a browser, select all, copy, and paste into a new Gmail message. Use **Copy subject** for the subject.
+3. Put your own address in **To** and the recipients in **BCC**, in batches of 90 or fewer. Send yourself a test first.
+4. Delete the CSV afterwards: it's personal data.
+
+The same files are in `docs/content/emails/vote-open-2026-11.html` / `.txt`. Re-generate them with `npm run emails:render` if the wording or the closing time changes.
+
 ## Watching it and announcing the winner
 
 - **Dashboard → Community → Pitch vote** shows the live tally, how many people voted, how many picks in all, and how many people could vote. The % next to each project is the share of voters who picked it. With two picks each, the percentages add up past 100%. **Export CSV** saves it.

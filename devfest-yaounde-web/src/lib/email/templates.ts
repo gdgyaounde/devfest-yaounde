@@ -28,7 +28,8 @@
  */
 import type { PaymentIntentRow } from "@/lib/payments/intents";
 import { mailtoHref } from "@/lib/mailto";
-import { CHAPTER_EMAIL, SITE_URL } from "@/lib/site-config";
+import { CHAPTER_EMAIL, SITE_URL, VOTE_CLOSES_AT } from "@/lib/site-config";
+import { MAX_PICKS, PITCH_PROJECTS } from "@/lib/pitch-vote";
 import { EVENT_DATES } from "@/lib/calendar";
 import { formatCutoff, formatEventDates } from "@/lib/event";
 
@@ -702,6 +703,8 @@ interface LaunchCopy {
   title: string;
   preheader: string;
   intro: string;
+  /** "Powered by" a partner, shown under the intro with their logo. */
+  poweredBy?: { label: string; name: string; logo: string };
   items: LaunchItem[];
   signoff: string;
   team: string;
@@ -913,9 +916,15 @@ ${links ? `<p style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-heig
 </td></tr></table>`;
     })
     .join("\n");
+  const partner = c.poweredBy
+    ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:-4px 0 22px;"><tr>
+<td valign="middle" style="padding-right:12px;font-family:${MONO};font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:${BRAND.muted};">${escapeHtml(c.poweredBy.label)}</td>
+<td valign="middle" style="line-height:0;"><img src="${SITE_URL}${c.poweredBy.logo}" width="110" height="40" alt="${escapeHtml(c.poweredBy.name)}" style="display:block;border:0;height:40px;width:110px;"></td>
+</tr></table>`
+    : "";
   return `<div lang="${l}">
 <p style="margin:0 0 20px;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.ink};">${escapeHtml(c.intro)}</p>
-${items}
+${partner}${items}
 <p style="margin:22px 0 0;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.ink};"><strong>${escapeHtml(c.signoff)}</strong><br>${escapeHtml(c.team)}</p>
 </div>`;
 }
@@ -927,6 +936,7 @@ function launchSectionText(l: Locale, c: LaunchCopy): string[] {
     c.title.toUpperCase(),
     "",
     c.intro,
+    ...(c.poweredBy ? ["", `${c.poweredBy.label} ${c.poweredBy.name}`] : []),
     "",
     ...c.items.flatMap((item, i) => [
       `${i + 1}. ${item.lead} ${item.body}`,
@@ -1026,4 +1036,130 @@ export function renderLaunchUpdate({
   ].join("\n");
 
   return { subject: LAUNCH_SUBJECT, text, html };
+}
+
+/* ------------------------------------------------------------------------ */
+/* The pitch contest vote is open (ADR 0099)                                 */
+/* ------------------------------------------------------------------------ */
+
+export const VOTE_SUBJECT =
+  "DevFest Yaoundé — vote pour tes pitchs préférés / vote for your favourite pitches";
+
+const IMPACT_HUB_LOGO = "/sponsors/impact-hub-yaounde.png";
+
+function voteCopy(l: Locale, d: { date: string; time: string }): LaunchCopy {
+  const names = PITCH_PROJECTS.map((p) => p.name).join(", ");
+  return l === "fr"
+    ? {
+        title: "Vote pour tes pitchs préférés",
+        preheader: `Sept projets, ${MAX_PICKS} voix, jusqu'au ${d.date} à ${d.time}.`,
+        intro:
+          "Salut ! Merci d'avoir fait partie de DevFest Yaoundé 2026. Samedi, sept équipes ont présenté leur projet au concours de pitch. C'est maintenant à toi de choisir.",
+        poweredBy: {
+          label: "Concours propulsé par",
+          name: "Impact Hub Yaoundé",
+          logo: IMPACT_HUB_LOGO,
+        },
+        items: [
+          {
+            lead: "Deux voix par personne.",
+            body: "Connecte-toi avec ton compte Google sur le site et vote pour un ou deux projets, une voix par projet. Tu as changé d'avis ? Tu peux modifier ton vote jusqu'à la clôture.",
+            cta: { label: "Je vote", path: "/vote" },
+          },
+          {
+            lead: `Jusqu'au ${d.date} à ${d.time}`,
+            body: "(heure de Yaoundé). Les résultats s'affichent sur la page du vote dès la clôture.",
+          },
+          {
+            lead: "Les sept projets :",
+            body: `${names}. Leurs pitchs et leurs liens sont sur la page du vote.`,
+          },
+        ],
+        signoff: "Merci encore, et à très vite !",
+        team: "L'équipe GDG Yaoundé",
+        contact: "Une question ? Réponds simplement à cet e-mail.",
+        why: "Tu reçois cet e-mail parce que tu as un compte sur",
+      }
+    : {
+        title: "Vote for your favourite pitches",
+        preheader: `Seven projects, ${MAX_PICKS} votes, until ${d.date} at ${d.time}.`,
+        intro:
+          "Hi! Thank you for being part of DevFest Yaoundé 2026. On Saturday, seven teams pitched their projects in the pitch contest. Now it's your turn to choose.",
+        poweredBy: {
+          label: "Contest powered by",
+          name: "Impact Hub Yaoundé",
+          logo: IMPACT_HUB_LOGO,
+        },
+        items: [
+          {
+            lead: "Two votes each.",
+            body: "Sign in on the site with your Google account and vote for one or two projects, one vote per project. Changed your mind? You can change your vote until the close.",
+            cta: { label: "Vote now", path: "/vote" },
+          },
+          {
+            lead: `Until ${d.date} at ${d.time}`,
+            body: "(Yaoundé time). The results go up on the vote page as soon as it closes.",
+          },
+          {
+            lead: "The seven projects:",
+            body: `${names}. Their pitches and links are on the vote page.`,
+          },
+        ],
+        signoff: "Thanks again, and see you soon!",
+        team: "The GDG Yaoundé team",
+        contact: "A question? Just reply to this email.",
+        why: "You're getting this because you have an account on",
+      };
+}
+
+/**
+ * "The vote is open" — one bilingual email (French, then English) for every
+ * account on the site, sent by hand like the launch update (no sending
+ * domain). The close comes from `VOTE_CLOSES_AT`, the same instant the vote
+ * API enforces, so the email cannot promise a different deadline.
+ */
+export function renderVoteAnnouncement({
+  closesAt = VOTE_CLOSES_AT,
+}: { closesAt?: string } = {}): RenderedEmail {
+  const when = (l: Locale) => {
+    const c = formatCutoff(l, closesAt);
+    return { date: c?.date ?? "", time: c?.time ?? "" };
+  };
+  const fr = voteCopy("fr", when("fr"));
+  const en = voteCopy("en", when("en"));
+
+  const divider = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:32px 0 28px;"><tr>
+<td style="border-top:2px dashed ${BRAND.hairline};font-size:0;line-height:0;">&nbsp;</td></tr>
+<tr><td style="padding-top:14px;font-family:${MONO};font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${BRAND.muted};">English version</td></tr></table>
+<h2 lang="en" style="margin:0 0 18px;font-family:${FONT};font-size:24px;line-height:1.2;font-weight:800;color:${BRAND.ink};">${escapeHtml(en.title)}</h2>`;
+
+  const html = layout(
+    "fr",
+    `${fr.title} · ${en.title}`,
+    `${launchSectionHtml("fr", fr)}\n${divider}\n${launchSectionHtml("en", en)}`,
+    undefined,
+    {
+      preheader: `${fr.preheader} · ${en.preheader}`,
+      footer: [
+        { contact: fr.contact, why: fr.why, lang: "fr" },
+        { contact: en.contact, why: en.why, lang: "en" },
+      ],
+    },
+  );
+
+  const text = [
+    "DevFest Yaoundé 2026 — GDG Yaoundé",
+    "",
+    ...launchSectionText("fr", fr),
+    "",
+    "----------------------------------------",
+    "",
+    ...launchSectionText("en", en),
+    "",
+    "----------------------------------------",
+    `${fr.contact} / ${en.contact}`,
+    `${SITE_URL} · ${CHAPTER_EMAIL}`,
+  ].join("\n");
+
+  return { subject: VOTE_SUBJECT, text, html };
 }

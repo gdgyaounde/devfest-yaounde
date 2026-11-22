@@ -1,6 +1,12 @@
 /**
- * GET /api/admin/emails/recipients — the "paid" launch update's recipient
- * list (ADR 0076). Organiser-only; personal data, so:
+ * GET /api/admin/emails/recipients — recipient lists for the hand-sent
+ * emails (ADR 0076). Organiser-only; personal data, so:
+ *
+ *   - `?list=launch` (default): the "paid" launch update — ticket holders,
+ *     ticket buyers and site accounts;
+ *   - `?list=accounts`: every account on the site — the "vote is open"
+ *     email (ADR 0099), since any account can vote.
+ *
  *
  *   - 404 (not 403) for anybody who is not an organiser, like every admin
  *     route — the route's existence is not advertised;
@@ -62,27 +68,32 @@ export async function GET(request: NextRequest) {
 
   const format =
     request.nextUrl.searchParams.get("format") === "csv" ? "csv" : "json";
+  const accountsOnly = request.nextUrl.searchParams.get("list") === "accounts";
   const db = createAdminSupabase();
 
   let rows;
   try {
     const [tickets, intents, profiles] = await Promise.all([
-      readAll((from, to) =>
-        db
-          .from("tickets")
-          .select("attendee_email, attendee_name, deposit_id")
-          .order("id")
-          .range(from, to),
-      ),
-      readAll((from, to) =>
-        db
-          .from("payment_intents")
-          .select("deposit_id, contact, locale")
-          .eq("status", "activated")
-          .eq("kind", "tickets")
-          .order("deposit_id")
-          .range(from, to),
-      ),
+      accountsOnly
+        ? []
+        : readAll((from, to) =>
+            db
+              .from("tickets")
+              .select("attendee_email, attendee_name, deposit_id")
+              .order("id")
+              .range(from, to),
+          ),
+      accountsOnly
+        ? []
+        : readAll((from, to) =>
+            db
+              .from("payment_intents")
+              .select("deposit_id, contact, locale")
+              .eq("status", "activated")
+              .eq("kind", "tickets")
+              .order("deposit_id")
+              .range(from, to),
+          ),
       readAll((from, to) =>
         db
           .from("profiles")
@@ -112,7 +123,9 @@ export async function GET(request: NextRequest) {
   await recordAudit({
     actor: organiser.userId,
     action: "emails.recipients_export",
-    target: "launch-update-2026-11.paid",
+    target: accountsOnly
+      ? "vote-open-2026-11.accounts"
+      : "launch-update-2026-11.paid",
     after: { total: rows.length, bySource },
   });
 
@@ -120,8 +133,9 @@ export async function GET(request: NextRequest) {
     headers: {
       ...NO_STORE,
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition":
-        'attachment; filename="devfest-launch-update-paid-recipients.csv"',
+      "Content-Disposition": accountsOnly
+        ? 'attachment; filename="devfest-vote-open-recipients.csv"'
+        : 'attachment; filename="devfest-launch-update-paid-recipients.csv"',
       "X-Content-Type-Options": "nosniff",
     },
   });
