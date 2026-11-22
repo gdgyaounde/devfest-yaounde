@@ -64,7 +64,9 @@
     "reserveCta": "Réserver",
     "wallStories": "Chaque mot ici a été laissé par quelqu'un de cette communauté — des histoires anonymes des éditions du DevFest Yaoundé, racontées une à une. Merci pour chacune d'elles.",
     "thankYou": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable — à la prochaine !",
-    "thankYouCta": "Voir les photos"
+    "thankYouCta": "Voir les photos",
+    "thankYouVote": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable ! Vote pour ton pitch préféré jusqu'au {date} à {time}.",
+    "voteCta": "Je vote"
   },
   "offline": {
     "banner": "Tu es hors ligne — {pages} restent disponibles."

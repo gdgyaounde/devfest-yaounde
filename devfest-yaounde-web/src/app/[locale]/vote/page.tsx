@@ -89,7 +89,7 @@ export default async function VotePage({
           href={partner.websiteUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-flex -rotate-1 items-center gap-4 rounded-lg border-2 border-black02 bg-offwhite py-3 pl-5 pr-6 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 hover:rotate-0 motion-reduce:transform-none"
+          className="mt-8 inline-flex items-center gap-4 rounded-lg border-2 border-black02 bg-offwhite py-3 pl-5 pr-6 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 motion-reduce:transform-none"
         >
           <span className="font-mono text-mono-tag font-bold uppercase text-black02/70">
             {t("poweredBy")}

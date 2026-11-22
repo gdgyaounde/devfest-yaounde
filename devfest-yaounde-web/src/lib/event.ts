@@ -1,5 +1,5 @@
 import { EVENT_DATES } from "./calendar";
-import { SITE_URL } from "./site-config";
+import { SITE_URL, VOTE_CLOSES_AT } from "./site-config";
 import type { TicketingSettings } from "./admin/shape";
 
 /**
@@ -290,10 +290,12 @@ export function withinSalesCloseRevalidateWindow(
       Partial<Pick<TicketingSettings, "reservationsCloseAt">>;
   },
 ): boolean {
-  // Two switches now (ADR 0084): payments close, then reservations close.
+  // Payments close, then reservations close (ADR 0084), then the pitch vote
+  // closes (ADR 0099) — each changes what the banner must say.
   return [
     settings.ticketing.salesCloseAt,
     settings.ticketing.reservationsCloseAt,
+    VOTE_CLOSES_AT,
   ].some((value) => {
     const end = cutoffInstant(value);
     if (end === null) return false;

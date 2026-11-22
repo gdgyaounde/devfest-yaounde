@@ -26,7 +26,8 @@ import { JsonLd } from "@/lib/seo";
 import { loadSettings } from "@/lib/content/settings";
 import { cfsAcceptsSubmissions, cfsView } from "@/lib/content/cfs";
 import { getSpeakers } from "@/lib/content/store";
-import { SITE_URL, isPlaceholderUrl } from "@/lib/site-config";
+import { voteOpen } from "@/lib/pitch-vote";
+import { SITE_URL, VOTE_CLOSES_AT, isPlaceholderUrl } from "@/lib/site-config";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
 
@@ -173,10 +174,24 @@ export default async function LocaleLayout({
 
   const album = settings.memoryLane.currentGalleryUrl.trim();
   const hasAlbum = Boolean(album) && !isPlaceholderUrl(album);
+  /*
+    While the pitch contest's public vote is open (ADR 0099), the thank-you
+    banner points at /vote instead of the album. Its own wording, so people
+    who dismissed the plain thank-you see it again. At the close it hides
+    itself on the client (`announcementExpiresAt`), and the revalidation
+    sweep brings back the album button within minutes.
+  */
+  const voting = closed && voteOpen(new Date());
+  const voteCloses = formatCutoff(l, VOTE_CLOSES_AT);
   const announcementMessage =
     custom ||
     (closed
-      ? tAnnouncement("thankYou")
+      ? voting
+        ? tAnnouncement("thankYouVote", {
+            date: voteCloses?.date ?? "",
+            time: voteCloses?.time ?? "",
+          })
+        : tAnnouncement("thankYou")
       : salesBanner
         ? tAnnouncement("salesClose", {
             date: salesCutoff!.date,
@@ -195,7 +210,13 @@ export default async function LocaleLayout({
             ? tCfs("banner")
             : fallback);
   const announcementCta = closed
-    ? hasAlbum
+    ? voting
+      ? {
+          href: `/${locale}/vote`,
+          label: tAnnouncement("voteCta"),
+          external: false,
+        }
+      : hasAlbum
       ? {
           href: album,
           label: tAnnouncement("thankYouCta"),
@@ -284,7 +305,9 @@ export default async function LocaleLayout({
                     ? settings.ticketing.salesCloseAt
                     : reserveBanner
                       ? settings.ticketing.reservationsCloseAt
-                      : undefined
+                      : voting && !custom
+                        ? VOTE_CLOSES_AT
+                        : undefined
                 }
                 nav={settings.nav}
               />

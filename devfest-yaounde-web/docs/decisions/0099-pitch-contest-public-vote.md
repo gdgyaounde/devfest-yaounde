@@ -22,6 +22,7 @@ Two facts shaped the design:
 - **One vote per account, changeable until the close**: `pitch_votes` has the voter as its primary key; voting again updates the row.
 - **Closes Tuesday 24 November 2026, 23:59 (Douala)**, as `VOTE_CLOSES_AT` in `src/lib/site-config.ts`. The API refuses votes from then on.
 - **Results are hidden while voting is open.** Organisers see the live tally, turnout and eligible count in the dashboard (Community → Pitch vote, CSV export). Once voting closes, `/vote` shows everyone the ranking: ties share a rank, and the top project is badged "Public's choice". Counts only, never who voted for what.
+- **The banner points at it.** While the vote is open, the thank-you banner reads "…vote for your favourite pitch until {date}" with a "Vote now" button to `/vote` (new wording, so people who dismissed the plain thank-you see it again). It hides itself at the close, and the revalidation sweep (`withinSalesCloseRevalidateWindow`, which now includes `VOTE_CLOSES_AT`) brings back the thank-you with the album button within minutes.
 - **The table and its functions are service-role only**: RLS on, no policies, execute revoked from `anon` and `authenticated`. `/api/vote` checks the origin, requires sign-in, is rate-limited (per account, or per IP when signed out), validates the project id against the ballot (`zod` enum, plus a database check on its shape), and **fails closed**: before 0046 is applied, it writes nothing and the page says voting opens soon.
 
 ## Consequences

@@ -2,6 +2,8 @@
 
 After the event, the people who were checked in at the door can vote for their favourite pitch at **/vote** (for example `devfest.gdgyaounde.com/fr/vote`). The page credits the contest's partner, Impact Hub Yaoundé, at the top.
 
+Until voting closes, the banner at the top of every page links to it ("Vote now" / "Je vote"). Afterwards it goes back to the thank-you with "See the photos". A message typed in the dashboard's info bar still replaces the banner, as always.
+
 ## Turning it on (once)
 
 1. In Supabase → SQL editor, run `supabase/migrations/0046_pitch_votes.sql`.
