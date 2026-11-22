@@ -14,7 +14,7 @@ Two facts shaped the design:
 
 ## Decision
 
-- **`/vote`** (both locales, not indexed) lists the seven projects in pitch order: name, team, a short bilingual tagline (ours), the team's own pitch in French behind "Read their pitch", and a link to try it. The contest's partner is credited at the top: "Powered by" with Impact Hub Yaoundé's logo, sitting plainly on the page (`impact-hub-yaounde-plain.png`: the sponsor file straightened, its white plate made transparent), linking to their site.
+- **`/vote`** (both locales, not indexed) lists the seven projects in pitch order: name, team, a short bilingual tagline (ours), the team's own pitch in French behind "Read their pitch", and a link to try it. The contest's partner is credited at the top: "Powered by" with Impact Hub Yaoundé's logo, sitting plainly on the page, linking to their site. The logo file itself (`public/sponsors/impact-hub-yaounde.png`, used everywhere on the site) was cleaned to match: the supplied artwork came on a slightly tilted white plate, so it was straightened and the plate and letter counters made transparent.
 - **Who may vote is decided in the database** (`pitch_vote_eligible`, migration 0046), never in the browser or from anything a request carries. Every checked-in ticket or reservation maps to **exactly one account**, so none can produce a second voter:
   - your own ticket (`is_self`) or one you claimed: your account;
   - a ticket someone bought for you: the account whose email is the ticket's attendee email (case and spaces ignored), never the payer;

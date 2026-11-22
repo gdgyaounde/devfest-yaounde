@@ -33,11 +33,11 @@ const IMPACT_HUB_FALLBACK = {
   websiteUrl: "https://yaounde.impacthub.net/",
 };
 /**
- * Their logo without its tilted white plate — straightened, the plate made
- * transparent and the edges cleaned — so it sits plainly on the page. The
- * sponsor strip keeps the original file.
+ * Their logo, plain: the supplied artwork straightened, its white plate and
+ * letter counters made transparent, edges cleaned. The same file the sponsor
+ * strip uses.
  */
-const IMPACT_HUB_PLAIN_LOGO = "/sponsors/impact-hub-yaounde-plain.png";
+const IMPACT_HUB_PLAIN_LOGO = "/sponsors/impact-hub-yaounde.png";
 
 /**
  * `/{locale}/vote` — the pitch contest's public vote (ADR 0099).
