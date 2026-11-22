@@ -30,9 +30,14 @@ export async function generateMetadata({
 const IMPACT_HUB_ID = "impact-hub-yaounde";
 const IMPACT_HUB_FALLBACK = {
   name: "Impact Hub Yaoundé",
-  logoUrl: "/sponsors/impact-hub-yaounde.png",
   websiteUrl: "https://yaounde.impacthub.net/",
 };
+/**
+ * Their logo without its tilted white plate — straightened, the plate made
+ * transparent and the edges cleaned — so it sits plainly on the page. The
+ * sponsor strip keeps the original file.
+ */
+const IMPACT_HUB_PLAIN_LOGO = "/sponsors/impact-hub-yaounde-plain.png";
 
 /**
  * `/{locale}/vote` — the pitch contest's public vote (ADR 0099).
@@ -56,7 +61,6 @@ export default async function VotePage({
   const hub = sponsors.find((s) => s.id === IMPACT_HUB_ID);
   const partner = {
     name: hub?.name ?? IMPACT_HUB_FALLBACK.name,
-    logoUrl: hub?.logoUrl || IMPACT_HUB_FALLBACK.logoUrl,
     websiteUrl: hub?.websiteUrl || IMPACT_HUB_FALLBACK.websiteUrl,
   };
   const closes = formatCutoff(l, VOTE_CLOSES_AT);
@@ -89,16 +93,18 @@ export default async function VotePage({
           href={partner.websiteUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-4 rounded-lg border-2 border-black02 bg-offwhite py-3 pl-5 pr-6 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 motion-reduce:transform-none"
+          className="mt-8 inline-flex items-center gap-4 rounded-sm transition-opacity duration-200 hover:opacity-80"
         >
           <span className="font-mono text-mono-tag font-bold uppercase text-black02/70">
             {t("poweredBy")}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element -- a sponsor logo, possibly remote */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- a small static logo */}
           <img
-            src={partner.logoUrl}
+            src={IMPACT_HUB_PLAIN_LOGO}
             alt={partner.name}
-            className="h-12 w-auto object-contain sm:h-16"
+            width={1344}
+            height={491}
+            className="h-12 w-auto sm:h-16"
           />
         </a>
 
