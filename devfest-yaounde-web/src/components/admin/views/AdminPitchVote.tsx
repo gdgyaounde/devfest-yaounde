@@ -2,7 +2,7 @@
 
 import type { AdminData } from "@/lib/admin/shape";
 import { PITCH_PROJECTS, rankTally, voteClosesAt, voteOpen } from "@/lib/pitch-vote";
-import { ExportButton, InfoBanner, Panel, when } from "./shared";
+import { DataTable, ExportButton, InfoBanner, Panel, when } from "./shared";
 
 /**
  * The pitch contest public vote, live (ADR 0099). Organisers see the tally
@@ -87,6 +87,35 @@ export function AdminPitchVote({ data }: { data: AdminData }) {
             </li>
           ))}
         </ol>
+      </Panel>
+
+      <Panel
+        title={`Who voted (${data.pitchVoters.length})`}
+        subtitle="Everyone who has voted, first vote first, with their email. Their picks stay secret: only how many projects they chose. Personal data: keep exports off shared drives."
+        action={
+          <ExportButton
+            filename="devfest-pitch-voters.csv"
+            headers={["Name", "Email", "First voted", "Picks"]}
+            rows={data.pitchVoters.map((v) => [
+              v.name,
+              v.email,
+              v.votedAt,
+              v.picks,
+            ])}
+          />
+        }
+      >
+        <DataTable
+          headers={["#", "Name", "Email", "First voted", "Picks"]}
+          empty="Nobody has voted yet."
+          rows={data.pitchVoters.map((v, i) => [
+            i + 1,
+            v.name || "—",
+            v.email || "—",
+            when(v.votedAt),
+            v.picks,
+          ])}
+        />
       </Panel>
     </div>
   );

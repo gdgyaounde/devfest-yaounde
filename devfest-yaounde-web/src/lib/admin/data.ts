@@ -167,6 +167,63 @@ async function loadCommerceInputs(
   };
 }
 
+/**
+ * Who voted in the pitch vote (ADR 0099), for the organisers: name, email,
+ * first vote, number of picks. Which projects they picked is deliberately
+ * NOT read. Before migration 0046 the table is missing: reads as nobody.
+ */
+async function loadPitchVoters(
+  db: ReturnType<typeof createAdminSupabase>,
+): Promise<AdminData["pitchVoters"]> {
+  const PAGE = 1000;
+  const byUser = new Map<string, { votedAt: string; picks: number }>();
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await db
+      .from("pitch_votes")
+      .select("user_id, created_at")
+      .order("created_at")
+      .range(from, from + PAGE - 1);
+    if (error) {
+      if (!isMissingVoteSchema(error)) {
+        console.error("[admin] pitch voters read failed", error.message);
+      }
+      return [];
+    }
+    for (const row of data ?? []) {
+      const seen = byUser.get(row.user_id);
+      if (!seen) byUser.set(row.user_id, { votedAt: row.created_at, picks: 1 });
+      else {
+        seen.picks += 1;
+        if (row.created_at < seen.votedAt) seen.votedAt = row.created_at;
+      }
+    }
+    if (!data || data.length < PAGE) break;
+  }
+  const ids = [...byUser.keys()];
+  const people = new Map<string, { email: string; name: string }>();
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data, error } = await db
+      .from("profiles")
+      .select("id, email, display_name")
+      .in("id", ids.slice(i, i + 200));
+    if (error) {
+      console.error("[admin] pitch voter profiles read failed", error.message);
+      break;
+    }
+    for (const p of data ?? []) {
+      people.set(p.id, { email: p.email ?? "", name: p.display_name ?? "" });
+    }
+  }
+  return ids
+    .map((id) => ({
+      name: people.get(id)?.name ?? "",
+      email: people.get(id)?.email ?? "",
+      votedAt: byUser.get(id)!.votedAt,
+      picks: byUser.get(id)!.picks,
+    }))
+    .sort((a, b) => a.votedAt.localeCompare(b.votedAt));
+}
+
 export async function loadAdminData(): Promise<AdminData> {
   const organiser = await gate();
   const db = createAdminSupabase();
@@ -178,6 +235,7 @@ export async function loadAdminData(): Promise<AdminData> {
     commerceInputs,
     interestCounts,
     sessions,
+    pitchVoters,
     pitchVote,
   ] = await Promise.all([
     allApparelRows(db),
@@ -193,6 +251,7 @@ export async function loadAdminData(): Promise<AdminData> {
       return data ?? [];
     }),
     getSessions(),
+    loadPitchVoters(db),
     // The live tally (ADR 0099). Before migration 0046: null, and the view
     // says so.
     db.rpc("pitch_vote_stats").then(({ data, error }) => {
@@ -412,6 +471,7 @@ export async function loadAdminData(): Promise<AdminData> {
     },
     reservations: commerceInputs.reservations,
     pitchVote,
+    pitchVoters,
     sessionInterest: {
       total: interest.reduce((n, r) => n + r.interested, 0),
       rows: interest,

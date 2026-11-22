@@ -247,6 +247,14 @@ export interface AdminSettings {
   source: "database" | "repo";
 }
 
+export interface AdminPitchVoter {
+  name: string;
+  email: string;
+  /** When they first voted (ISO). */
+  votedAt: string;
+  picks: number;
+}
+
 export interface AdminData {
   organiserEmail: string | null;
   /** Google profile picture — only ever a vetted Google-hosted https URL. */
@@ -275,6 +283,11 @@ export interface AdminData {
    * 0046 is applied.
    */
   pitchVote: import("@/lib/pitch-vote").VoteStats | null;
+  /**
+   * Who voted (ADR 0099), first vote first: name, email, when, and how many
+   * picks. NOT which projects — the ballot stays secret, even here.
+   */
+  pitchVoters: AdminPitchVoter[];
   /** "This interests me" per session — counts only, never who (ADR 0086). */
   sessionInterest: {
     total: number;

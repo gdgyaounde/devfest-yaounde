@@ -31,6 +31,7 @@ The same files are in `docs/content/emails/vote-open-2026-11.html` / `.txt`. Re-
 ## Watching it and announcing the winner
 
 - **Dashboard → Community → Pitch vote** shows the live tally, how many people voted, how many picks in all, and how many people could vote. The % next to each project is the share of voters who picked it. With two picks each, the percentages add up past 100%. **Export CSV** saves it.
+- Below the tally, **Who voted** lists everyone who has voted: name, email, when they first voted, and how many projects they picked. It has its own **Export CSV**. Which projects each person chose is never shown.
 - Voters don't see the results while voting is open.
 - Voting closes on **Tuesday 24 November 2026 at 23:59** (Yaoundé time). From then on, /vote shows everyone the ranking, with the winner marked "Public's choice".
 
