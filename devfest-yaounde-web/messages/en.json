@@ -900,9 +900,9 @@
     },
     "vote": {
       "title": "Vote for your favourite pitches",
-      "metaDesc": "Seven teams pitched at DevFest Yaoundé 2026. Sign in and vote for up to two projects you liked best.",
+      "metaDesc": "Eight teams pitched at DevFest Yaoundé 2026. Sign in and vote for up to two projects you liked best.",
       "eyebrow": "Pitch contest · DevFest Yaoundé 2026",
-      "lead": "Seven teams took the stage on Saturday. Sign in and vote for up to two of them: pick the projects you'd back.",
+      "lead": "Eight teams took the stage on Saturday. Sign in and vote for up to two of them: pick the projects you'd back.",
       "poweredBy": "Powered by",
       "openUntil": "Voting is open until {date} at {time}",
       "closedOn": "Voting closed on {date} at {time}",
@@ -927,7 +927,7 @@
       "resultsTitle": "The public's choice",
       "resultsLead": "{count, plural, =0 {Nobody voted.} one {# person voted, up to two projects each.} other {# people voted, up to two projects each.}}",
       "winner": "Public's choice",
-      "projectsTitle": "The seven pitches",
+      "projectsTitle": "The eight pitches",
       "signOut": "Sign out",
       "picksUsed": "Your votes: {count} of {max}",
       "removeVote": "Remove my vote",
@@ -1484,7 +1484,7 @@
   "votePopup": {
     "title": "Vote for your favourite pitches",
     "poweredBy": "Pitch contest powered by",
-    "body": "Seven teams pitched on Saturday. Sign in and vote for up to two projects you'd back, until {date} at {time}. Results are revealed once voting closes.",
+    "body": "Eight teams pitched on Saturday. Sign in and vote for up to two projects you'd back, until {date} at {time}. Results are revealed once voting closes.",
     "cta": "Vote now",
     "later": "Maybe later"
   },

@@ -20,7 +20,7 @@ import {
 } from "@/lib/pitch-vote";
 
 describe("the ballot", () => {
-  it("has the seven pitches, in pitch order, with unique ids", () => {
+  it("has the eight pitches, in pitch order, with unique ids", () => {
     assert.deepEqual(
       PITCH_PROJECTS.map((p) => p.id),
       [
@@ -31,6 +31,7 @@ describe("the ballot", () => {
         "divinelink",
         "transax",
         "tchuekam-agent",
+        "fys",
       ],
     );
   });
