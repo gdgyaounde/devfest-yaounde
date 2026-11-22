@@ -46,31 +46,31 @@
     "id": "faq-when-where",
     "category": "general",
     "question": {
-      "fr": "Quand et où ça se passe ?",
-      "en": "When and where is it happening?"
+      "en": "When and where did it happen?",
+      "fr": "Quand et où cela s'est-il passé ?"
     },
     "answer": {
-      "fr": "DevFest Yaoundé 2026 a lieu le samedi 21 novembre 2026. Il se tient à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350. Le bloc « Quand et où » de la page d'accueil donne la date et un lien vers le point exact sur Maps, et le programme complet est sur la page Programme.",
-      "en": "DevFest Yaoundé 2026 takes place on Saturday 21 November 2026. It is held at the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350. The venue section on the home page has the date and a link to the exact spot on Maps, and the full agenda is on the Schedule page."
+      "en": "DevFest Yaoundé 2026 took place on Saturday 21 November 2026. It was held at the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350. Thank you to everyone who came — the full programme of the day is still on the Schedule page.",
+      "fr": "DevFest Yaoundé 2026 s'est déroulé le samedi 21 novembre 2026. Il s'est tenu à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350. Merci à toutes celles et ceux qui sont venus — le programme complet de la journée reste sur la page Programme."
     },
     "cta": {
       "label": {
-        "fr": "Voir le lieu",
-        "en": "See the venue"
+        "fr": "Voir le programme",
+        "en": "See the programme"
       },
-      "href": "/#venue"
+      "href": "/schedule"
     }
   },
   {
     "id": "faq-agenda",
     "category": "general",
     "question": {
-      "fr": "Le programme est-il disponible ?",
-      "en": "Is the agenda available?"
+      "en": "Can I still see the agenda?",
+      "fr": "Le programme est-il toujours consultable ?"
     },
     "answer": {
-      "fr": "Oui — le programme est en ligne. La journée va de 8h00 (accueil) à 19h00 sur cinq salles, avec l'ouverture à 9h00, des talks et des ateliers toute la journée, des pauses, une session partenaires et un concours de pitch. Les salles sont ouvertes à tous : choisis ce qui te plaît. Certaines entrées peuvent encore bouger, jette donc un œil à la page Programme le jour J.",
-      "en": "Yes — the agenda is live. The day runs from 08:00 (check-in) to 19:00 across five rooms, with the opening at 09:00, talks and workshops all day, breaks, a partner session and a pitch contest. Rooms are open to everyone: pick what you like. Some entries may still move, so check the Schedule page on the day."
+      "en": "Yes — the full programme of the day stays on the Schedule page, with every talk, workshop and speaker.",
+      "fr": "Oui — le programme complet de la journée reste sur la page Programme, avec chaque talk, atelier et speaker."
     },
     "cta": {
       "label": {
@@ -123,12 +123,12 @@
     "id": "faq-ticket-types",
     "category": "tickets",
     "question": {
-      "fr": "Quels sont les types de billets disponibles ?",
-      "en": "What ticket types are available?"
+      "en": "What ticket types were there?",
+      "fr": "Quels types de billets y avait-il ?"
     },
     "answer": {
-      "fr": "Cinq catégories, nommées d'après des modèles Claude (oui, vraiment). Haikyu est gratuit : il donne accès aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, avec un certificat de participation. Sonnet, Opus, Fable et Mythos sont payants : en plus, ils comprennent le déjeuner et les pauses café, un identifiant de l'événement (badge, lanyard, bracelet ou similaire) et le swag de leur palier. Les paiements en ligne sont clos : les pass payants se réservent désormais sur le site et se paient en espèces sur place — Sonnet 5 000, Opus 6 500, Fable 12 000, Mythos 27 000 XAF.",
-      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu is free: it gets you into the talks, the workshops (while there's room) and the sponsor stands, with a certificate of participation. Sonnet, Opus, Fable and Mythos are paid: on top of that, they include lunch and coffee breaks, an event identifier (badge, lanyard, bracelet or similar) and their tier's swag. Online payments are closed: paid passes are now reserved on the site and paid in cash at the venue — Sonnet 5,000, Opus 6,500, Fable 12,000, Mythos 27,000 XAF."
+      "en": "Five tiers, named after Claude model releases (yes, really). Haikyu was free: the talks, the workshops (while there was room), the sponsor stands and a certificate of participation. Sonnet, Opus, Fable and Mythos were paid and added lunch and coffee breaks, an event identifier and their tier's swag. Ticket sales are now closed.",
+      "fr": "Cinq niveaux, nommés d'après les modèles Claude (oui, vraiment). Haikyu était gratuit : les talks, les ateliers (dans la limite des places), les stands des sponsors et un certificat de participation. Sonnet, Opus, Fable et Mythos étaient payants et ajoutaient le déjeuner et les pauses café, un identifiant de l'événement et le swag du niveau. La billetterie est désormais fermée."
     },
     "cta": {
       "label": {
@@ -139,127 +139,27 @@
     }
   },
   {
-    "id": "faq-free-ticket",
-    "category": "tickets",
-    "question": {
-      "fr": "Comment j'obtiens le billet gratuit ?",
-      "en": "How do I get the free ticket?"
-    },
-    "answer": {
-      "fr": "Le pass gratuit (Haikyu) se réserve sur notre page communautaire GDG Bevy, pas sur ce site — une seule réservation par personne. Il te donne accès aux talks, aux ateliers (dans la limite des places) et aux stands des sponsors, plus un certificat de participation. Le repas, les boissons, le swag et les identifiants (badge, lanyard, bracelet ou similaire) sont réservés aux pass payants.",
-      "en": "The free pass (Haikyu) is booked on our GDG Bevy community page, not on this site — one RSVP per person. It gets you into the talks, the workshops (while there's room) and the sponsor stands, plus a certificate of participation. Food, drinks, swag and event identifiers (badge, lanyard, bracelet or similar) are for paid passes."
-    },
-    "cta": {
-      "label": {
-        "fr": "Lire les conditions de participation",
-        "en": "Read the participation terms"
-      },
-      "href": "/terms"
-    }
-  },
-  {
     "id": "faq-payment-method",
     "category": "tickets",
     "question": {
-      "fr": "Comment payer un billet payant ?",
-      "en": "How do I pay for a paid ticket?"
+      "en": "Can I still buy a ticket?",
+      "fr": "Puis-je encore acheter un billet ?"
     },
     "answer": {
-      "fr": "Les paiements en ligne ont fermé le mercredi 18 novembre à 12h00 — plus rien ne se paie sur le site. Réserve ta place (billets ou articles de la boutique) jusqu'au vendredi 20 novembre à 17h00, puis paie en espèces sur place. Avant la clôture, nous n'acceptions que le Mobile Money (MTN MoMo et Orange Money).",
-      "en": "Online payments closed on Wednesday 18 November at 12:00 — nothing is paid on the site any more. Reserve your spot (tickets or shop items) until Friday 20 November at 17:00, then pay in cash at the venue. Before the cutoff we accepted Mobile Money only (MTN MoMo and Orange Money)."
-    },
-    "cta": {
-      "label": {
-        "fr": "Réserver ma place",
-        "en": "Reserve my spot"
-      },
-      "href": "/reserve"
-    }
-  },
-  {
-    "id": "faq-reservation",
-    "category": "tickets",
-    "question": {
-      "fr": "Que veut dire « réserver » ?",
-      "en": "What does it mean to reserve?"
-    },
-    "answer": {
-      "fr": "Depuis la clôture des paiements en ligne, tu réserves : tu choisis tes billets et tes articles, tu donnes ton nom, et tu reçois une référence. Rien ne se paie sur le site — tu paies en espèces sur place, au prix en espèces (sans frais en ligne). La réservation garde ta place et tes articles, et ferme le vendredi 20 novembre à 17h00.",
-      "en": "Since online payments closed, you reserve instead: pick your tickets and any shop items, give your name, and you get a reference. Nothing is paid on the site — you pay in cash at the venue, at the cash price (no online fee). Reservations hold your place and your items, and close on Friday 20 November at 17:00."
-    },
-    "cta": {
-      "label": {
-        "fr": "Réserver ma place",
-        "en": "Reserve my spot"
-      },
-      "href": "/reserve"
-    }
-  },
-  {
-    "id": "faq-pay-at-venue",
-    "category": "tickets",
-    "question": {
-      "fr": "Puis-je venir directement et payer le jour J ?",
-      "en": "Can I just show up and pay on the day?"
-    },
-    "answer": {
-      "fr": "Oui. Une fois les réservations closes (vendredi 20 novembre, 17h00), viens à la Faculté de Médecine et des Sciences Biomédicales de Yaoundé (FMSB), Amphi 350, et paie en espèces sur place, au prix en espèces. Les pass gratuits se réservent toujours sur notre page communautaire.",
-      "en": "Yes. After reservations close (Friday 20 November, 17:00), come to the Faculty of Medicine and Biomedical Sciences Yaoundé (FMSB), Amphi 350, and pay in cash on the spot, at the cash price. Free passes are still reserved on our community page."
-    },
-    "cta": {
-      "label": {
-        "fr": "Voir le lieu",
-        "en": "See the venue"
-      },
-      "href": "/#venue"
-    }
-  },
-  {
-    "id": "faq-ticket-for-someone-else",
-    "category": "tickets",
-    "question": {
-      "fr": "Puis-je acheter un billet pour quelqu'un d'autre ?",
-      "en": "Can I buy a ticket for someone else?"
-    },
-    "answer": {
-      "fr": "Oui — réserve autant de billets payants que tu veux et renseigne le nom de chaque participant (et la taille de T-shirt quand son pass en inclut un), en cochant le tien si tu viens aussi. Les billets déjà achetés en ligne fonctionnent comme avant.",
-      "en": "Yes — reserve as many paid tickets as you like and fill in each attendee's name (and T-shirt size where their tier includes one), including marking one as your own if you're attending too. Tickets already bought online keep working as before."
-    }
-  },
-  {
-    "id": "faq-discount-codes",
-    "category": "tickets",
-    "question": {
-      "fr": "Proposez-vous des codes de réduction ?",
-      "en": "Do you offer discount codes?"
-    },
-    "answer": {
-      "fr": "Les codes de réduction ne fonctionnaient qu'en ligne, avant la clôture des paiements le mercredi 18 novembre à 12h00. Pour un paiement en espèces sur place, écris à gdgyaounde@gmail.com si tu as un code d'un sponsor ou d'un partenaire.",
-      "en": "Discount codes only worked online, before payments closed on Wednesday 18 November at 12:00. For cash at the venue, write to gdgyaounde@gmail.com if you have a code from a sponsor or partner."
+      "en": "No — DevFest Yaoundé 2026 is over and ticket sales are closed. Nothing can be bought, reserved or paid at the venue any more. Join our community to hear about the next edition first.",
+      "fr": "Non — DevFest Yaoundé 2026 est terminé et la billetterie est fermée. Plus rien ne peut être acheté, réservé ni payé sur place. Rejoins notre communauté pour être parmi les premiers informés de la prochaine édition."
     }
   },
   {
     "id": "faq-refunds",
     "category": "tickets",
     "question": {
-      "fr": "Les billets sont-ils remboursables ?",
-      "en": "Are tickets refundable?"
+      "en": "Are tickets refundable?",
+      "fr": "Les billets sont-ils remboursables ?"
     },
     "answer": {
-      "fr": "Les billets achetés en ligne avant la clôture ne sont pas remboursables — c'était indiqué au paiement. Les réservations ne coûtent rien tant que tu ne paies pas en espèces sur place, et tu peux annuler la tienne depuis ton compte jusqu'au vendredi 20 novembre à 17h00.",
-      "en": "Tickets bought online before the cutoff are non-refundable — we flagged this at checkout. Reservations cost nothing until you pay in cash at the venue, and you can cancel yours from your account until Friday 20 November at 17:00."
-    }
-  },
-  {
-    "id": "faq-no-confirmation-email",
-    "category": "tickets",
-    "question": {
-      "fr": "J'ai acheté un billet mais je n'ai pas reçu d'email de confirmation.",
-      "en": "I bought a ticket but haven't received a confirmation email."
-    },
-    "answer": {
-      "fr": "Tu dois recevoir une confirmation avec ton billet et ton QR code peu après le paiement. Si rien n'arrive après quelques minutes, vérifie tes spams, puis écris-nous à gdgyaounde@gmail.com et on règle ça. Tu as réservé au lieu d'acheter ? Les réservations ne sont pas envoyées par e-mail : ta référence est sur l'écran de confirmation et dans « Mes réservations » de ton compte — garde-la et apporte-la le jour J.",
-      "en": "You should get a confirmation with your ticket and QR code shortly after payment. If it hasn't arrived after a few minutes, check spam, then email gdgyaounde@gmail.com and we'll sort it out. Reserved instead of buying? Reservations aren't emailed: your reference is on the confirmation screen and under \"My reservations\" in your account — keep it and bring it on the day."
+      "en": "Tickets bought online were non-refundable — we flagged this at checkout. If something went wrong with yours, write to gdgyaounde@gmail.com and we'll look into it.",
+      "fr": "Les billets achetés en ligne n'étaient pas remboursables — c'était indiqué au paiement. Si quelque chose s'est mal passé avec le tien, écris à gdgyaounde@gmail.com et nous regarderons."
     },
     "cta": {
       "label": {
@@ -271,158 +171,82 @@
     }
   },
   {
-    "id": "faq-ticket-bought-for-friend",
+    "id": "faq-no-confirmation-email",
     "category": "tickets",
     "question": {
-      "fr": "J'ai acheté un billet pour un ami — peut-il le gérer lui-même ?",
-      "en": "I bought a ticket for a friend — can they manage it themselves?"
+      "en": "I bought a ticket but can't find it.",
+      "fr": "J'ai acheté un billet mais je ne le retrouve pas."
     },
     "answer": {
-      "fr": "Oui — si tu as acheté un billet pour quelqu'un d'autre, cette personne peut le récupérer sur son propre compte pour le gérer et se présenter à l'accueil avec. Le billet garde tous les avantages de son palier (repas, identifiant, swag) : c'est le pass qui compte, pas qui l'a payé.",
-      "en": "Yes — if you bought a ticket on someone else's behalf, they can claim it into their own account to manage it and check in with it themselves. The ticket keeps every perk of its tier (food, identifier, swag): it's the pass that counts, not who paid for it."
+      "en": "Every ticket bought online is in your account, under My tickets. If it isn't there, email gdgyaounde@gmail.com with the phone number or email you paid with and we'll sort it out.",
+      "fr": "Chaque billet acheté en ligne se trouve dans ton compte, sous Mes billets. S'il n'y est pas, écris à gdgyaounde@gmail.com avec le numéro ou l'e-mail utilisé pour payer et nous réglerons ça."
     },
     "cta": {
       "label": {
-        "fr": "Voir ce que chaque pass comprend",
-        "en": "See what each pass includes"
+        "fr": "Nous écrire",
+        "en": "Email us"
       },
-      "href": "/terms"
-    }
-  },
-  {
-    "id": "faq-change-tshirt-size",
-    "category": "tickets",
-    "question": {
-      "fr": "Je peux changer ma taille de T-shirt ?",
-      "en": "Can I change my T-shirt size?"
-    },
-    "answer": {
-      "fr": "Oui — depuis ton compte, jusqu'au mercredi 18 novembre à 23h59 (heure de Yaoundé). Tu peux aussi y corriger le nom de la personne qui vient. Après, tout part à l'impression : écris-nous si quelque chose cloche.",
-      "en": "Yes — from your account, until Wednesday 18 November at 23:59 (Yaoundé time). You can fix the attendee's name there too. After that, everything goes to print — write to us if something's wrong."
-    },
-    "cta": {
-      "label": {
-        "fr": "Mon compte",
-        "en": "My account"
-      },
-      "href": "/account"
-    }
-  },
-  {
-    "id": "faq-what-to-bring",
-    "category": "venue",
-    "question": {
-      "fr": "Qu'est-ce que je dois apporter ?",
-      "en": "What should I bring?"
-    },
-    "answer": {
-      "fr": "Toi-même, une pièce d'identité valide au nom de ton billet, ta référence de réservation si tu as réservé (et de quoi payer en espèces), et peut-être une veste si tu as vite froid dans les salles climatisées. Les ordinateurs portables sont les bienvenus pour suivre un atelier.",
-      "en": "Yourself, a valid ID matching the name on your ticket, your reservation reference if you reserved (and cash to pay it), and maybe a jacket if you run cold in AC'd rooms. Laptops are welcome if you're following along with a workshop."
-    }
-  },
-  {
-    "id": "faq-parking-accessibility",
-    "category": "venue",
-    "question": {
-      "fr": "Y a-t-il un parking / le lieu est-il accessible ?",
-      "en": "Is there parking / is the venue accessible?"
-    },
-    "answer": {
-      "fr": "Nous n'avons pas encore de détails confirmés sur le parking ou l'accessibilité à FMSB Yaoundé. Ouvre le lien Maps pour voir les alentours, et écris à gdgyaounde@gmail.com si tu as des besoins particuliers — nous te dirons ce que nous pouvons.",
-      "en": "We don't have confirmed details about parking or accessibility at FMSB Yaoundé yet. Open the map link to see the surroundings, and write to gdgyaounde@gmail.com if you have specific needs — we'll tell you what we can."
-    }
-  },
-  {
-    "id": "faq-food-venue",
-    "category": "venue",
-    "question": {
-      "fr": "Y aura-t-il de quoi manger ?",
-      "en": "Will there be food?"
-    },
-    "answer": {
-      "fr": "Oui, pour les pass payants (Sonnet, Opus, Fable, Mythos) : le déjeuner et les pauses café sont compris. Le pass gratuit ne comprend ni repas ni boissons — même s'il en reste en fin de journée.",
-      "en": "Yes, for paid passes (Sonnet, Opus, Fable, Mythos): lunch and coffee breaks are included. The free pass doesn't include food or drinks — even if there's some left at the end of the day."
-    },
-    "cta": {
-      "label": {
-        "fr": "Voir ce que chaque pass comprend",
-        "en": "See what each pass includes"
-      },
-      "href": "/terms"
-    }
-  },
-  {
-    "id": "faq-free-pass-food",
-    "category": "venue",
-    "question": {
-      "fr": "Y aura-t-il à manger pour les pass gratuits ?",
-      "en": "Will there be food for free-pass holders?"
-    },
-    "answer": {
-      "fr": "Non — le repas et les boissons sont réservés aux pass payants, y compris s'il en reste en fin de journée. Prévois de quoi manger (si le lieu l'autorise) ou repère les options à proximité. Et si tu préfères avoir le déjeuner compris, un pass payant reste possible jusqu'au mercredi 18 novembre à 12h00 en ligne, et tu peux encore en réserver un jusqu'au vendredi 20 novembre à 17h00 puis payer en espèces sur place.",
-      "en": "No — food and drinks are for paid passes, including if there's some left at the end of the day. Bring something to eat (if the venue allows it) or look up the options nearby. And if you'd rather have lunch included, paid passes could be bought online until Wednesday 18 November at 12:00, and you can still reserve one until Friday 20 November at 17:00 and pay in cash at the venue."
-    },
-    "cta": {
-      "label": {
-        "fr": "Lire les conditions de participation",
-        "en": "Read the participation terms"
-      },
-      "href": "/terms"
+      "href": "mailto:gdgyaounde@gmail.com",
+      "external": true
     }
   },
   {
     "id": "faq-shop-without-ticket",
     "category": "shop",
     "question": {
-      "fr": "Puis-je acheter du merch sans acheter de billet ?",
-      "en": "Can I buy merch without buying a ticket?"
+      "en": "Can I still buy merch?",
+      "fr": "Puis-je encore acheter du merch ?"
     },
     "answer": {
-      "fr": "Oui — la boutique est ouverte à tous, avec ou sans billet. Les paiements en ligne étant clos, les articles se réservent désormais sur le site (jusqu'au vendredi 20 novembre à 17h00) et se paient en espèces en les récupérant sur place. Réserver du merch ne transforme pas un pass gratuit en pass payant : le repas, les identifiants et le swag des paliers restent liés aux billets payants.",
-      "en": "Yes — the shop is open to everyone, ticket or not. Online payments are closed, so shop items are now reserved on the site (until Friday 20 November at 17:00) and paid in cash when you collect them at the venue. Reserving merch doesn't turn a free pass into a paid one, though: food, event identifiers and tier swag stay with paid tickets."
+      "en": "Not right now. The shop stays open to browse, but sales and reservations are closed for the moment. Join our community to hear when it reopens.",
+      "fr": "Pas pour le moment. La boutique reste consultable, mais les ventes et les réservations sont fermées pour l'instant. Rejoins notre communauté pour savoir quand elle rouvrira."
     },
     "cta": {
       "label": {
-        "fr": "Lire les conditions de participation",
-        "en": "Read the participation terms"
+        "fr": "Voir la boutique",
+        "en": "Browse the shop"
       },
-      "href": "/terms"
+      "href": "/shop"
     }
   },
   {
     "id": "faq-order-pickup-delivery",
     "category": "shop",
     "question": {
-      "fr": "Comment je récupère ma commande — retrait ou livraison ?",
-      "en": "How do I get my order — pickup or delivery?"
+      "en": "I didn't get the items I ordered — what now?",
+      "fr": "Je n'ai pas reçu les articles commandés — que faire ?"
     },
     "answer": {
-      "fr": "Les articles réservés se récupèrent — et se paient en espèces — à la table merch sur place ; il n'y a pas d'expédition. Apporte ta référence de réservation. Les commandes payées en ligne avant la clôture se récupèrent aussi là-bas.",
-      "en": "Reserved items are collected — and paid for in cash — at the merch table at the venue; there is no shipping. Bring your reservation reference. Orders paid online before the cutoff are collected there too."
+      "en": "Items ordered for DevFest were handed out at the merch table on the day; there was no shipping. If you didn't get yours, write to gdgyaounde@gmail.com with your order reference.",
+      "fr": "Les articles commandés pour le DevFest étaient remis à la table merch le jour J ; il n'y avait pas de livraison. Si tu n'as pas reçu les tiens, écris à gdgyaounde@gmail.com avec ta référence de commande."
+    },
+    "cta": {
+      "label": {
+        "fr": "Nous écrire",
+        "en": "Email us"
+      },
+      "href": "mailto:gdgyaounde@gmail.com",
+      "external": true
     }
   },
   {
     "id": "faq-shop-returns",
     "category": "shop",
     "question": {
-      "fr": "Puis-je retourner ou échanger un article ?",
-      "en": "Can I return or exchange something I bought?"
+      "en": "Can I return or exchange something I bought?",
+      "fr": "Puis-je retourner ou échanger un article acheté ?"
     },
     "answer": {
-      "fr": "Articles achetés en ligne avant la clôture : les achats « sur un coup de tête » ne sont pas remboursables, mais si un article est abîmé, défectueux ou erroné — ou si un vêtement ne va pas — écris-nous et nous verrons un échange, selon le stock. Articles réservés et payés en espèces : vérifie-les à la table avant de payer, et annule ta réservation depuis ton compte si tu changes d'avis.",
-      "en": "Items bought online before the cutoff: change-of-mind purchases aren't refundable, but if something is damaged, defective, or wrong — or apparel just doesn't fit — reach out and we'll sort out an exchange, subject to stock. Items reserved and paid in cash: check them at the table before you pay, and cancel your reservation from your account if you change your mind."
-    }
-  },
-  {
-    "id": "faq-sold-out",
-    "category": "shop",
-    "question": {
-      "fr": "Et si un produit que je veux est en rupture de stock ?",
-      "en": "What if a product I want is sold out?"
+      "en": "Change-of-mind purchases aren't refundable. If something you got is damaged, defective or the wrong size, write to us and we'll sort out an exchange, subject to stock.",
+      "fr": "Les achats sur un coup de tête ne sont pas remboursables. Si un article reçu est abîmé, défectueux ou à la mauvaise taille, écris-nous et nous organiserons un échange, dans la limite des stocks."
     },
-    "answer": {
-      "fr": "Les articles épuisés sont clairement indiqués sur la page boutique et ne peuvent pas être réservés. Repasse nous voir — nous réassortissons parfois.",
-      "en": "Sold-out items are marked clearly on the shop page and can't be reserved. Check back — we sometimes restock."
+    "cta": {
+      "label": {
+        "fr": "Nous écrire",
+        "en": "Email us"
+      },
+      "href": "mailto:gdgyaounde@gmail.com",
+      "external": true
     }
   },
   {

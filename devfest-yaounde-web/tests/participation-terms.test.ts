@@ -186,11 +186,7 @@ describe("the FAQs", () => {
   });
 
   it("include the three new questions, in both languages", () => {
-    for (const id of [
-      "faq-is-devfest-free",
-      "faq-free-pass-food",
-      "faq-change-tshirt-size",
-    ]) {
+    for (const id of ["faq-is-devfest-free"]) {
       const f = byId.get(id);
       assert.ok(f, id);
       assert.ok(
@@ -200,22 +196,18 @@ describe("the FAQs", () => {
   });
 
   it("link every perk answer to /terms", () => {
-    for (const id of [
-      "faq-ticket-types",
-      "faq-free-ticket",
-      "faq-food-venue",
-      "faq-shop-without-ticket",
-      "faq-ticket-bought-for-friend",
-      "faq-is-devfest-free",
-      "faq-free-pass-food",
-    ]) {
+    for (const id of ["faq-ticket-types", "faq-is-devfest-free"]) {
       assert.equal(byId.get(id)?.cta?.href, "/terms", id);
     }
   });
 
   it("no longer promise food or a badge to the free pass", () => {
-    const free = byId.get("faq-free-ticket")!;
-    assert.match(free.answer.en, /for paid passes/);
+    // ADR 0098: the free-pass FAQs went with the event; the remaining
+    // answers still keep food and badges on the paid side.
+    assert.match(
+      byId.get("faq-is-devfest-free")!.answer.en,
+      /Paid passes add food/,
+    );
     assert.doesNotMatch(
       byId.get("faq-speak")!.answer.en,
       /open on Sessionize through/,

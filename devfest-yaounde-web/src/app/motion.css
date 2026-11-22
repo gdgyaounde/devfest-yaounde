@@ -2107,7 +2107,6 @@ html:has([data-preloader="held"]) .hero-settle {
   }
 }
 
-
 /* ===========================================================================
    Thank-you hero (ADR 0098) — a soft, short arrival: the photograph settles,
    the words surface (the Storytime `anim-story-word`), the body breathes in,
@@ -2130,7 +2129,7 @@ html:has([data-preloader="held"]) .hero-settle {
 @keyframes ty-rise {
   from {
     opacity: 0;
-    transform: translateY(60%);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -2138,16 +2137,138 @@ html:has([data-preloader="held"]) .hero-settle {
   }
 }
 .ty-watermark {
-  animation: ty-rise 1500ms var(--ease-out-devfest) 2300ms both;
+  animation: ty-rise 1400ms var(--ease-out-devfest) 1500ms both;
 }
-html:has([data-preloader="held"]) .ty-pause {
+html:has([data-preloader="held"]) .ty-pause,
+html:has([data-preloader="held"]) .ty-intro,
+html:has([data-preloader="held"]) .ty-intro * {
   animation-play-state: paused;
+}
+
+/* --- The intro words: typed in, drawn behind, then broken apart --------- */
+
+/* Bold and stroked, so the words read over the photograph before their
+   backdrop has drawn. Flat offset shadow — no blur, no gradient. */
+.ty-zoom {
+  color: var(--color-offwhite);
+  -webkit-text-stroke: 0.035em var(--color-black02);
+  paint-order: stroke fill;
+  text-shadow: 0 0.05em 0 var(--color-black02);
+  animation: ty-zoom-out 1100ms var(--ease-in-out-devfest) var(--ty-break, 0ms)
+    both;
+}
+@keyframes ty-zoom-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.72);
+    opacity: 0;
+  }
+}
+
+/* One letter popping in, on the bouncy curve. */
+.ty-char {
+  display: inline-block;
+  white-space: pre;
+  animation: ty-type 450ms var(--ease-bouncy) var(--ty-type, 0ms) both;
+}
+@keyframes ty-type {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em) scale(0.3) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The same letter breaking off: its own element, so its transform never
+   fights the pop-in's. */
+.ty-shard {
+  display: inline-block;
+  animation: ty-shatter 900ms var(--ease-out-devfest) var(--ty-shatter, 0ms)
+    both;
+}
+@keyframes ty-shatter {
+  from {
+    transform: none;
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    transform: translate(var(--ty-x, 0), var(--ty-y, 0)) rotate(var(--ty-r, 0))
+      scale(0.4);
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+/* The flat backdrop drawing itself in, left to right. */
+.ty-draw {
+  /* Two animations, two properties: the draw owns clip-path, the break owns
+     opacity and transform — so neither overwrites the other. */
+  animation:
+    ty-draw 600ms var(--ease-out-devfest) var(--ty-draw, 0ms) both,
+    ty-plate-out 650ms var(--ease-in-out-devfest) var(--ty-break, 0ms) both;
+}
+@keyframes ty-plate-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.55) rotate(var(--ty-plate-r, 6deg));
+  }
+}
+@keyframes ty-draw {
+  from {
+    clip-path: inset(0 100% 0 0 round 0.16em);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0.16em);
+  }
+}
+
+/* The spray of small flat particles leaving with the letters. */
+.ty-particle {
+  opacity: 0;
+  animation: ty-particle 1200ms var(--ease-out-devfest) var(--p-delay, 0ms) both;
+}
+@keyframes ty-particle {
+  0% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--p-start, 0)), -50%) scale(0.4);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--p-x, 0)), calc(-50% + var(--p-y, 0)))
+      scale(1) rotate(160deg);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .ty-photo,
-  .ty-watermark {
+  .ty-watermark,
+  .ty-char,
+  .ty-shard,
+  .ty-zoom {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
+  }
+  /* The words are shown, drawn, and stay; nothing flies away. */
+  .ty-draw {
+    animation: none !important;
+    clip-path: none !important;
+  }
+  .ty-particle {
+    display: none !important;
   }
 }

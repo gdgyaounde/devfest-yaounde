@@ -1,141 +1,210 @@
+import type { CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
-import { Button } from "@/components/ui/Button";
 import { ContentImage } from "@/components/ui/ContentImage";
-import { EVENT, formatEventDates } from "@/lib/event";
-import { isPlaceholderUrl } from "@/lib/site-config";
-import { calmDelay, calmIn, storyWord, wordDelay } from "@/lib/motion";
 
 /**
  * The landing hero for the days after the edition (ADR 0098): a thank-you.
  *
  * ## The composition
  *
- * The group photograph fills the section, settling in slowly. Over it, an
- * eyebrow, a two-word thank-you set as flat yellow stamps (legible over any
- * photograph, and over none), a short note in an off-white card, and the one
- * useful link: the album. The watermark band sits along the bottom edge.
+ * The group photograph IS the hero — the people in it are the message. The
+ * only thing that stays on it is the edition's watermark, centred along the
+ * bottom edge at its own proportions.
+ *
+ * ## The arrival (about five seconds, once the preloader lifts)
+ *
+ * 1. The photograph settles in.
+ * 2. "Thank you, Yaoundé." is typed in at the centre — big, bold, stroked,
+ *    tilted — each letter popping in on the bouncy curve.
+ * 3. A flat backdrop draws itself behind each line.
+ * 4. It holds for a breath, then zooms out and breaks apart: the letters
+ *    scatter and fade, a spray of small flat particles goes with them.
+ * 5. The watermark rises at the bottom, and the photo is left on its own.
+ *
+ * Pure CSS, every timing a custom property computed here — no client JS. The
+ * scatter directions are pseudo-random but SEEDED, so the server and every
+ * visitor draw the same burst (no hydration mismatch, nothing on a timer).
+ * Held while the preloader owns the screen, like every hero entrance.
+ *
+ * ## Accessibility
+ *
+ * The animated words are decorative (`aria-hidden`); the real heading is a
+ * visually-hidden `<h1>` with the same words, so assistive tech reads it once
+ * and never meets the letters flying off. Under reduced motion the words are
+ * simply shown, drawn, and stay.
  *
  * ## No navbar here
  *
  * `GlobalChrome` keeps the navbar and the banner out of sight on the home
- * page until the visitor scrolls past this section, then slides them in and
- * they stay for the rest of the site. So this hero has no chrome clearance
- * to leave: the content is simply centred in the viewport.
+ * page until the visitor scrolls past this section, then slides them in.
  *
- * ## The photograph
+ * ## The photograph and the watermark
  *
- * `backdropUrl` is the dashboard's hero image (Admin → Config → hero), so the
- * group photo can arrive without a deploy. Until one is uploaded the section
- * is the theme's pastel ground and reads as a finished state, not a gap.
- *
- * ## The watermark
- *
- * `/brand/watermark-devfest.svg` — replace the file to change it. It is
- * decorative (`alt=""`): the same words are in the heading above it.
+ * `backdropUrl` is the dashboard's hero image, so the group photo can be
+ * swapped without a deploy. `/brand/watermark-devfest.svg` is used exactly as
+ * supplied — never edited, never stretched to the full width.
  */
-export async function ThankYouHero({
-  locale,
-  backdropUrl,
-  currentGalleryUrl,
-  eventDate,
-}: {
-  locale: string;
-  backdropUrl: string;
-  currentGalleryUrl: string;
-  eventDate: string;
-}) {
+
+/* --- The timeline, in ms after the preloader lifts ----------------------- */
+const TYPE_START = 900;
+const TYPE_STEP = 65;
+const POP = 450;
+const DRAW = 600;
+const HOLD = 1100;
+const BREAK = 1100;
+
+/** A tiny seeded generator: the same burst on the server and the client. */
+function seeded(seed: number) {
+  let s = seed % 2147483647 || 1;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+const vars = (v: Record<string, string>) => v as CSSProperties;
+
+export async function ThankYouHero({ backdropUrl }: { backdropUrl: string }) {
   const t = await getTranslations("home.thanks");
-  const th = await getTranslations("home.hero");
-  const lang = locale === "en" ? "en" : "fr";
-  const date = formatEventDates(lang, [eventDate]) ?? "";
-  const gallery = currentGalleryUrl.trim();
-  const hasGallery = Boolean(gallery) && !isPlaceholderUrl(gallery);
   const hasPhoto = Boolean(backdropUrl?.trim());
+  const lines = [t("lead"), t("city")].map((line) => Array.from(line));
+  const total = lines[0].length + lines[1].length;
+
+  const typedAt = TYPE_START + total * TYPE_STEP + POP;
+  const drawAt = [typedAt - 200, typedAt - 20];
+  const breakAt = drawAt[1] + DRAW + HOLD;
+  const watermarkAt = breakAt + BREAK - 500;
+
+  const rand = seeded(2026);
+  let index = 0;
+
+  const particles = Array.from({ length: 36 }, () => {
+    const angle = rand() * Math.PI * 2;
+    const dist = 18 + rand() * 32;
+    return {
+      x: `${(Math.cos(angle) * dist).toFixed(1)}vw`,
+      y: `${(Math.sin(angle) * dist * 0.75).toFixed(1)}vh`,
+      start: `${(rand() * 8 - 4).toFixed(1)}vw`,
+      size: `${(0.5 + rand() * 0.7).toFixed(2)}rem`,
+      delay: `${Math.round(breakAt + rand() * 260)}ms`,
+      round: rand() > 0.5,
+      tone:
+        rand() > 0.55
+          ? "bg-primary"
+          : rand() > 0.5
+            ? "bg-offwhite"
+            : "bg-black02",
+    };
+  });
 
   return (
     <section
       id="thank-you"
-      className="relative isolate flex min-h-svh flex-col overflow-hidden bg-pastel"
+      className="relative isolate flex min-h-svh flex-col justify-end overflow-hidden bg-pastel"
     >
-      {/* The ground, the photograph, and a flat scrim so the text card and
-          the stamps stay readable whatever the photo's brightness. */}
+      <h1 className="sr-only">{`${t("lead")} ${t("city")}`}</h1>
+
       <div aria-hidden className="absolute inset-0 -z-10 bg-pastel">
         {hasPhoto && (
           <>
             <div className="ty-photo ty-pause absolute inset-0">
               <ContentImage
                 src={backdropUrl}
-                alt=""
+                alt={t("photoAlt")}
                 sizes="100vw"
                 priority
                 className="object-cover"
               />
             </div>
-            <div className="absolute inset-0 bg-black02/30" />
+            <div className="absolute inset-0 bg-black02/10" />
           </>
         )}
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-5 pb-[calc(14.2vw+1.5rem)] pt-12 sm:px-8">
-        <p
-          className={`${calmIn} ty-pause w-fit rounded-pill border-2 border-black02 bg-offwhite px-4 py-1.5 font-mono text-mono-tag font-bold uppercase tracking-wide text-black02`}
-          style={calmDelay(300)}
-        >
-          {t("eyebrow", { year: EVENT.year, date })}
-        </p>
-
-        <h1 className="mt-5 flex flex-col items-start gap-2 font-sans text-[clamp(3.25rem,min(12vw,13svh),9.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-black02">
-          <span className="inline-block -rotate-2 rounded-lg border-[0.04em] border-black02 bg-primary px-[0.22em] py-[0.02em] shadow-[0_0.05em_0_0_var(--color-black02)]">
-            <span className={`${storyWord} ty-pause`} style={wordDelay(500)}>
-              {t("lead")}
-            </span>
-          </span>
-          <span className="inline-block rotate-1 rounded-lg border-[0.04em] border-black02 bg-offwhite px-[0.22em] py-[0.02em] shadow-[0_0.05em_0_0_var(--color-black02)] sm:ml-[0.6em]">
-            <span className={`${storyWord} ty-pause`} style={wordDelay(1000)}>
-              {t("city")}
-            </span>
-          </span>
-        </h1>
-
-        <p
-          className={`${calmIn} ty-pause mt-6 max-w-2xl rounded-lg border-2 border-black02 bg-offwhite p-5 text-body-l text-black02 shadow-[0_4px_0_0_var(--color-black02)] sm:p-6`}
-          style={calmDelay(1700)}
-        >
-          {t("body", { year: EVENT.year, date })}
-        </p>
-
+      {/* ---------- The intro: typed, drawn, then broken apart ---------- */}
+      <div
+        aria-hidden
+        className="ty-intro pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4"
+      >
         <div
-          className={`${calmIn} ty-pause mt-6 flex flex-wrap items-center gap-3`}
-          style={calmDelay(2200)}
+          className="ty-zoom flex flex-col items-center gap-[0.12em] font-sans text-[clamp(3rem,13vw,10rem)] font-bold leading-[0.95] tracking-[-0.03em]"
+          style={vars({ "--ty-break": `${breakAt}ms` })}
         >
-          {hasGallery ? (
-            <Button tone="primary" href={gallery} external size="lg">
-              {th("ctaGallery", { year: EVENT.year })}
-              <span className="sr-only">{th("ctaGalleryNewTab")}</span>
-            </Button>
-          ) : (
-            /* A quiet pill, not a faded button: a disabled button reads as
-               broken over a photograph. */
-            <span className="inline-flex items-center rounded-pill border-2 border-black02 bg-offwhite px-6 py-3 font-sans text-body-l font-bold text-black02">
-              {th("ctaGalleryComingSoon")}
+          {lines.map((chars, line) => (
+            <span
+              key={line}
+              className={`relative inline-block px-[0.22em] py-[0.06em] ${
+                line === 0 ? "-rotate-[4deg]" : "ml-[0.8em] rotate-[3deg]"
+              }`}
+            >
+              <span
+                className={`ty-draw absolute inset-0 -z-10 rounded-[0.16em] border-[0.05em] border-black02 shadow-[0_0.07em_0_0_var(--color-black02)] ${
+                  line === 0 ? "bg-primary" : "bg-black02"
+                }`}
+                style={vars({
+                  "--ty-draw": `${drawAt[line]}ms`,
+                  "--ty-plate-r": line === 0 ? "-9deg" : "7deg",
+                })}
+              />
+              {chars.map((ch, i) => {
+                const at = TYPE_START + index++ * TYPE_STEP;
+                const angle = rand() * Math.PI * 2;
+                return (
+                  <span
+                    key={i}
+                    className="ty-char"
+                    style={vars({ "--ty-type": `${at}ms` })}
+                  >
+                    <span
+                      className="ty-shard"
+                      style={vars({
+                        "--ty-x": `${(Math.cos(angle) * (0.6 + rand())).toFixed(2)}em`,
+                        "--ty-y": `${(Math.sin(angle) * (0.6 + rand()) - 0.4).toFixed(2)}em`,
+                        "--ty-r": `${Math.round(rand() * 160 - 80)}deg`,
+                        "--ty-shatter": `${Math.round(breakAt + rand() * 280)}ms`,
+                      })}
+                    >
+                      {ch === " " ? " " : ch}
+                    </span>
+                  </span>
+                );
+              })}
             </span>
-          )}
-          <Button tone="black02" href="/schedule" size="lg">
-            {t("ctaSchedule")}
-          </Button>
+          ))}
         </div>
+
+        {particles.map((p, i) => (
+          <span
+            key={i}
+            className={`ty-particle absolute left-1/2 top-1/2 border-2 border-black02 ${p.tone} ${
+              p.round ? "rounded-pill" : "rounded-sm"
+            }`}
+            style={vars({
+              width: p.size,
+              height: p.size,
+              "--p-x": p.x,
+              "--p-y": p.y,
+              "--p-start": p.start,
+              "--p-delay": p.delay,
+            })}
+          />
+        ))}
       </div>
 
-      {/* The watermark along the bottom edge. Decorative; plain <img> because
-          an SVG gains nothing from the optimiser. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/brand/watermark-devfest.svg"
-        alt=""
-        aria-hidden
-        draggable={false}
-        className="ty-watermark ty-pause pointer-events-none absolute inset-x-0 bottom-0 z-20 w-full select-none"
-      />
+      {/* ---------- What stays: the watermark, centred along the bottom ---------- */}
+      <div className="relative z-20 flex justify-center px-5 pb-6 sm:px-8 sm:pb-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/watermark-devfest.svg"
+          alt=""
+          aria-hidden
+          draggable={false}
+          width={1330}
+          height={189}
+          className="ty-watermark ty-pause pointer-events-none h-auto w-[min(100%,42rem)] select-none"
+          style={{ animationDelay: `${watermarkAt}ms` }}
+        />
+      </div>
     </section>
   );
 }

@@ -261,11 +261,8 @@
     },
     "metaDesc": "DevFest Yaoundé is GDG Yaoundé's flagship tech conference — a day of talks, workshops and the community that shows up for each other.",
     "thanks": {
-      "eyebrow": "DevFest Yaoundé {year} · {date}",
       "lead": "Thank you,",
       "city": "Yaoundé.",
-      "body": "You made DevFest Yaoundé {year} what it was — the speakers, the volunteers, our partners and sponsors, the organisers, and every single person who showed up on {date}. Thank you for the talks, the questions, the hallway chats and all that energy. Until next time.",
-      "ctaSchedule": "Relive the schedule",
       "photoAlt": "The DevFest Yaoundé community, all together"
     }
   },

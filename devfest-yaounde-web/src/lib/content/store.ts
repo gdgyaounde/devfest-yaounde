@@ -13,7 +13,7 @@
 import "server-only";
 import { cache } from "react";
 import { loadSettings } from "./settings";
-import { formatEventDates } from "@/lib/event";
+import { eventHasEnded, formatEventDates } from "@/lib/event";
 import speakersJson from "@/data/speakers.json";
 import teamJson from "@/data/team.json";
 import sessionsJson from "@/data/sessions.json";
@@ -200,6 +200,8 @@ export const getFaqs = async () => {
   return faqs.map((faq) => {
     if (faq.id !== "faq-when-where") return faq;
     const dates = [settings.eventDate];
+    // Past tense once the event is over (ADR 0098).
+    const ended = eventHasEnded(new Date(), dates);
     const remainder = (text: string) => {
       const end = text.indexOf(". ");
       return end < 0 ? "" : text.slice(end + 2);
@@ -207,8 +209,8 @@ export const getFaqs = async () => {
     return {
       ...faq,
       answer: {
-        fr: `DevFest Yaoundé se déroule le ${formatEventDates("fr", dates)}, à Yaoundé, au Cameroun. ${remainder(faq.answer.fr)}`.trim(),
-        en: `DevFest Yaoundé takes place on ${formatEventDates("en", dates)}, in Yaoundé, Cameroon. ${remainder(faq.answer.en)}`.trim(),
+        fr: `DevFest Yaoundé ${ended ? "s'est déroulé" : "se déroule"} le ${formatEventDates("fr", dates)}, à Yaoundé, au Cameroun. ${remainder(faq.answer.fr)}`.trim(),
+        en: `DevFest Yaoundé ${ended ? "took place" : "takes place"} on ${formatEventDates("en", dates)}, in Yaoundé, Cameroon. ${remainder(faq.answer.en)}`.trim(),
       },
     };
   });
