@@ -42,6 +42,8 @@ describe("the ballot", () => {
       assert.ok(p.tagline.fr.trim() && p.tagline.en.trim(), p.id);
       assert.ok(p.pitch.trim(), p.id);
       if (p.url) assert.match(p.url, /^https:\/\//, p.id);
+      // wa.me wants the international number, digits only.
+      if (p.whatsapp) assert.match(p.whatsapp.number, /^[1-9]\d{7,14}$/, p.id);
       // Ids must pass the database's own check constraint.
       assert.match(p.id, /^[a-z0-9-]{1,40}$/);
     }

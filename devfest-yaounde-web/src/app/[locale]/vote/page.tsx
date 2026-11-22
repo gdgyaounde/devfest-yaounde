@@ -73,6 +73,9 @@ export default async function VotePage({
     pitch: p.pitch,
     url: p.url,
     note: p.note?.[l],
+    whatsapp: p.whatsapp
+      ? { number: p.whatsapp.number, label: p.whatsapp.label[l] }
+      : undefined,
   }));
 
   return (

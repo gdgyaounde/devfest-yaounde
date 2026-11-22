@@ -20,6 +20,11 @@ export interface PitchProject {
   pitch: string;
   url?: string;
   note?: { fr: string; en: string };
+  /**
+   * A WhatsApp contact, as a wa.me link: the number in international form,
+   * digits only (Cameroon: 237…), and what to call it.
+   */
+  whatsapp?: { number: string; label: { fr: string; en: string } };
 }
 
 /** The ballot, in the order the teams pitched. */

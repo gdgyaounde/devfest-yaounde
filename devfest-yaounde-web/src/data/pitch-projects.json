@@ -89,9 +89,12 @@
     },
     "pitch": "FYS est une marque camerounaise de jus naturels intelligents, composés avec l'intelligence artificielle. Tu ne bois plus ce qu'on te propose : tu choisis comment composer ton jus. Soit tu le composes toi-même, en sélectionnant tes fruits parmi ceux du Cameroun (ananas, mangue, corossol, baobab, goyave, gingembre, foléré…), soit tu laisses l'intelligence artificielle te proposer une composition adaptée à ton état de santé et à tes objectifs : immunité, énergie, digestion, peau…\n\nDans les deux cas, notre assistant nutritionnel NutriFYS analyse ton mélange en temps réel : ses bénéfices, ses précautions, et s'il convient à ton profil de santé. Si ta combinaison présente un risque pour toi, NutriFYS t'alerte clairement, et tu restes libre de décider en connaissance de cause. Ensuite tu commandes, et tu es livré chez toi.\n\nPas de sucre ajouté, pas de conservateurs, des fruits d'ici, et des recettes élaborées avec des nutritionnistes de Yaoundé. Que tu sois étudiant, sportif, femme enceinte, diabétique ou simplement curieux de ce que tu bois, FYS te dit exactement ce qu'il y a dans ton verre et pourquoi, pour que tu saches ce que tu bois.",
     "url": "https://fys-app.com",
-    "note": {
-      "fr": "NutriFYS sur WhatsApp : 650437427",
-      "en": "NutriFYS on WhatsApp: 650437427"
+    "whatsapp": {
+      "number": "237650437427",
+      "label": {
+        "fr": "NutriFYS sur WhatsApp",
+        "en": "NutriFYS on WhatsApp"
+      }
     }
   },
   {

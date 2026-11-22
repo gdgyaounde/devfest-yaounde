@@ -6,6 +6,7 @@ import {
   CheckCircle,
   GoogleLogo,
   Trophy,
+  WhatsappLogo,
 } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
@@ -23,6 +24,13 @@ export interface BallotProject {
   pitch: string;
   url?: string;
   note?: string;
+  whatsapp?: { number: string; label: string };
+}
+
+/** 237650437427 → "+237 650 43 74 27" (Cameroon); anything else as +digits. */
+function prettyPhone(digits: string): string {
+  const m = /^237(\d)(\d{2})(\d{2})(\d{2})(\d{2})$/.exec(digits);
+  return m ? `+237 ${m[1]}${m[2]} ${m[3]} ${m[4]} ${m[5]}` : `+${digits}`;
 }
 
 /** A project's name inside a sentence: kept as is by browser translation. */
@@ -361,7 +369,9 @@ export function VoteBallot({
                         onClick={() => toggle(p.id)}
                         className={PRIMARY}
                       >
-                        {t.rich("voteFor", { project: p.name, n: keepName })}
+                        <span>
+                          {t.rich("voteFor", { project: p.name, n: keepName })}
+                        </span>
                       </button>
                     )}
                     {canVote && !mine && full && (
@@ -376,8 +386,24 @@ export function VoteBallot({
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 font-sans text-body-m font-bold text-blue-ink underline decoration-2 underline-offset-4"
                       >
-                        {t.rich("tryIt", { project: p.name, n: keepName })}
+                        <span>
+                          {t.rich("tryIt", { project: p.name, n: keepName })}
+                        </span>
                         <ArrowSquareOut size={16} weight="bold" aria-hidden />
+                      </a>
+                    )}
+                    {p.whatsapp && (
+                      <a
+                        href={`https://wa.me/${p.whatsapp.number}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-sans text-body-m font-bold text-blue-ink underline decoration-2 underline-offset-4"
+                      >
+                        <WhatsappLogo size={18} weight="bold" aria-hidden />
+                        <span translate="no">{p.whatsapp.label}</span>
+                        <span className="font-mono text-caption font-normal">
+                          {prettyPhone(p.whatsapp.number)}
+                        </span>
                       </a>
                     )}
                     {p.note && (
