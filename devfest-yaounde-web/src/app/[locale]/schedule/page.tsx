@@ -4,8 +4,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ScheduleBoard } from "@/components/schedule/ScheduleBoard";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
-import { UpNextStrip } from "@/components/schedule/UpNextStrip";
-import { resolveUpNext, upNextEntries } from "@/lib/up-next";
 import { getSessions, getSpeakers, getSponsors } from "@/lib/content/store";
 
 export async function generateMetadata({
@@ -46,12 +44,6 @@ export default async function SchedulePage({
         <p className="mt-6 max-w-2xl text-body-l text-black02/80">
           {t("lead")}
         </p>
-
-        <UpNextStrip
-          now={resolveUpNext(upNextEntries("now"), allSessions, speakers)}
-          next={resolveUpNext(upNextEntries("next"), allSessions, speakers)}
-          locale={locale as "fr" | "en"}
-        />
 
         <div className="mt-16">
           {/* Same board as the Home preview, with filters and calendar on */}
