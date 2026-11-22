@@ -25,10 +25,10 @@ export function AdminPitchVote({ data }: { data: AdminData }) {
     );
   }
 
-  const ranked = rankTally(stats.tally);
+  const ranked = rankTally(stats.tally, stats.voters);
   const name = new Map(PITCH_PROJECTS.map((p) => [p.id, p.name]));
   const turnout = stats.eligible
-    ? Math.round((stats.voted / stats.eligible) * 100)
+    ? Math.round((stats.voters / stats.eligible) * 100)
     : 0;
 
   return (
@@ -49,12 +49,12 @@ export function AdminPitchVote({ data }: { data: AdminData }) {
       </InfoBanner>
 
       <Panel
-        title={`${stats.voted} vote${stats.voted === 1 ? "" : "s"} cast`}
-        subtitle={`${stats.eligible} checked-in account${stats.eligible === 1 ? "" : "s"} can vote · ${turnout}% turnout. Only people checked in at the door (tickets and reservations) can vote; free passes were checked in on Bevy.`}
+        title={`${stats.voters} ${stats.voters === 1 ? "person has" : "people have"} voted · ${stats.votes} pick${stats.votes === 1 ? "" : "s"}`}
+        subtitle={`${stats.eligible} checked-in account${stats.eligible === 1 ? "" : "s"} can vote · ${turnout}% turnout. Each person picks up to two projects; the % is the share of voters who picked it. Only people checked in at the door (tickets and reservations) can vote; free passes were checked in on Bevy.`}
         action={
           <ExportButton
             filename="devfest-pitch-vote.csv"
-            headers={["Rank", "Project", "Votes", "Share %"]}
+            headers={["Rank", "Project", "Votes", "% of voters"]}
             rows={ranked.map((r) => [
               r.rank,
               name.get(r.id) ?? r.id,

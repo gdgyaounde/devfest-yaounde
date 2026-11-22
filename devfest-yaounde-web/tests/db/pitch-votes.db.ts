@@ -18,8 +18,9 @@
  *   - a ticket NOT checked in → may not vote;
  *   - a checked-in reservation → its account may vote; its contact email
  *     gives nobody else a vote; a cancelled one → nobody;
- *   - one row per voter: voting again changes it;
- *   - stats count eligible accounts once each, and the tally;
+ *   - up to two picks per voter, never the same project twice; sending a new
+ *     set replaces the old one; the TABLE refuses a third row on its own;
+ *   - stats count eligible accounts once each, voters, picks, and the tally;
  *   - nobody but the service role can execute the functions.
  */
 import { PGlite } from "@electric-sql/pglite";
@@ -109,12 +110,19 @@ async function main() {
     );
     return r.rows[0].ok;
   }
-  async function cast(id: string, project: string) {
+  async function pick(id: string, projects: string[]) {
     const r = await db.query<{ r: { status: string } }>(
-      "select public.cast_pitch_vote($1, $2) as r",
-      [id, project],
+      "select public.set_pitch_votes($1, $2) as r",
+      [id, projects],
     );
     return r.rows[0].r.status;
+  }
+  async function picksOf(id: string) {
+    const r = await db.query<{ project_id: string }>(
+      "select project_id from public.pitch_votes where user_id = $1 order by project_id",
+      [id],
+    );
+    return r.rows.map((x) => x.project_id).join(",");
   }
 
   console.log("\nWho may vote");
@@ -145,41 +153,92 @@ async function main() {
   );
   check("an account that does not exist may NOT", !(await eligible(u(999))));
 
-  console.log("\nCasting");
+  console.log("\nPicking");
   check(
     "ineligible vote refused",
-    (await cast(U.buyer, "safeme")) === "not_eligible",
+    (await pick(U.buyer, ["safeme"])) === "not_eligible",
+  );
+  check("…and nothing was written", (await picksOf(U.buyer)) === "");
+  check(
+    "one pick counted",
+    (await pick(U.attendee, ["safeme"])) === "saved" &&
+      (await picksOf(U.attendee)) === "safeme",
   );
   check(
-    "eligible vote counted",
-    (await cast(U.attendee, "safeme")) === "voted",
+    "two picks counted",
+    (await pick(U.attendee, ["safeme", "finfree"])) === "saved" &&
+      (await picksOf(U.attendee)) === "finfree,safeme",
   );
   check(
-    "voting again changes it",
-    (await cast(U.attendee, "finfree")) === "voted",
-  );
-  const rows = await db.query<{ project_id: string }>(
-    "select project_id from public.pitch_votes where user_id = $1",
-    [U.attendee],
+    "a new set replaces the old one",
+    (await pick(U.attendee, ["finfree", "holaride"])) === "saved" &&
+      (await picksOf(U.attendee)) === "finfree,holaride",
   );
   check(
-    "still exactly one row, with the new choice",
-    rows.rows.length === 1 && rows.rows[0].project_id === "finfree",
+    "three picks refused, the two kept",
+    (await pick(U.attendee, ["finfree", "holaride", "safeme"])) ===
+      "too_many" && (await picksOf(U.attendee)) === "finfree,holaride",
+  );
+  check(
+    "the same project twice refused",
+    (await pick(U.attendee, ["finfree", "finfree"])) === "duplicate" &&
+      (await picksOf(U.attendee)) === "finfree,holaride",
+  );
+  check(
+    "an empty set withdraws every pick",
+    (await pick(U.self, ["safeme"])) === "saved" &&
+      (await pick(U.self, [])) === "saved" &&
+      (await picksOf(U.self)) === "",
   );
   let rejected = false;
   try {
-    await cast(U.self, "Robert'); drop table x;--");
+    await pick(U.self, ["Robert'); drop table x;--"]);
   } catch {
     rejected = true;
   }
   check("a malformed project id is rejected by the check constraint", rejected);
-  await cast(U.self, "finfree");
-  await cast(U.reserver, "holaride");
+
+  // Around the function: a raw third row must still be refused by the table.
+  let capped = false;
+  try {
+    await db.query(
+      "insert into public.pitch_votes (user_id, project_id) values ($1, 'safeme')",
+      [U.attendee],
+    );
+  } catch {
+    capped = true;
+  }
+  check("the table itself refuses a third pick", capped);
+  let dup = false;
+  try {
+    await db.query(
+      "insert into public.pitch_votes (user_id, project_id) values ($1, 'finfree')",
+      [U.claimer],
+    );
+    await db.query(
+      "insert into public.pitch_votes (user_id, project_id) values ($1, 'finfree')",
+      [U.claimer],
+    );
+  } catch {
+    dup = true;
+  }
+  check("the table itself refuses the same project twice", dup);
+  await db.query("delete from public.pitch_votes where user_id = $1", [
+    U.claimer,
+  ]);
+
+  await pick(U.self, ["finfree"]);
+  await pick(U.reserver, ["holaride", "transax"]);
 
   console.log("\nStats");
   const stats = (
     await db.query<{
-      s: { eligible: number; voted: number; tally: Record<string, number> };
+      s: {
+        eligible: number;
+        voters: number;
+        votes: number;
+        tally: Record<string, number>;
+      };
     }>("select public.pitch_vote_stats() as s")
   ).rows[0].s;
   check(
@@ -188,18 +247,21 @@ async function main() {
     stats.eligible === 5,
     JSON.stringify(stats),
   );
-  check("voted = 3", stats.voted === 3);
+  check("3 voters", stats.voters === 3);
+  check("5 picks", stats.votes === 5);
   check(
     "tally",
     stats.tally.finfree === 2 &&
-      stats.tally.holaride === 1 &&
+      stats.tally.holaride === 2 &&
+      stats.tally.transax === 1 &&
       !stats.tally.safeme,
+    JSON.stringify(stats.tally),
   );
 
   console.log("\nPrivileges");
   for (const fn of [
     "pitch_vote_eligible(uuid)",
-    "cast_pitch_vote(uuid, text)",
+    "set_pitch_votes(uuid, text[])",
     "pitch_vote_stats()",
   ]) {
     for (const role of ["anon", "authenticated"]) {

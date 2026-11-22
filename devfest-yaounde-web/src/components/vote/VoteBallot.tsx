@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import type { VoteState } from "@/app/api/vote/route";
 import { bouncyPop } from "@/lib/motion";
+import { MAX_PICKS } from "@/lib/pitch-vote";
 import { signInWithGoogle, signOut } from "@/lib/use-session";
 
 export interface BallotProject {
@@ -70,18 +71,32 @@ export function VoteBallot({
     void load();
   }, [load]);
 
-  async function vote(projectId: string) {
+  /** Add or remove one pick; the server gets the whole new set. */
+  async function toggle(projectId: string) {
+    if (!state) return;
+    const current = state.myVotes;
+    const next = current.includes(projectId)
+      ? current.filter((id) => id !== projectId)
+      : [...current, projectId];
+    if (next.length > MAX_PICKS) return;
+    // Keep ballot order, whatever order they were tapped in.
+    const ordered = projects.map((p) => p.id).filter((id) => next.includes(id));
     setBusy(projectId);
     setNotice(null);
     try {
       const res = await fetch("/api/vote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId }),
+        body: JSON.stringify({ projectIds: ordered }),
       });
       if (res.ok) {
-        setState((s) => (s ? { ...s, myVote: projectId } : s));
-        setNotice({ kind: "saved", text: t("saved", closes) });
+        setState((s) => (s ? { ...s, myVotes: ordered } : s));
+        setNotice({
+          kind: "saved",
+          text: ordered.length
+            ? t("saved", { ...closes, count: ordered.length })
+            : t("cleared"),
+        });
         return;
       }
       const { error } = (await res.json().catch(() => ({}))) as {
@@ -136,7 +151,7 @@ export function VoteBallot({
             {t("resultsTitle")}
           </h2>
           <p className="mt-2 text-body-m text-black02/80">
-            {t("resultsLead", { count: state?.totalVotes ?? 0 })}
+            {t("resultsLead", { count: state?.voters ?? 0 })}
           </p>
           <ol className="mt-6 space-y-4">
             {results.map((r) => {
@@ -158,7 +173,7 @@ export function VoteBallot({
                       )}
                     </span>
                     <span className="shrink-0 font-mono text-caption font-bold text-black02">
-                      {t("votes", { count: r.votes })} · {r.percent}%
+                      {t("votesShare", { count: r.votes, percent: r.percent })}
                     </span>
                   </div>
                   <div className="mt-2 h-4 overflow-hidden rounded-pill border-2 border-black02 bg-pastel">
@@ -207,6 +222,11 @@ export function VoteBallot({
                 {t("continueWithGoogle")}
               </button>
             </section>
+          ) : state.eligible ? (
+            <p className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-offwhite px-4 py-2 font-sans text-body-m font-bold text-black02">
+              <CheckCircle size={20} weight="fill" aria-hidden />
+              {t("picksUsed", { count: state.myVotes.length, max: MAX_PICKS })}
+            </p>
           ) : state.eligible === false ? (
             <section className={CARD}>
               <h2 className="font-sans text-heading-m font-bold text-black02">
@@ -250,7 +270,8 @@ export function VoteBallot({
       </h2>
       <ol className="mt-6 grid gap-5">
         {projects.map((p, i) => {
-          const mine = state?.myVote === p.id;
+          const mine = Boolean(state?.myVotes.includes(p.id));
+          const full = (state?.myVotes.length ?? 0) >= MAX_PICKS;
           return (
             <li
               key={p.id}
@@ -309,17 +330,30 @@ export function VoteBallot({
                         {t("yourVote")}
                       </span>
                     )}
-                    {canVote && !mine && (
+                    {canVote && mine && (
                       <button
                         type="button"
                         disabled={busy !== null}
-                        onClick={() => vote(p.id)}
-                        className={state?.myVote ? SECONDARY : PRIMARY}
+                        onClick={() => toggle(p.id)}
+                        className={SECONDARY}
                       >
-                        {state?.myVote
-                          ? t("switchTo", { name: p.name })
-                          : t("voteFor", { name: p.name })}
+                        {t("removeVote", { name: p.name })}
                       </button>
+                    )}
+                    {canVote && !mine && !full && (
+                      <button
+                        type="button"
+                        disabled={busy !== null}
+                        onClick={() => toggle(p.id)}
+                        className={PRIMARY}
+                      >
+                        {t("voteFor", { name: p.name })}
+                      </button>
+                    )}
+                    {canVote && !mine && full && (
+                      <span className="font-mono text-caption text-black02/70">
+                        {t("bothUsed")}
+                      </span>
                     )}
                     {p.url && (
                       <a

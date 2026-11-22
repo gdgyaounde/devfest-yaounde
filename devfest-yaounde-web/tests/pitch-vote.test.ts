@@ -15,6 +15,7 @@ import {
   rankTally,
   voteClosesAt,
   voteOpen,
+  MAX_PICKS,
   voteSchema,
 } from "@/lib/pitch-vote";
 
@@ -59,17 +60,30 @@ describe("the window", () => {
 });
 
 describe("a vote request", () => {
-  it("accepts a project on the ballot", () => {
-    assert.equal(voteSchema.safeParse({ projectId: "safeme" }).success, true);
+  it("is at most two picks", () => {
+    assert.equal(MAX_PICKS, 2);
+  });
+
+  it("accepts none, one or two distinct projects on the ballot", () => {
+    for (const projectIds of [[], ["safeme"], ["safeme", "finfree"]]) {
+      assert.equal(
+        voteSchema.safeParse({ projectIds }).success,
+        true,
+        JSON.stringify(projectIds),
+      );
+    }
   });
 
   it("refuses anything else", () => {
     for (const body of [
       {},
-      { projectId: "not-a-project" },
-      { projectId: "SAFEME" },
-      { projectId: "safeme", userId: "someone-else" },
-      { projectId: ["safeme"] },
+      { projectIds: "safeme" },
+      { projectIds: ["not-a-project"] },
+      { projectIds: ["SAFEME"] },
+      { projectIds: ["safeme", "safeme"] },
+      { projectIds: ["safeme", "finfree", "holaride"] },
+      { projectIds: ["safeme"], userId: "someone-else" },
+      { projectId: "safeme" },
     ]) {
       assert.equal(voteSchema.safeParse(body).success, false, JSON.stringify(body));
     }
@@ -80,7 +94,7 @@ describe("rankTally", () => {
   const ballot = [{ id: "a" }, { id: "b" }, { id: "c" }, { id: "d" }];
 
   it("ranks by votes, lists every project, and shares ranks on ties", () => {
-    const r = rankTally({ c: 5, a: 2, b: 5 }, ballot);
+    const r = rankTally({ c: 5, a: 2, b: 5 }, 8, ballot);
     assert.deepEqual(
       r.map((x) => [x.id, x.votes, x.rank]),
       [
@@ -92,13 +106,26 @@ describe("rankTally", () => {
     );
   });
 
-  it("works out whole-number shares, and 0 % when nobody voted", () => {
+  it("shares are of VOTERS (two picks each can pass 100 % in total)", () => {
+    // 3 people: two picked a+b, one picked b only.
     assert.deepEqual(
-      rankTally({ a: 1, b: 2 }, ballot).map((x) => x.percent),
-      [67, 33, 0, 0],
+      rankTally({ a: 2, b: 3 }, 3, ballot).map((x) => [x.id, x.percent]),
+      [
+        ["b", 100],
+        ["a", 67],
+        ["c", 0],
+        ["d", 0],
+      ],
+    );
+  });
+
+  it("never shows a share past 100 %, and 0 % when nobody voted", () => {
+    assert.deepEqual(
+      rankTally({ a: 5 }, 2, ballot).map((x) => x.percent),
+      [100, 0, 0, 0],
     );
     assert.deepEqual(
-      rankTally({}, ballot).map((x) => [x.percent, x.rank]),
+      rankTally({}, 0, ballot).map((x) => [x.percent, x.rank]),
       [
         [0, 1],
         [0, 1],
@@ -111,6 +138,7 @@ describe("rankTally", () => {
   it("ignores projects no longer on the ballot and junk counts", () => {
     const r = rankTally(
       { a: 3, gone: 50, b: -4, c: Number.NaN } as Record<string, number>,
+      3,
       ballot,
     );
     assert.deepEqual(
@@ -128,8 +156,13 @@ describe("rankTally", () => {
 describe("parseVoteStats", () => {
   it("reads what pitch_vote_stats returns, and nothing it shouldn't", () => {
     assert.deepEqual(
-      parseVoteStats({ eligible: 27, voted: 3, tally: { a: 2, b: "x" } }),
-      { eligible: 27, voted: 3, tally: { a: 2 } },
+      parseVoteStats({
+        eligible: 27,
+        voters: 3,
+        votes: 5,
+        tally: { a: 2, b: "x" },
+      }),
+      { eligible: 27, voters: 3, votes: 5, tally: { a: 2 } },
     );
     assert.equal(parseVoteStats(null), null);
   });

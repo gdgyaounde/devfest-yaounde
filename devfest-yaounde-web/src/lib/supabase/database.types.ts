@@ -680,19 +680,16 @@ export type Database = {
         Row: {
           created_at: string
           project_id: string
-          updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           project_id: string
-          updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           project_id?: string
-          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -788,8 +785,8 @@ export type Database = {
         Args: { p_id: string; p_user_id: string }
         Returns: string
       }
-      cast_pitch_vote: {
-        Args: { p_project_id: string; p_user_id: string }
+      set_pitch_votes: {
+        Args: { p_project_ids: string[]; p_user_id: string }
         Returns: Json
       }
       pitch_vote_eligible: {

@@ -65,7 +65,7 @@
     "wallStories": "Chaque mot ici a été laissé par quelqu'un de cette communauté — des histoires anonymes des éditions du DevFest Yaoundé, racontées une à une. Merci pour chacune d'elles.",
     "thankYou": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable — à la prochaine !",
     "thankYouCta": "Voir les photos",
-    "thankYouVote": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable ! Vote pour ton pitch préféré jusqu'au {date} à {time}.",
+    "thankYouVote": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable ! Vote pour tes deux pitchs préférés jusqu'au {date} à {time}.",
     "voteCta": "Je vote"
   },
   "offline": {
@@ -899,14 +899,14 @@
       "myReservations": "Mes réservations"
     },
     "vote": {
-      "title": "Vote pour ton pitch préféré",
-      "metaDesc": "Sept équipes ont pitché au DevFest Yaoundé 2026. Si tu as été enregistré à l'entrée, vote pour le projet que tu as préféré.",
+      "title": "Vote pour tes pitchs préférés",
+      "metaDesc": "Sept équipes ont pitché au DevFest Yaoundé 2026. Si tu as été enregistré à l'entrée, vote pour deux projets au maximum.",
       "eyebrow": "Concours de pitch · DevFest Yaoundé 2026",
-      "lead": "Sept équipes sont montées sur scène samedi. Si tu as été enregistré à l'entrée, tu as une voix : choisis le projet que tu soutiens.",
+      "lead": "Sept équipes sont montées sur scène samedi. Si tu as été enregistré à l'entrée, tu peux voter pour deux d'entre elles au maximum : choisis les projets que tu soutiens.",
       "poweredBy": "Propulsé par",
       "openUntil": "Le vote est ouvert jusqu'au {date} à {time}",
       "closedOn": "Le vote s'est clos le {date} à {time}",
-      "rules": "Une voix par personne. Tu as changé d'avis ? Tu peux modifier ton vote jusqu'à la clôture. Les résultats s'affichent ici une fois le vote terminé.",
+      "rules": "Deux voix maximum par personne, une par projet. Tu as changé d'avis ? Retire une voix et choisis-en un autre, jusqu'à la clôture. Les résultats s'affichent ici une fois le vote terminé.",
       "checking": "On vérifie ton vote…",
       "signInTitle": "Connecte-toi pour voter",
       "signInBody": "Utilise le compte Google de ton billet ou de ta réservation. C'est comme ça qu'on sait que tu étais là.",
@@ -919,18 +919,21 @@
       "pitchLanguage": "Dans les mots de l'équipe.",
       "tryIt": "Essayer {name}",
       "voteFor": "Voter pour {name}",
-      "switchTo": "Changer mon vote pour {name}",
       "yourVote": "Ton vote",
-      "saved": "Vote enregistré, merci ! Tu peux encore le changer jusqu'au {date} à {time}.",
+      "saved": "{count, plural, one {Vote enregistré} other {Votes enregistrés}}, merci ! Tu peux les changer jusqu'au {date} à {time}.",
       "errorGeneric": "Un souci de notre côté : ton vote n'a pas été enregistré. Tu réessaies ?",
       "errorClosed": "Le vote vient de se clore, ce vote n'a donc pas pu être compté.",
       "errorRateLimited": "Beaucoup de changements en peu de temps. Attends quelques minutes et réessaie.",
       "resultsTitle": "Le choix du public",
-      "resultsLead": "{count, plural, =0 {Aucun vote n'a été exprimé.} one {# vote exprimé par celles et ceux qui étaient là.} other {# votes exprimés par celles et ceux qui étaient là.}}",
-      "votes": "{count, plural, one {# vote} other {# votes}}",
+      "resultsLead": "{count, plural, =0 {Personne n'a voté.} one {# personne a voté, pour deux projets au maximum.} other {# personnes ont voté, pour deux projets au maximum chacune.}}",
       "winner": "Choix du public",
       "projectsTitle": "Les sept pitchs",
-      "signOut": "Se déconnecter"
+      "signOut": "Se déconnecter",
+      "picksUsed": "Tes voix : {count} sur {max}",
+      "removeVote": "Retirer ma voix",
+      "bothUsed": "Tu as utilisé tes deux voix. Retires-en une pour choisir ce projet.",
+      "cleared": "Voix retirée. Tu peux choisir jusqu'à deux projets jusqu'à la clôture.",
+      "votesShare": "{count, plural, one {# voix} other {# voix}} · {percent} % des votants"
     }
   },
   "errors": {

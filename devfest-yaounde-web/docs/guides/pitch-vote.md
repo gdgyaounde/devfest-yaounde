@@ -1,6 +1,6 @@
 # The pitch contest public vote
 
-After the event, the people who were checked in at the door can vote for their favourite pitch at **/vote** (for example `devfest.gdgyaounde.com/fr/vote`). The page credits the contest's partner, Impact Hub Yaoundé, at the top.
+After the event, the people who were checked in at the door can vote for up to **two** of their favourite pitches (one vote per project) at **/vote** (for example `devfest.gdgyaounde.com/fr/vote`). The page credits the contest's partner, Impact Hub Yaoundé, at the top.
 
 Until voting closes, the banner at the top of every page links to it ("Vote now" / "Je vote"). Afterwards it goes back to the thank-you with "See the photos". A message typed in the dashboard's info bar still replaces the banner, as always.
 
@@ -13,7 +13,7 @@ Until step 1 is done, the page shows the projects and says "Voting opens very so
 
 ## Who can vote
 
-Only people checked in through the site's door station, once each:
+Only people checked in through the site's door station. Each picks one or two projects, and can remove a pick and choose another until the close:
 
 - someone who bought their own ticket, or claimed one, and was checked in;
 - someone a ticket was bought for, who was checked in. They sign in with the email that was on the ticket. The person who paid does **not** get that vote;
@@ -23,7 +23,7 @@ People who only came on a free Bevy pass were checked in on Bevy, not here, so t
 
 ## Watching it and announcing the winner
 
-- **Dashboard → Community → Pitch vote** shows the live tally, how many people voted, and how many could. **Export CSV** saves it.
+- **Dashboard → Community → Pitch vote** shows the live tally, how many people voted, how many picks in all, and how many people could vote. The % next to each project is the share of voters who picked it. With two picks each, the percentages add up past 100%. **Export CSV** saves it.
 - Voters don't see the results while voting is open.
 - Voting closes on **Tuesday 24 November 2026 at 23:59** (Yaoundé time). From then on, /vote shows everyone the ranking, with the winner marked "Public's choice".
 

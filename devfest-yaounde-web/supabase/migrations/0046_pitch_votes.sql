@@ -2,11 +2,12 @@
 --
 -- After DevFest Yaoundé 2026, the people who were THERE vote for the project
 -- they liked best among the pitches (the contest powered by Impact Hub
--- Yaoundé). One vote per account, changeable until voting closes.
+-- Yaoundé). Each account picks UP TO TWO projects (one vote each, never two
+-- on the same project), and can change its picks until voting closes.
 --
 -- WHO MAY VOTE — checked in through this site's door station, as the person
 -- who was actually there (not whoever paid). Every checked-in ticket or
--- reservation maps to EXACTLY ONE account, so none can yield two votes:
+-- reservation maps to EXACTLY ONE account, so none can yield a second voter:
 --   * a ticket the voter holds as their own (is_self) or claimed (0024):
 --     the holder's account;
 --   * a ticket bought for someone else, unclaimed: the account whose email
@@ -26,16 +27,37 @@
 -- yet). Apply this, then the ballot works with no further deploy.
 
 create table if not exists public.pitch_votes (
-  user_id    uuid primary key references auth.users (id) on delete cascade,
+  user_id    uuid not null references auth.users (id) on delete cascade,
   project_id text not null check (project_id ~ '^[a-z0-9-]{1,40}$'),
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  -- One vote per project per voter.
+  primary key (user_id, project_id)
 );
 
 comment on table public.pitch_votes is
-  'One row per voter: the pitch they voted for (ADR 0099). Service role only.';
+  'One row per (voter, project) picked — at most two per voter (ADR 0099). Service role only.';
 
 alter table public.pitch_votes enable row level security;
+
+-- At most two picks per voter, held by the TABLE, not only by the function
+-- that writes it: a third row is refused however it arrives.
+create or replace function public.pitch_votes_cap()
+returns trigger
+language plpgsql
+set search_path = public
+as $fn$
+begin
+  if (select count(*) from public.pitch_votes where user_id = new.user_id) >= 2 then
+    raise exception 'at most two picks per voter' using errcode = 'check_violation';
+  end if;
+  return new;
+end;
+$fn$;
+
+drop trigger if exists pitch_votes_cap on public.pitch_votes;
+create trigger pitch_votes_cap
+  before insert on public.pitch_votes
+  for each row execute function public.pitch_votes_cap();
 
 -- ------------------------------------------------------ pitch_vote_eligible ---
 
@@ -80,34 +102,44 @@ $fn$;
 revoke all on function public.pitch_vote_eligible(uuid)
   from public, anon, authenticated;
 
--- ---------------------------------------------------------- cast_pitch_vote ---
+-- ---------------------------------------------------------- set_pitch_votes ---
+-- Replaces the voter's picks with the given set (0, 1 or 2 distinct projects)
+-- in one transaction, under a per-voter lock so two quick taps can't race.
 
-create or replace function public.cast_pitch_vote(
-  p_user_id    uuid,
-  p_project_id text
+create or replace function public.set_pitch_votes(
+  p_user_id     uuid,
+  p_project_ids text[]
 )
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
 as $fn$
+declare
+  v_ids text[];
 begin
+  select coalesce(array_agg(distinct x), '{}') into v_ids
+    from unnest(coalesce(p_project_ids, '{}')) as x;
+  if cardinality(v_ids) <> cardinality(coalesce(p_project_ids, '{}')) then
+    return jsonb_build_object('status', 'duplicate');
+  end if;
+  if cardinality(v_ids) > 2 then
+    return jsonb_build_object('status', 'too_many');
+  end if;
   if not public.pitch_vote_eligible(p_user_id) then
     return jsonb_build_object('status', 'not_eligible');
   end if;
 
-  -- One row per voter: voting again changes the vote, never adds one.
+  perform pg_advisory_xact_lock(hashtext('pitch_votes:' || p_user_id::text));
+  delete from public.pitch_votes where user_id = p_user_id;
   insert into public.pitch_votes (user_id, project_id)
-  values (p_user_id, p_project_id)
-  on conflict (user_id) do update
-    set project_id = excluded.project_id,
-        updated_at = now();
+  select p_user_id, x from unnest(v_ids) as x;
 
-  return jsonb_build_object('status', 'voted', 'projectId', p_project_id);
+  return jsonb_build_object('status', 'saved', 'projectIds', to_jsonb(v_ids));
 end;
 $fn$;
 
-revoke all on function public.cast_pitch_vote(uuid, text)
+revoke all on function public.set_pitch_votes(uuid, text[])
   from public, anon, authenticated;
 
 -- --------------------------------------------------------- pitch_vote_stats ---
@@ -137,7 +169,8 @@ as $fn$
   )
   select jsonb_build_object(
     'eligible', (select count(*) from eligible),
-    'voted', (select count(*) from public.pitch_votes),
+    'voters', (select count(distinct user_id) from public.pitch_votes),
+    'votes', (select count(*) from public.pitch_votes),
     'tally', coalesce(
       (select jsonb_object_agg(project_id, n)
          from (select project_id, count(*) as n

@@ -27,7 +27,22 @@ export const PITCH_PROJECTS: PitchProject[] = projects;
 
 const ids = PITCH_PROJECTS.map((p) => p.id) as [string, ...string[]];
 
-export const voteSchema = z.object({ projectId: z.enum(ids) }).strict();
+/** How many projects one person may vote for (one vote each). */
+export const MAX_PICKS = 2;
+
+/**
+ * A vote request: the voter's whole set of picks — none, one or two
+ * distinct projects on the ballot. Sending the set (not "add"/"remove")
+ * makes a repeated or out-of-order request harmless.
+ */
+export const voteSchema = z
+  .object({
+    projectIds: z
+      .array(z.enum(ids))
+      .max(MAX_PICKS)
+      .refine((list) => new Set(list).size === list.length, "duplicate"),
+  })
+  .strict();
 
 export function voteClosesAt(): Date {
   return new Date(VOTE_CLOSES_AT);
@@ -41,7 +56,10 @@ export function voteOpen(now: Date, closesAt: Date = voteClosesAt()): boolean {
 export interface RankedProject {
   id: string;
   votes: number;
-  /** Whole-number share of all votes cast; 0 when nobody voted. */
+  /**
+   * Whole-number share of VOTERS who picked it (each may pick two, so these
+   * can add up past 100); 0 when nobody voted.
+   */
   percent: number;
   /** 1 for the top; projects on the same count share a rank. */
   rank: number;
@@ -55,6 +73,7 @@ export interface RankedProject {
  */
 export function rankTally(
   tally: Record<string, number>,
+  voters: number,
   ballot: Pick<PitchProject, "id">[] = PITCH_PROJECTS,
 ): RankedProject[] {
   const rows = ballot.map((p, order) => ({
@@ -62,7 +81,9 @@ export function rankTally(
     order,
     votes: Math.max(0, Math.floor(Number(tally[p.id]) || 0)),
   }));
-  const total = rows.reduce((n, r) => n + r.votes, 0);
+  // Nobody can be counted twice for one project, so a project never has more
+  // votes than there are voters; guard anyway so a share never passes 100.
+  const total = Math.max(voters, ...rows.map((r) => r.votes), 0);
   rows.sort((a, b) => b.votes - a.votes || a.order - b.order);
   let rank = 0;
   let previous = -1;
@@ -82,8 +103,12 @@ export function rankTally(
 
 /** What `pitch_vote_stats()` returns, checked rather than trusted. */
 export interface VoteStats {
+  /** Accounts that may vote. */
   eligible: number;
-  voted: number;
+  /** People who voted (one or two picks). */
+  voters: number;
+  /** Picks in all. */
+  votes: number;
   tally: Record<string, number>;
 }
 
@@ -96,9 +121,11 @@ export function parseVoteStats(value: unknown): VoteStats | null {
       if (typeof n === "number" && Number.isFinite(n)) tally[k] = n;
     }
   }
+  const n = (x: unknown) => (typeof x === "number" && Number.isFinite(x) ? x : 0);
   return {
-    eligible: typeof v.eligible === "number" ? v.eligible : 0,
-    voted: typeof v.voted === "number" ? v.voted : 0,
+    eligible: n(v.eligible),
+    voters: n(v.voters),
+    votes: n(v.votes),
     tally,
   };
 }

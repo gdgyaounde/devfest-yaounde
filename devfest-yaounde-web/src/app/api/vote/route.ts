@@ -1,14 +1,15 @@
 /**
  * /api/vote — the pitch contest public vote (ADR 0099).
  *
- *   GET   → { open, closesAt, signedIn, eligible, myVote, results }
- *   POST  { projectId } → 200 { projectId } | 401 | 403 not_eligible
- *                         | 409 vote_closed | 503 vote_unavailable
+ *   GET   → { open, closesAt, signedIn, eligible, myVotes, results }
+ *   POST  { projectIds: [] | [a] | [a, b] } → 200 { projectIds } | 401
+ *         | 403 not_eligible | 409 vote_closed | 503 vote_unavailable
  *
  * Who may vote is the DATABASE's call (`pitch_vote_eligible`, migration
  * 0046): checked in at the door, as the person who was there, matched on the
  * account id and the account's own email — never on anything in the
- * request. One vote per account; voting again changes it, until the close.
+ * request. Up to two picks per account (one vote each), sent as the whole
+ * set and replaced atomically; changeable until the close.
  *
  * Results are only ever sent once voting has closed; before that a voter
  * sees their own choice and nothing else (the organisers see the live tally
@@ -20,6 +21,7 @@
 import { NextRequest } from "next/server";
 import { isSameOrigin } from "@/lib/admin/organiser-roles";
 import {
+  PITCH_PROJECTS,
   isMissingVoteSchema,
   parseVoteStats,
   rankTally,
@@ -47,10 +49,12 @@ export interface VoteState {
   signedIn: boolean;
   /** null when signed out, or when it could not be worked out. */
   eligible: boolean | null;
-  myVote: string | null;
+  /** The voter's current picks, in ballot order. */
+  myVotes: string[];
   /** Only once voting has closed. */
   results: RankedProject[] | null;
-  totalVotes: number | null;
+  /** How many people voted — only once voting has closed. */
+  voters: number | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -62,9 +66,9 @@ export async function GET(request: NextRequest) {
     unavailable: false,
     signedIn: false,
     eligible: null,
-    myVote: null,
+    myVotes: [],
     results: null,
-    totalVotes: null,
+    voters: null,
   };
   const user = await currentUser();
   const limit = await rateLimit(
@@ -86,8 +90,8 @@ export async function GET(request: NextRequest) {
     } else {
       const stats = parseVoteStats(data);
       if (stats) {
-        state.results = rankTally(stats.tally);
-        state.totalVotes = stats.voted;
+        state.results = rankTally(stats.tally, stats.voters);
+        state.voters = stats.voters;
       }
     }
   }
@@ -100,8 +104,7 @@ export async function GET(request: NextRequest) {
     db
       .from("pitch_votes")
       .select("project_id")
-      .eq("user_id", user.id)
-      .maybeSingle(),
+      .eq("user_id", user.id),
   ]);
   if (eligible.error || mine.error) {
     const error = (eligible.error ?? mine.error)!;
@@ -113,7 +116,8 @@ export async function GET(request: NextRequest) {
     return Response.json(state, { headers: NO_STORE });
   }
   state.eligible = Boolean(eligible.data);
-  state.myVote = mine.data?.project_id ?? null;
+  const picked = new Set((mine.data ?? []).map((r) => r.project_id));
+  state.myVotes = PITCH_PROJECTS.map((p) => p.id).filter((id) => picked.has(id));
   return Response.json(state, { headers: NO_STORE });
 }
 
@@ -146,9 +150,9 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) return fail("invalid_body", 400);
 
   const db = createAdminSupabase();
-  const { data, error } = await db.rpc("cast_pitch_vote", {
+  const { data, error } = await db.rpc("set_pitch_votes", {
     p_user_id: user.id,
-    p_project_id: parsed.data.projectId,
+    p_project_ids: parsed.data.projectIds,
   });
   if (error) {
     if (isMissingVoteSchema(error)) return fail("vote_unavailable", 503);
@@ -157,9 +161,12 @@ export async function POST(request: NextRequest) {
   }
   const status = (data as { status?: string } | null)?.status;
   if (status === "not_eligible") return fail("not_eligible", 403);
-  if (status !== "voted") return fail("vote_failed", 500);
+  if (status === "too_many" || status === "duplicate") {
+    return fail("invalid_body", 400);
+  }
+  if (status !== "saved") return fail("vote_failed", 500);
   return Response.json(
-    { projectId: parsed.data.projectId },
+    { projectIds: parsed.data.projectIds },
     { headers: NO_STORE },
   );
 }
