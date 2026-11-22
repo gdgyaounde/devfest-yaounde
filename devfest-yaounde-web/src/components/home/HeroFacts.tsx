@@ -1,38 +1,49 @@
 "use client";
 
 import { useId, useState, type CSSProperties } from "react";
+import { FactSticker } from "@/components/home/FactSticker";
 
 export interface HeroFact {
   id: string;
-  /** Where the hotspot sits on the photograph, in % of the hero box. */
+  /** Where the hotspot sits on the photograph, in % of the photo. */
   x: number;
   y: number;
+  /** A DP-generator sticker id that says what the card is about. */
+  sticker: string;
   value: string;
   label: string;
   detail?: string;
 }
+
+/** Each card's own lean, so no two tilt alike — not a rule of left or right. */
+const TILTS = [-2.2, 1.4, -0.9, 2.6, -1.6, 0.8, -2.8, 1.9];
 
 /**
  * The hotspots on the thank-you photograph (ADR 0098).
  *
  * As the thank-you note breaks apart, a handful of its particles fly out
  * from the centre and settle on the photo as pinging dots — a "room tour"
- * hotspot. Hover (or focus, or tap) one and it opens a small card with a fact
- * about the day. The card grows out of the dot and folds back into it
- * (`.ty-fact-card` in motion.css), tilted a touch with an accent strip.
+ * hotspot. Hover (or focus, or tap) one and the DOT ITSELF becomes the card.
  *
- * Each dot is a real `<button>`: keyboard reachable, `aria-expanded`, and the
- * card is described by it. Hover and focus open it from CSS; a tap toggles it
- * for touch screens, where there is no hover.
+ * ## One element, not two
  *
- * The flight is CSS (`ty-settle`): from the centre of the hero to the dot's
- * place, starting as the words break (`settleAt`), each a little after the
- * last. The ping starts once it has landed. Positions are percentages, so a
- * new photo means editing `src/data/hero-facts.json`, not this file.
+ * Closed, the card is clipped to a dot-sized circle in one of its corners,
+ * and that corner holds the dot's face (white disc, black ring, yellow pip).
+ * So what looks like a dot IS the card. Opening interpolates the clip from
+ * that circle to the whole rounded card (two `inset()` shapes, so it is a
+ * true stretch, not a fade) while the dot's face melts away; closing plays it
+ * backwards and the face returns as the card folds home. Nothing else is
+ * drawn on top, so there is no seam to see.
+ *
+ * Each dot is a real `<button>` over the face: keyboard reachable, with
+ * `aria-expanded`, and the card describes it. Hover and focus open it from
+ * CSS; a tap toggles it for touch screens.
+ *
+ * Positions are percentages of the photo, so a new photo means editing
+ * `src/data/hero-facts.json`, not this file. Place every dot OFF faces —
+ * on a banner, a wall, a laptop — and check it at the dot's real size
+ * (about 3.5% of the photo's height), pulse ring included.
  */
-/** Each card's own lean, so no two tilt alike — not a rule of left or right. */
-const TILTS = [-2.2, 1.4, -0.9, 2.6, -1.6, 0.8, -2.8, 1.9];
-
 export function HeroFacts({
   facts,
   settleAt,
@@ -41,7 +52,7 @@ export function HeroFacts({
   settleAt: number;
 }) {
   return (
-    <ul className="pointer-events-none absolute inset-0 z-[15]">
+    <ul className="pointer-events-none absolute inset-0 z-15">
       {facts.map((fact, i) => (
         <Hotspot
           key={fact.id}
@@ -69,13 +80,6 @@ function Hotspot({
   // sideways away from the nearer edge, and upwards from a low dot.
   const toLeft = fact.x > 55;
   const upward = fact.y > 55;
-  /*
-   * The card grows out of the CORNER the dot sits in. Closed, it is clipped
-   * to a dot-sized circle in that corner (an `inset()` whose rounding is half
-   * the dot); open, the inset is zero with the card's own radius. Two inset()
-   * shapes interpolate cleanly, so the circle stretches into the rounded card
-   * and folds back into it.
-   */
   const far = "calc(100% - var(--d))";
   const closedClip = [
     upward ? far : "0",
@@ -84,41 +88,29 @@ function Hotspot({
     toLeft ? far : "0",
   ].join(" ");
   const corner = `${upward ? "bottom" : "top"} ${toLeft ? "right" : "left"}`;
-  const style = {
-    left: `${fact.x}%`,
-    top: `${fact.y}%`,
-    "--fx": `${(50 - fact.x).toFixed(1)}vw`,
-    "--fy": `${(50 - fact.y).toFixed(1)}svh`,
-    "--settle": `${delay}ms`,
-    "--ping": `${delay + 900}ms`,
-  } as CSSProperties;
 
   return (
     <li
       data-open={open}
       className="group absolute -translate-x-1/2 -translate-y-1/2 [--d:1.75rem] sm:[--d:2rem]"
-      style={style}
+      style={
+        {
+          left: `${fact.x}%`,
+          top: `${fact.y}%`,
+          "--fx": `${(50 - fact.x).toFixed(1)}vw`,
+          "--fy": `${(50 - fact.y).toFixed(1)}svh`,
+          "--settle": `${delay}ms`,
+          "--ping": `${delay + 900}ms`,
+        } as CSSProperties
+      }
     >
-      <span className="ty-settle ty-pause pointer-events-auto relative block">
+      <span className="ty-settle ty-pause pointer-events-auto relative block size-(--d)">
         <span
           aria-hidden
           className="ty-ping absolute inset-0 rounded-pill border-2 border-offwhite"
         />
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-describedby={cardId}
-          aria-label={`${fact.value} ${fact.label}`}
-          onClick={() => setOpen((v) => !v)}
-          onBlur={() => setOpen(false)}
-          className="ty-dot relative z-30 grid size-(--d) place-items-center rounded-pill border-2 border-black02 bg-offwhite shadow-[0_3px_0_0_var(--color-black02)]"
-        >
-          <span
-            aria-hidden
-            className="size-2.5 rounded-pill bg-primary sm:size-3"
-          />
-        </button>
 
+        {/* The card — which, closed, is the dot. */}
         <span
           id={cardId}
           role="tooltip"
@@ -130,13 +122,32 @@ function Hotspot({
               "--tilt": `${tilt}deg`,
             } as CSSProperties
           }
-          className={`ty-fact-card absolute z-20 w-60 rounded-xl border-2 border-b-[6px] border-black02 bg-offwhite px-4 text-left text-black02 sm:w-68 ${
+          className={`ty-fact-card absolute z-20 block w-64 rounded-xl border-2 border-black02 bg-offwhite px-4 text-left text-black02 sm:w-72 ${
             toLeft ? "right-0" : "left-0"
-          } ${upward ? "bottom-0 pb-[calc(var(--d)+0.75rem)] pt-4" : "top-0 pb-4 pt-[calc(var(--d)+0.75rem)]"}`}
+          } ${upward ? "bottom-0 pb-[calc(var(--d)+0.5rem)] pt-4" : "top-0 pb-4 pt-[calc(var(--d)+0.5rem)]"}`}
         >
-          {/* The accent: the figure itself, on a flat tag of the theme
-              colour. */}
-          <span className="inline-block rounded-md border-2 border-black02 bg-primary px-2 py-0.5 font-sans text-heading-l font-bold leading-none tracking-[-0.04em]">
+          {/* The dot's face, in the corner the card grows from. Offset by
+              the border so it sits exactly on the card's own corner. */}
+          <span
+            aria-hidden
+            className={`ty-card-dot absolute grid size-(--d) place-items-center rounded-pill border-2 border-black02 bg-offwhite ${
+              toLeft ? "-right-0.5" : "-left-0.5"
+            } ${upward ? "-bottom-0.5" : "-top-0.5"}`}
+          >
+            <span className="ty-card-pip size-2.5 rounded-pill bg-primary sm:size-3" />
+          </span>
+
+          {/* The accent: a sticker that says what the card is about, slapped
+              on the far corner. */}
+          <FactSticker
+            id={fact.sticker}
+            size={56}
+            className={`ty-card-sticker absolute top-2 ${toLeft ? "left-2 rotate-[-10deg]" : "right-2 rotate-[8deg]"}`}
+          />
+
+          <span
+            className={`block font-sans text-display-l font-bold leading-none tracking-[-0.045em] ${toLeft ? "pl-14" : "pr-14"}`}
+          >
             {fact.value}
           </span>
           <span className="mt-2 block font-mono text-mono-tag font-bold uppercase tracking-wide">
@@ -148,6 +159,16 @@ function Hotspot({
             </span>
           )}
         </span>
+
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-describedby={cardId}
+          aria-label={`${fact.value} ${fact.label}`}
+          onClick={() => setOpen((v) => !v)}
+          onBlur={() => setOpen(false)}
+          className="absolute inset-0 z-30 rounded-pill focus-visible:outline-none"
+        />
       </span>
     </li>
   );

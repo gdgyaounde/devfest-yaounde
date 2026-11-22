@@ -911,6 +911,42 @@ export function drawStickerPreview(
   ctx.restore();
 }
 
+/**
+ * A shape sticker as a small, LOUD badge — the accent on the thank-you
+ * hotspot cards (ADR 0098). Unlike the picker preview above it is drawn the
+ * way a sticker sits on a DP card: a chunky ink outline and a flat ink
+ * shadow, so it reads at 56px. `fill` recolours the sticker's main surface
+ * (parts with their own colour keep it), so every card carries the theme
+ * accent rather than five different colours.
+ */
+export function drawStickerBadge(
+  canvas: HTMLCanvasElement,
+  stickerId: string,
+  px: number,
+  fill?: string,
+) {
+  const found = findSticker(stickerId);
+  if (!found || found.kind !== "shape") return;
+  const sticker = fill ? { ...found, fill } : found;
+  canvas.width = px;
+  canvas.height = px;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  ctx.clearRect(0, 0, px, px);
+  const size = px * 0.76;
+  // `u` sets the outline weight; a fixed share of the badge, not of a card.
+  const u = px * 6;
+  const shadow = px * 0.05;
+  ctx.save();
+  ctx.translate(px / 2 - shadow / 2 + shadow, px / 2 - shadow / 2 + shadow);
+  drawShapeSticker(ctx, sticker, size, u, true);
+  ctx.restore();
+  ctx.save();
+  ctx.translate(px / 2 - shadow / 2, px / 2 - shadow / 2);
+  drawShapeSticker(ctx, sticker, size, u);
+  ctx.restore();
+}
+
 /** Where a sticker's hit area is, in card fractions. Used by the crop stage. */
 export function stickerRadius(item: PlacedSticker, ratio: DpRatio): number {
   void ratio;

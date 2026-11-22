@@ -91,6 +91,9 @@ const nextConfig: NextConfig = {
     // AVIF first, WebP behind it. The optimiser picks per request from the
     // browser's Accept header, so an old browser still gets a JPEG.
     formats: ["image/avif", "image/webp"],
+    // Next 16 only serves the qualities listed here. 92 is the thank-you
+    // group photo (ADR 0098): a crowd of faces shows compression first.
+    qualities: [75, 92],
     /*
      * SVG is NOT enabled here, and that is deliberate.
      *

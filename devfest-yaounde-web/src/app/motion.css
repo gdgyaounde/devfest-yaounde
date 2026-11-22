@@ -2139,6 +2139,26 @@ html:has([data-preloader="held"]) .hero-settle {
 .ty-watermark {
   animation: ty-rise 1400ms var(--ease-out-devfest) 1500ms both;
 }
+/*
+ * The watermark follows the footer's theme (ADR 0098). Its yellow — the
+ * shadow plate and the 21, 9, FMSB and 2026 figures — is recoloured to each
+ * theme's primary in its own copy of the file; everything else is the
+ * supplied artwork, byte for byte. A background is only fetched when its
+ * rule applies, so a visitor downloads the one copy they see. Yellow (and
+ * no theme yet) keeps the original file.
+ */
+.ty-watermark-art {
+  background: url("/brand/watermark-devfest.svg") center / contain no-repeat;
+}
+:root[data-theme="blue"] .ty-watermark-art {
+  background-image: url("/brand/watermark-devfest-blue.svg");
+}
+:root[data-theme="red"] .ty-watermark-art {
+  background-image: url("/brand/watermark-devfest-red.svg");
+}
+:root[data-theme="green"] .ty-watermark-art {
+  background-image: url("/brand/watermark-devfest-green.svg");
+}
 html:has([data-preloader="held"]) .ty-pause,
 html:has([data-preloader="held"]) .ty-intro,
 html:has([data-preloader="held"]) .ty-intro * {
@@ -2165,6 +2185,53 @@ html:has([data-preloader="held"]) .ty-intro * {
   to {
     transform: scale(0.72);
     opacity: 0;
+  }
+}
+
+/* The gentle pinch, once the note is fully drawn: a squeeze in, a soft
+   overshoot out, settle. */
+.ty-pinch {
+  animation: ty-pinch 560ms var(--ease-bouncy) var(--ty-pinch, 0ms) both;
+}
+@keyframes ty-pinch {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.94);
+  }
+  70% {
+    transform: scale(1.035);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Brand confetti bursting around the note at the pinch, then drifting down
+   and fading before the note breaks. */
+.ty-confetti {
+  opacity: 0;
+  animation: ty-confetti 1400ms var(--ease-out-devfest) var(--c-delay, 0ms) both;
+}
+@keyframes ty-confetti {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+        calc(-50% + var(--c-x, 0)),
+        calc(-50% + var(--c-y, 0) + 6vmin)
+      )
+      scale(1) rotate(var(--c-r, 180deg));
   }
 }
 
@@ -2284,36 +2351,65 @@ html:has([data-preloader="held"]) .ty-intro * {
   opacity: 0;
   animation: ty-ping 1800ms var(--ease-out-devfest) var(--ping, 0ms) infinite;
 }
-/* The fact card GROWS OUT OF THE CORNER ITS DOT SITS IN and folds back into
-   it. `--clip-closed` (set per card) is a dot-sized circle in that corner;
-   open, the clip is the whole card with its own radius. Both are inset()
-   shapes, so the circle stretches smoothly into the card. A small tilt on
-   the bouncy curve, pivoting on the same corner. Clip-path also clips
-   hit-testing; pointer-events are off while closed anyway. */
+/* The fact card IS its dot when closed: clipped to a dot-sized circle in a
+   corner (`--clip-closed`, set per card) that holds the dot's face. Opening
+   stretches that clip into the whole rounded card — two inset() shapes, so
+   it interpolates as one shape — while the face melts; closing reverses it
+   and the face comes back as the card folds home. A slight tilt pivots on
+   the same corner. Clip-path clips hit-testing too. */
 .ty-fact-card {
   clip-path: var(--clip-closed);
   transform-origin: var(--corner, top left);
   rotate: 0deg;
   pointer-events: none;
+  box-shadow: 0 5px 0 0 var(--color-black02);
   transition:
-    clip-path 520ms var(--ease-in-out-devfest),
-    rotate 520ms var(--ease-bouncy);
+    clip-path 560ms var(--ease-in-out-devfest),
+    rotate 560ms var(--ease-bouncy);
 }
 .group:hover .ty-fact-card,
 .group:focus-within .ty-fact-card,
 .ty-fact-card[data-open="true"] {
-  clip-path: inset(0 0 0 0 round 0.75rem);
+  /* Extends below the card so the flat shadow is not clipped off. */
+  clip-path: inset(0 0 -6px 0 round 0.75rem);
   rotate: var(--tilt, -1.5deg);
   pointer-events: auto;
 }
-/* The dot stays as the card's corner pin, settling a touch smaller. */
-.ty-dot {
-  transition: scale 300ms var(--ease-bouncy);
+/* The face: present while closed, melting as the clip stretches. */
+.ty-card-dot {
+  transition: opacity 220ms var(--ease-out-devfest) 300ms;
 }
-.group:hover .ty-dot,
-.group:focus-within .ty-dot,
-.group[data-open="true"] .ty-dot {
-  scale: 0.86;
+.ty-card-pip {
+  transition: scale 260ms var(--ease-bouncy) 300ms;
+}
+.group:hover .ty-card-dot,
+.group:focus-within .ty-card-dot,
+.group[data-open="true"] .ty-card-dot {
+  opacity: 0;
+  transition-delay: 60ms;
+}
+.group:hover .ty-card-pip,
+.group:focus-within .ty-card-pip,
+.group[data-open="true"] .ty-card-pip {
+  scale: 0;
+  transition-delay: 0ms;
+}
+/* The sticker lands once the card is open, and leaves before it folds. */
+.ty-card-sticker {
+  opacity: 0;
+  scale: 0.4;
+  transition:
+    opacity 160ms var(--ease-out-devfest),
+    scale 160ms var(--ease-out-devfest);
+}
+.group:hover .ty-card-sticker,
+.group:focus-within .ty-card-sticker,
+.group[data-open="true"] .ty-card-sticker {
+  opacity: 1;
+  scale: 1;
+  transition:
+    opacity 200ms var(--ease-out-devfest) 320ms,
+    scale 420ms var(--ease-bouncy) 320ms;
 }
 .group:hover .ty-ping,
 .group:focus-within .ty-ping,
@@ -2384,8 +2480,12 @@ html:has([data-preloader="held"]) .ty-intro * {
     animation: none !important;
     clip-path: none !important;
   }
-  .ty-particle {
+  .ty-particle,
+  .ty-confetti {
     display: none !important;
+  }
+  .ty-pinch {
+    animation: none !important;
   }
   .ty-settle {
     animation: none !important;
@@ -2398,7 +2498,9 @@ html:has([data-preloader="held"]) .ty-intro * {
     animation: none !important;
   }
   .ty-fact-card,
-  .ty-dot {
+  .ty-card-dot,
+  .ty-card-pip,
+  .ty-card-sticker {
     transition: none !important;
   }
 }

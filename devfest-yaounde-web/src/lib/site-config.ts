@@ -139,6 +139,13 @@ export const RESERVATIONS_CLOSE_AT = "2026-11-20T17:00:00+01:00";
  */
 export const PAST_GALLERY_URL = "https://photos.app.goo.gl/S4nVSxBmu73FjChW6";
 
+/**
+ * This edition's album (DevFest Yaoundé 2026), linked from the thank-you
+ * banner and Memory Lane (ADR 0098). Overridden by
+ * `site_settings.memory_lane.currentGalleryUrl`.
+ */
+export const CURRENT_GALLERY_URL = "https://photos.app.goo.gl/aiU2LaXqxqFFQmgf6";
+
 /** The sponsor prospectus. Overridden by `site_settings.sponsor_call`. */
 export const SPONSOR_PROSPECTUS_URL =
   "https://drive.google.com/file/d/1Bof8zhqp5aOtweXL_qmXXGAvyGb1VAAQ/view?usp=sharing";

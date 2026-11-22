@@ -12,6 +12,7 @@ import {
   CFS_CLOSES_AT,
   CFS_OPENS_AT,
   CFS_URL,
+  CURRENT_GALLERY_URL,
   PARTICIPATION_TERMS_URL,
   PAST_GALLERY_URL,
   PRIVACY_POLICY_URL,
@@ -66,7 +67,10 @@ const REPO_DEFAULTS: SiteSettings = {
   /* No overall capacity until an admin sets one — `null` total means "don't
      show a public counter", not "zero tickets left". */
   capacity: { total: null },
-  memoryLane: { galleryUrl: PAST_GALLERY_URL, currentGalleryUrl: "" },
+  memoryLane: {
+    galleryUrl: PAST_GALLERY_URL,
+    currentGalleryUrl: CURRENT_GALLERY_URL,
+  },
   /* Every tab shown until an admin hides one. */
   nav: DEFAULT_NAV,
   source: "repo",
