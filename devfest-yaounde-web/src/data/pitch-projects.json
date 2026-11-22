@@ -93,5 +93,15 @@
       "fr": "NutriFYS sur WhatsApp : 650437427",
       "en": "NutriFYS on WhatsApp: 650437427"
     }
+  },
+  {
+    "id": "genesis",
+    "team": "Équipe Genesis",
+    "name": "Genesis",
+    "tagline": {
+      "fr": "La langue des signes traduite en texte, et le texte en langue des signes, grâce à l'IA.",
+      "en": "Sign language turned into text, and text into sign language, with AI."
+    },
+    "pitch": "C'est une plateforme d'accessibilité pour les personnes malentendantes, qui fonctionne dans les deux sens :\n\n• Signes → texte : la caméra d'un téléphone ou d'un ordinateur capte les mains et le corps, l'IA reconnaît les gestes et les traduit en texte en temps réel.\n• Texte → signes : une personne entendante écrit ou dicte une phrase, et un avatar 3D la traduit en langue des signes.\n\nElle vise à lever les barrières de communication dans la santé, l'éducation et les administrations, là où les interprètes sont rares et coûteux. Elle repose sur la vision par ordinateur et l'apprentissage profond."
   }
 ]

@@ -900,9 +900,9 @@
     },
     "vote": {
       "title": "Vote pour tes pitchs préférés",
-      "metaDesc": "Huit équipes ont pitché au DevFest Yaoundé 2026. Connecte-toi et vote pour deux projets au maximum.",
+      "metaDesc": "Neuf équipes ont pitché au DevFest Yaoundé 2026. Connecte-toi et vote pour deux projets au maximum.",
       "eyebrow": "Concours de pitch · DevFest Yaoundé 2026",
-      "lead": "Huit équipes sont montées sur scène samedi. Connecte-toi et vote pour deux d'entre elles au maximum : choisis les projets que tu soutiens.",
+      "lead": "Neuf équipes sont montées sur scène samedi. Connecte-toi et vote pour deux d'entre elles au maximum : choisis les projets que tu soutiens.",
       "poweredBy": "Propulsé par",
       "openUntil": "Le vote est ouvert jusqu'au {date} à {time}",
       "closedOn": "Le vote s'est clos le {date} à {time}",
@@ -927,7 +927,7 @@
       "resultsTitle": "Le choix du public",
       "resultsLead": "{count, plural, =0 {Personne n'a voté.} one {# personne a voté, pour deux projets au maximum.} other {# personnes ont voté, pour deux projets au maximum chacune.}}",
       "winner": "Choix du public",
-      "projectsTitle": "Les huit pitchs",
+      "projectsTitle": "Les neuf pitchs",
       "signOut": "Se déconnecter",
       "picksUsed": "Tes voix : {count} sur {max}",
       "removeVote": "Retirer ma voix",
@@ -1484,7 +1484,7 @@
   "votePopup": {
     "title": "Vote pour tes pitchs préférés",
     "poweredBy": "Concours de pitch propulsé par",
-    "body": "Huit équipes ont pitché samedi. Connecte-toi et vote pour deux projets au maximum, jusqu'au {date} à {time}. Les résultats s'affichent à la clôture du vote.",
+    "body": "Neuf équipes ont pitché samedi. Connecte-toi et vote pour deux projets au maximum, jusqu'au {date} à {time}. Les résultats s'affichent à la clôture du vote.",
     "cta": "Je vote",
     "later": "Plus tard"
   },
