@@ -1,0 +1,72 @@
+[
+  {
+    "id": "speakers",
+    "x": 16,
+    "y": 30,
+    "value": "27",
+    "label": {
+      "en": "speakers on stage",
+      "fr": "speakers sur scène"
+    },
+    "detail": {
+      "en": "Some of them joined from abroad.",
+      "fr": "Certains sont venus de l'étranger."
+    }
+  },
+  {
+    "id": "sessions",
+    "x": 79,
+    "y": 24,
+    "value": "22 + 5",
+    "label": {
+      "en": "talks and workshops",
+      "fr": "talks et ateliers"
+    },
+    "detail": {
+      "en": "Plus a pitch contest on the main stage.",
+      "fr": "Et un pitch contest sur la scène principale."
+    }
+  },
+  {
+    "id": "rooms",
+    "x": 34,
+    "y": 58,
+    "value": "5 × 11h",
+    "label": {
+      "en": "rooms, one long Saturday",
+      "fr": "salles, un long samedi"
+    },
+    "detail": {
+      "en": "Doors at 08:00, lights out around 19:00.",
+      "fr": "Ouverture à 08:00, fin vers 19:00."
+    }
+  },
+  {
+    "id": "dp-cards",
+    "x": 68,
+    "y": 55,
+    "value": "101",
+    "label": {
+      "en": "DP cards made",
+      "fr": "cartes DP créées"
+    },
+    "detail": {
+      "en": "Every one of them on the community wall.",
+      "fr": "Toutes sur le mur de la communauté."
+    }
+  },
+  {
+    "id": "stories",
+    "x": 90,
+    "y": 44,
+    "value": "15",
+    "label": {
+      "en": "stories shared",
+      "fr": "témoignages partagés"
+    },
+    "detail": {
+      "en": "Left anonymously on Storytime.",
+      "fr": "Laissés anonymement sur Storytime."
+    }
+  }
+]

@@ -77,7 +77,7 @@ export default async function HomePage({
           settings.eventDate,
         ])}
       />
-      <ThankYouHero backdropUrl={settings.hero.imageUrl} />
+      <ThankYouHero locale={locale} backdropUrl={settings.hero.imageUrl} />
       {/*
         The sponsor strip used to be layer 4 INSIDE the hero. The redesign
         gives the bottom edge to the wordmark (ADR 0044), and two things

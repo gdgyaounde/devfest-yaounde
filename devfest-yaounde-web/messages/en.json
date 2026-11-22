@@ -263,7 +263,9 @@
     "thanks": {
       "lead": "Thank you,",
       "city": "Yaoundé.",
-      "photoAlt": "The DevFest Yaoundé community, all together"
+      "photoAlt": "The DevFest Yaoundé community, all together",
+      "panHint": "Drag or swipe to see everyone",
+      "panLabel": "Group photo — scroll sideways to see everyone"
     }
   },
   "pages": {

@@ -2151,9 +2151,9 @@ html:has([data-preloader="held"]) .ty-intro * {
    backdrop has drawn. Flat offset shadow — no blur, no gradient. */
 .ty-zoom {
   color: var(--color-offwhite);
-  -webkit-text-stroke: 0.035em var(--color-black02);
+  -webkit-text-stroke: 0.055em var(--color-black02);
   paint-order: stroke fill;
-  text-shadow: 0 0.05em 0 var(--color-black02);
+  text-shadow: 0 0.06em 0 var(--color-black02);
   animation: ty-zoom-out 1100ms var(--ease-in-out-devfest) var(--ty-break, 0ms)
     both;
 }
@@ -2226,10 +2226,10 @@ html:has([data-preloader="held"]) .ty-intro * {
 }
 @keyframes ty-draw {
   from {
-    clip-path: inset(0 100% 0 0 round 0.16em);
+    clip-path: inset(0 100% 0 0);
   }
   to {
-    clip-path: inset(0 0 0 0 round 0.16em);
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -2252,6 +2252,122 @@ html:has([data-preloader="held"]) .ty-intro * {
       scale(1) rotate(160deg);
   }
 }
+/* --- The hotspots: particles that settle on the photo and ping -------- */
+@keyframes ty-settle {
+  from {
+    opacity: 0;
+    transform: translate(var(--fx, 0), var(--fy, 0)) scale(0.3);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ty-settle {
+  animation: ty-settle 900ms var(--ease-out-devfest) var(--settle, 0ms) both;
+}
+@keyframes ty-ping {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+.ty-ping {
+  opacity: 0;
+  animation: ty-ping 1800ms var(--ease-out-devfest) var(--ping, 0ms) infinite;
+}
+/* The fact card GROWS OUT OF THE CORNER ITS DOT SITS IN and folds back into
+   it. `--clip-closed` (set per card) is a dot-sized circle in that corner;
+   open, the clip is the whole card with its own radius. Both are inset()
+   shapes, so the circle stretches smoothly into the card. A small tilt on
+   the bouncy curve, pivoting on the same corner. Clip-path also clips
+   hit-testing; pointer-events are off while closed anyway. */
+.ty-fact-card {
+  clip-path: var(--clip-closed);
+  transform-origin: var(--corner, top left);
+  rotate: 0deg;
+  pointer-events: none;
+  transition:
+    clip-path 520ms var(--ease-in-out-devfest),
+    rotate 520ms var(--ease-bouncy);
+}
+.group:hover .ty-fact-card,
+.group:focus-within .ty-fact-card,
+.ty-fact-card[data-open="true"] {
+  clip-path: inset(0 0 0 0 round 0.75rem);
+  rotate: var(--tilt, -1.5deg);
+  pointer-events: auto;
+}
+/* The dot stays as the card's corner pin, settling a touch smaller. */
+.ty-dot {
+  transition: scale 300ms var(--ease-bouncy);
+}
+.group:hover .ty-dot,
+.group:focus-within .ty-dot,
+.group[data-open="true"] .ty-dot {
+  scale: 0.86;
+}
+.group:hover .ty-ping,
+.group:focus-within .ty-ping,
+.group[data-open="true"] .ty-ping {
+  visibility: hidden;
+}
+.group:hover {
+  z-index: 1;
+}
+
+/* --- The panorama and its hint ------------------------------------------ */
+.ty-pan {
+  scrollbar-width: none;
+}
+.ty-pan::-webkit-scrollbar {
+  display: none;
+}
+/* Just above the watermark, whose height follows its width (1330 × 189). */
+.ty-hint {
+  bottom: calc(min(100vw - 2.5rem, 42rem) * 0.142 + 2.25rem);
+  animation: ty-hint-in 700ms var(--ease-out-devfest) var(--hint-at, 0ms) both;
+  transition: opacity 500ms var(--ease-out-devfest);
+}
+@media (min-width: 640px) {
+  .ty-hint {
+    bottom: calc(min(100vw - 4rem, 42rem) * 0.142 + 3.5rem);
+  }
+}
+.ty-hint[data-gone="true"] {
+  opacity: 0 !important;
+}
+@keyframes ty-hint-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ty-hint-nudge {
+  animation: ty-nudge 1600ms var(--ease-in-out-devfest) infinite;
+}
+@keyframes ty-nudge {
+  0%,
+  100% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ty-photo,
   .ty-watermark,
@@ -2270,5 +2386,19 @@ html:has([data-preloader="held"]) .ty-intro * {
   }
   .ty-particle {
     display: none !important;
+  }
+  .ty-settle {
+    animation: none !important;
+  }
+  .ty-ping {
+    display: none !important;
+  }
+  .ty-hint,
+  .ty-hint-nudge {
+    animation: none !important;
+  }
+  .ty-fact-card,
+  .ty-dot {
+    transition: none !important;
   }
 }

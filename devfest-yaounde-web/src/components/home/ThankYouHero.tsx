@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
-import { ContentImage } from "@/components/ui/ContentImage";
+import { PhotoPanorama } from "@/components/home/PhotoPanorama";
+import { HeroFacts } from "@/components/home/HeroFacts";
+import heroFacts from "@/data/hero-facts.json";
 
 /**
  * The landing hero for the days after the edition (ADR 0098): a thank-you.
@@ -64,7 +66,14 @@ function seeded(seed: number) {
 
 const vars = (v: Record<string, string>) => v as CSSProperties;
 
-export async function ThankYouHero({ backdropUrl }: { backdropUrl: string }) {
+export async function ThankYouHero({
+  backdropUrl,
+  locale,
+}: {
+  backdropUrl: string;
+  locale: string;
+}) {
+  const lang = locale === "en" ? "en" : "fr";
   const t = await getTranslations("home.thanks");
   const hasPhoto = Boolean(backdropUrl?.trim());
   const lines = [t("lead"), t("city")].map((line) => Array.from(line));
@@ -104,20 +113,28 @@ export async function ThankYouHero({ backdropUrl }: { backdropUrl: string }) {
     >
       <h1 className="sr-only">{`${t("lead")} ${t("city")}`}</h1>
 
-      <div aria-hidden className="absolute inset-0 -z-10 bg-pastel">
+      {/* ---------- The photograph, as a panorama, with its hotspots ---------- */}
+      <div className="absolute inset-0 -z-10 bg-pastel">
         {hasPhoto && (
-          <>
-            <div className="ty-photo ty-pause absolute inset-0">
-              <ContentImage
-                src={backdropUrl}
-                alt={t("photoAlt")}
-                sizes="100vw"
-                priority
-                className="object-cover"
-              />
-            </div>
-            <div className="absolute inset-0 bg-black02/10" />
-          </>
+          <PhotoPanorama
+            src={backdropUrl}
+            alt={t("photoAlt")}
+            hintAt={watermarkAt + 700}
+            hint={t("panHint")}
+            label={t("panLabel")}
+          >
+            <HeroFacts
+              settleAt={breakAt}
+              facts={heroFacts.map((f) => ({
+                id: f.id,
+                x: f.x,
+                y: f.y,
+                value: f.value,
+                label: f.label[lang],
+                detail: f.detail?.[lang],
+              }))}
+            />
+          </PhotoPanorama>
         )}
       </div>
 
@@ -127,18 +144,22 @@ export async function ThankYouHero({ backdropUrl }: { backdropUrl: string }) {
         className="ty-intro pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4"
       >
         <div
-          className="ty-zoom flex flex-col items-center gap-[0.12em] font-sans text-[clamp(3rem,13vw,10rem)] font-bold leading-[0.95] tracking-[-0.03em]"
+          className="ty-zoom flex flex-col items-center font-sans text-[clamp(3rem,13vw,10rem)] font-bold leading-[0.95] tracking-[-0.055em]"
           style={vars({ "--ty-break": `${breakAt}ms` })}
         >
           {lines.map((chars, line) => (
             <span
               key={line}
-              className={`relative inline-block px-[0.22em] py-[0.06em] ${
-                line === 0 ? "-rotate-[4deg]" : "ml-[0.8em] rotate-[3deg]"
+              className={`relative inline-block px-[0.24em] py-[0.08em] ${
+                line === 0
+                  ? "-rotate-[1.5deg]"
+                  : /* Tucked up under the first line, so the two
+                       backdrops overlap a little. */
+                    "-mt-[0.16em] ml-[0.8em] rotate-[1deg]"
               }`}
             >
               <span
-                className={`ty-draw absolute inset-0 -z-10 rounded-[0.16em] border-[0.05em] border-black02 shadow-[0_0.07em_0_0_var(--color-black02)] ${
+                className={`ty-draw absolute inset-0 -z-10 border-[0.05em] border-black02 shadow-[0_0.07em_0_0_var(--color-black02)] ${
                   line === 0 ? "bg-primary" : "bg-black02"
                 }`}
                 style={vars({
@@ -192,7 +213,7 @@ export async function ThankYouHero({ backdropUrl }: { backdropUrl: string }) {
       </div>
 
       {/* ---------- What stays: the watermark, centred along the bottom ---------- */}
-      <div className="relative z-20 flex justify-center px-5 pb-6 sm:px-8 sm:pb-10">
+      <div className="pointer-events-none relative z-20 flex justify-center px-5 pb-6 sm:px-8 sm:pb-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/brand/watermark-devfest.svg"
