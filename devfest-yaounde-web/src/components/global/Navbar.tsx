@@ -33,21 +33,13 @@ export function Navbar({
   nav: NavSettings;
 }) {
   const t = useTranslations("nav");
-  // The ticket button follows the end-game phase (ADR 0084): buy → reserve →
-  // pay at the venue (which points at the venue section on the home page).
+  // The ticket button follows the end-game phase (ADR 0084, 0098): buy →
+  // reserve → gone. Once everything is closed there is nothing to sell, so
+  // the button is not shown at all rather than pointing nowhere.
   const phase = useSalesPhase();
-  const ticketHref =
-    phase === "selling"
-      ? "/tickets"
-      : phase === "reserving"
-        ? "/reserve"
-        : "/#venue";
-  const ticketLabel =
-    phase === "selling"
-      ? t("tickets")
-      : phase === "reserving"
-        ? t("reserve")
-        : t("payAtVenue");
+  const ticketHref = phase === "selling" ? "/tickets" : "/reserve";
+  const ticketLabel = phase === "selling" ? t("tickets") : t("reserve");
+  const showTicketCta = nav.tickets && phase !== "closed";
   const links = visibleTextLinks(nav);
   const pathname = usePathname();
   // This hook returns the path WITHOUT the locale prefix.
@@ -134,7 +126,7 @@ export function Navbar({
               {t("shop")}
             </Link>
           )}
-          {nav.tickets && (
+          {showTicketCta && (
             <Link
               href={ticketHref}
               className="whitespace-nowrap rounded-pill border-2 border-black02 bg-primary px-4 py-2 font-sans text-body-m font-bold text-black02 shadow-[0_3px_0_0_var(--color-black02)] transition-[transform,box-shadow,background-color] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-halftone hover:shadow-[0_5px_0_0_var(--color-black02)] active:translate-y-0.5 active:shadow-none"
@@ -206,7 +198,7 @@ export function Navbar({
                   {t("shop")}
                 </Link>
               )}
-              {nav.tickets && (
+              {showTicketCta && (
                 <Link
                   href={ticketHref}
                   onClick={() => setMobileOpen(false)}

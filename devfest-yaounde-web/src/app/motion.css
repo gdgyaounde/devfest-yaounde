@@ -2106,3 +2106,48 @@ html:has([data-preloader="held"]) .hero-settle {
     opacity: 1 !important;
   }
 }
+
+
+/* ===========================================================================
+   Thank-you hero (ADR 0098) — a soft, short arrival: the photograph settles,
+   the words surface (the Storytime `anim-story-word`), the body breathes in,
+   and the watermark band rises last. About four seconds end to end.
+   Held while the preloader owns the screen, like the rest of the hero.
+   =========================================================================== */
+@keyframes ty-photo {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ty-photo {
+  animation: ty-photo 3200ms var(--ease-out-devfest) both;
+}
+@keyframes ty-rise {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ty-watermark {
+  animation: ty-rise 1500ms var(--ease-out-devfest) 2300ms both;
+}
+html:has([data-preloader="held"]) .ty-pause {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ty-photo,
+  .ty-watermark {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

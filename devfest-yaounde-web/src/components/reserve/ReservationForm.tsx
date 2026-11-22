@@ -223,7 +223,7 @@ export function ReservationForm({
     );
   }
 
-  if (phase === "door") {
+  if (phase === "closed") {
     return (
       <section className={CARD}>
         <h2 className="flex items-center gap-3 font-sans text-heading-l font-bold text-black02">

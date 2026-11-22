@@ -3,13 +3,12 @@
 import {
   CalendarCheck,
   HourglassMedium,
-  MapPinLine,
+  Prohibit,
 } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Countdown } from "@/components/ui/Countdown";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
-import { EVENT } from "@/lib/event";
 
 /** The countdown only appears in the final stretch (ADR 0072). */
 const COUNTDOWN_WINDOW_MS = 48 * 60 * 60 * 1000;
@@ -33,14 +32,14 @@ export function SalesCutoffNotice({
   salesCloseAt,
   closeDate,
   closeTime,
-  eventDate,
   reservationsDeadline,
   editsDeadline,
 }: {
   salesCloseAt: string | null;
   closeDate: string | null;
   closeTime: string | null;
-  eventDate: string;
+  /** Kept for callers; the closed state no longer names a date (ADR 0098). */
+  eventDate?: string;
   /** When reservations end (ADR 0084); null = no deadline set. */
   reservationsDeadline?: { date: string; time: string } | null;
   /** When holders stop being able to edit (ADR 0075); null = not shown. */
@@ -106,7 +105,7 @@ export function SalesCutoffNotice({
   }
 
   const reserving = phase === "reserving";
-  const Icon = reserving ? CalendarCheck : MapPinLine;
+  const Icon = reserving ? CalendarCheck : Prohibit;
   const cta =
     "inline-flex shrink-0 items-center gap-2 self-start rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none sm:self-center";
 
@@ -135,10 +134,7 @@ export function SalesCutoffNotice({
                   date: reservationsDeadline?.date ?? "",
                   time: reservationsDeadline?.time ?? "",
                 })
-              : t("doorBody", {
-                  venue: EVENT.venue ?? EVENT.city,
-                  date: eventDate,
-                })}
+              : t("doorBody")}
           </p>
         </div>
       </div>
@@ -147,17 +143,7 @@ export function SalesCutoffNotice({
           <CalendarCheck size={18} weight="bold" aria-hidden />
           {t("reservingCta")}
         </Link>
-      ) : (
-        <a
-          href={EVENT.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cta}
-        >
-          <MapPinLine size={18} weight="bold" aria-hidden />
-          {t("doorCta")}
-        </a>
-      )}
+      ) : null}
     </section>
   );
 }

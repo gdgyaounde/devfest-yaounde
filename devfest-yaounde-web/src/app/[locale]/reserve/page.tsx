@@ -10,7 +10,7 @@ import { ScrambleText } from "@/components/ui/ScrambleText";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { loadSettings } from "@/lib/content/settings";
 import { getProducts, getSwagProducts, getTiers } from "@/lib/content/store";
-import { EVENT, formatCutoff, formatEventDates } from "@/lib/event";
+import { EVENT, formatCutoff, formatEventDates, salesPhase } from "@/lib/event";
 import { cashPriceXAF } from "@/lib/payments/fees";
 import { pageMetadata } from "@/lib/seo";
 
@@ -52,6 +52,9 @@ export default async function ReservePage({
     getSwagProducts(),
   ]);
 
+  /* Once everything is closed (ADR 0098) the page says only that. */
+  const closed = salesPhase(new Date(), settings) === "closed";
+
   const swagName = new Map(swag.map((p) => [p.id, p.name]));
   const reservableTiers: ReservableTier[] = tiers
     .filter((tier) => tier.onSale && !tier.rsvpExternal && tier.priceXAF > 0)
@@ -82,11 +85,13 @@ export default async function ReservePage({
     <main id="main-content" tabIndex={-1} className="flex-1 pt-32 sm:pt-28">
       <SectionContainer background="yellow-wash" maxWidth="4xl">
         <h1 className="font-sans text-display-hero font-bold leading-[0.9] text-black02">
-          <ScrambleText text={t("title")} />
+          <ScrambleText text={closed ? t("closedTitle") : t("title")} />
         </h1>
-        <p className="mt-6 max-w-2xl text-body-l text-black02/80">
-          {t("lead", { venue: EVENT.venue ?? EVENT.city })}
-        </p>
+        {!closed && (
+          <p className="mt-6 max-w-2xl text-body-l text-black02/80">
+            {t("lead", { venue: EVENT.venue ?? EVENT.city })}
+          </p>
+        )}
 
         <div className="mt-12">
           <ReservationForm
@@ -102,9 +107,11 @@ export default async function ReservePage({
           />
         </div>
 
-        <div className="mt-16">
-          <VenueCard />
-        </div>
+        {!closed && (
+          <div className="mt-16">
+            <VenueCard />
+          </div>
+        )}
       </SectionContainer>
     </main>
   );

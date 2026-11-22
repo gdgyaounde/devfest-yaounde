@@ -4,7 +4,7 @@ import { About } from "@/components/home/About";
 import { VenueBand } from "@/components/home/VenueCard";
 import { CommunityCta } from "@/components/home/CommunityCta";
 import { FaqPreview } from "@/components/home/FaqPreview";
-import { Hero } from "@/components/home/Hero";
+import { ThankYouHero } from "@/components/home/ThankYouHero";
 import { MemoryLane } from "@/components/home/MemoryLane";
 import { QuotesInterstitial } from "@/components/home/QuotesInterstitial";
 import { ScheduleOverviewPreview } from "@/components/home/ScheduleOverviewPreview";
@@ -77,7 +77,7 @@ export default async function HomePage({
           settings.eventDate,
         ])}
       />
-      <Hero
+      <ThankYouHero
         locale={locale}
         eventDate={settings.eventDate}
         backdropUrl={settings.hero.imageUrl}

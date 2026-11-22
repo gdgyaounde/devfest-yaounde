@@ -153,10 +153,10 @@ export class ReservationError extends Error {
  * deadline — exactly `salesPhase === "reserving"` (ADR 0084).
  */
 export function reservationGate(
-  phase: "selling" | "reserving" | "door",
+  phase: "selling" | "reserving" | "closed",
 ): ReservationErrorCode | null {
   if (phase === "selling") return RESERVATION_ERRORS.NOT_OPEN;
-  if (phase === "door") return RESERVATION_ERRORS.CLOSED;
+  if (phase === "closed") return RESERVATION_ERRORS.CLOSED;
   return null;
 }
 

@@ -56,6 +56,8 @@ export function GlobalChrome({
   );
   const current = useBeforeInstant(announcementExpiresAt, true);
   const [scrolled, setScrolled] = useState(false);
+  /* Past the home page's thank-you hero (ADR 0098). */
+  const [pastHero, setPastHero] = useState(false);
   const pathname = usePathname();
 
   /*
@@ -72,9 +74,19 @@ export function GlobalChrome({
    */
   const onWall = /^\/[a-z]{2}\/wall\/?$/.test(pathname ?? "");
 
+  /*
+   * The home page opens on the thank-you hero with NO navbar and no banner.
+   * They stay out of sight until the visitor has scrolled most of the way
+   * past it, then slide in and remain for the rest of the site — the same
+   * chrome as every other page. Every other route shows it from the start.
+   */
+  const onHome = /^\/[a-z]{2}\/?$/.test(pathname ?? "");
+  const chromeHidden = onHome && !pastHero;
+
   useEffect(() => {
     function onScroll() {
       setScrolled(window.scrollY > 12);
+      setPastHero(window.scrollY > window.innerHeight * 0.85);
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -95,9 +107,12 @@ export function GlobalChrome({
       /* Named so the admin can suppress the site chrome without a tag
          selector that also hits the dashboard's own headers. */
       data-site-chrome
-      className={`pointer-events-none fixed inset-x-0 z-50 flex justify-center px-3 sm:px-6 ${
+      /* `inert` keeps the hidden links out of the tab order and away from
+         assistive tech until the bar has actually arrived. */
+      inert={chromeHidden}
+      className={`pointer-events-none fixed inset-x-0 z-50 flex justify-center px-3 transition-transform duration-700 ease-out-devfest motion-reduce:transition-none sm:px-6 ${
         onWall ? "bottom-0 pb-3 sm:pb-5" : "top-0 pt-3 sm:pt-5"
-      }`}
+      } ${chromeHidden ? "-translate-y-[140%]" : "translate-y-0"}`}
     >
       <div
         /*

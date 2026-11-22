@@ -6,7 +6,7 @@ import { feeInclusiveAmount } from "@/lib/payments/fees";
 import { useBeforeInstant } from "@/lib/use-before-instant";
 
 /**
- * The end-game phase, live (ADR 0084): `selling` → `reserving` → `door`.
+ * The end-game phase, live (ADR 0084): `selling` → `reserving` → `closed`.
  *
  * The public pages are statically prerendered, so the server's answer goes
  * stale at 12:00 today and again on Friday at 17:00. This provider keeps the
@@ -24,11 +24,14 @@ const PhaseContext = createContext<SalesPhase>("selling");
 export function SalesPhaseProvider({
   salesCloseAt,
   reservationsCloseAt,
+  eventEndsAt,
   initial,
   children,
 }: {
   salesCloseAt: string | null;
   reservationsCloseAt: string | null;
+  /** When the event is over: everything is closed from then (ADR 0098). */
+  eventEndsAt: string | null;
   /** What the server computed when it rendered this HTML. */
   initial: SalesPhase;
   children: ReactNode;
@@ -36,13 +39,18 @@ export function SalesPhaseProvider({
   const selling = useBeforeInstant(salesCloseAt, initial === "selling");
   const reservingOrEarlier = useBeforeInstant(
     reservationsCloseAt,
-    initial !== "door",
+    initial !== "closed",
   );
-  const phase: SalesPhase = selling
-    ? "selling"
-    : reservingOrEarlier
-      ? "reserving"
-      : "door";
+  /* An event with no date never ends; an empty instant means "no cutoff",
+     which `useBeforeInstant` already reads as "still before it". */
+  const beforeEventEnd = useBeforeInstant(eventEndsAt, initial !== "closed");
+  const phase: SalesPhase = !beforeEventEnd
+    ? "closed"
+    : selling
+      ? "selling"
+      : reservingOrEarlier
+        ? "reserving"
+        : "closed";
   return (
     <PhaseContext.Provider value={phase}>{children}</PhaseContext.Provider>
   );

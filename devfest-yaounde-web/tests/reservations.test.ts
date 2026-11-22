@@ -312,7 +312,7 @@ describe("reservationGate", () => {
   it("opens only between the cutoff and the deadline", () => {
     assert.equal(reservationGate("selling"), "reservations_not_open");
     assert.equal(reservationGate("reserving"), null);
-    assert.equal(reservationGate("door"), "reservations_closed");
+    assert.equal(reservationGate("closed"), "reservations_closed");
   });
 });
 

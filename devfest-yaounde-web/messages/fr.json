@@ -51,7 +51,7 @@
     "skipToContent": "Aller au contenu",
     "home": "DevFest Yaoundé — accueil",
     "reserve": "Réserver",
-    "payAtVenue": "Payer sur place"
+    "payAtVenue": "Ventes closes"
   },
   "announcement": {
     "message": "🎟️ Les billets early bird se terminent bientôt — réservez le vôtre avant l'augmentation des prix !",
@@ -59,10 +59,12 @@
     "wall": "Chaque carte ici a été faite par quelqu'un de cette communauté, dans un navigateur, probablement au lieu de faire quelque chose de plus productif. Regarde-moi ça. Sincèrement, merci — ce mur, c'est juste vous.",
     "salesClose": "📍 {eventDate} · {venue} — Les paiements en ligne ferment {date} à {time} — ensuite, réserve ta place et paie en espèces sur place. Tu as déjà un billet ? Tu peux modifier ton nom et ta taille de T-shirt depuis ton compte jusque-là.",
     "salesCloseCta": "Billets",
-    "afterSales": "Les réservations sont closes — rendez-vous le {date} à {venue} ! Paiement en espèces sur place 🎉",
+    "afterSales": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable — à la prochaine !",
     "reservationsOpen": "📍 {eventDate} · {venue} — Les paiements en ligne sont clos — réserve ta place (billets ou boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
     "reserveCta": "Réserver",
-    "wallStories": "Chaque mot ici a été laissé par quelqu'un de cette communauté — des histoires anonymes des éditions du DevFest Yaoundé, racontées une à une. Merci pour chacune d'elles."
+    "wallStories": "Chaque mot ici a été laissé par quelqu'un de cette communauté — des histoires anonymes des éditions du DevFest Yaoundé, racontées une à une. Merci pour chacune d'elles.",
+    "thankYou": "💛 Merci d'avoir rendu DevFest Yaoundé 2026 inoubliable — à la prochaine !",
+    "thankYouCta": "Voir les photos"
   },
   "offline": {
     "banner": "Tu es hors ligne — {pages} restent disponibles."
@@ -257,7 +259,15 @@
       "cta": "D'autres questions ?",
       "toggleHint": "Touche une question"
     },
-    "metaDesc": "DevFest Yaoundé, la conférence tech du GDG Yaoundé — une journée de talks, d'ateliers et d'une communauté qui se serre les coudes."
+    "metaDesc": "DevFest Yaoundé, la conférence tech du GDG Yaoundé — une journée de talks, d'ateliers et d'une communauté qui se serre les coudes.",
+    "thanks": {
+      "eyebrow": "DevFest Yaoundé {year} · {date}",
+      "lead": "Merci,",
+      "city": "Yaoundé.",
+      "body": "Vous avez fait de DevFest Yaoundé {year} ce qu'il a été — les speakers, les bénévoles, nos partenaires et sponsors, les organisateurs, et chaque personne venue le {date}. Merci pour les talks, les questions, les discussions dans les couloirs et toute cette énergie. À la prochaine.",
+      "ctaSchedule": "Revoir le programme",
+      "photoAlt": "La communauté DevFest Yaoundé, tous ensemble"
+    }
   },
   "pages": {
     "schedule": {
@@ -391,9 +401,9 @@
       "reservingTitle": "Les paiements en ligne sont clos — tu peux encore réserver",
       "reservingBody": "Plus rien ne se paie sur le site. Réserve tes billets (et tes articles de la boutique) jusqu'au {date} à {time}, puis paie en espèces sur place.",
       "reservingCta": "Réserver ma place",
-      "doorTitle": "Les réservations sont closes — paiement sur place",
-      "doorBody": "Rendez-vous à {venue} le {date} et paie en espèces sur place. Les pass gratuits se réservent toujours sur la page de la communauté.",
-      "doorCta": "Voir le lieu"
+      "doorTitle": "La billetterie est fermée",
+      "doorBody": "DevFest Yaoundé 2026 a eu lieu : les billets ne sont plus en vente et plus rien ne peut être réservé ni payé sur place. Merci à toutes celles et ceux qui sont venus !",
+      "doorCta": "Billetterie fermée"
     },
     "shop": {
       "title": "Boutique",
@@ -704,7 +714,7 @@
         "emptyTitle": "Aucune réservation pour l'instant",
         "emptyReserving": "Les paiements en ligne sont clos. Réserve tes billets et tes articles de la boutique, et paie en espèces sur place.",
         "emptySelling": "Les réservations ouvrent à la clôture des paiements en ligne, aujourd'hui à midi.",
-        "emptyDoor": "Les réservations sont closes. Viens à {venue} et paie en espèces sur place.",
+        "emptyDoor": "Les réservations sont closes.",
         "reserveCta": "Réserver ma place",
         "status": {
           "reserved": "Réservé",
@@ -849,7 +859,7 @@
       "notOpenBody": "D'ici là, tu peux encore payer en ligne billets et articles de la boutique. Ensuite, réserve ici et paie en espèces sur place.",
       "payNow": "Payer en ligne maintenant",
       "closedTitle": "Les réservations sont closes",
-      "closedBody": "Rendez-vous à {venue} le {date} et paie en espèces sur place. Les pass gratuits se réservent sur notre page communautaire.",
+      "closedBody": "DevFest Yaoundé 2026 a eu lieu : plus rien ne peut être réservé ni payé sur place. Merci d'en avoir fait partie !",
       "ticketsTitle": "1 · Billets",
       "ticketsHint": "Pass payants, jusqu'à {max} par réservation. Les prix sont ceux que tu paies en espèces — sans frais en ligne.",
       "inTheBox": "Dans le kit : {items}",
@@ -897,8 +907,8 @@
       "tier_not_on_sale": "Ce billet n'est plus en vente. Il en reste d'autres, jette un œil.",
       "tier_rsvp_external": "Ce pass ne se prend pas ici — il passe par la page de la communauté.",
       "tier_sold_out": "Plus de place sur ce billet — il est parti vite. Essaie une autre catégorie.",
-      "ticket_sales_closed": "La vente de billets est close. Tu peux encore réserver ta place jusqu'au vendredi 20 novembre, 17h00 — ensuite, c'est en espèces sur place.",
-      "payments_closed": "Les paiements sont clos — plus rien ne se paie sur le site. Réserve ta place (billets ou articles de la boutique) jusqu'au vendredi 20 novembre, 17h00, et paie en espèces sur place.",
+      "ticket_sales_closed": "La billetterie est fermée.",
+      "payments_closed": "Les paiements sont clos — rien n'est vendu ni réservé pour le moment.",
       "unknown_product": "Cet article n'est plus au catalogue. Recharge la boutique.",
       "product_unavailable": "Cet article n'est pas commandable en ligne pour l'instant.",
       "invalid_variant": "Choisis une taille et une couleur disponibles avant de continuer.",
@@ -951,7 +961,7 @@
     },
     "reservations": {
       "reservations_not_open": "Les réservations ouvrent à la clôture des paiements en ligne, aujourd'hui à midi.",
-      "reservations_closed": "Les réservations sont closes. Viens sur place et paie en espèces.",
+      "reservations_closed": "Les réservations sont closes.",
       "empty_reservation": "Ajoute au moins un billet ou un article de la boutique.",
       "unknown_tier": "Ce billet n'est plus disponible. Recharge la page.",
       "tier_not_reservable": "Ce billet ne se réserve pas ici (le pass gratuit est sur notre page communautaire).",
@@ -1385,21 +1395,22 @@
   },
   "reservations": {
     "cta": "Réserver ma place",
-    "doorCta": "Payer sur place",
+    "doorCta": "Ventes closes",
     "phaseSelling": "Paiements en ligne",
     "phaseReserving": "Réservations",
-    "phaseDoor": "Sur place",
+    "phaseDoor": "Fermé",
     "addToReservation": "Ajouter à ma réservation",
     "viewReservation": "Voir ma réservation",
     "myReservation": "Ma réservation",
     "shopReserving": "Les paiements en ligne sont clos. Réserve tes articles maintenant — tu paies en espèces en les récupérant sur place.",
-    "shopDoor": "Les réservations sont closes. Paie en espèces sur place — articles disponibles dans la limite des stocks.",
+    "shopDoor": "La boutique reste consultable, mais les ventes et les réservations sont fermées pour le moment.",
     "bagTitleReserving": "Ton panier est maintenant une réservation",
     "bagBodyReserving": "Les paiements en ligne sont clos : rien ne se paie sur le site. Indique ton nom et choisis tes billets et articles sur la page de réservation — tu paies en espèces sur place.",
-    "bagTitleDoor": "Les réservations sont closes",
-    "bagBodyDoor": "Rendez-vous à {venue} et paie en espèces sur place — articles disponibles dans la limite des stocks.",
+    "bagTitleDoor": "La boutique est fermée pour le moment",
+    "bagBodyDoor": "Tu peux toujours parcourir la collection, mais rien ne peut être acheté ni réservé pour le moment.",
     "continueToReservation": "Continuer vers ma réservation",
-    "seeVenue": "Voir le lieu"
+    "seeVenue": "Voir le lieu",
+    "backToShop": "Retour à la boutique"
   },
   "salesPopup": {
     "stepOf": "Étape {step} sur {total}",
@@ -1410,8 +1421,8 @@
     "reservingTitle": "Les paiements en ligne sont clos — réserve ta place",
     "reservingBody": "Plus rien ne se paie sur le site. Réserve tes billets et tes articles de la boutique jusqu'au {date} à {time}, puis paie en espèces sur place.",
     "reservingCta": "Réserver ma place",
-    "doorTitle": "Paiement sur place",
-    "doorBody": "Les réservations sont closes. Rendez-vous à {venue} le {date} et paie en espèces sur place.",
+    "doorTitle": "Les ventes sont closes",
+    "doorBody": "DevFest Yaoundé 2026 a eu lieu. Les billets ne sont plus en vente.",
     "doorCta": "Voir le lieu",
     "ok": "Compris"
   },

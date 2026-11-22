@@ -181,36 +181,53 @@ export function ticketSalesOpen(
 }
 
 /**
- * Where we are in the end-game (ADR 0084), as ONE answer every surface reads:
+ * Where we are in the end-game (ADR 0084, 0098), as ONE answer every surface
+ * reads:
  *
  *   - `selling`   — before `salesCloseAt`: tickets and the shop take payments;
  *   - `reserving` — from `salesCloseAt` to `reservationsCloseAt`: NO payment
  *                   passes through the platform; people reserve and pay in
  *                   cash at the venue;
- *   - `door`      — from `reservationsCloseAt`: reservations are over; anyone
- *                   comes to the venue and pays cash.
+ *   - `closed`    — from `reservationsCloseAt`, or from the moment the event
+ *                   has ended if that comes first: nothing is sold and
+ *                   nothing is reserved, tickets or shop. The shop stays
+ *                   browsable. Paying at the venue is gone too (ADR 0098).
  *
  * Same boundary rule as `ticketSalesOpen` (closed FROM the instant). A cleared
  * `salesCloseAt` keeps selling; a cleared `reservationsCloseAt` keeps
- * reserving — emptying a field in the dashboard must never shut a door.
- * Pure, `now` an argument, so the banner, the CTAs, the pop-up, checkout and
- * the tests cannot disagree.
+ * reserving — emptying a field in the dashboard must never shut a door — but
+ * the end of the event always closes everything. Pure, `now` an argument, so
+ * the banner, the CTAs, the pop-up, checkout and the tests cannot disagree.
  */
-export type SalesPhase = "selling" | "reserving" | "door";
+export type SalesPhase = "selling" | "reserving" | "closed";
 
 export function salesPhase(
   now: Date,
   settings: {
     ticketing: Pick<TicketingSettings, "salesCloseAt" | "reservationsCloseAt">;
+    /** The event date: once it is over, everything is closed (ADR 0098). */
+    eventDate?: string | null;
   },
 ): SalesPhase {
+  if (settings.eventDate && eventHasEnded(now, [settings.eventDate])) {
+    return "closed";
+  }
   const sales = cutoffInstant(settings.ticketing.salesCloseAt);
   if (sales === null || now.getTime() < sales) return "selling";
   const reservations = cutoffInstant(settings.ticketing.reservationsCloseAt);
   if (reservations === null || now.getTime() < reservations) {
     return "reserving";
   }
-  return "door";
+  return "closed";
+}
+
+/**
+ * The instant the event is over, as an ISO string — what the client follows
+ * to flip to `closed` at the minute without a rebuild. Null without a date.
+ */
+export function eventEndsAtIso(dates: readonly string[]): string | null {
+  const end = eventEndInstant(dates);
+  return end === null ? null : new Date(end).toISOString();
 }
 
 /**

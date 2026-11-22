@@ -142,7 +142,7 @@ export function ShopBrowser({
         setStatus(null);
       }}
       toolbar={
-        phase === "door" ? undefined : (
+        phase === "closed" ? undefined : (
           <a
             href={`/${locale}/${phase === "selling" ? "shop/cart" : "reserve"}`}
             className="inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-5 py-2.5 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none"

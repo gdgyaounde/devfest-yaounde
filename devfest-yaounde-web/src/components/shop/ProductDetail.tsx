@@ -195,7 +195,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <div className="mt-8">
                 <Button
                   size="md"
-                  disabled={!ready || phase === "door"}
+                  disabled={!ready || phase === "closed"}
                   onClick={() => {
                     add({
                       productId: product.id,

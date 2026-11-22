@@ -16,6 +16,7 @@ import { TermsUpdatedPopup } from "@/components/global/TermsUpdatedPopup";
 import { routing } from "@/i18n/routing";
 import {
   EVENT,
+  eventEndsAtIso,
   formatCutoff,
   salesPhase,
   formatEventDates,
@@ -25,7 +26,7 @@ import { JsonLd } from "@/lib/seo";
 import { loadSettings } from "@/lib/content/settings";
 import { cfsAcceptsSubmissions, cfsView } from "@/lib/content/cfs";
 import { getSpeakers } from "@/lib/content/store";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, isPlaceholderUrl } from "@/lib/site-config";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
 
@@ -128,6 +129,13 @@ export default async function LocaleLayout({
   */
   const phase = salesPhase(new Date(), settings);
   const salesOpen = phase === "selling";
+  /*
+    Once everything is closed — the event is over (ADR 0098) — the banner has
+    one job: say thank you. It beats the call for speakers and the derived
+    sales lines (which cannot be true any more); only a message typed in the
+    dashboard still wins.
+  */
+  const closed = phase === "closed";
   const salesCutoff = salesOpen
     ? formatCutoff(l, settings.ticketing.salesCloseAt)
     : null;
@@ -145,7 +153,8 @@ export default async function LocaleLayout({
     !custom && phase === "reserving" && settings.nav.tickets;
 
   const cfs = cfsView(settings.cfs, speakers.length);
-  const cfsBanner = !custom && !salesBanner && cfsAcceptsSubmissions(cfs);
+  const cfsBanner =
+    !custom && !closed && !salesBanner && cfsAcceptsSubmissions(cfs);
   const tCfs = await getTranslations("cfs");
 
   /*
@@ -162,40 +171,52 @@ export default async function LocaleLayout({
         venue: EVENT.venue ?? EVENT.city,
       });
 
+  const album = settings.memoryLane.currentGalleryUrl.trim();
+  const hasAlbum = Boolean(album) && !isPlaceholderUrl(album);
   const announcementMessage =
     custom ||
-    (salesBanner
-      ? tAnnouncement("salesClose", {
-          date: salesCutoff!.date,
-          time: salesCutoff!.time,
-          eventDate,
-          venue,
-        })
-      : reserveBanner
-        ? tAnnouncement("reservationsOpen", {
-            date: reservationsCutoff?.date ?? "",
-            time: reservationsCutoff?.time ?? "",
+    (closed
+      ? tAnnouncement("thankYou")
+      : salesBanner
+        ? tAnnouncement("salesClose", {
+            date: salesCutoff!.date,
+            time: salesCutoff!.time,
             eventDate,
             venue,
           })
-        : cfsBanner
-          ? tCfs("banner")
-          : fallback);
-  const announcementCta = salesBanner
-    ? {
-        href: `/${locale}/tickets`,
-        label: tAnnouncement("salesCloseCta"),
-        external: false,
-      }
-    : reserveBanner
+        : reserveBanner
+          ? tAnnouncement("reservationsOpen", {
+              date: reservationsCutoff?.date ?? "",
+              time: reservationsCutoff?.time ?? "",
+              eventDate,
+              venue,
+            })
+          : cfsBanner
+            ? tCfs("banner")
+            : fallback);
+  const announcementCta = closed
+    ? hasAlbum
       ? {
-          href: `/${locale}/reserve`,
-          label: tAnnouncement("reserveCta"),
+          href: album,
+          label: tAnnouncement("thankYouCta"),
+          external: true,
+        }
+      : undefined
+    : salesBanner
+      ? {
+          href: `/${locale}/tickets`,
+          label: tAnnouncement("salesCloseCta"),
           external: false,
         }
-      : cfsBanner
-        ? { href: cfs.url, label: tCfs("bannerCta"), external: true }
-        : undefined;
+      : reserveBanner
+        ? {
+            href: `/${locale}/reserve`,
+            label: tAnnouncement("reserveCta"),
+            external: false,
+          }
+        : cfsBanner
+          ? { href: cfs.url, label: tCfs("bannerCta"), external: true }
+          : undefined;
 
   return (
     <html
@@ -233,6 +254,7 @@ export default async function LocaleLayout({
           <SalesPhaseProvider
             salesCloseAt={settings.ticketing.salesCloseAt}
             reservationsCloseAt={settings.ticketing.reservationsCloseAt}
+            eventEndsAt={eventEndsAtIso([settings.eventDate])}
             initial={salesPhase(new Date(), settings)}
           >
             <EventDateProvider date={settings.eventDate}>
@@ -270,17 +292,20 @@ export default async function LocaleLayout({
                 update (once per `legal.termsVersion`), then where payments
                 stand (once per phase). Waits for the preloader and the hero
                 entrance before it opens. */}
-              <TermsUpdatedPopup
-                version={settings.legal.termsVersion}
-                eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
-                salesClose={formatCutoff(l, settings.ticketing.salesCloseAt)}
-                reservationsClose={formatCutoff(
-                  l,
-                  settings.ticketing.reservationsCloseAt,
-                )}
-                venue={EVENT.venue ?? EVENT.city}
-                mapUrl={EVENT.mapUrl}
-              />
+              {/* Nothing left to announce once everything is closed (ADR 0098). */}
+              {!closed && (
+                <TermsUpdatedPopup
+                  version={settings.legal.termsVersion}
+                  eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
+                  salesClose={formatCutoff(l, settings.ticketing.salesCloseAt)}
+                  reservationsClose={formatCutoff(
+                    l,
+                    settings.ticketing.reservationsCloseAt,
+                  )}
+                  venue={EVENT.venue ?? EVENT.city}
+                  mapUrl={EVENT.mapUrl}
+                />
+              )}
               <FloatingScrollbar />
               <CustomCursor />
               <ServiceWorkerRegistration />

@@ -371,7 +371,7 @@ export function TermsUpdatedPopup({
                   {tn("reservingCta")}
                 </Link>
               )}
-              {phase === "door" && (
+              {phase === "closed" && (
                 <a
                   href={mapUrl}
                   target="_blank"

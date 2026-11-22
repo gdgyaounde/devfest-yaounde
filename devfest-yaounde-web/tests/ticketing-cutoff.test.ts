@@ -104,9 +104,25 @@ describe("salesPhase (ADR 0084)", () => {
     assert.equal(at(RESERVATIONS_MS - 1), "reserving");
   });
 
-  it("is cash at the door from Friday 17:00", () => {
-    assert.equal(at(RESERVATIONS_MS), "door");
-    assert.equal(at(Date.UTC(2026, 10, 21, 8, 0, 0)), "door");
+  it("is closed from Friday 17:00 — no cash at the venue either (ADR 0098)", () => {
+    assert.equal(at(RESERVATIONS_MS), "closed");
+    assert.equal(at(Date.UTC(2026, 10, 21, 8, 0, 0)), "closed");
+  });
+
+  it("is closed once the event is over, whatever the cutoffs say", () => {
+    const withDate = { ...s, eventDate: "2026-11-21" };
+    const afterEvent = new Date(Date.UTC(2026, 10, 22, 12, 0, 0));
+    assert.equal(salesPhase(afterEvent, withDate), "closed");
+    // Even with every cutoff cleared: the event ending always closes it.
+    assert.equal(
+      salesPhase(afterEvent, {
+        ...settings(null, null, null),
+        eventDate: "2026-11-21",
+      }),
+      "closed",
+    );
+    // And before it, the cutoffs still decide.
+    assert.equal(salesPhase(new Date(CUTOFF_MS - 1), withDate), "selling");
   });
 
   it("never shuts a door because a field was cleared", () => {

@@ -51,7 +51,7 @@
     "skipToContent": "Skip to content",
     "home": "DevFest Yaoundé — home",
     "reserve": "Reserve",
-    "payAtVenue": "Pay at the venue"
+    "payAtVenue": "Sales closed"
   },
   "announcement": {
     "message": "🎟️ Early bird tickets end soon — grab yours before prices go up!",
@@ -59,10 +59,12 @@
     "wall": "Every card here was made by somebody in this community, in a browser, probably instead of doing something more productive. Look at them all. Genuinely, thank you — this wall is just you lot.",
     "salesClose": "📍 {eventDate} · {venue} — Online payments close {date} at {time} — after that, reserve your spot and pay cash at the venue. Already have a ticket? You can update the name and T-shirt size from your account until then.",
     "salesCloseCta": "Get tickets",
-    "afterSales": "Reservations are closed — see you on {date} at {venue}! Pay cash on the spot 🎉",
+    "afterSales": "💛 Thank you for making DevFest Yaoundé 2026 unforgettable — see you next time!",
     "reservationsOpen": "📍 {eventDate} · {venue} — Online payments are closed — reserve your spot (tickets or shop) until {date} at {time}, then pay cash at the venue.",
     "reserveCta": "Reserve",
-    "wallStories": "Every word here was left by someone in this community — anonymous stories from the editions of DevFest Yaoundé, told one at a time. Thank you for each one of them."
+    "wallStories": "Every word here was left by someone in this community — anonymous stories from the editions of DevFest Yaoundé, told one at a time. Thank you for each one of them.",
+    "thankYou": "💛 Thank you for making DevFest Yaoundé 2026 unforgettable — see you next time!",
+    "thankYouCta": "See the photos"
   },
   "offline": {
     "banner": "You're offline — {pages} still work."
@@ -257,7 +259,15 @@
       "cta": "More questions?",
       "toggleHint": "Tap a question"
     },
-    "metaDesc": "DevFest Yaoundé is GDG Yaoundé's flagship tech conference — a day of talks, workshops and the community that shows up for each other."
+    "metaDesc": "DevFest Yaoundé is GDG Yaoundé's flagship tech conference — a day of talks, workshops and the community that shows up for each other.",
+    "thanks": {
+      "eyebrow": "DevFest Yaoundé {year} · {date}",
+      "lead": "Thank you,",
+      "city": "Yaoundé.",
+      "body": "You made DevFest Yaoundé {year} what it was — the speakers, the volunteers, our partners and sponsors, the organisers, and every single person who showed up on {date}. Thank you for the talks, the questions, the hallway chats and all that energy. Until next time.",
+      "ctaSchedule": "Relive the schedule",
+      "photoAlt": "The DevFest Yaoundé community, all together"
+    }
   },
   "pages": {
     "schedule": {
@@ -391,9 +401,9 @@
       "reservingTitle": "Online payments are closed — you can still reserve",
       "reservingBody": "Nothing is paid on the site any more. Reserve your tickets (and any shop items) until {date} at {time}, then pay in cash at the venue.",
       "reservingCta": "Reserve my spot",
-      "doorTitle": "Reservations are closed — pay at the venue",
-      "doorBody": "Come to {venue} on {date} and pay in cash on the spot. Free passes are still reserved on our community page.",
-      "doorCta": "See the venue"
+      "doorTitle": "Ticket sales are closed",
+      "doorBody": "DevFest Yaoundé 2026 has taken place, so tickets are no longer on sale and nothing can be reserved or paid at the venue. Thank you to everyone who came!",
+      "doorCta": "Ticket sales are closed"
     },
     "shop": {
       "title": "Shop",
@@ -704,7 +714,7 @@
         "emptyTitle": "No reservations yet",
         "emptyReserving": "Online payments are closed. Reserve your tickets and shop items, and pay in cash at the venue.",
         "emptySelling": "Reservations open when online payments close, today at noon.",
-        "emptyDoor": "Reservations are closed. Come to {venue} and pay in cash on the spot.",
+        "emptyDoor": "Reservations are closed.",
         "reserveCta": "Reserve my spot",
         "status": {
           "reserved": "Reserved",
@@ -849,7 +859,7 @@
       "notOpenBody": "Until then you can still pay online for tickets and shop items. From then on, reserve here and pay in cash at the venue.",
       "payNow": "Pay online now",
       "closedTitle": "Reservations are closed",
-      "closedBody": "Come to {venue} on {date} and pay in cash on the spot. Free passes are reserved on our community page.",
+      "closedBody": "DevFest Yaoundé 2026 has taken place, so nothing can be reserved or paid at the venue any more. Thank you for being part of it!",
       "ticketsTitle": "1 · Tickets",
       "ticketsHint": "Paid passes, up to {max} per reservation. Prices are what you pay in cash — no online fee.",
       "inTheBox": "In the box: {items}",
@@ -897,8 +907,8 @@
       "tier_not_on_sale": "That ticket isn't on sale any more. There are others — take a look.",
       "tier_rsvp_external": "This pass isn't taken here — it goes through the community page.",
       "tier_sold_out": "That one's sold out — it went fast. Try another tier.",
-      "ticket_sales_closed": "Ticket sales are closed. You can still reserve your spot until Friday 20 November, 17:00 — then it's cash at the venue.",
-      "payments_closed": "Payments are closed — nothing is paid on the site any more. Reserve your spot (tickets or shop items) until Friday 20 November, 17:00, and pay in cash at the venue.",
+      "ticket_sales_closed": "Ticket sales are closed.",
+      "payments_closed": "Payments are closed — nothing is sold or reserved at the moment.",
       "unknown_product": "That item is no longer in the catalog. Reload the shop.",
       "product_unavailable": "That item can't be ordered online right now.",
       "invalid_variant": "Pick an available size and colour before you carry on.",
@@ -951,7 +961,7 @@
     },
     "reservations": {
       "reservations_not_open": "Reservations open when online payments close, today at noon.",
-      "reservations_closed": "Reservations are closed. Come to the venue and pay in cash.",
+      "reservations_closed": "Reservations are closed.",
       "empty_reservation": "Add at least one ticket or shop item.",
       "unknown_tier": "That ticket isn't available any more. Reload the page.",
       "tier_not_reservable": "That ticket can't be reserved here (the free pass is on our community page).",
@@ -1385,21 +1395,22 @@
   },
   "reservations": {
     "cta": "Reserve your spot",
-    "doorCta": "Pay at the venue",
+    "doorCta": "Sales closed",
     "phaseSelling": "Online payments",
     "phaseReserving": "Reservations",
-    "phaseDoor": "At the venue",
+    "phaseDoor": "Closed",
     "addToReservation": "Add to my reservation",
     "viewReservation": "View my reservation",
     "myReservation": "My reservation",
     "shopReserving": "Online payments are closed. Reserve your items now — you pay in cash when you collect them at the venue.",
-    "shopDoor": "Reservations are closed. Pay in cash at the venue — items are available while stock lasts.",
+    "shopDoor": "The shop is open to browse, but sales and reservations are closed for now.",
     "bagTitleReserving": "Your bag is now a reservation",
     "bagBodyReserving": "Online payments are closed, so nothing is paid on the site. Add your name and pick your tickets and items on the reservation page — you pay in cash at the venue.",
-    "bagTitleDoor": "Reservations are closed",
-    "bagBodyDoor": "Come to {venue} and pay in cash on the spot — items are available while stock lasts.",
+    "bagTitleDoor": "The shop is closed for now",
+    "bagBodyDoor": "You can still browse the collection, but nothing can be bought or reserved at the moment.",
     "continueToReservation": "Continue to my reservation",
-    "seeVenue": "See the venue"
+    "seeVenue": "See the venue",
+    "backToShop": "Back to the shop"
   },
   "salesPopup": {
     "stepOf": "Step {step} of {total}",
@@ -1410,8 +1421,8 @@
     "reservingTitle": "Online payments are closed — reserve your spot",
     "reservingBody": "Nothing is paid on the site any more. Reserve your tickets and any shop items until {date} at {time}, then pay in cash at the venue.",
     "reservingCta": "Reserve my spot",
-    "doorTitle": "Pay at the venue",
-    "doorBody": "Reservations are closed. Come to {venue} on {date} and pay in cash on the spot.",
+    "doorTitle": "Sales are closed",
+    "doorBody": "DevFest Yaoundé 2026 has taken place. Tickets are no longer on sale.",
     "doorCta": "See the venue",
     "ok": "Got it"
   },

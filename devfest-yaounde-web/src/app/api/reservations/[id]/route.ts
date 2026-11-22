@@ -54,7 +54,7 @@ export async function PATCH(
 
   // Reservations over means over: after the deadline it is for organisers.
   const phase = salesPhase(new Date(), await loadSettings());
-  if (phase === "door") return fail("reservations_closed", 409);
+  if (phase === "closed") return fail("reservations_closed", 409);
 
   const { data, error } = await createAdminSupabase().rpc(
     "cancel_reservation",

@@ -1,11 +1,10 @@
 "use client";
 
-import { CalendarCheck, MapPinLine } from "@phosphor-icons/react";
+import { CalendarCheck, Storefront } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { useSalesPhase } from "@/components/global/SalesPhaseProvider";
 import { Button } from "@/components/ui/Button";
-import { EVENT } from "@/lib/event";
 
 /**
  * The bag page (ADR 0084). While payments are online it is the ordinary
@@ -27,7 +26,7 @@ export function ShopCartGate({ children }: { children: ReactNode }) {
       <p className="text-body-m text-black02/80">
         {reserving
           ? t("bagBodyReserving")
-          : t("bagBodyDoor", { venue: EVENT.venue ?? EVENT.city })}
+          : t("bagBodyDoor")}
       </p>
       {reserving ? (
         <Button size="md" href="/reserve">
@@ -35,9 +34,9 @@ export function ShopCartGate({ children }: { children: ReactNode }) {
           {t("continueToReservation")}
         </Button>
       ) : (
-        <Button size="md" href={EVENT.mapUrl} external>
-          <MapPinLine size={18} weight="bold" aria-hidden />
-          {t("seeVenue")}
+        <Button size="md" href="/shop">
+          <Storefront size={18} weight="bold" aria-hidden />
+          {t("backToShop")}
         </Button>
       )}
     </section>
