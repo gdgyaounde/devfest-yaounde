@@ -85,7 +85,11 @@ describe("a vote request", () => {
       { projectIds: ["safeme"], userId: "someone-else" },
       { projectId: "safeme" },
     ]) {
-      assert.equal(voteSchema.safeParse(body).success, false, JSON.stringify(body));
+      assert.equal(
+        voteSchema.safeParse(body).success,
+        false,
+        JSON.stringify(body),
+      );
     }
   });
 });
@@ -162,7 +166,14 @@ describe("parseVoteStats", () => {
         votes: 5,
         tally: { a: 2, b: "x" },
       }),
-      { eligible: 27, voters: 3, votes: 5, tally: { a: 2 } },
+      {
+        eligible: 27,
+        voters: 3,
+        votes: 5,
+        bevyEmails: 0,
+        bevyPeople: 0,
+        tally: { a: 2 },
+      },
     );
     assert.equal(parseVoteStats(null), null);
   });

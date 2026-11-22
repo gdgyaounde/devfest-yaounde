@@ -17,9 +17,18 @@ Only people checked in through the site's door station. Each picks one or two pr
 
 - someone who bought their own ticket, or claimed one, and was checked in;
 - someone a ticket was bought for, who was checked in. They sign in with the email that was on the ticket. The person who paid does **not** get that vote;
-- someone who made a reservation that was checked in (and not cancelled).
+- someone who made a reservation that was checked in (and not cancelled);
+- someone checked in on **Bevy** (free passes), once their check-ins are imported (below). They sign in with the Google account that has the same email as their Bevy registration. If someone says "it says my account wasn't checked in", ask which Google account they used for their ticket. The page lets them sign out and try another.
 
-People who only came on a free Bevy pass were checked in on Bevy, not here, so they can't vote. If someone says "it says my account wasn't checked in", ask which Google account they used for their ticket. The page lets them sign out and try another.
+## Importing the Bevy check-ins
+
+1. Run `supabase/migrations/0047_pitch_vote_bevy_checkins.sql` in Supabase (once).
+2. On Bevy, as the event's organiser, export the attendee list as CSV, with **full** emails. Put it in the git-ignored `.private/` folder.
+3. Run `npx tsx scripts/bevy-checkins-sql.ts .private/<the-file>.csv`. It keeps only the rows with a check-in date and writes `.private/bevy-checkins.sql`. That file holds no emails or names, only fingerprints (hashes) of the emails. The script prints counts.
+4. Paste `.private/bevy-checkins.sql` into the Supabase SQL editor and run it. Re-running with a newer export replaces the old import.
+5. The dashboard (Community → Pitch vote) then shows how many Bevy emails and people were imported.
+
+If the script says the emails are **masked** (`j*****@gmail.com`), Bevy hid them in that export. Export again with full emails: a masked email can't be matched to anyone.
 
 ## Watching it and announcing the winner
 

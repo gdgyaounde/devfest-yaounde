@@ -109,6 +109,9 @@ export interface VoteStats {
   voters: number;
   /** Picks in all. */
   votes: number;
+  /** Imported Bevy check-ins (migration 0047): distinct emails, people. */
+  bevyEmails: number;
+  bevyPeople: number;
   tally: Record<string, number>;
 }
 
@@ -126,6 +129,8 @@ export function parseVoteStats(value: unknown): VoteStats | null {
     eligible: n(v.eligible),
     voters: n(v.voters),
     votes: n(v.votes),
+    bevyEmails: n(v.bevyEmails),
+    bevyPeople: n(v.bevyPeople),
     tally,
   };
 }

@@ -8,7 +8,8 @@
  * Not part of `npm test` (PGlite is deliberately not a dependency — see
  * tests/db/organiser-roles.db.ts). It never touches a real database: it
  * builds a scratch one in memory with just the columns the migration reads
- * from `auth.users`, `tickets` and `reservations`, applies migration 0046
+ * from `auth.users`, `tickets` and `reservations`, applies migrations 0046
+ * and 0047
  * VERBATIM, and checks every rule:
  *
  *   - checked in on a ticket bought for them (by email, any case) → may vote;
@@ -25,9 +26,17 @@
  */
 import { PGlite } from "@electric-sql/pglite";
 import { readFileSync } from "node:fs";
+import { emailKey } from "@/lib/email-key";
 
 const migration = readFileSync(
   new URL("../../supabase/migrations/0046_pitch_votes.sql", import.meta.url),
+  "utf8",
+);
+const bevyMigration = readFileSync(
+  new URL(
+    "../../supabase/migrations/0047_pitch_vote_bevy_checkins.sql",
+    import.meta.url,
+  ),
   "utf8",
 );
 
@@ -101,7 +110,8 @@ async function main() {
     ('${U.cancelled}', 'cancelled@example.com', 'cancelled', now());
 `);
   await db.exec(migration);
-  console.log("migration 0046 applied verbatim");
+  await db.exec(bevyMigration);
+  console.log("migrations 0046 and 0047 applied verbatim");
 
   async function eligible(id: string) {
     const r = await db.query<{ ok: boolean }>(
@@ -258,11 +268,96 @@ async function main() {
     JSON.stringify(stats.tally),
   );
 
+  console.log("\nBevy check-ins (0047)");
+  for (const sample of [
+    "jdoe@gmail.com",
+    " J.Doe+DevFest@GMAIL.com ",
+    "j.doe@googlemail.com",
+    "Ada.Lovelace+x@facsciences-uy1.cm",
+    "é.t@uy1.cm",
+    "not-an-email",
+  ]) {
+    const sql = (
+      await db.query<{ k: string | null }>(
+        "select public.pitch_vote_email_key($1) as k",
+        [sample],
+      )
+    ).rows[0].k;
+    check(
+      `TypeScript and SQL keys agree for ${JSON.stringify(sample)}`,
+      sql === emailKey(sample),
+      `${sql} vs ${emailKey(sample)}`,
+    );
+  }
+
+  const bevyUser = u(20);
+  const bevyCase = u(21);
+  await db.query("insert into auth.users values ($1, $2), ($3, $4)", [
+    bevyUser,
+    "Bevy.Person@gmail.com",
+    bevyCase,
+    "someone@uy1.cm",
+  ]);
+  check(
+    "before the import, a Bevy attendee may NOT vote",
+    !(await eligible(bevyUser)),
+  );
+  // The CSV had the dotless, +tagged spelling; the account has dots and caps.
+  await db.query(
+    "insert into public.bevy_checkins (email_key, people) values ($1, 2)",
+    [emailKey("bevyperson+devfest@gmail.com")],
+  );
+  check(
+    "after the import, the matching account may vote (Gmail dots, case, +tag ignored)",
+    await eligible(bevyUser),
+  );
+  check(
+    "an account whose email isn't in the import may NOT",
+    !(await eligible(bevyCase)),
+  );
+  check("…and can now pick", (await pick(bevyUser, ["safeme"])) === "saved");
+  let badKey = false;
+  try {
+    await db.query(
+      "insert into public.bevy_checkins (email_key) values ('jdoe@gmail.com')",
+    );
+  } catch {
+    badKey = true;
+  }
+  check(
+    "the table refuses anything but a SHA-256 key (never an email)",
+    badKey,
+  );
+  const after = (
+    await db.query<{
+      s: {
+        eligible: number;
+        voters: number;
+        bevyEmails: number;
+        bevyPeople: number;
+      };
+    }>("select public.pitch_vote_stats() as s")
+  ).rows[0].s;
+  check(
+    "stats: eligible now includes the Bevy account",
+    after.eligible === 6,
+    JSON.stringify(after),
+  );
+  check(
+    "stats: 1 Bevy email, 2 people, 4 voters",
+    after.bevyEmails === 1 && after.bevyPeople === 2 && after.voters === 4,
+  );
+  const bevyRls = await db.query<{ on: boolean }>(
+    "select relrowsecurity as on from pg_class where relname = 'bevy_checkins'",
+  );
+  check("RLS is on for bevy_checkins", bevyRls.rows[0].on);
+
   console.log("\nPrivileges");
   for (const fn of [
     "pitch_vote_eligible(uuid)",
     "set_pitch_votes(uuid, text[])",
     "pitch_vote_stats()",
+    "pitch_vote_email_key(text)",
   ]) {
     for (const role of ["anon", "authenticated"]) {
       const r = await db.query<{ ok: boolean }>(
