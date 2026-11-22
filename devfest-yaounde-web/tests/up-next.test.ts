@@ -31,11 +31,11 @@ describe("the Going on now / Coming up next rows (ADR 0097)", () => {
     ]);
   });
 
-  it("is coming up next: Egbe (R1), Marie (R2), Folong (R3)", () => {
+  it("is coming up next: Dachi (R1), Egbe (R2), Marie (R3)", () => {
     assert.deepEqual(rows("next"), [
-      ["Egbe Michel", "Room 1"],
-      ["Marie Ipouk", "Room 2"],
-      ["Emerson Folong", "Room 3"],
+      ["Le Prince Dachi", "Room 1"],
+      ["Egbe Michel", "Room 2"],
+      ["Marie Ipouk", "Room 3"],
     ]);
   });
 
