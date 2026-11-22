@@ -2291,9 +2291,11 @@ html:has([data-preloader="held"]) .ty-intro * {
     transform: scale(0.55) rotate(var(--ty-plate-r, 6deg));
   }
 }
+/* The side a backdrop draws FROM is per line (`--ty-draw-from`): the first
+   line from the left, "Yaoundé" from the right, so the two cross. */
 @keyframes ty-draw {
   from {
-    clip-path: inset(0 100% 0 0);
+    clip-path: var(--ty-draw-from, inset(0 100% 0 0));
   }
   to {
     clip-path: inset(0 0 0 0);

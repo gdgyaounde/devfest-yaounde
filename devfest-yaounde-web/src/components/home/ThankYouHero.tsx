@@ -208,6 +208,9 @@ export async function ThankYouHero({
                   }`}
                   style={vars({
                     "--ty-draw": `${drawAt[line]}ms`,
+                    // "Thank you," draws left to right; "Yaoundé." right to left.
+                    "--ty-draw-from":
+                      line === 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)",
                     "--ty-plate-r": line === 0 ? "-9deg" : "7deg",
                   })}
                 />
