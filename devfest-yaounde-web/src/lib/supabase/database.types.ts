@@ -676,6 +676,27 @@ export type Database = {
         }
         Relationships: []
       }
+      pitch_votes: {
+        Row: {
+          created_at: string
+          project_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          project_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          project_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
           cancelled_at: string | null
@@ -766,6 +787,18 @@ export type Database = {
       cancel_reservation: {
         Args: { p_id: string; p_user_id: string }
         Returns: string
+      }
+      cast_pitch_vote: {
+        Args: { p_project_id: string; p_user_id: string }
+        Returns: Json
+      }
+      pitch_vote_eligible: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
+      pitch_vote_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
       }
       session_interest_counts: {
         Args: Record<PropertyKey, never>

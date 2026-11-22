@@ -73,6 +73,9 @@ export const RATE_LIMITS = {
     windowSeconds: 300,
   },
   staffPerk: { bucket: "staff-perk", limit: 300, windowSeconds: 300 },
+  /** The pitch vote (ADR 0099), per account: changing your mind a few times. */
+  vote: { bucket: "vote", limit: 20, windowSeconds: 300 },
+  voteRead: { bucket: "vote-read", limit: 60, windowSeconds: 300 },
   staffOrder: { bucket: "staff-order", limit: 60, windowSeconds: 300 },
   /** Organisers adding or removing volunteers. */
   adminVolunteer: { bucket: "admin-volunteer", limit: 60, windowSeconds: 300 },

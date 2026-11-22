@@ -270,6 +270,11 @@ export interface AdminData {
   tickets: { rows: AdminTicket[]; total: number };
   /** Reserve-now, pay-cash-at-the-venue reservations (ADR 0084), newest first. */
   reservations: AdminReservation[];
+  /**
+   * The pitch contest public vote (ADR 0099), live. `null` until migration
+   * 0046 is applied.
+   */
+  pitchVote: import("@/lib/pitch-vote").VoteStats | null;
   /** "This interests me" per session — counts only, never who (ADR 0086). */
   sessionInterest: {
     total: number;

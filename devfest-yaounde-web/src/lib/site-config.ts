@@ -133,6 +133,12 @@ export const TICKET_EDITS_CLOSE_AT = "2026-11-18T23:59:00+01:00";
 export const RESERVATIONS_CLOSE_AT = "2026-11-20T17:00:00+01:00";
 
 /**
+ * When the public vote for the pitch contest closes (ADR 0099): Tuesday
+ * 24 November 2026, 23:59 in Yaoundé. Results go public on /vote from then.
+ */
+export const VOTE_CLOSES_AT = "2026-11-24T23:59:00+01:00";
+
+/**
  * Last edition's full photo gallery, linked from Memory Lane. Overridden by
  * `site_settings.memory_lane` so next year's album is a dashboard edit, not a
  * deploy.

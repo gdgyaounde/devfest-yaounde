@@ -1,0 +1,82 @@
+[
+  {
+    "id": "finfree",
+    "team": "Équipe FinFree",
+    "name": "FinFree",
+    "tagline": {
+      "fr": "L'éducation financière des jeunes Africains de 15 à 35 ans, à travers des histoires du quotidien.",
+      "en": "Financial education for young Africans aged 15 to 35, told through everyday stories."
+    },
+    "pitch": "FinFree est une plateforme d'éducation financière conçue pour aider les jeunes Africains de 15 à 35 ans à mieux comprendre et gérer leur argent. À travers des histoires inspirées de leur quotidien, des outils financiers pratiques et un espace de partage d'opportunités, FinFree transforme l'apprentissage de la finance en une expérience simple, accessible et concrète.\n\nFinFree : ton argent, tes choix, ton avenir !",
+    "url": "https://finfree-go.web.app/"
+  },
+  {
+    "id": "agrisense",
+    "team": "Équipe Kanem-sa",
+    "name": "Agrisense",
+    "tagline": {
+      "fr": "Le suivi des cultures pour les producteurs, et Agrimarket pour vendre ses récoltes.",
+      "en": "Crop tracking for farmers, plus Agrimarket, a marketplace to sell the harvest."
+    },
+    "pitch": "AGRISENSE est une plateforme numérique dédiée au secteur agricole. Elle accompagne les producteurs dans le suivi et la gestion de leurs cultures grâce à des conseils et des informations adaptées. Elle intègre également Agrimarket, une marketplace qui facilite la mise en vente des récoltes et la mise en relation entre producteurs et acheteurs."
+  },
+  {
+    "id": "safeme",
+    "team": "Équipe SafeMe",
+    "name": "SafeMe",
+    "tagline": {
+      "fr": "Signaler un enfant disparu en quelques clics, et alerter aussitôt la communauté et les autorités.",
+      "en": "Report a missing child in a few taps, and alert the community and the authorities at once."
+    },
+    "pitch": "SafeMe est une application de signalement conçue pour aider à retrouver rapidement les enfants disparus. Parents, proches et citoyens peuvent signaler une disparition en quelques clics, avec photo, description et dernière localisation connue. Les alertes partent aussitôt vers la communauté et les autorités. SafeMe transforme chaque téléphone en relais d'alerte, pour que chaque seconde compte et qu'aucun enfant ne reste introuvable. Puis il y a d'autres signalements, comme la perte de documents importants ou les cas d'accident.\n\nSafeMe : ensemble, nous pouvons sauver des vies.",
+    "url": "https://frontend-one-virid-61.vercel.app/"
+  },
+  {
+    "id": "holaride",
+    "team": "Équipe HolaRide",
+    "name": "HolaRide",
+    "tagline": {
+      "fr": "Le covoiturage entre particuliers, d'une ville camerounaise à l'autre.",
+      "en": "Intercity carpooling between people, from one Cameroonian city to another."
+    },
+    "pitch": "HolaRide est une application camerounaise de covoiturage entre particuliers qui met en relation des passagers qui veulent voyager d'une ville à l'autre et des conducteurs qui font déjà ce trajet. Côté passager, tu réserves simplement une place dans une voiture qui va dans ta ville pour voyager moins cher, plus confortablement et sans l'attente et les files des agences de voyage. Côté conducteur, ce n'est pas un travail : c'est juste une personne comme toi, un médecin, un étudiant ou un commerçant qui a sa voiture, qui voyage déjà entre Douala, Yaoundé, Bafoussam ou Garoua et qui propose ses places vides pour partager les frais de carburant et voyager ensemble.",
+    "url": "https://pwa.hola-ride.com/"
+  },
+  {
+    "id": "divinelink",
+    "team": "Équipe DivineLink",
+    "name": "DivineLink",
+    "tagline": {
+      "fr": "Des dossiers patients pour les cliniques, qui restent disponibles même sans internet.",
+      "en": "Patient records for clinics that stay available even without internet."
+    },
+    "pitch": "Et si c'était votre mère ? Votre sœur ? Votre enfant ?\n\nImaginez une urgence vitale. Le médecin a besoin du dossier du patient. Mais le dossier est perdu dans une montagne de papier… et le réseau internet est coupé. C'est le quotidien de nos hôpitaux.\n\nVoici DivineLink : le système qui sauve des vies, même sans internet.\n\n• Fonctionne 100 % hors ligne (même sans réseau, les dossiers sont là).\n• Données 100 % sécurisées au Cameroun (pas à l'étranger).\n• Abordable pour toutes les cliniques.\n\nDéjà 15 cliniques l'utilisent et ne le quittent plus (0 % de churn). Je suis un étudiant en médecine qui a codé ce système sur un ordinateur emprunté pour protéger les patients camerounais.\n\nChez DivineLink, 1 patient enregistré est une vie sauvée.",
+    "url": "https://divinelink.mooo.com/",
+    "note": {
+      "fr": "Code de démo : 1234",
+      "en": "Demo code: 1234"
+    }
+  },
+  {
+    "id": "transax",
+    "team": "Équipe Transax",
+    "name": "Transax",
+    "tagline": {
+      "fr": "Un service d'escrow qui garde l'argent de l'acheteur jusqu'à la livraison validée.",
+      "en": "Escrow that holds the buyer's money until the delivery is confirmed."
+    },
+    "pitch": "Transax est une plateforme d'escrow qui vise à résoudre le problème de confiance dans le e-commerce, notamment au Cameroun et à l'international. En effet, les acheteurs risquent de payer sans jamais recevoir leur commande, tandis que les vendeurs peuvent livrer leurs produits sans être payés. Pour remédier à cela, Transax sécurise les transactions en conservant temporairement l'argent de l'acheteur et en ne le transférant au vendeur qu'après la livraison et la validation du produit par l'acheteur.\n\nNotre objectif est de rendre le commerce en ligne plus sûr et de renforcer la confiance entre les différentes parties.",
+    "url": "https://1500520000001956.clickup.ai/a/h/1ampw4t85x4-732/80710817ff85831"
+  },
+  {
+    "id": "tchuekam-agent",
+    "team": "Équipe TchueKAM Agent AI",
+    "name": "TchueKAM Agent",
+    "tagline": {
+      "fr": "L'IA réunie sur une seule plateforme, pensée aussi pour les personnes sourdes et malentendantes.",
+      "en": "AI tools in one place, designed with deaf and hard-of-hearing people in mind."
+    },
+    "pitch": "L'intelligence artificielle au service de tous.\n\nAujourd'hui, l'accès aux technologies d'intelligence artificielle reste limité par la multiplication des outils, leurs coûts, leur complexité et les barrières de communication et d'accessibilité. Pour les étudiants, les entrepreneurs, les créateurs de contenu, les personnes en situation de handicap, notamment les personnes sourdes ou malentendantes, ces obstacles peuvent réduire les opportunités d'apprentissage, de création et de développement professionnel.\n\nTchueKAM Agent apporte une réponse à ces défis en réunissant plusieurs capacités d'intelligence artificielle au sein d'une seule plateforme accessible et centralisée. Son objectif est de démocratiser l'accès à l'IA et de permettre à chacun de transformer ses idées en réalisations concrètes.\n\nLa plateforme repose sur trois grandes fonctionnalités :\n\n1. Assistant IA intelligent et agents autonomes — un assistant capable d'accompagner les utilisateurs dans leurs recherches, leurs études, la rédaction, l'analyse d'informations et la résolution de problèmes. Grâce à des agents IA spécialisés, il est également possible de déléguer certaines tâches liées à la gestion, au marketing, à la recherche et aux activités professionnelles.\n\n2. Image & Creative Studio — un espace de création assistée par l'intelligence artificielle permettant de générer des images professionnelles, affiches publicitaires, flyers, visuels marketing et vidéos. Il permet aux entrepreneurs, créateurs et particuliers de produire du contenu de qualité sans nécessairement disposer de compétences avancées en graphisme ou en montage.\n\n3. Business & Digital Creation Hub — un environnement permettant de transformer des idées en projets concrets : création de sites web, développement d'applications, génération de code, conception de documents professionnels et accompagnement des activités entrepreneuriales. Il facilite l'accès aux outils numériques nécessaires pour entreprendre et développer une activité.\n\nNotre engagement pour l'inclusion : TchueKAM Agent ambitionne de réduire les barrières numériques et de rendre les opportunités offertes par l'intelligence artificielle accessibles au plus grand nombre, avec une attention particulière portée aux personnes sourdes et malentendantes. Nous voulons contribuer à un environnement numérique dans lequel le handicap, le manque de ressources ou l'absence de compétences techniques ne constituent plus des obstacles à la créativité, à l'apprentissage et à l'entrepreneuriat.\n\nNotre vision : faire de l'intelligence artificielle un véritable levier d'inclusion, d'autonomie et de développement économique en Afrique.",
+    "url": "https://tchuekam-agent-production.up.railway.app/#/"
+  }
+]

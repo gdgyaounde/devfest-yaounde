@@ -1,4 +1,5 @@
 import "server-only";
+import { isMissingVoteSchema, parseVoteStats } from "@/lib/pitch-vote";
 import { createAdminSupabase } from "@/lib/supabase/server";
 import { currentOrganiser } from "@/lib/security/organisers";
 import { signedUrl } from "@/lib/dp/gallery-server";
@@ -177,6 +178,7 @@ export async function loadAdminData(): Promise<AdminData> {
     commerceInputs,
     interestCounts,
     sessions,
+    pitchVote,
   ] = await Promise.all([
     allApparelRows(db),
     loadTiers(),
@@ -191,6 +193,17 @@ export async function loadAdminData(): Promise<AdminData> {
       return data ?? [];
     }),
     getSessions(),
+    // The live tally (ADR 0099). Before migration 0046: null, and the view
+    // says so.
+    db.rpc("pitch_vote_stats").then(({ data, error }) => {
+      if (error) {
+        if (!isMissingVoteSchema(error)) {
+          console.error("[admin] pitch vote read failed", error.message);
+        }
+        return null;
+      }
+      return parseVoteStats(data);
+    }),
   ]);
   const interest = interestRows(interestCounts, sessions);
   const [tickets, orders, intents, users, discounts, refundRequests] =
@@ -398,6 +411,7 @@ export async function loadAdminData(): Promise<AdminData> {
       users: users.count ?? 0,
     },
     reservations: commerceInputs.reservations,
+    pitchVote,
     sessionInterest: {
       total: interest.reduce((n, r) => n + r.interested, 0),
       rows: interest,

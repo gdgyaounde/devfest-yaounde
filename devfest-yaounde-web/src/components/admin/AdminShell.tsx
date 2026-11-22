@@ -3,6 +3,7 @@
 import {
   ArrowCounterClockwise,
   CalendarCheck,
+  Trophy,
   ArrowLeft,
   CalendarBlank,
   CaretDown,
@@ -37,6 +38,7 @@ import { DevFestLogo } from "@/components/brand/DevFestLogo";
 import type { AdminData, AdminSettings, MissingPhoto } from "@/lib/admin/shape";
 import { AdminOverview } from "./views/AdminOverview";
 import { AdminTickets } from "./views/AdminTickets";
+import { AdminPitchVote } from "./views/AdminPitchVote";
 import { AdminEmails } from "./views/AdminEmails";
 import { AdminTicketTiers } from "./views/AdminTicketTiers";
 import { AdminShop } from "./views/AdminShop";
@@ -94,6 +96,7 @@ export type ViewId =
   | "discounts"
   | "wall"
   | "testimonials"
+  | "pitch-vote"
   | "users"
   | "emails"
   | "content"
@@ -139,6 +142,7 @@ const GROUPS: {
     items: [
       { id: "wall", label: "DP wall", Icon: ImageIcon },
       { id: "testimonials", label: "Testimonials", Icon: ChatCircleText },
+      { id: "pitch-vote", label: "Pitch vote", Icon: Trophy },
       { id: "users", label: "Users", Icon: Users },
       { id: "emails", label: "Emails", Icon: EnvelopeSimple },
     ],
@@ -265,6 +269,11 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
   wall: {
     title: "Community wall",
     blurb: "Click a card to hide or show it. Reported ones sit up front.",
+  },
+  "pitch-vote": {
+    title: "Pitch vote",
+    blurb:
+      "The public vote for the pitch contest (powered by Impact Hub), live. Only people checked in at the door can vote, once each; results go public on /vote when it closes.",
   },
   testimonials: {
     title: "Testimonials",
@@ -744,6 +753,7 @@ export function AdminShell({
             {view === "memory-lane" && (
               <AdminMemoryLane rows={collections.pastEditions} />
             )}
+            {view === "pitch-vote" && <AdminPitchVote data={data} />}
             {view === "testimonials" && (
               <AdminTestimonials rows={collections.quotes} />
             )}
