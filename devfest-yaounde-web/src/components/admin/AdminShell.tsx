@@ -273,7 +273,7 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
   "pitch-vote": {
     title: "Pitch vote",
     blurb:
-      "The public vote for the pitch contest (powered by Impact Hub), live. Only people checked in at the door can vote, once each; results go public on /vote when it closes.",
+      "The public vote for the pitch contest (powered by Impact Hub), live. Anyone with an account on the site can vote, for up to two projects; results go public on /vote when it closes.",
   },
   testimonials: {
     title: "Testimonials",

@@ -5,10 +5,10 @@
  *   POST  { projectIds: [] | [a] | [a, b] } → 200 { projectIds } | 401
  *         | 403 not_eligible | 409 vote_closed | 503 vote_unavailable
  *
- * Who may vote is the DATABASE's call (`pitch_vote_eligible`, migration
- * 0046): checked in at the door, as the person who was there, matched on the
- * account id and the account's own email — never on anything in the
- * request. Up to two picks per account (one vote each), sent as the whole
+ * Who may vote is the DATABASE's call (`pitch_vote_eligible`): since
+ * migration 0047, any account on the site (0046 had limited it to people
+ * checked in at the door). The voter is the signed-in account — never
+ * anything in the request. Up to two picks per account (one vote each), sent as the whole
  * set and replaced atomically; changeable until the close.
  *
  * Results are only ever sent once voting has closed; before that a voter

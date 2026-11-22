@@ -44,7 +44,7 @@ const IMPACT_HUB_PLAIN_LOGO = "/sponsors/impact-hub-yaounde.png";
  *
  * The projects are rendered here, on the server, so they read the same for
  * everyone; `VoteBallot` adds what depends on who is looking — signed in or
- * not, checked in or not, their current vote — and, once voting has closed,
+ * not, their current picks — and, once voting has closed,
  * the results. The contest's partner, Impact Hub Yaoundé, is credited at the
  * top with its logo.
  */

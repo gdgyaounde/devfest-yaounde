@@ -50,7 +50,7 @@ export function AdminPitchVote({ data }: { data: AdminData }) {
 
       <Panel
         title={`${stats.voters} ${stats.voters === 1 ? "person has" : "people have"} voted · ${stats.votes} pick${stats.votes === 1 ? "" : "s"}`}
-        subtitle={`${stats.eligible} checked-in account${stats.eligible === 1 ? "" : "s"} can vote · ${turnout}% turnout. Each person picks up to two projects; the % is the share of voters who picked it. Only people checked in at the door (tickets and reservations) can vote; free passes were checked in on Bevy.`}
+        subtitle={`${stats.eligible} account${stats.eligible === 1 ? "" : "s"} on the site can vote · ${turnout}% turnout. Each person picks up to two projects; the % is the share of voters who picked it.`}
         action={
           <ExportButton
             filename="devfest-pitch-vote.csv"

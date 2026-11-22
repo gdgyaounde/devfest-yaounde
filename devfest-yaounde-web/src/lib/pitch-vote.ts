@@ -2,8 +2,8 @@
  * The pitch contest public vote (ADR 0099) — the rules, kept pure so they
  * are tested without a database.
  *
- * Who may vote is decided IN THE DATABASE (`pitch_vote_eligible`, migration
- * 0046): checked in through the door station, as the person who was there.
+ * Who may vote is decided IN THE DATABASE (`pitch_vote_eligible`): any
+ * account on the site since migration 0047 (0046 required a check-in).
  * What is decided here: which projects are on the ballot, whether voting is
  * open, what a request may ask for, and how a tally becomes a ranking.
  */

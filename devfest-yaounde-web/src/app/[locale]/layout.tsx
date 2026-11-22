@@ -217,12 +217,12 @@ export default async function LocaleLayout({
           external: false,
         }
       : hasAlbum
-      ? {
-          href: album,
-          label: tAnnouncement("thankYouCta"),
-          external: true,
-        }
-      : undefined
+        ? {
+            href: album,
+            label: tAnnouncement("thankYouCta"),
+            external: true,
+          }
+        : undefined
     : salesBanner
       ? {
           href: `/${locale}/tickets`,
@@ -315,8 +315,9 @@ export default async function LocaleLayout({
                 update (once per `legal.termsVersion`), then where payments
                 stand (once per phase). Waits for the preloader and the hero
                 entrance before it opens. */}
-              {/* Nothing left to announce once everything is closed (ADR 0098). */}
-              {!closed && (
+              {/* Before the event: terms, payments, agenda. After it, only
+                  the pitch vote while it is open (ADR 0098, 0099). */}
+              {(!closed || voting) && (
                 <TermsUpdatedPopup
                   version={settings.legal.termsVersion}
                   eventDate={formatEventDates(l, [settings.eventDate]) ?? ""}
@@ -327,6 +328,11 @@ export default async function LocaleLayout({
                   )}
                   venue={EVENT.venue ?? EVENT.city}
                   mapUrl={EVENT.mapUrl}
+                  vote={
+                    voting
+                      ? { closes: voteCloses, closesAt: VOTE_CLOSES_AT }
+                      : null
+                  }
                 />
               )}
               <FloatingScrollbar />

@@ -9,6 +9,7 @@
  * tests/db/organiser-roles.db.ts). It never touches a real database: it
  * builds a scratch one in memory with just the columns the migration reads
  * from `auth.users`, `tickets` and `reservations`, applies migration 0046
+ * (then 0047, which opens the vote to every account)
  * VERBATIM, and checks every rule:
  *
  *   - checked in on a ticket bought for them (by email, any case) → may vote;
@@ -28,6 +29,13 @@ import { readFileSync } from "node:fs";
 
 const migration = readFileSync(
   new URL("../../supabase/migrations/0046_pitch_votes.sql", import.meta.url),
+  "utf8",
+);
+const openMigration = readFileSync(
+  new URL(
+    "../../supabase/migrations/0047_pitch_vote_any_account.sql",
+    import.meta.url,
+  ),
   "utf8",
 );
 
@@ -257,6 +265,44 @@ async function main() {
       !stats.tally.safeme,
     JSON.stringify(stats.tally),
   );
+
+  console.log("\nOpen to every account (0047)");
+  await db.exec(openMigration);
+  check("0047 applied verbatim", true);
+  check(
+    "the buyer who was never checked in may now vote",
+    await eligible(U.buyer),
+  );
+  check(
+    "an account with no ticket at all may now vote",
+    await eligible(U.stranger),
+  );
+  check(
+    "an account that does not exist still may NOT",
+    !(await eligible(u(999))),
+  );
+  check(
+    "…and picking works for them",
+    (await pick(U.stranger, ["safeme", "transax"])) === "saved",
+  );
+  check(
+    "…still at most two",
+    (await pick(U.stranger, ["safeme", "transax", "finfree"])) === "too_many",
+  );
+  const users = (
+    await db.query<{ n: number }>("select count(*)::int as n from auth.users")
+  ).rows[0].n;
+  const opened = (
+    await db.query<{ s: { eligible: number; voters: number } }>(
+      "select public.pitch_vote_stats() as s",
+    )
+  ).rows[0].s;
+  check(
+    "stats: every account is eligible",
+    opened.eligible === users,
+    JSON.stringify(opened),
+  );
+  check("stats: 4 voters", opened.voters === 4);
 
   console.log("\nPrivileges");
   for (const fn of [

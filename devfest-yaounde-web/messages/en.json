@@ -900,19 +900,19 @@
     },
     "vote": {
       "title": "Vote for your favourite pitches",
-      "metaDesc": "Seven teams pitched at DevFest Yaoundé 2026. If you were checked in at the door, vote for up to two projects you liked best.",
+      "metaDesc": "Seven teams pitched at DevFest Yaoundé 2026. Sign in and vote for up to two projects you liked best.",
       "eyebrow": "Pitch contest · DevFest Yaoundé 2026",
-      "lead": "Seven teams took the stage on Saturday. If you were checked in at the door, you can vote for up to two of them: pick the projects you'd back.",
+      "lead": "Seven teams took the stage on Saturday. Sign in and vote for up to two of them: pick the projects you'd back.",
       "poweredBy": "Powered by",
       "openUntil": "Voting is open until {date} at {time}",
       "closedOn": "Voting closed on {date} at {time}",
       "rules": "Up to two votes per person, one per project. Changed your mind? Remove a vote and pick another, any time before the close. Results are revealed here once voting ends.",
       "checking": "Checking your vote…",
       "signInTitle": "Sign in to vote",
-      "signInBody": "Use the Google account you used for your ticket or reservation. That's how we know you were there.",
+      "signInBody": "Sign in with your Google account to vote. It takes a few seconds.",
       "continueWithGoogle": "Continue with Google",
-      "notEligibleTitle": "This account wasn't checked in",
-      "notEligibleBody": "Only people checked in at the door can vote, and we couldn't find a check-in for this account. Bought your ticket or reserved with another Google account? Sign out and try that one.",
+      "notEligibleTitle": "This account can't vote",
+      "notEligibleBody": "Something's off with this account. Sign out, sign back in with Google, and try again.",
       "unavailableTitle": "Voting opens very soon",
       "unavailableBody": "We're putting the last touches on the ballot. Check back in a little while.",
       "pitchToggle": "Read their pitch",
@@ -1480,6 +1480,13 @@
     "title": "Welcome to our new partners",
     "body": "A big thank you to Impact Hub Yaoundé, our incubator partner, who will welcome the two winners of the Pitch Contest into its programme, and to the Tech Innovation Center (TiC), our venue partner. This edition is better because of them.",
     "ok": "Thank you both!"
+  },
+  "votePopup": {
+    "title": "Vote for your favourite pitches",
+    "poweredBy": "Pitch contest powered by",
+    "body": "Seven teams pitched on Saturday. Sign in and vote for up to two projects you'd back, until {date} at {time}. Results are revealed once voting closes.",
+    "cta": "Vote now",
+    "later": "Maybe later"
   },
   "testimonial": {
     "metaTitle": "Tell your DevFest story",

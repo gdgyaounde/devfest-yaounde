@@ -1,25 +1,21 @@
 # The pitch contest public vote
 
-After the event, the people who were checked in at the door can vote for up to **two** of their favourite pitches (one vote per project) at **/vote** (for example `devfest.gdgyaounde.com/fr/vote`). The page credits the contest's partner, Impact Hub Yaoundé, at the top.
+After the event, **anyone with an account on the site** (Google sign-in) can vote for up to **two** of their favourite pitches (one vote per project) at **/vote** (for example `devfest.gdgyaounde.com/fr/vote`). The page credits the contest's partner, Impact Hub Yaoundé, at the top.
 
-Until voting closes, the banner at the top of every page links to it ("Vote now" / "Je vote"). Afterwards it goes back to the thank-you with "See the photos". A message typed in the dashboard's info bar still replaces the banner, as always.
+Until voting closes, the banner at the top of every page links to it ("Vote now" / "Je vote"), and first-time visitors get a pop-up inviting them to vote (once per browser, never on /vote itself). Afterwards it goes back to the thank-you with "See the photos". A message typed in the dashboard's info bar still replaces the banner, as always.
 
 ## Turning it on (once)
 
-1. In Supabase → SQL editor, run `supabase/migrations/0046_pitch_votes.sql`.
-2. Open /vote, sign in with a Google account that was checked in, and vote. Then check **Dashboard → Community → Pitch vote**: you should see 1 vote.
+1. In Supabase → SQL editor, run `supabase/migrations/0046_pitch_votes.sql`, then `0047_pitch_vote_any_account.sql`.
+2. Open /vote, sign in with Google, and vote. Then check **Dashboard → Community → Pitch vote**: you should see 1 vote.
 
 Until step 1 is done, the page shows the projects and says "Voting opens very soon". Nothing can be voted.
 
 ## Who can vote
 
-Only people checked in through the site's door station. Each picks one or two projects, and can remove a pick and choose another until the close:
+Anyone who signs in with Google, since migration `0047_pitch_vote_any_account.sql`. Each person picks one or two projects, and can remove a pick and choose another until the close.
 
-- someone who bought their own ticket, or claimed one, and was checked in;
-- someone a ticket was bought for, who was checked in. They sign in with the email that was on the ticket. The person who paid does **not** get that vote;
-- someone who made a reservation that was checked in (and not cancelled).
-
-People who only came on a free Bevy pass were checked in on Bevy, not here, so they can't vote. If someone says "it says my account wasn't checked in", ask which Google account they used for their ticket. The page lets them sign out and try another.
+The vote first started limited to people checked in at the site's door (migration 0046). It was opened to every account the same day, because most attendees were checked in on Bevy and the Bevy export had their emails hidden. To narrow it again, a new migration can restore the 0046 version of `pitch_vote_eligible`.
 
 ## Watching it and announcing the winner
 

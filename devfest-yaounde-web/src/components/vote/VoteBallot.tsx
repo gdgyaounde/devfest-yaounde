@@ -35,7 +35,7 @@ const SECONDARY =
  * The ballot on `/vote` (ADR 0099).
  *
  * Asks `/api/vote` who is looking and renders the projects accordingly:
- * everyone can read them; a signed-in, checked-in voter gets a button on
+ * everyone can read them; a signed-in voter gets a button on
  * each; once voting has closed, the ranking leads. Every rule is the
  * server's — this only reflects what it answers, and a refused vote is
  * explained, never assumed.

@@ -9,6 +9,7 @@ import {
   MapPinLine,
   Scroll,
   Ticket,
+  Trophy,
 } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,6 +25,7 @@ import {
   salesNoticeSeenKey,
   termsSeenKey,
   useSeenOnce,
+  VOTE_SEEN_KEY,
 } from "@/lib/use-seen-once";
 
 /**
@@ -41,13 +43,15 @@ const EXCLUDED = /^\/[a-z]{2}\/(admin|volunteer|terms|wall|storytime)(\/|$)/;
 const RESERVE = /^\/[a-z]{2}\/reserve(\/|$)/;
 /** The agenda step has no business on the agenda itself. */
 const SCHEDULE = /^\/[a-z]{2}\/schedule(\/|$)/;
+/** Nor the vote step on the vote page. */
+const VOTE = /^\/[a-z]{2}\/vote(\/|$)/;
 
 const PRIMARY =
   "inline-flex items-center gap-2 rounded-pill border-2 border-black02 bg-primary px-6 py-3 font-sans text-body-m font-bold text-black02 shadow-[0_4px_0_0_var(--color-black02)] transition-transform duration-200 ease-bouncy hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none motion-reduce:transform-none";
 const SECONDARY =
   "inline-flex items-center rounded-pill border-2 border-black02 bg-offwhite px-6 py-3 font-sans text-body-m font-bold text-black02 transition-[background-color,transform] duration-200 ease-bouncy hover:-translate-y-0.5 hover:bg-pastel motion-reduce:transform-none";
 
-type Step = "terms" | "notice" | "partners" | "agenda" | "offline";
+type Step = "terms" | "notice" | "partners" | "agenda" | "offline" | "vote";
 
 /** Our two newest partners, thanked in step 3 (ADR 0085). */
 const PARTNER_LOGOS = [
@@ -74,6 +78,11 @@ type When = { date: string; time: string } | null;
  *   it never steals focus mid-animation; under reduced motion it waits less.
  * - Never on /admin, /volunteer or the wall; never on /terms (visiting it
  *   counts as having seen step 1); step 2 not on /reserve.
+ * AFTER THE EVENT (ADR 0099) the layout passes `vote` while the pitch vote
+ * is open, and the pop-up has ONE job: a single step inviting people to
+ * vote, once per browser, never on /vote itself, and not after the close.
+ * Everything above was about getting to the event, so none of it shows.
+ *
  * - The shared `Modal` (dialog variant) supplies the focus trap, Escape,
  *   scroll lock, `aria-labelledby` and the reduced-motion-safe entrance. It
  *   only focuses on OPEN, so each step marks its primary button
@@ -86,6 +95,7 @@ export function TermsUpdatedPopup({
   reservationsClose,
   venue,
   mapUrl,
+  vote = null,
 }: {
   version: string;
   /** Already formatted for this locale, e.g. "21 novembre 2026". */
@@ -96,11 +106,14 @@ export function TermsUpdatedPopup({
   reservationsClose: When;
   venue: string;
   mapUrl: string;
+  /** After the event, while the pitch vote is open: its close. */
+  vote?: { closes: When; closesAt: string } | null;
 }) {
   const t = useTranslations("termsPopup");
   const tn = useTranslations("salesPopup");
   const ta = useTranslations("agendaPopup");
   const tp = useTranslations("partnersPopup");
+  const tv = useTranslations("votePopup");
   const tCommon = useTranslations("common");
   const phase = useSalesPhase();
   const pathname = usePathname() ?? "";
@@ -114,6 +127,10 @@ export function TermsUpdatedPopup({
   const [agendaSeen, markAgendaSeen] = useSeenOnce(AGENDA_SEEN_KEY);
   const [partnersSeen, markPartnersSeen] = useSeenOnce(PARTNERS_SEEN_KEY);
   const [offlineSeen, markOfflineSeen] = useSeenOnce(OFFLINE_SEEN_KEY);
+  const afterEvent = vote !== null;
+  const [voteSeen, markVoteSeen] = useSeenOnce(
+    afterEvent ? VOTE_SEEN_KEY : null,
+  );
   // Only where a service worker can exist at all (not in `next dev`'s tab on
   // an old browser, not in private modes that refuse it).
   const canSave = useSyncExternalStore(
@@ -129,12 +146,21 @@ export function TermsUpdatedPopup({
     if (onTerms && !termsSeen) markTermsSeen();
   }, [onTerms, termsSeen, markTermsSeen]);
 
-  const wantsNotice = !noticeSeen && !onReserve;
-  const wantsAgenda = !agendaSeen && !SCHEDULE.test(pathname) && !onReserve;
-  const wantsPartners = !partnersSeen && !onReserve;
-  const wantsOffline = !offlineSeen && canSave && !onReserve;
+  const before = !afterEvent;
+  const wantsTerms = before && !termsSeen;
+  const wantsNotice = before && !noticeSeen && !onReserve;
+  const wantsAgenda =
+    before && !agendaSeen && !SCHEDULE.test(pathname) && !onReserve;
+  const wantsPartners = before && !partnersSeen && !onReserve;
+  const wantsOffline = before && !offlineSeen && canSave && !onReserve;
+  const wantsVote = afterEvent && !voteSeen && !VOTE.test(pathname);
   const wantsAnything =
-    !termsSeen || wantsNotice || wantsPartners || wantsAgenda || wantsOffline;
+    wantsTerms ||
+    wantsNotice ||
+    wantsPartners ||
+    wantsAgenda ||
+    wantsOffline ||
+    wantsVote;
 
   useEffect(() => {
     if (!wantsAnything || excluded || ready) return;
@@ -145,6 +171,8 @@ export function TermsUpdatedPopup({
     const poll = window.setInterval(() => {
       if (document.querySelector("[data-preloader]")) return;
       window.clearInterval(poll);
+      // A page cached before the vote closed must not invite anyone after.
+      if (vote && Date.now() >= Date.parse(vote.closesAt)) return;
       settle = window.setTimeout(
         () => setReady(true),
         calm ? SETTLE_CALM_MS : SETTLE_MS,
@@ -154,13 +182,14 @@ export function TermsUpdatedPopup({
       window.clearInterval(poll);
       window.clearTimeout(settle);
     };
-  }, [wantsAnything, excluded, ready]);
+  }, [wantsAnything, excluded, ready, vote]);
 
   // The steps this visitor still has to see, in order. Each one only ever
   // advances; the list is frozen when the pop-up opens so the counter reads
   // "1 of 3, 2 of 3…" instead of shrinking as steps are marked seen.
   const pending: Step[] = [
-    ...(!termsSeen ? (["terms"] as const) : []),
+    ...(wantsVote ? (["vote"] as const) : []),
+    ...(wantsTerms ? (["terms"] as const) : []),
     ...(wantsNotice ? (["notice"] as const) : []),
     ...(wantsPartners ? (["partners"] as const) : []),
     ...(wantsAgenda ? (["agenda"] as const) : []),
@@ -183,30 +212,34 @@ export function TermsUpdatedPopup({
   }, [open, step]);
 
   const close =
-    step === "terms"
-      ? markTermsSeen
-      : step === "notice"
-        ? markNoticeSeen
-        : step === "partners"
-          ? markPartnersSeen
-          : step === "offline"
-            ? markOfflineSeen
-            : markAgendaSeen;
+    step === "vote"
+      ? markVoteSeen
+      : step === "terms"
+        ? markTermsSeen
+        : step === "notice"
+          ? markNoticeSeen
+          : step === "partners"
+            ? markPartnersSeen
+            : step === "offline"
+              ? markOfflineSeen
+              : markAgendaSeen;
 
   const Icon =
-    step === "terms"
-      ? Scroll
-      : step === "offline"
-        ? DownloadSimple
-        : step === "agenda"
-          ? CalendarDots
-          : step === "partners"
-            ? Handshake
-            : phase === "selling"
-              ? Ticket
-              : phase === "reserving"
-                ? CalendarCheck
-                : MapPinLine;
+    step === "vote"
+      ? Trophy
+      : step === "terms"
+        ? Scroll
+        : step === "offline"
+          ? DownloadSimple
+          : step === "agenda"
+            ? CalendarDots
+            : step === "partners"
+              ? Handshake
+              : phase === "selling"
+                ? Ticket
+                : phase === "reserving"
+                  ? CalendarCheck
+                  : MapPinLine;
 
   return (
     <Modal
@@ -234,7 +267,51 @@ export function TermsUpdatedPopup({
         )}
         <Icon size={40} weight="duotone" aria-hidden className="text-black02" />
 
-        {step === "terms" ? (
+        {step === "vote" ? (
+          <>
+            <h2
+              id="terms-popup-title"
+              className="font-sans text-heading-l font-bold leading-tight text-black02"
+            >
+              {tv("title")}
+            </h2>
+            <p className="flex items-center gap-3 font-mono text-mono-tag font-bold uppercase text-black02/70">
+              {tv("poweredBy")}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={PARTNER_LOGOS[0].src}
+                alt={PARTNER_LOGOS[0].name}
+                width={1344}
+                height={491}
+                className="h-10 w-auto"
+              />
+            </p>
+            <p className="text-body-m leading-relaxed text-black02/85">
+              {tv("body", {
+                date: vote?.closes?.date ?? "",
+                time: vote?.closes?.time ?? "",
+              })}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/vote"
+                data-autofocus
+                onClick={markVoteSeen}
+                className={PRIMARY}
+              >
+                <Trophy size={20} weight="bold" aria-hidden />
+                {tv("cta")}
+              </Link>
+              <button
+                type="button"
+                onClick={markVoteSeen}
+                className={SECONDARY}
+              >
+                {tv("later")}
+              </button>
+            </div>
+          </>
+        ) : step === "terms" ? (
           <>
             <h2
               id="terms-popup-title"

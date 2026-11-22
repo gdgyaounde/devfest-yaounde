@@ -900,19 +900,19 @@
     },
     "vote": {
       "title": "Vote pour tes pitchs préférés",
-      "metaDesc": "Sept équipes ont pitché au DevFest Yaoundé 2026. Si tu as été enregistré à l'entrée, vote pour deux projets au maximum.",
+      "metaDesc": "Sept équipes ont pitché au DevFest Yaoundé 2026. Connecte-toi et vote pour deux projets au maximum.",
       "eyebrow": "Concours de pitch · DevFest Yaoundé 2026",
-      "lead": "Sept équipes sont montées sur scène samedi. Si tu as été enregistré à l'entrée, tu peux voter pour deux d'entre elles au maximum : choisis les projets que tu soutiens.",
+      "lead": "Sept équipes sont montées sur scène samedi. Connecte-toi et vote pour deux d'entre elles au maximum : choisis les projets que tu soutiens.",
       "poweredBy": "Propulsé par",
       "openUntil": "Le vote est ouvert jusqu'au {date} à {time}",
       "closedOn": "Le vote s'est clos le {date} à {time}",
       "rules": "Deux voix maximum par personne, une par projet. Tu as changé d'avis ? Retire une voix et choisis-en un autre, jusqu'à la clôture. Les résultats s'affichent ici une fois le vote terminé.",
       "checking": "On vérifie ton vote…",
       "signInTitle": "Connecte-toi pour voter",
-      "signInBody": "Utilise le compte Google de ton billet ou de ta réservation. C'est comme ça qu'on sait que tu étais là.",
+      "signInBody": "Connecte-toi avec ton compte Google pour voter. Ça prend quelques secondes.",
       "continueWithGoogle": "Continuer avec Google",
-      "notEligibleTitle": "Ce compte n'a pas été enregistré à l'entrée",
-      "notEligibleBody": "Seules les personnes enregistrées à l'entrée peuvent voter, et on n'a pas trouvé d'enregistrement pour ce compte. Tu as pris ton billet ou réservé avec un autre compte Google ? Déconnecte-toi et essaie avec celui-là.",
+      "notEligibleTitle": "Ce compte ne peut pas voter",
+      "notEligibleBody": "Quelque chose cloche avec ce compte. Déconnecte-toi, reconnecte-toi avec Google et réessaie.",
       "unavailableTitle": "Le vote ouvre très bientôt",
       "unavailableBody": "On met la dernière main au bulletin. Repasse dans un petit moment.",
       "pitchToggle": "Lire leur pitch",
@@ -1480,6 +1480,13 @@
     "title": "Bienvenue à nos nouveaux partenaires",
     "body": "Un immense merci à Impact Hub Yaoundé, notre partenaire incubateur, qui accueillera les deux lauréats du Pitch Contest dans son programme, et au Tech Innovation Center (TiC), notre partenaire lieu. Cette édition est plus belle grâce à eux.",
     "ok": "Merci à eux !"
+  },
+  "votePopup": {
+    "title": "Vote pour tes pitchs préférés",
+    "poweredBy": "Concours de pitch propulsé par",
+    "body": "Sept équipes ont pitché samedi. Connecte-toi et vote pour deux projets au maximum, jusqu'au {date} à {time}. Les résultats s'affichent à la clôture du vote.",
+    "cta": "Je vote",
+    "later": "Plus tard"
   },
   "testimonial": {
     "metaTitle": "Raconte ton DevFest",
