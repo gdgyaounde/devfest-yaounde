@@ -82,7 +82,16 @@ function seeded(seed: number) {
 
 const vars = (v: Record<string, string>) => v as CSSProperties;
 
-export async function ThankYouHero({ locale }: { locale: string }) {
+/** Figures the site already knows, so a card can never disagree with it. */
+type LiveCounts = { speakers: number };
+
+export async function ThankYouHero({
+  locale,
+  counts,
+}: {
+  locale: string;
+  counts: LiveCounts;
+}) {
   const lang = locale === "en" ? "en" : "fr";
   const t = await getTranslations("home.thanks");
   const lines = [t("lead"), t("city")].map((line) => Array.from(line));
@@ -155,7 +164,11 @@ export async function ThankYouHero({ locale }: { locale: string }) {
               x: f.x,
               y: f.y,
               sticker: f.sticker,
-              value: f.value,
+              // A fact with `count` shows the live figure instead of `value`.
+              value:
+                "count" in f && f.count
+                  ? String(counts[f.count as keyof LiveCounts])
+                  : f.value,
               label: f.label[lang],
               detail: f.detail?.[lang],
             }))}

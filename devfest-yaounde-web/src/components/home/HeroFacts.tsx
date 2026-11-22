@@ -146,7 +146,12 @@ function Hotspot({
           />
 
           <span
-            className={`block font-sans text-display-l font-bold leading-none tracking-[-0.045em] ${toLeft ? "pl-14" : "pr-14"}`}
+            className={`block font-sans font-bold tracking-[-0.045em] ${
+              /* A lone symbol (∞) sits at x-height; draw it up to cap size. */
+              /^\D$/u.test(fact.value)
+                ? "text-[4.5rem] leading-[0.68]"
+                : "text-display-l leading-none"
+            } ${toLeft ? "pl-14" : "pr-14"}`}
           >
             {fact.value}
           </span>

@@ -1,10 +1,26 @@
 [
   {
+    "id": "attendees",
+    "x": 47,
+    "y": 17,
+    "sticker": "burst",
+    "value": "150+",
+    "label": {
+      "en": "attendees",
+      "fr": "participants"
+    },
+    "detail": {
+      "en": "A full house, all Saturday long.",
+      "fr": "Salle comble, tout le samedi."
+    }
+  },
+  {
     "id": "speakers",
     "x": 34.5,
     "y": 39,
     "sticker": "bubble",
-    "value": "27",
+    "count": "speakers",
+    "value": "",
     "label": {
       "en": "speakers on stage",
       "fr": "speakers sur scène"
@@ -15,63 +31,48 @@
     }
   },
   {
-    "id": "sessions",
+    "id": "memories",
     "x": 73,
     "y": 40,
-    "sticker": "code",
-    "value": "22 + 5",
+    "sticker": "heart",
+    "value": "∞",
     "label": {
-      "en": "talks and workshops",
-      "fr": "talks et ateliers"
+      "en": "memories made",
+      "fr": "souvenirs créés"
     },
     "detail": {
-      "en": "Plus a pitch contest on the main stage.",
-      "fr": "Et un pitch contest sur la scène principale."
+      "en": "Photos, moments, new friends — and counting.",
+      "fr": "Photos, moments, nouvelles amitiés — et ça continue."
     }
   },
   {
-    "id": "rooms",
-    "x": 47,
-    "y": 17,
-    "sticker": "pin",
-    "value": "5 × 11h",
-    "label": {
-      "en": "rooms, one long Saturday",
-      "fr": "salles, un long samedi"
-    },
-    "detail": {
-      "en": "Doors at 08:00, lights out around 19:00.",
-      "fr": "Ouverture à 08:00, fin vers 19:00."
-    }
-  },
-  {
-    "id": "dp-cards",
+    "id": "interactions",
     "x": 61.3,
     "y": 68,
-    "sticker": "spark",
-    "value": "101",
+    "sticker": "bolt",
+    "value": "300+",
     "label": {
-      "en": "DP cards made",
-      "fr": "cartes DP créées"
+      "en": "interactions",
+      "fr": "interactions"
     },
     "detail": {
-      "en": "Every one of them on the community wall.",
-      "fr": "Toutes sur le mur de la communauté."
+      "en": "Registrations, check-ins, Storytime, DP cards and more.",
+      "fr": "Inscriptions, check-ins, Storytime, cartes DP et plus encore."
     }
   },
   {
-    "id": "stories",
+    "id": "volunteers",
     "x": 92,
     "y": 35,
-    "sticker": "heart",
-    "value": "15",
+    "sticker": "thumbsup",
+    "value": "10+",
     "label": {
-      "en": "stories shared",
-      "fr": "témoignages partagés"
+      "en": "volunteers",
+      "fr": "bénévoles"
     },
     "detail": {
-      "en": "Left anonymously on Storytime.",
-      "fr": "Laissés anonymement sur Storytime."
+      "en": "At the door, in the rooms, everywhere at once.",
+      "fr": "À l'accueil, dans les salles, partout à la fois."
     }
   }
 ]

@@ -77,7 +77,10 @@ export default async function HomePage({
           settings.eventDate,
         ])}
       />
-      <ThankYouHero locale={locale} />
+      <ThankYouHero
+        locale={locale}
+        counts={{ speakers: speakers.length }}
+      />
       {/*
         The sponsor strip used to be layer 4 INSIDE the hero. The redesign
         gives the bottom edge to the wordmark (ADR 0044), and two things

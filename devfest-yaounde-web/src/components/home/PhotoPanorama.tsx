@@ -24,6 +24,8 @@ const AUTO_EASE = 0.9;
 const EDGE_SOFTNESS = 0.18;
 /** After the visitor pans, how long the photo waits before drifting again. */
 const IDLE_RESUME = 6000;
+/** How long the "drag or swipe" hint stays before it leaves on its own. */
+const HINT_STAY = 8000;
 /** How long after the hint shows the drift begins. */
 const AUTO_DELAY = 1400;
 /** Released-drag glide: the velocity falls by e every 1/FRICTION seconds. */
@@ -66,7 +68,8 @@ const MIN_GLIDE = 8;
  * percentage position stays on the same person whatever the screen.
  *
  * Once the thank-you note has gone (`hintAt`) a small hint says the photo
- * moves, and only if it actually does; it leaves at the visitor's first pan.
+ * moves, and only if it actually does; it leaves at the visitor's first pan,
+ * or on its own after a few seconds.
  */
 export function PhotoPanorama({
   src,
@@ -103,6 +106,7 @@ export function PhotoPanorama({
     startAt: 0,
     range: 0,
     touched: false,
+    hintDone: false,
     visible: true,
     drag: null as null | {
       x: number;
@@ -164,7 +168,6 @@ export function PhotoPanorama({
       last = now;
       const s = m.current;
       const range = el.scrollWidth - el.clientWidth;
-      if (range <= 8 || s.drag) return;
 
       // The drift's clock starts when the preloader lets the page go — the
       // same moment every CSS timing on the hero counts from.
@@ -172,6 +175,15 @@ export function PhotoPanorama({
         if (document.querySelector('[data-preloader="held"]')) return;
         s.startAt = now + hintAt + AUTO_DELAY;
       }
+
+      // The hint has said its piece: it leaves on its own (reduced motion
+      // included, where its fade-in is off and it would otherwise stay).
+      if (!s.hintDone && now > s.startAt - AUTO_DELAY + HINT_STAY) {
+        s.hintDone = true;
+        setPanned(true);
+      }
+
+      if (range <= 8 || s.drag) return;
 
       // The photo settles in from a slight zoom, which changes the range
       // under it; stay centred until the drift or the visitor moves it.
