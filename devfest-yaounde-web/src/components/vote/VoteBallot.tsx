@@ -8,7 +8,7 @@ import {
   Trophy,
 } from "@phosphor-icons/react";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import type { VoteState } from "@/app/api/vote/route";
 import { bouncyPop } from "@/lib/motion";
 import { MAX_PICKS } from "@/lib/pitch-vote";
@@ -24,6 +24,9 @@ export interface BallotProject {
   url?: string;
   note?: string;
 }
+
+/** A project's name inside a sentence: kept as is by browser translation. */
+const keepName = (chunks: ReactNode) => <span translate="no">{chunks}</span>;
 
 const CARD = "rounded-lg border-2 border-black02 bg-offwhite p-5 sm:p-6";
 const PRIMARY =
@@ -52,9 +55,10 @@ export function VoteBallot({
   const t = useTranslations("pages.vote");
   const [state, setState] = useState<VoteState | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const [notice, setNotice] = useState<
-    { kind: "saved" | "error"; text: string } | null
-  >(null);
+  const [notice, setNotice] = useState<{
+    kind: "saved" | "error";
+    text: string;
+  } | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -165,7 +169,7 @@ export function VoteBallot({
                       <span className="mr-2 font-mono text-black02/60">
                         {r.rank}.
                       </span>
-                      {p.name}
+                      <span translate="no">{p.name}</span>
                       {top && (
                         <span className="ml-3 inline-flex rounded-pill border-2 border-black02 bg-primary px-3 py-0.5 align-middle font-mono text-mono-tag font-bold uppercase">
                           {t("winner")}
@@ -285,10 +289,17 @@ export function VoteBallot({
                   {i + 1}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-sans text-heading-m font-bold leading-tight text-black02">
+                  {/* Names are the teams' own: never machine-translated. */}
+                  <h3
+                    translate="no"
+                    className="font-sans text-heading-m font-bold leading-tight text-black02"
+                  >
                     {p.name}
                   </h3>
-                  <p className="font-mono text-caption text-black02/70">
+                  <p
+                    translate="no"
+                    className="font-mono text-caption text-black02/70"
+                  >
                     {p.team}
                   </p>
                   <p className="mt-3 text-body-m text-black02/85">
@@ -305,7 +316,10 @@ export function VoteBallot({
                         className="transition-transform group-open:rotate-180 motion-reduce:transition-none"
                       />
                     </summary>
-                    <div lang="fr" className="mt-3 border-l-4 border-primary pl-4">
+                    <div
+                      lang="fr"
+                      className="mt-3 border-l-4 border-primary pl-4"
+                    >
                       {locale === "en" && (
                         <p
                           lang="en"
@@ -337,7 +351,7 @@ export function VoteBallot({
                         onClick={() => toggle(p.id)}
                         className={SECONDARY}
                       >
-                        {t("removeVote", { name: p.name })}
+                        {t("removeVote")}
                       </button>
                     )}
                     {canVote && !mine && !full && (
@@ -347,7 +361,7 @@ export function VoteBallot({
                         onClick={() => toggle(p.id)}
                         className={PRIMARY}
                       >
-                        {t("voteFor", { name: p.name })}
+                        {t.rich("voteFor", { project: p.name, n: keepName })}
                       </button>
                     )}
                     {canVote && !mine && full && (
@@ -362,7 +376,7 @@ export function VoteBallot({
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 font-sans text-body-m font-bold text-blue-ink underline decoration-2 underline-offset-4"
                       >
-                        {t("tryIt", { name: p.name })}
+                        {t.rich("tryIt", { project: p.name, n: keepName })}
                         <ArrowSquareOut size={16} weight="bold" aria-hidden />
                       </a>
                     )}
