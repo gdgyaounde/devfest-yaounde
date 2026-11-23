@@ -106,5 +106,17 @@
       "en": "Sign language turned into text, and text into sign language, with AI."
     },
     "pitch": "C'est une plateforme d'accessibilité pour les personnes malentendantes, qui fonctionne dans les deux sens :\n\n• Signes → texte : la caméra d'un téléphone ou d'un ordinateur capte les mains et le corps, l'IA reconnaît les gestes et les traduit en texte en temps réel.\n• Texte → signes : une personne entendante écrit ou dicte une phrase, et un avatar 3D la traduit en langue des signes.\n\nElle vise à lever les barrières de communication dans la santé, l'éducation et les administrations, là où les interprètes sont rares et coûteux. Elle repose sur la vision par ordinateur et l'apprentissage profond."
+  },
+  {
+    "id": "bookbridge",
+    "team": "Équipe BookBridge",
+    "name": "BookBridge",
+    "tagline": {
+      "fr": "Une marketplace de manuels scolaires d'occasion, avec paiement Mobile Money sécurisé par séquestre.",
+      "en": "A marketplace for used school textbooks, with Mobile Money payments held in escrow."
+    },
+    "pitchLang": "en",
+    "pitch": "Problem and users: secondary and high school students in Cameroon (ages 12–21) need physical textbooks, but new books are expensive and used ones are hard to find. Parents overspend every year while last year's books sit unused at home. Buying from strangers online is risky: no payment protection, no verified sellers, and many users are minors. Students and parents need a trustworthy way to buy and sell used textbooks nearby.\n\nSolution and purpose: BookBridge is a mobile marketplace for used school textbooks. Sellers list books, and buyers filter by class, subject, school and distance. Payment is by Mobile Money through escrow: funds are held until the buyer confirms receipt, then paid to the seller. Users are ID-verified, with extra guardian protections for the youngest, and meetups happen in safe campus zones. The result is cheaper books for families, income for students, and safer transactions for minors.",
+    "url": "https://play.google.com/store/apps/details?id=cm.devsafe.bookbridge"
   }
 ]

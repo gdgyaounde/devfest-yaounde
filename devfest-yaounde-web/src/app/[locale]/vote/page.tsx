@@ -71,6 +71,7 @@ export default async function VotePage({
     name: p.name,
     tagline: p.tagline[l],
     pitch: p.pitch,
+    pitchLang: p.pitchLang === "en" ? "en" : "fr",
     url: p.url,
     note: p.note?.[l],
     whatsapp: p.whatsapp

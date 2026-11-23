@@ -4,7 +4,7 @@ DevFest Yaoundé 2026 — GDG Yaoundé
 
 VOTE POUR TES PITCHS PRÉFÉRÉS
 
-Salut ! Merci d'avoir fait partie de DevFest Yaoundé 2026. Samedi, neuf équipes ont présenté leur projet au concours de pitch. C'est maintenant à toi de choisir.
+Salut ! Merci d'avoir fait partie de DevFest Yaoundé 2026. Samedi, dix équipes ont présenté leur projet au concours de pitch. C'est maintenant à toi de choisir.
 
 Concours propulsé par Impact Hub Yaoundé
 
@@ -13,7 +13,7 @@ Concours propulsé par Impact Hub Yaoundé
 
 2. Jusqu'au mardi 24 novembre à 23h59 (heure de Yaoundé). Les résultats s'affichent sur la page du vote dès la clôture.
 
-3. Les neuf projets : FinFree, Agrisense, SafeMe, HolaRide, DivineLink, Transax, TchueKAM Agent, FYS (For Your Self), Genesis. Leurs pitchs et leurs liens sont sur la page du vote.
+3. Les dix projets : FinFree, Agrisense, SafeMe, HolaRide, DivineLink, Transax, TchueKAM Agent, FYS (For Your Self), Genesis, BookBridge. Leurs pitchs et leurs liens sont sur la page du vote.
 
 Merci encore, et à très vite !
 L'équipe GDG Yaoundé
@@ -22,7 +22,7 @@ L'équipe GDG Yaoundé
 
 VOTE FOR YOUR FAVOURITE PITCHES
 
-Hi! Thank you for being part of DevFest Yaoundé 2026. On Saturday, nine teams pitched their projects in the pitch contest. Now it's your turn to choose.
+Hi! Thank you for being part of DevFest Yaoundé 2026. On Saturday, ten teams pitched their projects in the pitch contest. Now it's your turn to choose.
 
 Contest powered by Impact Hub Yaoundé
 
@@ -31,7 +31,7 @@ Contest powered by Impact Hub Yaoundé
 
 2. Until Tuesday 24 November at 23:59 (Yaoundé time). The results go up on the vote page as soon as it closes.
 
-3. The nine projects: FinFree, Agrisense, SafeMe, HolaRide, DivineLink, Transax, TchueKAM Agent, FYS (For Your Self), Genesis. Their pitches and links are on the vote page.
+3. The ten projects: FinFree, Agrisense, SafeMe, HolaRide, DivineLink, Transax, TchueKAM Agent, FYS (For Your Self), Genesis, BookBridge. Their pitches and links are on the vote page.
 
 Thanks again, and see you soon!
 The GDG Yaoundé team

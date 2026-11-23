@@ -20,7 +20,7 @@ import {
 } from "@/lib/pitch-vote";
 
 describe("the ballot", () => {
-  it("has the nine pitches, in pitch order, with unique ids", () => {
+  it("has the ten pitches, in pitch order, with unique ids", () => {
     assert.deepEqual(
       PITCH_PROJECTS.map((p) => p.id),
       [
@@ -33,6 +33,7 @@ describe("the ballot", () => {
         "tchuekam-agent",
         "fys",
         "genesis",
+        "bookbridge",
       ],
     );
   });
@@ -42,6 +43,7 @@ describe("the ballot", () => {
       assert.ok(p.tagline.fr.trim() && p.tagline.en.trim(), p.id);
       assert.ok(p.pitch.trim(), p.id);
       if (p.url) assert.match(p.url, /^https:\/\//, p.id);
+      if (p.pitchLang) assert.match(p.pitchLang, /^(fr|en)$/, p.id);
       // wa.me wants the international number, digits only.
       if (p.whatsapp) assert.match(p.whatsapp.number, /^[1-9]\d{7,14}$/, p.id);
       // Ids must pass the database's own check constraint.

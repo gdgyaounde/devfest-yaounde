@@ -16,8 +16,10 @@ export interface PitchProject {
   team: string;
   name: string;
   tagline: { fr: string; en: string };
-  /** The team's own words, in French as they sent them. */
+  /** The team's own words, as they sent them. */
   pitch: string;
+  /** The language of `pitch` ("fr" or "en"); French unless said otherwise. */
+  pitchLang?: string;
   url?: string;
   note?: { fr: string; en: string };
   /**

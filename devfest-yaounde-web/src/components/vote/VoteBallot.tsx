@@ -22,6 +22,7 @@ export interface BallotProject {
   tagline: string;
   /** The team's own words, as sent. */
   pitch: string;
+  pitchLang: "fr" | "en";
   url?: string;
   note?: string;
   whatsapp?: { number: string; label: string };
@@ -325,12 +326,13 @@ export function VoteBallot({
                       />
                     </summary>
                     <div
-                      lang="fr"
+                      lang={p.pitchLang}
                       className="mt-3 border-l-4 border-primary pl-4"
                     >
-                      {locale === "en" && (
+                      {/* Said only when the pitch isn't in the page's language. */}
+                      {p.pitchLang !== locale && (
                         <p
-                          lang="en"
+                          lang={locale}
                           className="mb-2 font-mono text-caption text-black02/60"
                         >
                           {t("pitchLanguage")}

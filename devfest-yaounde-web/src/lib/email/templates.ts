@@ -1052,9 +1052,9 @@ function voteCopy(l: Locale, d: { date: string; time: string }): LaunchCopy {
   return l === "fr"
     ? {
         title: "Vote pour tes pitchs préférés",
-        preheader: `Neuf projets, ${MAX_PICKS} voix, jusqu'au ${d.date} à ${d.time}.`,
+        preheader: `Dix projets, ${MAX_PICKS} voix, jusqu'au ${d.date} à ${d.time}.`,
         intro:
-          "Salut ! Merci d'avoir fait partie de DevFest Yaoundé 2026. Samedi, neuf équipes ont présenté leur projet au concours de pitch. C'est maintenant à toi de choisir.",
+          "Salut ! Merci d'avoir fait partie de DevFest Yaoundé 2026. Samedi, dix équipes ont présenté leur projet au concours de pitch. C'est maintenant à toi de choisir.",
         poweredBy: {
           label: "Concours propulsé par",
           name: "Impact Hub Yaoundé",
@@ -1071,7 +1071,7 @@ function voteCopy(l: Locale, d: { date: string; time: string }): LaunchCopy {
             body: "(heure de Yaoundé). Les résultats s'affichent sur la page du vote dès la clôture.",
           },
           {
-            lead: "Les neuf projets :",
+            lead: "Les dix projets :",
             body: `${names}. Leurs pitchs et leurs liens sont sur la page du vote.`,
           },
         ],
@@ -1082,9 +1082,9 @@ function voteCopy(l: Locale, d: { date: string; time: string }): LaunchCopy {
       }
     : {
         title: "Vote for your favourite pitches",
-        preheader: `Nine projects, ${MAX_PICKS} votes, until ${d.date} at ${d.time}.`,
+        preheader: `Ten projects, ${MAX_PICKS} votes, until ${d.date} at ${d.time}.`,
         intro:
-          "Hi! Thank you for being part of DevFest Yaoundé 2026. On Saturday, nine teams pitched their projects in the pitch contest. Now it's your turn to choose.",
+          "Hi! Thank you for being part of DevFest Yaoundé 2026. On Saturday, ten teams pitched their projects in the pitch contest. Now it's your turn to choose.",
         poweredBy: {
           label: "Contest powered by",
           name: "Impact Hub Yaoundé",
@@ -1101,7 +1101,7 @@ function voteCopy(l: Locale, d: { date: string; time: string }): LaunchCopy {
             body: "(Yaoundé time). The results go up on the vote page as soon as it closes.",
           },
           {
-            lead: "The nine projects:",
+            lead: "The ten projects:",
             body: `${names}. Their pitches and links are on the vote page.`,
           },
         ],
