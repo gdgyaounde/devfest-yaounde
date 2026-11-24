@@ -42,7 +42,9 @@ For the real sends, do this with the **gdgyaounde@gmail.com** account, because e
 
 ## The Slides template
 
-Make a Google Slides deck (landscape) that looks like the final certificate, and put its ID in Settings → `template_id`. The ID is the long part of its URL between `/d/` and `/edit`. Type these placeholders anywhere in text boxes; spaces inside are fine (`{{ full_name }}`):
+**Quickest start:** open the edition tab and use **Certificates → Create a starter template…**. It makes a plain, on-brand certificate with every placeholder in place, and puts its ID in Settings. Restyle it freely; keep the `{{…}}` and the square `{{qr}}` box.
+
+Or make your own Google Slides deck (landscape) that looks like the final certificate, and put its ID in Settings → `template_id`. The ID is the long part of its URL between `/d/` and `/edit`. Type these placeholders anywhere in text boxes; spaces inside are fine (`{{ full_name }}`):
 
 | Placeholder | Becomes |
 |---|---|

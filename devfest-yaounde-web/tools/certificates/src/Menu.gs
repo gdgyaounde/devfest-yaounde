@@ -29,6 +29,7 @@ function onOpen() {
     .addItem("Stop scheduled runs", "stopScheduledRuns")
     .addSeparator()
     .addItem("Set up a new edition…", "setupEdition")
+    .addItem("Create a starter template…", "createStarterTemplate")
     .addItem("Connect to the site (secret)…", "setSiteSecret")
     .addToUi();
 }
@@ -91,4 +92,57 @@ function stopScheduledRuns() {
   SpreadsheetApp.getUi().alert(
     removed ? `Stopped ${removed} scheduled run(s).` : "Nothing was scheduled.",
   );
+}
+
+/**
+ * A plain, on-brand Slides certificate with every placeholder in place, so
+ * an edition can be tested at once. Restyle it freely (keep the {{…}} and
+ * the square {{qr}} box), or replace it with a designer's template.
+ * Its id is written to the active edition's Settings column.
+ */
+function createStarterTemplate() {
+  const sheet = editionSheet_();
+  const edition = sheet.getName();
+  const deck = SlidesApp.create(`DevFest Yaoundé ${edition} — certificate template`);
+  const slide = deck.getSlides()[0];
+  slide.getPageElements().forEach((el) => el.remove());
+  slide.getBackground().setSolidFill("#FFE7A5");
+  const W = deck.getPageWidth();
+  const H = deck.getPageHeight();
+
+  const box = (text, left, top, width, height, size, opts) => {
+    const shape = slide.insertTextBox(text, left, top, width, height);
+    const range = shape.getText();
+    range.getTextStyle().setFontFamily("Google Sans").setFontSize(size).setForegroundColor("#1E1E1E").setBold(Boolean(opts && opts.bold));
+    range.getParagraphStyle().setParagraphAlignment(opts && opts.left ? SlidesApp.ParagraphAlignment.START : SlidesApp.ParagraphAlignment.CENTER);
+    return shape;
+  };
+
+  const band = slide.insertShape(SlidesApp.ShapeType.RECTANGLE, 0, 0, W, 56);
+  band.getFill().setSolidFill("#1E1E1E");
+  band.getBorder().setTransparent();
+  const brand = band.getText();
+  brand.setText("GDG YAOUNDÉ  ×  {{event_name}}");
+  brand.getTextStyle().setFontFamily("Google Sans Code").setFontSize(14).setBold(true).setForegroundColor("#F9AB00");
+  brand.getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
+
+  box("CERTIFICAT · CERTIFICATE", 40, 80, W - 80, 40, 16, { bold: true });
+  box("{{full_name}}", 40, 125, W - 80, 70, 40, { bold: true });
+  box("{{role_fr}} · {{role_en}}", 40, 195, W - 80, 30, 18, { bold: true });
+  box("Décerné {{role_line_fr}}", 40, 228, W - 80, 26, 14);
+  box("Awarded {{role_line_en}}", 40, 252, W - 80, 26, 14);
+  box("{{detail}}", 60, 280, W - 120, 26, 13);
+  box("{{venue}} · {{event_date_fr}} · {{event_date_en}}", 40, H - 70, W - 200, 24, 12, { left: true });
+  box("N° {{certificate_id}}", 40, H - 46, W - 200, 24, 12, { bold: true, left: true });
+  box("{{qr}}", W - 130, H - 130, 100, 100, 10);
+
+  deck.saveAndClose();
+
+  // Point the edition's Settings at it.
+  const settings = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Settings");
+  const values = settings.getDataRange().getValues();
+  const col = values[0].map(String).indexOf(edition);
+  const row = values.findIndex((r) => String(r[0]) === "template_id");
+  if (col >= 0 && row >= 0) settings.getRange(row + 1, col + 1).setValue(deck.getId());
+  alert_(`Starter template created and set in Settings (${edition} → template_id):\n${deck.getUrl()}`);
 }
