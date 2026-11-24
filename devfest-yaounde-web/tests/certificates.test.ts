@@ -18,19 +18,24 @@ import {
 } from "@/lib/certificates/rules";
 
 describe("certificate ids", () => {
-  it("accepts an edition prefix, a dash and a running number", () => {
-    for (const id of ["DFY26-0042", "DFY27-001", "GDGYAOUNDE-123456"]) {
+  it("accepts an edition prefix and a random Crockford key", () => {
+    for (const id of ["DFY26-K7QM-4XHT", "DFY27-0000-ZZZZ", "GDGYAOUNDE-AB12-CD34"]) {
       assert.equal(isCertificateId(id), true, id);
     }
   });
 
-  it("refuses anything else", () => {
+  it("refuses running numbers, ambiguous letters and anything else", () => {
     for (const id of [
-      "dfy26-0042",
-      "DFY26-42",
-      "26-0042",
-      "DFY26_0042",
-      "DFY26-0042 ",
+      "DFY26-0042",
+      "dfy26-k7qm-4xht",
+      "DFY26-K7QM4XHT",
+      "DFY26-K7QM-4XH",
+      "DFY26-K7QM-4XHTT",
+      "DFY26-K7QO-4XHT",
+      "DFY26-K7QI-4XHT",
+      "DFY26-K7QU-4XHT",
+      "26-K7QM-4XHT",
+      "DFY26-K7QM-4XHT ",
       "",
       null,
     ]) {
@@ -39,14 +44,16 @@ describe("certificate ids", () => {
   });
 
   it("normalises what was typed or scanned", () => {
-    assert.equal(normaliseCertificateId(" dfy26-0042 "), "DFY26-0042");
-    assert.equal(normaliseCertificateId("dfy26%2D0042"), "DFY26-0042");
+    assert.equal(normaliseCertificateId(" dfy26-k7qm-4xht "), "DFY26-K7QM-4XHT");
+    assert.equal(normaliseCertificateId("dfy26%2Dk7qm-4xht"), "DFY26-K7QM-4XHT");
+    // O, I and L in the key are read as 0 and 1; the prefix is left alone.
+    assert.equal(normaliseCertificateId("DFYOI-KOQL-4XHI"), "DFYOI-K0Q1-4XH1");
   });
 });
 
 describe("the issue request", () => {
   const one = {
-    id: "DFY26-0001",
+    id: "DFY26-K7QM-4XHT",
     edition: 2026,
     fullName: "Ada Lovelace",
     role: "speaker",
@@ -96,8 +103,8 @@ describe("the shared secret", () => {
 describe("the verify URL", () => {
   it("has no locale, so the visitor's language is picked", () => {
     assert.equal(
-      verifyUrl("DFY26-0042", "https://devfest.example/"),
-      "https://devfest.example/certificates/DFY26-0042",
+      verifyUrl("DFY26-K7QM-4XHT", "https://devfest.example/"),
+      "https://devfest.example/certificates/DFY26-K7QM-4XHT",
     );
   });
 });

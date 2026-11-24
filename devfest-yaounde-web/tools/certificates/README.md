@@ -54,8 +54,8 @@ Or make your own Google Slides deck (landscape) that looks like the final certif
 | `{{role_line_fr}}` / `{{role_line_en}}` | "pour son intervention au DevFest Yaoundé 2026" (Settings → `line_*`) |
 | `{{detail}}` | the talk title (speakers), the team role (organisers), or empty |
 | `{{event_name}}`, `{{event_date_fr}}`, `{{event_date_en}}`, `{{venue}}`, `{{edition}}` | from Settings |
-| `{{certificate_id}}` | DFY26-0042 |
-| `{{verify_url}}` | https://devfest.gdgyaounde.com/certificates/DFY26-0042 |
+| `{{certificate_id}}` | DFY26-K7QM-4XHT: the prefix, then a random key |
+| `{{verify_url}}` | https://devfest.gdgyaounde.com/certificates/DFY26-K7QM-4XHT |
 | `{{qr}}` | **a square text box containing only `{{qr}}`**: it's replaced by the QR code image, at the box's size |
 
 An unknown placeholder (a typo like `{{fullname}}`) stops generation with a clear message. It never ends up printed on a certificate.

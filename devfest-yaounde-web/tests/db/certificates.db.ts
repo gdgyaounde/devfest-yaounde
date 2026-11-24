@@ -52,24 +52,24 @@ async function main() {
     `insert into public.certificates (id, edition, full_name, role${extra ? ", detail" : ""}) values ('${id}', 2026, 'Ada Lovelace', 'speaker'${extra ? `, '${extra}'` : ""})`;
 
   console.log("\nConstraints");
-  await db.exec(insert("DFY26-0001", "AI at scale"));
+  await db.exec(insert("DFY26-K7QM-4XHT", "AI at scale"));
   check("a well-formed certificate is accepted", true);
   await refuses("a malformed id is refused", insert("dfy26-1"));
   await refuses(
     "an unknown role is refused",
-    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-0002', 2026, 'X', 'vip')",
+    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-K7QM-4XH2', 2026, 'X', 'vip')",
   );
   await refuses(
     "an empty name is refused",
-    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-0003', 2026, '', 'attendee')",
+    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-K7QM-4XH3', 2026, '', 'attendee')",
   );
   await refuses(
     "an absurd edition is refused",
-    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-0004', 1999, 'X', 'attendee')",
+    "insert into public.certificates (id, edition, full_name, role) values ('DFY26-K7QM-4XH4', 1999, 'X', 'attendee')",
   );
   await refuses(
     "a duplicate id is refused (plain insert)",
-    insert("DFY26-0001"),
+    insert("DFY26-K7QM-4XHT"),
   );
 
   const cols = await db.query<{ column_name: string }>(
@@ -91,13 +91,13 @@ async function main() {
 
   console.log("\nRe-issue (the API's upsert)");
   await db.exec(
-    "update public.certificates set issued_at = '2026-11-24T10:00:00Z', revoked_at = '2026-11-25T10:00:00Z' where id = 'DFY26-0001'",
+    "update public.certificates set issued_at = '2026-11-24T10:00:00Z', revoked_at = '2026-11-25T10:00:00Z' where id = 'DFY26-K7QM-4XHT'",
   );
   // What supabase-js `.upsert(rows, { onConflict: "id" })` sends: only the
   // columns in the row — no issued_at, no revoked_at.
   await db.exec(`
     insert into public.certificates (id, edition, full_name, role, detail, updated_at)
-    values ('DFY26-0001', 2026, 'Ada King Lovelace', 'speaker', 'AI at scale', now())
+    values ('DFY26-K7QM-4XHT', 2026, 'Ada King Lovelace', 'speaker', 'AI at scale', now())
     on conflict (id) do update set
       edition = excluded.edition, full_name = excluded.full_name,
       role = excluded.role, detail = excluded.detail, updated_at = excluded.updated_at`);
@@ -107,7 +107,7 @@ async function main() {
       issued_at: Date;
       revoked_at: Date | null;
     }>(
-      "select full_name, issued_at, revoked_at from public.certificates where id = 'DFY26-0001'",
+      "select full_name, issued_at, revoked_at from public.certificates where id = 'DFY26-K7QM-4XHT'",
     )
   ).rows[0];
   check("the corrected name is stored", row.full_name === "Ada King Lovelace");

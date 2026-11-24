@@ -37,7 +37,7 @@ After DevFest Yaoundé 2026 the organisers want to email every checked-in attend
 
 ## Consequences
 
-- Certificate numbers (`DFY26-0042`, with the prefix set per edition) are allocated once in the sheet and never reused. Resetting a row keeps its number, so a printed QR code stays valid.
+- Certificate ids (`DFY26-K7QM-4XHT`) are the edition's prefix plus a **random** key of eight Crockford base32 characters (no I, L, O or U). They are not a running number, which would let anyone walk `-0001`, `-0002`, … on the verify page and list every holder's name. An id is allocated once in the sheet and never reused. Resetting a row keeps it, so a printed QR code stays valid.
 - Speakers' and organisers' emails, and the Bevy free passes (from a full-email Bevy export), are added to the sheet by hand. The site holds none of these.
 - The free Gmail quota means about 160 certificates go out over two days. A Workspace sender would do it in one.
 - A future second channel (for example sending from the site once a domain exists) can reuse the same `certificates` records and verify page.

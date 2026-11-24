@@ -17,7 +17,7 @@
 
 create table if not exists public.certificates (
   id          text primary key
-                check (id ~ '^[A-Z][A-Z0-9]{1,9}-[0-9]{3,6}$'),
+                check (id ~ '^[A-Z][A-Z0-9]{1,9}-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$'),
   edition     integer not null check (edition between 2020 and 2100),
   full_name   text not null check (char_length(full_name) between 1 and 120),
   role        text not null

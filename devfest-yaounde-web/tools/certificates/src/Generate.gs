@@ -72,10 +72,12 @@ function runGenerate_(edition, interactive) {
       // The template must only use placeholders we know — checked once.
       checkTemplate_(settings, todo[0]);
 
-      // 1. Numbers: allocated once, written at once, never reused.
-      const nextId = nextIdAllocator_(settings.id_prefix, rows);
+      // 1. Ids: random, allocated once, written at once, never reused. A
+      // row still holding an old-style id (a running number, from a test
+      // before ids became random) gets a new one: the site refuses those.
+      const nextId = idAllocator_(settings.id_prefix, rows);
       todo.forEach((r) => {
-        if (!r.certificate_id) {
+        if (!CERTIFICATE_ID_RE.test(String(r.certificate_id))) {
           r.certificate_id = nextId();
           writeRow_(sheet, map, r._row, { certificate_id: r.certificate_id });
         }
@@ -136,7 +138,7 @@ function runGenerate_(edition, interactive) {
  */
 function checkTemplate_(settings, sampleRow) {
   const deck = SlidesApp.openById(settings.template_id);
-  const values = placeholderValues_(settings, Object.assign({}, sampleRow, { certificate_id: "CHECK-0000" }));
+  const values = placeholderValues_(settings, Object.assign({}, sampleRow, { certificate_id: `${settings.id_prefix}-0000-0000` }));
   values.qr = "";
   const unknown = [];
   allTexts_(deck).forEach((t) => {

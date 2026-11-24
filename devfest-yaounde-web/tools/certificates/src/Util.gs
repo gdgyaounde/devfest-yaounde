@@ -143,17 +143,42 @@ function rootFolder_(settings) {
   return childFolder_(DriveApp.getRootFolder(), "DevFest Yaoundé — Certificates");
 }
 
-/** "DFY26-0042" style ids: the next number after the highest already used. */
-function nextIdAllocator_(prefix, rows) {
-  let max = 0;
-  const re = new RegExp(`^${prefix}-(\\d+)$`);
+/** Crockford base32: no I, L, O or U, so nothing on a certificate is misread. */
+const ID_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+/** Must match CERTIFICATE_ID on the site (src/lib/certificates/rules.ts). */
+const CERTIFICATE_ID_RE = /^[A-Z][A-Z0-9]{1,9}-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/;
+
+/** Eight random characters (40 bits) from a v4 UUID's random hex. */
+function randomKey_() {
+  // The first 10 hex digits of a v4 UUID are all random.
+  let n = parseInt(Utilities.getUuid().replace(/-/g, "").slice(0, 10), 16);
+  let key = "";
+  for (let i = 0; i < 8; i++) {
+    key = ID_ALPHABET[n % 32] + key;
+    n = Math.floor(n / 32);
+  }
+  return key;
+}
+
+/**
+ * "DFY26-K7QM-4XHT" style ids: the prefix, then a random key — never a
+ * running number, so nobody can walk the verify page and list every holder.
+ * Never repeats an id already in the sheet.
+ */
+function idAllocator_(prefix, rows) {
+  const used = {};
   rows.forEach((r) => {
-    const m = re.exec(String(r.certificate_id));
-    if (m) max = Math.max(max, Number(m[1]));
+    if (r.certificate_id) used[String(r.certificate_id)] = true;
   });
   return () => {
-    max += 1;
-    return `${prefix}-${String(max).padStart(4, "0")}`;
+    for (;;) {
+      const key = randomKey_();
+      const id = `${prefix}-${key.slice(0, 4)}-${key.slice(4)}`;
+      if (!used[id]) {
+        used[id] = true;
+        return id;
+      }
+    }
   };
 }
 

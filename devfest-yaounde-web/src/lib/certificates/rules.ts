@@ -11,19 +11,33 @@ import { z } from "zod";
 import { SITE_URL } from "@/lib/site-config";
 
 /**
- * "DFY26-0042": an edition prefix (letters/digits, starting with a letter),
- * a dash, then a running number. The prefix is set per edition in the
- * sheet's Settings, so next year's can be "DFY27".
+ * "DFY26-K7QM-4XHT": an edition prefix (letters/digits, starting with a
+ * letter, set per edition in the sheet's Settings), then a RANDOM key of
+ * eight Crockford base32 characters (no I, L, O or U, so nothing is
+ * misread). Random, not a running number: a number would let anyone walk
+ * DFY26-0001, -0002, … on the verify page and list every holder's name.
+ * 40 bits is far beyond guessing for a few hundred certificates a year.
  */
-export const CERTIFICATE_ID = /^[A-Z][A-Z0-9]{1,9}-\d{3,6}$/;
+const KEY = "[0-9A-HJKMNP-TV-Z]{4}";
+export const CERTIFICATE_ID = new RegExp(`^[A-Z][A-Z0-9]{1,9}-${KEY}-${KEY}$`);
 
 export function isCertificateId(value: unknown): value is string {
   return typeof value === "string" && CERTIFICATE_ID.test(value);
 }
 
-/** Normalises what someone typed or scanned: trims, upper-cases. */
+/**
+ * Normalises what someone typed or scanned: trims, upper-cases, and in the
+ * key (after the prefix) reads O as 0 and I or L as 1, Crockford-style.
+ */
 export function normaliseCertificateId(raw: string): string {
-  return decodeURIComponent(raw).trim().toUpperCase();
+  const id = decodeURIComponent(raw).trim().toUpperCase();
+  const dash = id.indexOf("-");
+  if (dash < 0) return id;
+  const key = id
+    .slice(dash + 1)
+    .replace(/O/g, "0")
+    .replace(/[IL]/g, "1");
+  return `${id.slice(0, dash)}-${key}`;
 }
 
 export const CERTIFICATE_ROLES = [

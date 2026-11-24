@@ -41,7 +41,7 @@ function defaultSettings_(edition) {
     ["event_date_fr", "", "e.g. 21 novembre 2026"],
     ["event_date_en", "", "e.g. 21 November 2026"],
     ["venue", "Yaoundé", ""],
-    ["id_prefix", `DFY${yy}`, "Certificate numbers look like DFY26-0042. Never change it once numbers are issued."],
+    ["id_prefix", `DFY${yy}`, "Certificate ids look like DFY26-K7QM-4XHT: this prefix, then a random key."],
     ["template_id", "", "The Google Slides template's ID (from its URL)."],
     ["folder_id", "", "Drive folder for the PDFs. Empty = one is created in My Drive."],
     ["site_url", "https://devfest.gdgyaounde.com", "Where certificates are registered and verified. EMPTY = test mode: no registration, no QR code."],

@@ -11,16 +11,22 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import vm from "node:vm";
+import { randomUUID } from "node:crypto";
+
+import { CERTIFICATE_ID } from "@/lib/certificates/rules";
 
 const DIR = join(process.cwd(), "tools/certificates/src");
 const files = readdirSync(DIR).filter((f) => f.endsWith(".gs"));
 
 // Load every .gs into one context, like Apps Script's single global scope.
 // `const` declarations don't attach to the context, so expose what we test.
-const context = vm.createContext({ console });
+const context = vm.createContext({
+  console,
+  Utilities: { getUuid: () => randomUUID() },
+});
 vm.runInContext(
   files.map((f) => readFileSync(join(DIR, f), "utf8")).join("\n;\n") +
-    "\n;globalThis.__t = { fill_, placeholderValues_, nextIdAllocator_, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
+    "\n;globalThis.__t = { fill_, placeholderValues_, idAllocator_, CERTIFICATE_ID_RE, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
   context,
 );
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,7 +47,7 @@ const row = {
   email: "ada@example.cm",
   role: "speaker",
   detail: "L'IA à l'échelle",
-  certificate_id: "DFY26-0042",
+  certificate_id: "DFY26-K7QM-4XHT",
 };
 
 describe("the Apps Script files", () => {
@@ -64,7 +70,7 @@ describe("placeholders", () => {
     assert.equal(values.role_line_en, "for speaking at DevFest Yaoundé 2026");
     assert.equal(
       values.verify_url,
-      "https://devfest.gdgyaounde.com/certificates/DFY26-0042",
+      "https://devfest.gdgyaounde.com/certificates/DFY26-K7QM-4XHT",
     );
     assert.equal(
       t.fill_("{{full_name}} — {{ role }}, {{event_date_fr}}", values),
@@ -118,25 +124,31 @@ describe("the email templates", () => {
         file === "email.html",
       );
       assert.doesNotMatch(out, /\{\{|\}\}/);
-      assert.match(out, /DFY26-0042/);
+      assert.match(out, /DFY26-K7QM-4XHT/);
     });
   }
 });
 
-describe("certificate numbers", () => {
-  it("continue after the highest used, padded, never reusing one", () => {
-    const next = t.nextIdAllocator_("DFY26", [
-      { certificate_id: "DFY26-0007" },
-      { certificate_id: "DFY26-0012" },
-      { certificate_id: "DFY27-0099" },
-      { certificate_id: "" },
-    ]);
-    assert.equal(next(), "DFY26-0013");
-    assert.equal(next(), "DFY26-0014");
+describe("certificate ids", () => {
+  it("are the prefix plus a random key, never repeating one in the sheet", () => {
+    const taken = [{ certificate_id: "DFY26-K7QM-4XHT" }, { certificate_id: "" }];
+    const next = t.idAllocator_("DFY26", taken);
+    const ids = Array.from({ length: 500 }, () => next());
+    assert.equal(new Set(ids).size, ids.length);
+    assert.ok(!ids.includes("DFY26-K7QM-4XHT"));
+    for (const id of ids) assert.match(id, /^DFY26-[0-9A-Z]{4}-[0-9A-Z]{4}$/);
+    // Not a counter: consecutive ids share no obvious order.
+    assert.notEqual([...ids].sort().join(), ids.join());
   });
 
-  it("match the site's format", () => {
-    const next = t.nextIdAllocator_("DFY26", []);
-    assert.match(next(), /^[A-Z][A-Z0-9]{1,9}-\d{3,6}$/);
+  it("match the site's format, with the same rule on both sides", () => {
+    const next = t.idAllocator_("DFY26", []);
+    for (let i = 0; i < 200; i++) {
+      const id = next();
+      assert.match(id, CERTIFICATE_ID);
+      assert.match(id, t.CERTIFICATE_ID_RE);
+    }
+    assert.equal(t.CERTIFICATE_ID_RE.source, CERTIFICATE_ID.source);
+    assert.doesNotMatch("DFY26-0042", t.CERTIFICATE_ID_RE);
   });
 });
