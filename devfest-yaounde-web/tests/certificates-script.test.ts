@@ -59,16 +59,27 @@ describe("placeholders", () => {
 
   it("fills names, roles, role lines, the number and the verify link", () => {
     assert.equal(values.first_name, "Ada");
-    assert.equal(values.role_fr, "Intervenant·e");
+    assert.equal(values.role, "Speaker");
+    assert.equal(values.role_fr, undefined);
     assert.equal(values.role_line_en, "for speaking at DevFest Yaoundé 2026");
     assert.equal(
       values.verify_url,
       "https://devfest.gdgyaounde.com/certificates/DFY26-0042",
     );
     assert.equal(
-      t.fill_("{{full_name}} — {{ role_en }}, {{event_date_fr}}", values),
+      t.fill_("{{full_name}} — {{ role }}, {{event_date_fr}}", values),
       "Ada Lovelace — Speaker, 21 novembre 2026",
     );
+  });
+
+  it("prints one role label per role, from Settings, with safe fallbacks", () => {
+    const custom = { ...settings, role_speaker: "Intervenant·e" };
+    assert.equal(t.placeholderValues_(custom, row).role, "Intervenant·e");
+    // A sheet set up before the single label: its old role_en_* still works.
+    const old = { ...settings, role_speaker: "", role_en_speaker: "Talker" };
+    assert.equal(t.placeholderValues_(old, row).role, "Talker");
+    const bare = { ...settings, role_speaker: "" };
+    assert.equal(t.placeholderValues_(bare, row).role, "Speaker");
   });
 
   it("refuses an unknown placeholder instead of printing it", () => {
@@ -91,6 +102,7 @@ describe("placeholders", () => {
     for (const role of t.ROLES) {
       const v = t.placeholderValues_(settings, { ...row, role });
       assert.ok(v.role_line_fr && v.role_line_en, role);
+      assert.ok(v.role && v.role !== role, `${role} has a printed label`);
       assert.doesNotMatch(t.fill_(settings.email_subject, v), /\{\{/);
     }
   });

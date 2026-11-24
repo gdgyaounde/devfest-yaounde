@@ -50,16 +50,11 @@ function defaultSettings_(edition) {
     ["reply_to", "gdgyaounde@gmail.com", "Where replies go."],
     ["daily_cap", "", "Optional: send at most this many a day (testing). Empty = Gmail's quota."],
     ["name_max_chars", "26", "Longer names get a smaller font on the certificate."],
-    ["role_fr_attendee", "Participant·e", ""],
-    ["role_en_attendee", "Attendee", ""],
-    ["role_fr_speaker", "Intervenant·e", ""],
-    ["role_en_speaker", "Speaker", ""],
-    ["role_fr_volunteer", "Bénévole", ""],
-    ["role_en_volunteer", "Volunteer", ""],
-    ["role_fr_organiser", "Organisateur·rice", ""],
-    ["role_en_organiser", "Organiser", ""],
-    ["role_fr_partner", "Partenaire", ""],
-    ["role_en_partner", "Partner", ""],
+    ["role_attendee", "Attendee", "What {{role}} prints, for each role. One label, in the language of your template."],
+    ["role_speaker", "Speaker", ""],
+    ["role_volunteer", "Volunteer", ""],
+    ["role_organiser", "Organiser", ""],
+    ["role_partner", "Partner", ""],
     ["line_fr_attendee", "pour sa participation au {{event_name}}", ""],
     ["line_en_attendee", "for taking part in {{event_name}}", ""],
     ["line_fr_speaker", "pour son intervention au {{event_name}}", "{{detail}} holds the talk title."],
@@ -84,23 +79,30 @@ function ensureSettings_(ss, edition) {
     sheet.setFrozenColumns(1);
   }
   const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String);
-  if (header.indexOf(String(edition)) >= 0) return sheet;
-
-  // Add the edition's column just before "help", filled with defaults.
-  const helpAt = header.indexOf("help") + 1 || header.length + 1;
-  sheet.insertColumnBefore(helpAt);
-  sheet.getRange(1, helpAt).setValue(String(edition)).setFontWeight("bold");
+  let col = header.indexOf(String(edition)) + 1;
+  const isNew = col === 0;
+  if (isNew) {
+    // Add the edition's column just before "help", filled with defaults.
+    col = header.indexOf("help") + 1 || header.length + 1;
+    sheet.insertColumnBefore(col);
+    sheet.getRange(1, col).setValue(String(edition)).setFontWeight("bold");
+    sheet.setColumnWidth(col, 320);
+  }
+  // An existing column only gains the keys it lacks (a newer version of the
+  // script added them); values already typed are never touched.
+  const helpCol = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String).indexOf("help") + 1;
   const keys = sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), 1).getValues().map((r) => String(r[0]));
   defaults.forEach((d) => {
     let at = keys.indexOf(d[0]);
-    if (at < 0) {
+    const added = at < 0;
+    if (added) {
       sheet.appendRow([d[0]]);
       keys.push(d[0]);
       at = keys.length - 1;
+      if (helpCol && d[2]) sheet.getRange(at + 2, helpCol).setValue(d[2]);
     }
-    sheet.getRange(at + 2, helpAt).setValue(d[1]);
+    if (isNew || added) sheet.getRange(at + 2, col).setValue(d[1]);
   });
-  sheet.setColumnWidth(helpAt, 320);
   return sheet;
 }
 

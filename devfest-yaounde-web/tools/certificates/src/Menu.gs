@@ -128,7 +128,7 @@ function createStarterTemplate() {
 
   box("CERTIFICAT · CERTIFICATE", 40, 80, W - 80, 40, 16, { bold: true });
   box("{{full_name}}", 40, 125, W - 80, 70, 40, { bold: true });
-  box("{{role_fr}} · {{role_en}}", 40, 195, W - 80, 30, 18, { bold: true });
+  box("{{role}}", 40, 195, W - 80, 30, 18, { bold: true });
   box("Décerné {{role_line_fr}}", 40, 228, W - 80, 26, 14);
   box("Awarded {{role_line_en}}", 40, 252, W - 80, 26, 14);
   box("{{detail}}", 60, 280, W - 120, 26, 13);

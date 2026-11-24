@@ -50,7 +50,7 @@ Or make your own Google Slides deck (landscape) that looks like the final certif
 |---|---|
 | `{{full_name}}` | Ada Lovelace. Long names shrink automatically (Settings → `name_max_chars`). |
 | `{{first_name}}` | Ada |
-| `{{role_fr}}` / `{{role_en}}` | Intervenant·e / Speaker (Settings → `role_*`) |
+| `{{role}}` | Speaker: one label per role, set in Settings (`role_attendee`, `role_speaker`, …). Write it in your template's language. |
 | `{{role_line_fr}}` / `{{role_line_en}}` | "pour son intervention au DevFest Yaoundé 2026" (Settings → `line_*`) |
 | `{{detail}}` | the talk title (speakers), the team role (organisers), or empty |
 | `{{event_name}}`, `{{event_date_fr}}`, `{{event_date_en}}`, `{{venue}}`, `{{edition}}` | from Settings |

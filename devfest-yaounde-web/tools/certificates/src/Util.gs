@@ -6,6 +6,14 @@
 const TIME_BUDGET_MS = 4.5 * 60 * 1000;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const DEFAULT_ROLE_LABELS = {
+  attendee: "Attendee",
+  speaker: "Speaker",
+  volunteer: "Volunteer",
+  organiser: "Organiser",
+  partner: "Partner",
+};
+
 const PLACEHOLDER_RE = /\{\{\s*([a-z0-9_]+)\s*\}\}/gi;
 
 /**
@@ -18,9 +26,8 @@ function placeholderValues_(settings, row) {
     full_name: row.full_name,
     first_name: String(row.full_name).split(/\s+/)[0] || row.full_name,
     detail: row.detail || "",
-    role: role,
-    role_fr: settings[`role_fr_${role}`] || role,
-    role_en: settings[`role_en_${role}`] || role,
+    // The printed role: ONE label per role, from Settings → role_<role>.
+    role: settings[`role_${role}`] || settings[`role_en_${role}`] || DEFAULT_ROLE_LABELS[role] || role,
     certificate_id: row.certificate_id,
     // Test mode (no site_url): no verify link either.
     verify_url: settings.site_url
