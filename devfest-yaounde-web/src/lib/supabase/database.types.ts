@@ -676,6 +676,39 @@ export type Database = {
         }
         Relationships: []
       }
+      certificates: {
+        Row: {
+          detail: string | null
+          edition: number
+          full_name: string
+          id: string
+          issued_at: string
+          revoked_at: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          detail?: string | null
+          edition: number
+          full_name: string
+          id: string
+          issued_at?: string
+          revoked_at?: string | null
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          detail?: string | null
+          edition?: number
+          full_name?: string
+          id?: string
+          issued_at?: string
+          revoked_at?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pitch_votes: {
         Row: {
           created_at: string

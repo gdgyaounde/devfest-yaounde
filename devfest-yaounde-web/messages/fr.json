@@ -934,6 +934,27 @@
       "bothUsed": "Tu as utilisé tes deux voix. Retires-en une pour choisir ce projet.",
       "cleared": "Voix retirée. Tu peux choisir jusqu'à deux projets jusqu'à la clôture.",
       "votesShare": "{count, plural, one {# voix} other {# voix}} · {percent} % des votants"
+    },
+    "certificate": {
+      "metaTitle": "Vérification de certificat",
+      "metaDesc": "Vérifier un certificat DevFest Yaoundé.",
+      "eyebrow": "DevFest Yaoundé · vérification de certificat",
+      "valid": "Certificat authentique",
+      "revoked": "Certificat révoqué",
+      "missing": "Introuvable",
+      "role": {
+        "attendee": "A participé au DevFest Yaoundé {edition}.",
+        "speaker": "A été intervenant·e au DevFest Yaoundé {edition}.",
+        "volunteer": "A été bénévole au DevFest Yaoundé {edition}.",
+        "organiser": "A organisé le DevFest Yaoundé {edition}.",
+        "partner": "A été partenaire du DevFest Yaoundé {edition}."
+      },
+      "idLabel": "Numéro de certificat",
+      "issuedLabel": "Délivré le",
+      "revokedBody": "Ce certificat a été retiré par les organisateurs et n'est plus valable.",
+      "missingTitle": "On ne trouve pas ce certificat",
+      "missingBody": "Aucun certificat ne porte le numéro « {id} ». Vérifie qu'il correspond, lettre pour lettre, à celui imprimé sur le certificat.",
+      "footnote": "Les certificats sont délivrés par GDG Yaoundé, qui organise le DevFest Yaoundé. Une question : gdgyaounde@gmail.com."
     }
   },
   "errors": {

@@ -4,6 +4,7 @@ import {
   ArrowCounterClockwise,
   CalendarCheck,
   Trophy,
+  Certificate,
   ArrowLeft,
   CalendarBlank,
   CaretDown,
@@ -39,6 +40,7 @@ import type { AdminData, AdminSettings, MissingPhoto } from "@/lib/admin/shape";
 import { AdminOverview } from "./views/AdminOverview";
 import { AdminTickets } from "./views/AdminTickets";
 import { AdminPitchVote } from "./views/AdminPitchVote";
+import { AdminCertificates } from "./views/AdminCertificates";
 import { AdminEmails } from "./views/AdminEmails";
 import { AdminTicketTiers } from "./views/AdminTicketTiers";
 import { AdminShop } from "./views/AdminShop";
@@ -97,6 +99,7 @@ export type ViewId =
   | "wall"
   | "testimonials"
   | "pitch-vote"
+  | "certificates"
   | "users"
   | "emails"
   | "content"
@@ -143,6 +146,7 @@ const GROUPS: {
       { id: "wall", label: "DP wall", Icon: ImageIcon },
       { id: "testimonials", label: "Testimonials", Icon: ChatCircleText },
       { id: "pitch-vote", label: "Pitch vote", Icon: Trophy },
+      { id: "certificates", label: "Certificates", Icon: Certificate },
       { id: "users", label: "Users", Icon: Users },
       { id: "emails", label: "Emails", Icon: EnvelopeSimple },
     ],
@@ -269,6 +273,11 @@ const HEADERS: Record<ViewId, { title: string; blurb: string }> = {
   wall: {
     title: "Community wall",
     blurb: "Click a card to hide or show it. Reported ones sit up front.",
+  },
+  certificates: {
+    title: "Certificates",
+    blurb:
+      "The list of who gets a certificate (for the Google Sheet that makes and emails them), and every certificate issued, with a way to revoke one.",
   },
   "pitch-vote": {
     title: "Pitch vote",
@@ -754,6 +763,7 @@ export function AdminShell({
               <AdminMemoryLane rows={collections.pastEditions} />
             )}
             {view === "pitch-vote" && <AdminPitchVote data={data} />}
+            {view === "certificates" && <AdminCertificates data={data} />}
             {view === "testimonials" && (
               <AdminTestimonials rows={collections.quotes} />
             )}

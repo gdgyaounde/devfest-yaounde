@@ -247,6 +247,16 @@ export interface AdminSettings {
   source: "database" | "repo";
 }
 
+export interface AdminCertificate {
+  id: string;
+  edition: number;
+  fullName: string;
+  role: string;
+  detail: string | null;
+  issuedAt: string;
+  revokedAt: string | null;
+}
+
 export interface AdminPitchVoter {
   name: string;
   email: string;
@@ -288,6 +298,11 @@ export interface AdminData {
    * picks. NOT which projects — the ballot stays secret, even here.
    */
   pitchVoters: AdminPitchVoter[];
+  /**
+   * Certificates the Apps Script has issued (ADR 0100), newest first.
+   * `null` until migration 0048 is applied.
+   */
+  certificates: AdminCertificate[] | null;
   /** "This interests me" per session — counts only, never who (ADR 0086). */
   sessionInterest: {
     total: number;

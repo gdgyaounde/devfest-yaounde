@@ -224,6 +224,45 @@ async function loadPitchVoters(
     .sort((a, b) => a.votedAt.localeCompare(b.votedAt));
 }
 
+/**
+ * Issued certificates (ADR 0100), newest first. Before migration 0048 the
+ * table is missing: `null`, and the view says so.
+ */
+async function loadCertificates(
+  db: ReturnType<typeof createAdminSupabase>,
+): Promise<AdminData["certificates"]> {
+  const out: NonNullable<AdminData["certificates"]> = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await db
+      .from("certificates")
+      .select("id, edition, full_name, role, detail, issued_at, revoked_at")
+      .order("issued_at", { ascending: false })
+      .range(from, from + 999);
+    if (error) {
+      if (
+        !/does not exist|could not find|PGRST205|42P01/i.test(
+          `${error.code} ${error.message}`,
+        )
+      ) {
+        console.error("[admin] certificates read failed", error.message);
+      }
+      return null;
+    }
+    for (const c of data ?? []) {
+      out.push({
+        id: c.id,
+        edition: c.edition,
+        fullName: c.full_name,
+        role: c.role,
+        detail: c.detail,
+        issuedAt: c.issued_at,
+        revokedAt: c.revoked_at,
+      });
+    }
+    if (!data || data.length < 1000) return out;
+  }
+}
+
 export async function loadAdminData(): Promise<AdminData> {
   const organiser = await gate();
   const db = createAdminSupabase();
@@ -236,6 +275,7 @@ export async function loadAdminData(): Promise<AdminData> {
     interestCounts,
     sessions,
     pitchVoters,
+    certificates,
     pitchVote,
   ] = await Promise.all([
     allApparelRows(db),
@@ -252,6 +292,7 @@ export async function loadAdminData(): Promise<AdminData> {
     }),
     getSessions(),
     loadPitchVoters(db),
+    loadCertificates(db),
     // The live tally (ADR 0099). Before migration 0046: null, and the view
     // says so.
     db.rpc("pitch_vote_stats").then(({ data, error }) => {
@@ -472,6 +513,7 @@ export async function loadAdminData(): Promise<AdminData> {
     reservations: commerceInputs.reservations,
     pitchVote,
     pitchVoters,
+    certificates,
     sessionInterest: {
       total: interest.reduce((n, r) => n + r.interested, 0),
       rows: interest,

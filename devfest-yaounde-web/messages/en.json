@@ -934,6 +934,27 @@
       "bothUsed": "You've used both votes. Remove one to pick this project.",
       "cleared": "Vote removed. You can pick up to two projects until the close.",
       "votesShare": "{count, plural, one {# vote} other {# votes}} · {percent}% of voters"
+    },
+    "certificate": {
+      "metaTitle": "Certificate check",
+      "metaDesc": "Check a DevFest Yaoundé certificate.",
+      "eyebrow": "DevFest Yaoundé · certificate check",
+      "valid": "Genuine certificate",
+      "revoked": "Revoked certificate",
+      "missing": "Not found",
+      "role": {
+        "attendee": "Took part in DevFest Yaoundé {edition}.",
+        "speaker": "Spoke at DevFest Yaoundé {edition}.",
+        "volunteer": "Volunteered at DevFest Yaoundé {edition}.",
+        "organiser": "Organised DevFest Yaoundé {edition}.",
+        "partner": "Partnered DevFest Yaoundé {edition}."
+      },
+      "idLabel": "Certificate number",
+      "issuedLabel": "Issued on",
+      "revokedBody": "This certificate was withdrawn by the organisers and is no longer valid.",
+      "missingTitle": "We can't find this certificate",
+      "missingBody": "No certificate has the number “{id}”. Check it matches the one printed on the certificate, letter for letter.",
+      "footnote": "Certificates are issued by GDG Yaoundé, who organises DevFest Yaoundé. Questions: gdgyaounde@gmail.com."
     }
   },
   "errors": {

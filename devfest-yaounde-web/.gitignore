@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Private exports (Sessionize etc.) — personal data, never commit
 /.private/
+
+# Apps Script (tools/certificates): which script project this checkout pushes to — per account, never committed.
+/tools/certificates/.clasp.json

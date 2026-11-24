@@ -76,6 +76,13 @@ export const RATE_LIMITS = {
   /** The pitch vote (ADR 0099), per account: changing your mind a few times. */
   vote: { bucket: "vote", limit: 20, windowSeconds: 300 },
   voteRead: { bucket: "vote-read", limit: 60, windowSeconds: 300 },
+  /**
+   * The certificates Apps Script registering a batch (ADR 0100): one caller,
+   * a few hundred certificates at most, in batches of up to 200.
+   */
+  certificateIssue: { bucket: "certificate-issue", limit: 120, windowSeconds: 300 },
+  /** The public verify page and QR images, per IP. */
+  certificateRead: { bucket: "certificate-read", limit: 120, windowSeconds: 300 },
   staffOrder: { bucket: "staff-order", limit: 60, windowSeconds: 300 },
   /** Organisers adding or removing volunteers. */
   adminVolunteer: { bucket: "admin-volunteer", limit: 60, windowSeconds: 300 },
