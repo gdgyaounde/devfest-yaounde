@@ -49,7 +49,7 @@ Or make your own Google Slides deck (landscape) that looks like the final certif
 | Placeholder | Becomes |
 |---|---|
 | `{{full_name}}` | Ada Lovelace. Long names shrink automatically (Settings → `name_max_chars`). |
-| `{{first_name}}` | Ada |
+| `{{first_name}}` | the first two names, if there are two: Ada King (from Ada King Lovelace) |
 | `{{role}}` | Speaker: one label per role, set in Settings (`role_attendee`, `role_speaker`, …). Write it in your template's language. |
 | `{{role_line_fr}}` / `{{role_line_en}}` | "pour avoir partagé son savoir et inspiré la communauté au DevFest Yaoundé 2026" (Settings → `line_*`) |
 | `{{detail}}` | the talk title (speakers), the team role (organisers), or empty |
@@ -76,6 +76,7 @@ Every word lives in the edition's **Settings** column, grouped by role, so you r
 | `title_fr_<role>` / `title_en_<role>` | the big headline at the top of the email |
 | `message_fr_<role>` / `message_en_<role>` | the body, greeting included. A blank line starts a new paragraph (Ctrl+Enter in the cell). It speaks **to** the person ("pour **ton** engagement"). |
 | `ps_fr_<role>` / `ps_en_<role>` | the P.S. under the signature. Empty: no P.S. |
+| `story_fr_<role>` / `story_en_<role>` | a card inviting them to leave an anonymous story about what DevFest Yaoundé has meant to them over the years, with a button to `/fr/storytime` or `/en/storytime`. Empty: no card. |
 
 Placeholders work in all of them (`{{first_name}}`, `{{event_name}}`, …). The defaults are in `src/Copy.gs`.
 

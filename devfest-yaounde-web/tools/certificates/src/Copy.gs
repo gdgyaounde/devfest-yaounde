@@ -36,6 +36,8 @@ const ROLE_COPY_ = {
     ],
     ps_fr: "P.S. Les slides que tu as promis de relire « ce week-end » t'attendent toujours. Nous aussi, à la prochaine édition.",
     ps_en: "P.S. Those slides you promised to go through \"this weekend\" are still waiting for you. So are we, at the next edition.",
+    story_fr: "Une dernière chose : le DevFest Yaoundé t'a-t-il déjà appris quelque chose, fait rencontrer quelqu'un, donné envie de te lancer ? Cette année ou les précédentes, raconte-le-nous en quelques mots, anonymement. Promis, on ne cherchera pas qui a écrit « le Wi-Fi était meilleur avant ».",
+    story_en: "One last thing: has DevFest Yaoundé ever taught you something, introduced you to someone, or pushed you to start something? This year or any year before, tell us in a few words, anonymously. We promise not to hunt down whoever writes \"the Wi-Fi was better before\".",
   },
 
   speaker: {
@@ -57,6 +59,8 @@ const ROLE_COPY_ = {
     ],
     ps_fr: "P.S. Si une démo a fait des siennes, personne n'a rien remarqué. Enfin… presque personne. 😉",
     ps_en: "P.S. If a demo misbehaved, nobody noticed. Well… almost nobody. 😉",
+    story_fr: "Et toi, que t'a apporté le DevFest Yaoundé au fil des années, de l'autre côté du micro ? Une rencontre, une opportunité, un déclic ? Laisse-nous un mot anonyme : tes histoires inspirent autant que tes talks.",
+    story_en: "And what has DevFest Yaoundé given you over the years, from the other side of the mic? A connection, an opportunity, a spark? Leave us an anonymous note: your stories inspire as much as your talks.",
   },
 
   volunteer: {
@@ -78,6 +82,8 @@ const ROLE_COPY_ = {
     ],
     ps_fr: "P.S. Tes jambes ont le droit de t'en vouloir un jour ou deux. Nous, on t'adore.",
     ps_en: "P.S. Your legs are allowed to hold a grudge for a day or two. We, on the other hand, adore you.",
+    story_fr: "Maintenant que tes pieds se reposent : qu'est-ce que le DevFest Yaoundé a changé pour toi, cette année ou les précédentes ? Dis-le-nous en quelques mots, anonymement. C'est ton tour d'être écouté·e.",
+    story_en: "Now that your feet are finally resting: what has DevFest Yaoundé changed for you, this year or any year before? Tell us in a few words, anonymously. It's your turn to be heard.",
   },
 
   organiser: {
@@ -99,6 +105,8 @@ const ROLE_COPY_ = {
     ],
     ps_fr: "P.S. Repose-toi. Vraiment. La réunion de lancement de la prochaine édition peut attendre… au moins une semaine.",
     ps_en: "P.S. Rest. Really. The kick-off meeting for next year can wait… at least a week.",
+    story_fr: "Toi qui l'as vu grandir de l'intérieur : qu'est-ce que le DevFest Yaoundé t'a apporté au fil des éditions ? Laisse un mot anonyme. Oui, même si tu connais sûrement la personne qui lira les réponses.",
+    story_en: "You've watched it grow from the inside: what has DevFest Yaoundé given you over the editions? Leave an anonymous note. Yes, even though you probably know who'll read the answers.",
   },
 
   partner: {
@@ -120,6 +128,8 @@ const ROLE_COPY_ = {
     ],
     ps_fr: "P.S. Oui, nous reviendrons vers vous pour la prochaine édition. Autant vous prévenir.",
     ps_en: "P.S. Yes, we'll be in touch about next year. Consider yourself warned.",
+    story_fr: "Et pour vous, quel impact le DevFest Yaoundé a-t-il eu au fil des années ? Partagez-le en quelques mots, anonymement : votre regard compte beaucoup pour nous.",
+    story_en: "And what impact has DevFest Yaoundé had for you over the years? Share it in a few words, anonymously: your perspective means a lot to us.",
   },
 };
 
@@ -138,5 +148,7 @@ function roleCopySettings_(role) {
     [`message_en_${role}`, c.message_en.join("\n\n"), ""],
     [`ps_fr_${role}`, c.ps_fr, "The P.S. under the signature. Leave empty for none."],
     [`ps_en_${role}`, c.ps_en, ""],
+    [`story_fr_${role}`, c.story_fr, "The invitation to leave an anonymous story at /storytime. Empty = no invitation."],
+    [`story_en_${role}`, c.story_en, ""],
   ];
 }

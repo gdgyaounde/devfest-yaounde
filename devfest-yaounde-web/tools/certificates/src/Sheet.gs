@@ -89,10 +89,10 @@ function ensureSettings_(ss, edition) {
       if (helpCol && d[2]) sheet.getRange(at + 2, helpCol).setValue(d[2]);
     }
     const cell = sheet.getRange(at + 2, col);
-    // The words (role_/line_/subject_/title_/message_/ps_) also come back
+    // The words (role_/line_/subject_/title_/message_/ps_/story_) also come back
     // when their cell was emptied, so "clear it and run setup again" restores
     // a default. Never for the rest: an empty site_url means test mode.
-    const words = /^(role|line|subject|title|message|ps)_/.test(d[0]);
+    const words = /^(role|line|subject|title|message|ps|story)_/.test(d[0]);
     if (isNew || added || (words && cell.getValue() === "")) cell.setValue(d[1]);
   });
   return sheet;

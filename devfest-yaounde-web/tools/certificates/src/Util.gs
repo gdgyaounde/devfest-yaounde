@@ -6,6 +6,13 @@
 const TIME_BUDGET_MS = 4.5 * 60 * 1000;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/**
+ * Where the logo, the footer link and the storytime page live. The site's
+ * address even in test mode (site_url empty), so the email never shows a
+ * broken logo.
+ */
+const DEFAULT_SITE_URL = "https://devfest.gdgyaounde.com";
+
 const PLACEHOLDER_RE = /\{\{\s*([a-z0-9_]+)\s*\}\}/gi;
 
 /**
@@ -16,7 +23,9 @@ function placeholderValues_(settings, row) {
   const role = row.role;
   const base = {
     full_name: row.full_name,
-    first_name: String(row.full_name).split(/\s+/)[0] || row.full_name,
+    // The first two names when there are two ("Ada King Lovelace" → "Ada
+    // King"): warmer than one, and many people here go by two.
+    first_name: String(row.full_name).trim().split(/\s+/).slice(0, 2).join(" ") || row.full_name,
     detail: row.detail || "",
     // The printed role: ONE label per role, from Settings → role_<role>.
     role: settings[`role_${role}`] || settings[`role_en_${role}`] || (ROLE_COPY_[role] && ROLE_COPY_[role].label) || role,
@@ -26,6 +35,7 @@ function placeholderValues_(settings, row) {
       ? `${settings.site_url.replace(/\/$/, "")}/certificates/${row.certificate_id}`
       : "",
     site_url: settings.site_url,
+    home_url: (settings.site_url || DEFAULT_SITE_URL).replace(/\/$/, ""),
     event_name: settings.event_name,
     event_date_fr: settings.event_date_fr || "",
     event_date_en: settings.event_date_en || "",
@@ -41,6 +51,8 @@ function placeholderValues_(settings, row) {
     base[`email_title_${lang}`] = fill_(wordSetting_(settings, `title_${lang}_${role}`), base);
     base[`message_${lang}`] = fill_(wordSetting_(settings, `message_${lang}_${role}`), base);
     base[`ps_${lang}`] = fill_(wordSetting_(settings, `ps_${lang}_${role}`), base);
+    base[`story_${lang}`] = fill_(wordSetting_(settings, `story_${lang}_${role}`), base);
+    base[`storytime_url_${lang}`] = `${base.home_url}/${lang}/storytime`;
   });
   return base;
 }

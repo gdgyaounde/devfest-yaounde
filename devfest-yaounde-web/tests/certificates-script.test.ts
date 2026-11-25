@@ -64,7 +64,11 @@ describe("placeholders", () => {
   const values = t.placeholderValues_(settings, row);
 
   it("fills names, roles, role lines, the number and the verify link", () => {
-    assert.equal(values.first_name, "Ada");
+    assert.equal(values.first_name, "Ada Lovelace");
+    const name = (full_name: string) =>
+      t.placeholderValues_(settings, { ...row, full_name }).first_name;
+    assert.equal(name("Ada King Lovelace"), "Ada King");
+    assert.equal(name("  Ada  "), "Ada");
     assert.equal(values.role, "Speaker");
     assert.equal(values.role_fr, undefined);
     assert.equal(values.role_line_en, "for sharing their knowledge and inspiring the community at DevFest Yaoundé 2026");
@@ -146,6 +150,27 @@ describe("each role's words", () => {
     assert.match(t.ROLE_COPY_.partner.message_fr.join(" "), /\bVous\b|\bvous\b/);
     assert.doesNotMatch(t.ROLE_COPY_.partner.message_fr.join(" "), /\b(tu|ton|ta|tes)\b/i);
     assert.match(t.ROLE_COPY_.attendee.message_fr.join(" "), /\btu\b/);
+  });
+
+  it("invites everyone to /storytime, in their language", () => {
+    for (const role of t.ROLES) {
+      const mail = t.renderEmail_(settings, { ...row, role }, html, text);
+      assert.match(mail.html, /href="https:\/\/devfest\.gdgyaounde\.com\/fr\/storytime"[^>]*>Laisser mon histoire/);
+      assert.match(mail.html, /href="https:\/\/devfest\.gdgyaounde\.com\/en\/storytime"[^>]*>Share my story/);
+      assert.match(mail.text, /Share my story: https:\/\/devfest\.gdgyaounde\.com\/en\/storytime/);
+      assert.match(t.ROLE_COPY_[role].story_en, /anonym/i, role);
+    }
+    const none = { ...settings, story_fr_speaker: "", story_en_speaker: "" };
+    const mail = t.renderEmail_(none, row, html, text);
+    assert.doesNotMatch(mail.html, /storytime/);
+    assert.doesNotMatch(mail.text, /storytime|\n{3,}/);
+  });
+
+  it("the logo and links point at the site even in test mode", () => {
+    const testMode = { ...settings, site_url: "" };
+    const mail = t.renderEmail_(testMode, row, html, text);
+    assert.match(mail.html, /src="https:\/\/devfest\.gdgyaounde\.com\/logo\/d-logo-left\.png"/);
+    assert.doesNotMatch(mail.html, /(src|href)="\//);
   });
 
   it("a name can't inject HTML into the paragraphs", () => {

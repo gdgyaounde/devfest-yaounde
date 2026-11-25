@@ -207,16 +207,36 @@ const EMAIL_PS_STYLE = "margin:18px 0 0;font-size:15px;line-height:1.6;font-styl
 function renderEmail_(settings, row, htmlTemplate, textTemplate) {
   const values = placeholderValues_(settings, row);
   const raw = {};
+  const rawText = {};
   ["fr", "en"].forEach((lang) => {
     raw[`message_${lang}`] = paragraphsHtml_(values[`message_${lang}`], EMAIL_P_STYLE);
     raw[`ps_${lang}`] = paragraphsHtml_(values[`ps_${lang}`], EMAIL_PS_STYLE);
+    const story = values[`story_${lang}`];
+    const url = values[`storytime_url_${lang}`];
+    raw[`story_${lang}`] = story ? storyHtml_(story, url, STORY_BUTTON[lang]) : "";
+    rawText[`story_${lang}`] = story ? `${story}\n${STORY_BUTTON[lang]}${lang === "fr" ? " : " : ": "}${url}` : "";
   });
   const subject = wordSetting_(settings, `subject_${row.role}`) || settings.email_subject;
   return {
     subject: fill_(subject, values),
     html: fill_(htmlTemplate, values, true, raw),
-    text: fill_(textTemplate, values).replace(/\n{3,}/g, "\n\n"),
+    text: fill_(textTemplate, values, false, rawText).replace(/\n{3,}/g, "\n\n"),
   };
+}
+
+const STORY_BUTTON = { fr: "Laisser mon histoire", en: "Share my story" };
+
+/** The storytime invitation: a pastel card with the role's words and a button. */
+function storyHtml_(text, url, label) {
+  return (
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;"><tr>' +
+    '<td style="background:#FFE7A5;border:2px solid #1E1E1E;border-radius:16px;padding:20px 22px;">' +
+    '<p style="margin:0 0 8px;font-family:\'SFMono-Regular\',Consolas,Menlo,monospace;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#1E1E1E;">Storytime</p>' +
+    paragraphsHtml_(text, "margin:0 0 14px;font-size:15px;line-height:1.6;color:#1E1E1E;") +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="background:#1E1E1E;border-radius:999px;">' +
+    `<a href="${escapeHtml_(url)}" style="display:inline-block;padding:11px 24px;font-size:15px;font-weight:700;color:#FFE7A5;text-decoration:none;">${escapeHtml_(label)}</a>` +
+    "</td></tr></table></td></tr></table>"
+  );
 }
 
 function pdfBlob_(link) {
