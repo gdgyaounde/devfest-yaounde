@@ -38,6 +38,7 @@ After DevFest Yaoundé 2026 the organisers want to email every checked-in attend
 ## Consequences
 
 - Certificate ids (`DFY26-K7QM-4XHT`) are the edition's prefix plus a **random** key of eight Crockford base32 characters (no I, L, O or U). They are not a running number, which would let anyone walk `-0001`, `-0002`, … on the verify page and list every holder's name. An id is allocated once in the sheet and never reused. Resetting a row keeps it, so a printed QR code stays valid.
+- **Paid tickets** (added 2026-11-25): the list's `ticket` column says `paid` (a tier with a price, or a reservation with a total) or `free`. Paid rows use `template_id_paid` (a "collector" starter matches the DP generator's paid frames and carries its seal) and words ending in `_paid`. An empty paid word falls back to the regular one. The site's record is unchanged: still role `attendee`.
 - Speakers' and organisers' emails, and the Bevy free passes (from a full-email Bevy export), are added to the sheet by hand. The site holds none of these.
 - The free Gmail quota means about 160 certificates go out over two days. A Workspace sender would do it in one.
 - A future second channel (for example sending from the site once a domain exists) can reuse the same `certificates` records and verify page.

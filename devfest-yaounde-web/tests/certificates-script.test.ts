@@ -13,6 +13,7 @@ import { join } from "node:path";
 import vm from "node:vm";
 import { randomUUID } from "node:crypto";
 
+import { CERTIFICATE_LIST_COLUMNS } from "@/lib/certificates/list";
 import { CERTIFICATE_ID } from "@/lib/certificates/rules";
 
 const DIR = join(process.cwd(), "tools/certificates/src");
@@ -26,7 +27,7 @@ const context = vm.createContext({
 });
 vm.runInContext(
   files.map((f) => readFileSync(join(DIR, f), "utf8")).join("\n;\n") +
-    "\n;globalThis.__t = { fill_, placeholderValues_, idAllocator_, CERTIFICATE_ID_RE, renderEmail_, wordSetting_, paragraphsHtml_, ROLE_COPY_, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
+    "\n;globalThis.__t = { fill_, placeholderValues_, idAllocator_, CERTIFICATE_ID_RE, renderEmail_, wordSetting_, paragraphsHtml_, ROLE_COPY_, PAID_COPY_, wordFor_, isPaid_, templateFor_, COLLECTOR_SEAL_PNG_BASE64, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
   context,
 );
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,6 +52,13 @@ const row = {
 };
 
 describe("the Apps Script files", () => {
+  it("the site's list pastes straight under the sheet's first columns", () => {
+    assert.deepEqual(
+      [...t.COLUMNS].slice(0, CERTIFICATE_LIST_COLUMNS.length),
+      [...CERTIFICATE_LIST_COLUMNS],
+    );
+  });
+
   it("all parse, and the roles match the site's", () => {
     assert.ok(files.length >= 5, files.join(", "));
     assert.deepEqual(
@@ -202,6 +210,61 @@ describe("each role's words", () => {
       '<p style="x">a<br>b</p>\n<p style="x">c</p>',
     );
     assert.equal(t.paragraphsHtml_("", "x"), "");
+  });
+});
+
+describe("paid tickets", () => {
+  const html = readFileSync(join(DIR, "email.html"), "utf8");
+  const text = readFileSync(join(DIR, "email_text.html"), "utf8");
+  const attendee = { ...row, role: "attendee", detail: "" };
+  const paid = { ...attendee, ticket: "paid" };
+
+  it("recognises paid rows, and nothing else", () => {
+    for (const v of ["paid", "PAID", " paid ", "payé", "paye"]) {
+      assert.equal(t.isPaid_({ ticket: v }), true, v);
+    }
+    for (const v of ["", "free", "yes", undefined]) {
+      assert.equal(t.isPaid_({ ticket: v }), false, String(v));
+    }
+  });
+
+  it("get their own words: subject, headline, message, P.S., story, line", () => {
+    const mail = t.renderEmail_(settings, paid, html, text);
+    const free = t.renderEmail_(settings, attendee, html, text);
+    const c = t.PAID_COPY_.attendee;
+    assert.ok(mail.subject.startsWith("🎟️ Ada Lovelace, ton certificat collector"));
+    assert.ok(mail.html.includes(t.escapeHtml_(c.title_en)));
+    assert.ok(mail.text.includes("tu as pris ton billet"));
+    assert.ok(mail.text.includes(c.ps_en));
+    assert.ok(mail.text.includes("return on investment"));
+    assert.doesNotMatch(mail.html + mail.text + mail.subject, /\{\{|\}\}/);
+    assert.notEqual(mail.subject, free.subject);
+    assert.ok(!free.text.includes("billet"));
+    assert.match(
+      t.placeholderValues_(settings, paid).role_line_en,
+      /supporting it with a ticket/,
+    );
+  });
+
+  it("an empty paid word falls back to the regular one", () => {
+    const s = { ...settings, ps_en_attendee_paid: "", title_fr_attendee_paid: "" };
+    assert.equal(t.wordFor_(s, "ps_en", paid), t.ROLE_COPY_.attendee.ps_en);
+    assert.equal(t.wordFor_(s, "title_fr", paid), t.ROLE_COPY_.attendee.title_fr);
+    // Roles with no paid words at all just get their own.
+    const vol = { ...paid, role: "volunteer" };
+    assert.equal(t.wordFor_(settings, "title_en", vol), t.ROLE_COPY_.volunteer.title_en);
+  });
+
+  it("use template_id_paid when it is set, template_id otherwise", () => {
+    const s = { ...settings, template_id: "FREE", template_id_paid: "PAID" };
+    assert.equal(t.templateFor_(s, paid), "PAID");
+    assert.equal(t.templateFor_(s, attendee), "FREE");
+    assert.equal(t.templateFor_({ ...s, template_id_paid: "" }, paid), "FREE");
+  });
+
+  it("the seal for the paid template is a real PNG", () => {
+    const png = Buffer.from(t.COLLECTOR_SEAL_PNG_BASE64, "base64");
+    assert.deepEqual([...png.subarray(1, 4)], [0x50, 0x4e, 0x47]);
   });
 });
 

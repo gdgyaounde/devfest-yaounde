@@ -15,7 +15,12 @@ import {
   buildCertificateList,
   CERTIFICATE_LIST_COLUMNS,
 } from "@/lib/certificates/list";
-import { getAllSessions, getSpeakers, getTeam } from "@/lib/content/store";
+import {
+  getAllSessions,
+  getSpeakers,
+  getTeam,
+  getTiers,
+} from "@/lib/content/store";
 import { CHECKOUT_ERRORS, errorResponse } from "@/lib/payments/errors";
 import { currentOrganiser } from "@/lib/security/organisers";
 import { RATE_LIMITS, rateLimit } from "@/lib/security/rate-limit";
@@ -69,11 +74,12 @@ export async function GET(request: NextRequest) {
       speakers,
       sessions,
       team,
+      tiers,
     ] = await Promise.all([
       readAll((from, to) =>
         db
           .from("tickets")
-          .select("attendee_name, attendee_email, checked_in_at")
+          .select("attendee_name, attendee_email, checked_in_at, tier_id")
           .not("checked_in_at", "is", null)
           .order("id")
           .range(from, to),
@@ -81,7 +87,7 @@ export async function GET(request: NextRequest) {
       readAll((from, to) =>
         db
           .from("reservations")
-          .select("contact_name, contact_email, status, checked_in_at")
+          .select("contact_name, contact_email, status, checked_in_at, total_xaf")
           .not("checked_in_at", "is", null)
           .order("id")
           .range(from, to),
@@ -103,6 +109,7 @@ export async function GET(request: NextRequest) {
       getSpeakers(),
       getAllSessions(),
       getTeam(),
+      getTiers(),
     ]);
 
     const ids = volunteerIds.map((v) => v.user_id);
@@ -120,6 +127,7 @@ export async function GET(request: NextRequest) {
     );
     rows = buildCertificateList({
       tickets,
+      tierPrices: Object.fromEntries(tiers.map((t) => [t.id, t.priceXAF])),
       reservations: reservations.map((r) => ({
         ...r,
         contact_email: r.contact_email ?? null,
@@ -149,14 +157,16 @@ export async function GET(request: NextRequest) {
 
   const byRole: Record<string, number> = {};
   const missingEmail: Record<string, number> = {};
+  let paidAttendees = 0;
   for (const r of rows) {
+    if (r.ticket === "paid") paidAttendees++;
     byRole[r.role] = (byRole[r.role] ?? 0) + 1;
     if (!r.email) missingEmail[r.role] = (missingEmail[r.role] ?? 0) + 1;
   }
 
   if (format === "json") {
     return Response.json(
-      { total: rows.length, byRole, missingEmail },
+      { total: rows.length, byRole, missingEmail, paidAttendees },
       { headers: NO_STORE },
     );
   }

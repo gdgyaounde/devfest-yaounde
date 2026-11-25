@@ -17,6 +17,11 @@
  *
  * Free passes were checked in on Bevy, outside the site: they are added to
  * the sheet from Bevy's own export.
+ *
+ * `ticket` tells paid attendees apart, so the sheet can give them their own
+ * template and words: "paid" for a ticket whose tier has a price, or a
+ * reservation with a total to pay; "free" for other attendees; empty for
+ * every other role.
  */
 import type { CertificateRole } from "@/lib/certificates/rules";
 
@@ -26,6 +31,7 @@ export interface CertificateListRow {
   role: CertificateRole;
   detail: string;
   source: string;
+  ticket: "paid" | "free" | "";
 }
 
 /** The sheet's columns, in order — the Apps Script reads them by name. */
@@ -35,6 +41,7 @@ export const CERTIFICATE_LIST_COLUMNS = [
   "role",
   "detail",
   "source",
+  "ticket",
 ] as const;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,24 +68,34 @@ export function buildCertificateList(input: {
     attendee_name: string;
     attendee_email: string;
     checked_in_at: string | null;
+    tier_id: string;
   }[];
+  /** Base price per tier id; a tier missing here counts as free. */
+  tierPrices: Record<string, number>;
   reservations: {
     contact_name: string;
     contact_email: string | null;
     status: string;
     checked_in_at: string | null;
+    total_xaf: number;
   }[];
   volunteers: { name: string | null; email: string | null }[];
   speakers: { name: string; arrived: boolean; sessionTitles: string[] }[];
   team: { name: string; role: string }[];
 }): CertificateListRow[] {
   const out = new Map<string, CertificateListRow>();
-  const add = (row: CertificateListRow) => {
+  const add = (row: Omit<CertificateListRow, "ticket"> & { ticket?: CertificateListRow["ticket"] }) => {
     const full_name = tidyName(row.full_name);
     if (!full_name) return;
     const key = `${row.role}|${row.email || `name:${full_name.toLowerCase()}`}`;
-    if (out.has(key)) return;
-    out.set(key, { ...row, full_name });
+    const prev = out.get(key);
+    // One certificate per person and role. Someone holding a free AND a
+    // paid ticket is a paid attendee.
+    if (prev) {
+      if (row.ticket === "paid") prev.ticket = "paid";
+      return;
+    }
+    out.set(key, { ...row, full_name, ticket: row.ticket ?? "" });
   };
 
   for (const t of input.tickets) {
@@ -89,6 +106,7 @@ export function buildCertificateList(input: {
       role: "attendee",
       detail: "",
       source: "ticket",
+      ticket: (input.tierPrices[t.tier_id] ?? 0) > 0 ? "paid" : "free",
     });
   }
   for (const r of input.reservations) {
@@ -99,6 +117,7 @@ export function buildCertificateList(input: {
       role: "attendee",
       detail: "",
       source: "reservation",
+      ticket: r.total_xaf > 0 ? "paid" : "free",
     });
   }
   for (const v of input.volunteers) {

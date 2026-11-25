@@ -30,6 +30,7 @@ function onOpen() {
     .addSeparator()
     .addItem("Set up a new edition…", "setupEdition")
     .addItem("Create a starter template…", "createStarterTemplate")
+    .addItem("Create a starter template for paid tickets…", "createPaidStarterTemplate")
     .addItem("Connect to the site (secret)…", "setSiteSecret")
     .addToUi();
 }
@@ -98,51 +99,101 @@ function stopScheduledRuns() {
  * A plain, on-brand Slides certificate with every placeholder in place, so
  * an edition can be tested at once. Restyle it freely (keep the {{…}} and
  * the square {{qr}} box), or replace it with a designer's template.
- * Its id is written to the active edition's Settings column.
+ * Its id is written to the active edition's Settings column (template_id).
  */
 function createStarterTemplate() {
+  buildStarterTemplate_(false);
+}
+
+/**
+ * The paid-ticket version (rows with ticket = paid): the "collector" look
+ * of the DP generator's paid frames — ink background, gold type, and the
+ * collector seal. Written to Settings → template_id_paid.
+ */
+function createPaidStarterTemplate() {
+  buildStarterTemplate_(true);
+}
+
+function buildStarterTemplate_(paid) {
+  const INK = "#1E1E1E";
+  const GOLD = "#F9AB00";
+  const PASTEL = "#FFE7A5";
+  const OFFWHITE = "#F0F0F0";
   const sheet = editionSheet_();
   const edition = sheet.getName();
-  const deck = SlidesApp.create(`DevFest Yaoundé ${edition} — certificate template`);
+  const deck = SlidesApp.create(
+    `DevFest Yaoundé ${edition} — certificate template${paid ? " (paid tickets)" : ""}`,
+  );
   const slide = deck.getSlides()[0];
   slide.getPageElements().forEach((el) => el.remove());
-  slide.getBackground().setSolidFill("#FFE7A5");
+  slide.getBackground().setSolidFill(paid ? INK : PASTEL);
   const W = deck.getPageWidth();
   const H = deck.getPageHeight();
+  const text = paid ? OFFWHITE : INK;
+  const accent = paid ? GOLD : INK;
 
-  const box = (text, left, top, width, height, size, opts) => {
-    const shape = slide.insertTextBox(text, left, top, width, height);
+  const box = (value, left, top, width, height, size, opts) => {
+    const shape = slide.insertTextBox(value, left, top, width, height);
     const range = shape.getText();
-    range.getTextStyle().setFontFamily("Google Sans").setFontSize(size).setForegroundColor("#1E1E1E").setBold(Boolean(opts && opts.bold));
-    range.getParagraphStyle().setParagraphAlignment(opts && opts.left ? SlidesApp.ParagraphAlignment.START : SlidesApp.ParagraphAlignment.CENTER);
+    range
+      .getTextStyle()
+      .setFontFamily(opts && opts.mono ? "Google Sans Code" : "Google Sans")
+      .setFontSize(size)
+      .setForegroundColor((opts && opts.color) || text)
+      .setBold(Boolean(opts && opts.bold));
+    range
+      .getParagraphStyle()
+      .setParagraphAlignment(opts && opts.left ? SlidesApp.ParagraphAlignment.START : SlidesApp.ParagraphAlignment.CENTER);
     return shape;
   };
 
+  // The brand band: ink on the regular one, gold on the paid one.
   const band = slide.insertShape(SlidesApp.ShapeType.RECTANGLE, 0, 0, W, 56);
-  band.getFill().setSolidFill("#1E1E1E");
+  band.getFill().setSolidFill(paid ? GOLD : INK);
   band.getBorder().setTransparent();
   const brand = band.getText();
   brand.setText("GDG YAOUNDÉ  ×  {{event_name}}");
-  brand.getTextStyle().setFontFamily("Google Sans Code").setFontSize(14).setBold(true).setForegroundColor("#F9AB00");
+  brand.getTextStyle().setFontFamily("Google Sans Code").setFontSize(14).setBold(true).setForegroundColor(paid ? INK : GOLD);
   brand.getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
 
-  box("CERTIFICAT · CERTIFICATE", 40, 80, W - 80, 40, 16, { bold: true });
-  box("{{full_name}}", 40, 125, W - 80, 70, 40, { bold: true });
+  box(
+    paid ? "CERTIFICAT COLLECTOR · COLLECTOR CERTIFICATE" : "CERTIFICAT · CERTIFICATE",
+    40, 80, W - 80, 40, paid ? 14 : 16,
+    { bold: true, mono: paid, color: accent },
+  );
+  box("{{full_name}}", 40, 125, W - 80, 70, 40, { bold: true, color: paid ? GOLD : INK });
   box("{{role}}", 40, 195, W - 80, 30, 18, { bold: true });
   box("Décerné {{role_line_fr}}", 40, 228, W - 80, 26, 14);
   box("Awarded {{role_line_en}}", 40, 252, W - 80, 26, 14);
   box("{{detail}}", 60, 280, W - 120, 26, 13);
   box("{{venue}} · {{event_date_fr}} · {{event_date_en}}", 40, H - 70, W - 200, 24, 12, { left: true });
-  box("N° {{certificate_id}}", 40, H - 46, W - 200, 24, 12, { bold: true, left: true });
-  box("{{qr}}", W - 130, H - 130, 100, 100, 10);
+  box("N° {{certificate_id}}", 40, H - 46, W - 200, 24, 12, { bold: true, left: true, mono: paid, color: accent });
+
+  // The QR code needs a light ground: a white tile under it on the dark one.
+  if (paid) {
+    const tile = slide.insertShape(SlidesApp.ShapeType.ROUND_RECTANGLE, W - 138, H - 138, 116, 116);
+    tile.getFill().setSolidFill("#FFFFFF");
+    tile.getBorder().setTransparent();
+  }
+  box("{{qr}}", W - 130, H - 130, 100, 100, 10, { color: INK });
+
+  // The collector seal, pinned over the band's corner like on the DP cards.
+  if (paid) {
+    const seal = Utilities.newBlob(Utilities.base64Decode(COLLECTOR_SEAL_PNG_BASE64), "image/png", "collector-seal.png");
+    slide.insertImage(seal, W - 150, 14, 120, 120);
+  }
 
   deck.saveAndClose();
 
-  // Point the edition's Settings at it.
+  const key = paid ? "template_id_paid" : "template_id";
   const settings = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Settings");
   const values = settings.getDataRange().getValues();
   const col = values[0].map(String).indexOf(edition);
-  const row = values.findIndex((r) => String(r[0]) === "template_id");
+  const row = values.findIndex((r) => String(r[0]) === key);
   if (col >= 0 && row >= 0) settings.getRange(row + 1, col + 1).setValue(deck.getId());
-  alert_(`Starter template created and set in Settings (${edition} → template_id):\n${deck.getUrl()}`);
+  alert_(
+    row >= 0
+      ? `Starter template created and set in Settings (${edition} → ${key}):\n${deck.getUrl()}`
+      : `Starter template created:\n${deck.getUrl()}\n\nSettings has no ${key} row yet: run Set up a new edition (${edition}) and paste the id there.`,
+  );
 }

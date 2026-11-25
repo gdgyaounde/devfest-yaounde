@@ -216,7 +216,7 @@ function renderEmail_(settings, row, htmlTemplate, textTemplate) {
     raw[`story_${lang}`] = story ? storyHtml_(story, url, STORY_BUTTON[lang]) : "";
     rawText[`story_${lang}`] = story ? `${story}\n${STORY_BUTTON[lang]}${lang === "fr" ? " : " : ": "}${url}` : "";
   });
-  const subject = wordSetting_(settings, `subject_${row.role}`) || settings.email_subject;
+  const subject = wordFor_(settings, "subject", row) || settings.email_subject;
   return {
     subject: fill_(subject, values),
     html: fill_(htmlTemplate, values, true, raw),

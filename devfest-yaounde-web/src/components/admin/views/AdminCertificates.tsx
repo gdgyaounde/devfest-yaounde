@@ -28,6 +28,7 @@ export function AdminCertificates({ data }: { data: AdminData }) {
     total: number;
     byRole: Record<string, number>;
     missingEmail: Record<string, number>;
+    paidAttendees?: number;
   } | null>(null);
   const [countsError, setCountsError] = useState(false);
   const [rows, setRows] = useState(data.certificates);
@@ -91,7 +92,7 @@ export function AdminCertificates({ data }: { data: AdminData }) {
 
       <Panel
         title="1 · Who gets one"
-        subtitle="Everyone the site knows was there, in the sheet's columns: checked-in tickets and reservations, volunteers, speakers marked as arrived and the team. Speakers' and organisers' emails aren't on the site — fill them in the sheet. Add the Bevy check-ins from Bevy's own export (with full emails)."
+        subtitle="Everyone the site knows was there, in the sheet's columns: checked-in tickets and reservations, volunteers, speakers marked as arrived and the team. Attendees are marked paid or free (the ticket column), so paid ones get their own template and words. Speakers' and organisers' emails aren't on the site — fill them in the sheet. Add the Bevy check-ins from Bevy's own export (with full emails)."
         action={
           <a
             href="/api/admin/certificates/list?format=csv"
@@ -122,6 +123,9 @@ export function AdminCertificates({ data }: { data: AdminData }) {
                     {label}
                     {counts.missingEmail[role]
                       ? ` · ${counts.missingEmail[role]} without email`
+                      : ""}
+                    {role === "attendee" && counts.paidAttendees
+                      ? ` · ${counts.paidAttendees} paid`
                       : ""}
                   </span>
                 </li>

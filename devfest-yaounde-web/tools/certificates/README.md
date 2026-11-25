@@ -80,6 +80,13 @@ Every word lives in the edition's **Settings** column, grouped by role, so you r
 
 Placeholders work in all of them (`{{first_name}}`, `{{event_name}}`, …). The defaults are in `src/Copy.gs`.
 
+### Paid tickets
+
+Attendees who **paid for their ticket** get their own certificate and email. The site's list marks every attendee in the `ticket` column: `paid` (a ticket whose tier has a price, or a reservation with something to pay) or `free`. Bevy free passes are `free`, or leave the cell empty.
+
+- **Their template:** Settings → `template_id_paid`. **Certificates → Create a starter template for paid tickets…** makes one in the "collector" look of the DP generator's paid frames (ink background, gold type, the collector seal) and fills that key in. Empty `template_id_paid` = everyone gets `template_id`.
+- **Their words:** the same keys with `_paid` at the end (`subject_attendee_paid`, `message_fr_attendee_paid`, …). They thank people for believing in it before the day and paying for part of the party. A paid word left **empty** uses the regular one, so you only keep the ones that should differ.
+
 To get a default back, empty its cell and run **Set up a new edition…** with the same year: it refills empty word cells and adds keys the sheet doesn't have yet. It never touches anything else, so an empty `site_url` stays empty.
 
 ---

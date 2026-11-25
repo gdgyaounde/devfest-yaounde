@@ -124,30 +124,55 @@ describe("buildCertificateList", () => {
         attendee_name: "ANN DOE",
         attendee_email: "Ann@Example.cm",
         checked_in_at: "2026-11-21T08:00Z",
+        tier_id: "haikyu",
       },
       {
         attendee_name: "Ann Doe",
         attendee_email: "ann@example.cm",
         checked_in_at: "2026-11-21T08:05Z",
+        tier_id: "sonnet",
       },
       {
         attendee_name: "No Show",
         attendee_email: "no@example.cm",
         checked_in_at: null,
+        tier_id: "opus",
+      },
+      {
+        attendee_name: "Fay Free",
+        attendee_email: "fay@example.cm",
+        checked_in_at: "2026-11-21T08:10Z",
+        tier_id: "haikyu",
+      },
+      {
+        attendee_name: "Gus Gone Tier",
+        attendee_email: "gus@example.cm",
+        checked_in_at: "2026-11-21T08:10Z",
+        tier_id: "retired",
       },
     ],
+    tierPrices: { haikyu: 0, sonnet: 2000, opus: 5000 },
     reservations: [
       {
         contact_name: "Ben",
         contact_email: "ben@example.cm",
         status: "cash_received",
         checked_in_at: "2026-11-21T09:00Z",
+        total_xaf: 4000,
+      },
+      {
+        contact_name: "Zoé Zero",
+        contact_email: "zoe@example.cm",
+        status: "confirmed",
+        checked_in_at: "2026-11-21T09:00Z",
+        total_xaf: 0,
       },
       {
         contact_name: "Gone",
         contact_email: "gone@example.cm",
         status: "cancelled",
         checked_in_at: "2026-11-21T09:00Z",
+        total_xaf: 4000,
       },
     ],
     volunteers: [{ name: "Ann Doe", email: "ann@example.cm" }],
@@ -171,8 +196,24 @@ describe("buildCertificateList", () => {
         ["volunteer", "Ann Doe", "ann@example.cm", "volunteer"],
         ["attendee", "Ann Doe", "ann@example.cm", "ticket"],
         ["attendee", "Ben", "ben@example.cm", "reservation"],
+        ["attendee", "Fay Free", "fay@example.cm", "ticket"],
+        ["attendee", "Gus Gone Tier", "gus@example.cm", "ticket"],
+        ["attendee", "Zoé Zero", "zoe@example.cm", "reservation"],
       ],
     );
+  });
+
+  it("marks attendees paid or free, and leaves other roles blank", () => {
+    const ticket = (name: string, role = "attendee") =>
+      rows.find((r) => r.full_name === name && r.role === role)?.ticket;
+    // Ann held a free AND a paid ticket: one certificate, paid.
+    assert.equal(ticket("Ann Doe"), "paid");
+    assert.equal(ticket("Ben"), "paid");
+    assert.equal(ticket("Fay Free"), "free");
+    assert.equal(ticket("Gus Gone Tier"), "free");
+    assert.equal(ticket("Zoé Zero"), "free");
+    assert.equal(ticket("Ann Doe", "volunteer"), "");
+    assert.equal(ticket("Sam Speaker", "speaker"), "");
   });
 
   it("carries the speaker's sessions and the organiser's role as the detail", () => {

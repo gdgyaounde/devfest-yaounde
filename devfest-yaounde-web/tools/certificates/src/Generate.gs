@@ -70,7 +70,14 @@ function runGenerate_(edition, interactive) {
       }
 
       // The template must only use placeholders we know — checked once.
-      checkTemplate_(settings, todo[0]);
+      // (Each template in use: paid tickets may have their own.)
+      const checked = {};
+      todo.forEach((r) => {
+        const id = templateFor_(settings, r);
+        if (checked[id]) return;
+        checked[id] = true;
+        checkTemplate_(settings, r, id);
+      });
 
       // 1. Ids: random, allocated once, written at once, never reused. A
       // row still holding an old-style id (a running number, from a test
@@ -136,8 +143,8 @@ function runGenerate_(edition, interactive) {
  * Every {{placeholder}} in the template must be one we fill — otherwise a
  * certificate would print "{{something}}". `{{qr}}` is the QR box.
  */
-function checkTemplate_(settings, sampleRow) {
-  const deck = SlidesApp.openById(settings.template_id);
+function checkTemplate_(settings, sampleRow, templateId) {
+  const deck = SlidesApp.openById(templateId);
   const values = placeholderValues_(settings, Object.assign({}, sampleRow, { certificate_id: `${settings.id_prefix}-0000-0000` }));
   values.qr = "";
   const unknown = [];
@@ -173,7 +180,7 @@ function allTexts_(deck) {
 /** Copy the template, fill it, swap in the QR, export the PDF, bin the copy. */
 function makePdf_(settings, row, folder, workFolder) {
   const values = placeholderValues_(settings, row);
-  const copy = DriveApp.getFileById(settings.template_id).makeCopy(`tmp ${row.certificate_id}`, workFolder);
+  const copy = DriveApp.getFileById(templateFor_(settings, row)).makeCopy(`tmp ${row.certificate_id}`, workFolder);
   try {
     const deck = SlidesApp.openById(copy.getId());
     const qrShapes = [];

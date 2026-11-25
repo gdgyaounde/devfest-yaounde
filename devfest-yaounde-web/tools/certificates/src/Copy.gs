@@ -152,3 +152,56 @@ function roleCopySettings_(role) {
     [`story_en_${role}`, c.story_en, ""],
   ];
 }
+
+/* ---------------------------------------------------------------------------
+ * Paid tickets (ticket = paid). Only the words that should differ: any
+ * word without a paid version, or left empty in the sheet, falls back to
+ * the role's regular one (Util.gs → wordFor_). Keys end in "_paid", e.g.
+ * message_fr_attendee_paid.
+ *
+ * They bought a ticket before the day: they believed in it first, and their
+ * money paid for part of the party. Thank them for that, with a wink.
+ * ------------------------------------------------------------------------- */
+
+const PAID_COPY_ = {
+  attendee: {
+    line_fr: "pour avoir pris part au {{event_name}} et l'avoir soutenu en prenant son billet",
+    line_en: "for taking part in {{event_name}} and supporting it with a ticket",
+    subject: "🎟️ {{first_name}}, ton certificat collector est là · Your collector certificate is here",
+    title_fr: "Tu y as cru avant même d'arriver.",
+    title_en: "You believed in it before you even arrived.",
+    message_fr: [
+      "Salut {{first_name}}, on dit quoi ?",
+      "Tu aurais pu attendre un pass gratuit, ou te contenter des stories des autres. À la place, tu as pris ton billet, et ton argent a littéralement payé une partie de la fête : le café, les goodies, la déco, et tout ce qui fait qu'un DevFest ressemble à un DevFest. Ton banquier ne comprend peut-être pas pourquoi on paie pour passer une journée à apprendre. Nous, si.",
+      "Et puis tu es venu·e : tu as écouté, posé des questions, rencontré du monde, et sûrement fait honneur au café que tu avais aidé à payer. Ton certificat collector est en pièce jointe : il salue ta curiosité, ton enthousiasme, et ton soutien. Ta famille sera fière. Ton LinkedIn aussi.",
+    ],
+    message_en: [
+      "Hey {{first_name}}!",
+      "You could have waited for a free pass, or just watched everyone else's stories. Instead you bought your ticket, and your money quite literally paid for part of the party: the coffee, the swag, the decor, and everything that makes a DevFest feel like a DevFest. Your bank may not understand why anyone pays to spend a day learning. We do.",
+      "Then you showed up: you listened, asked questions, met people, and surely did justice to the coffee you helped pay for. Your collector certificate is attached, honouring your curiosity, your enthusiasm and your support. Your family will be proud. So will your LinkedIn.",
+    ],
+    ps_fr: "P.S. Ton billet est le meilleur investissement de ton année. On n'a aucune preuve, mais aucun doute non plus.",
+    ps_en: "P.S. That ticket was the best investment you made all year. We have no proof, but no doubt either.",
+    story_fr: "Une dernière chose : toi qui as choisi d'investir dans le DevFest Yaoundé, qu'est-ce qu'il t'a rapporté, cette année ou les précédentes ? Une compétence, une rencontre, un déclic ? Raconte-le-nous en quelques mots, anonymement. C'est le genre de retour sur investissement qu'on adore lire.",
+    story_en: "One last thing: you chose to invest in DevFest Yaoundé, so what has it given you back, this year or any year before? A skill, a connection, a spark? Tell us in a few words, anonymously. It's the kind of return on investment we love reading about.",
+  },
+};
+
+/** The Settings rows for a role's paid-ticket words. */
+function paidCopySettings_(role) {
+  const c = PAID_COPY_[role];
+  const k = (base) => `${base}_${role}_paid`;
+  return [
+    [k("line_fr"), c.line_fr, `── ${ROLE_COPY_[role].label}, PAID ticket ── used instead of the regular words when ticket = paid. Empty = the regular word.`],
+    [k("line_en"), c.line_en, ""],
+    [k("subject"), c.subject, ""],
+    [k("title_fr"), c.title_fr, ""],
+    [k("title_en"), c.title_en, ""],
+    [k("message_fr"), c.message_fr.join("\n\n"), ""],
+    [k("message_en"), c.message_en.join("\n\n"), ""],
+    [k("ps_fr"), c.ps_fr, ""],
+    [k("ps_en"), c.ps_en, ""],
+    [k("story_fr"), c.story_fr, ""],
+    [k("story_en"), c.story_en, ""],
+  ];
+}

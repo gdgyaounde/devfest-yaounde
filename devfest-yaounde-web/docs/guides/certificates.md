@@ -6,7 +6,7 @@ The certificates are made and sent from a **Google Sheet** (menu **Certificates*
 
 What the site does:
 
-- **Dashboard → Certificates → Download the list**: everyone the site knows was there (checked-in tickets and reservations, volunteers, speakers marked as arrived, the team), ready to paste into the sheet. Add speakers' and organisers' emails, and the Bevy free passes, by hand.
+- **Dashboard → Certificates → Download the list**: everyone the site knows was there (checked-in tickets and reservations, volunteers, speakers marked as arrived, the team), ready to paste into the sheet. Attendees are marked `paid` or `free`; paid ones get their own certificate template and their own email. Add speakers' and organisers' emails, and the Bevy free passes, by hand.
 - **Dashboard → Certificates → Issued**: every certificate the sheet has generated. **Revoke** one to make its QR page say it's no longer valid; **Restore** undoes that.
 - **`devfest.gdgyaounde.com/certificates/<number>`**: the public page the QR code opens.
 

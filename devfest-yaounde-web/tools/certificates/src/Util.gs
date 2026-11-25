@@ -28,7 +28,8 @@ function placeholderValues_(settings, row) {
     first_name: String(row.full_name).trim().split(/\s+/).slice(0, 2).join(" ") || row.full_name,
     detail: row.detail || "",
     // The printed role: ONE label per role, from Settings → role_<role>.
-    role: settings[`role_${role}`] || settings[`role_en_${role}`] || (ROLE_COPY_[role] && ROLE_COPY_[role].label) || role,
+    role: wordFor_(settings, "role", row) || settings[`role_en_${role}`] || (ROLE_COPY_[role] && ROLE_COPY_[role].label) || role,
+    ticket: isPaid_(row) ? "paid" : "free",
     certificate_id: row.certificate_id,
     // Test mode (no site_url): no verify link either.
     verify_url: settings.site_url
@@ -44,14 +45,14 @@ function placeholderValues_(settings, row) {
     sender_name: settings.sender_name,
   };
   // The role lines may themselves use placeholders ({{event_name}}, {{detail}}).
-  base.role_line_fr = fill_(settings[`line_fr_${role}`] || "", base);
-  base.role_line_en = fill_(settings[`line_en_${role}`] || "", base);
+  base.role_line_fr = fill_(wordFor_(settings, "line_fr", row), base);
+  base.role_line_en = fill_(wordFor_(settings, "line_en", row), base);
   // The email's words for this role. They may use any placeholder above.
   ["fr", "en"].forEach((lang) => {
-    base[`email_title_${lang}`] = fill_(wordSetting_(settings, `title_${lang}_${role}`), base);
-    base[`message_${lang}`] = fill_(wordSetting_(settings, `message_${lang}_${role}`), base);
-    base[`ps_${lang}`] = fill_(wordSetting_(settings, `ps_${lang}_${role}`), base);
-    base[`story_${lang}`] = fill_(wordSetting_(settings, `story_${lang}_${role}`), base);
+    base[`email_title_${lang}`] = fill_(wordFor_(settings, `title_${lang}`, row), base);
+    base[`message_${lang}`] = fill_(wordFor_(settings, `message_${lang}`, row), base);
+    base[`ps_${lang}`] = fill_(wordFor_(settings, `ps_${lang}`, row), base);
+    base[`story_${lang}`] = fill_(wordFor_(settings, `story_${lang}`, row), base);
     base[`storytime_url_${lang}`] = `${base.home_url}/${lang}/storytime`;
   });
   return base;
@@ -64,8 +65,37 @@ function placeholderValues_(settings, row) {
  */
 function wordSetting_(settings, key) {
   if (key in settings) return settings[key];
-  const row = defaultSettings_(settings.edition).filter((d) => d[0] === key)[0];
-  return row ? row[1] : "";
+  const value = defaultSetting_(settings.edition, key);
+  return value === undefined ? "" : value;
+}
+
+/** A row with a paid ticket ("paid", or "payé" typed by hand). */
+function isPaid_(row) {
+  return /^(paid|pay[ée])$/i.test(String(row.ticket || "").trim());
+}
+
+/**
+ * A word for this row: "<base>_<role>", or for a paid ticket
+ * "<base>_<role>_paid" (from the sheet, else Copy.gs). A paid word that
+ * doesn't exist or is EMPTY gives the regular one.
+ */
+function wordFor_(settings, base, row) {
+  const plain = `${base}_${row.role}`;
+  if (isPaid_(row)) {
+    const paid = wordSetting_(settings, `${plain}_paid`);
+    if (paid) return paid;
+  }
+  return wordSetting_(settings, plain);
+}
+
+function defaultSetting_(edition, key) {
+  const row = defaultSettings_(edition).filter((d) => d[0] === key)[0];
+  return row ? row[1] : undefined;
+}
+
+/** The Slides template for this row: template_id_paid for paid tickets, if set. */
+function templateFor_(settings, row) {
+  return (isPaid_(row) && settings.template_id_paid) || settings.template_id;
 }
 
 /** Plain text to email paragraphs: a blank line splits, a single newline breaks. */

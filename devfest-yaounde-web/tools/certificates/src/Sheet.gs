@@ -17,6 +17,7 @@ const COLUMNS = [
   "role",
   "detail",
   "source",
+  "ticket",
   "certificate_id",
   "status",
   "generated_at",
@@ -25,6 +26,13 @@ const COLUMNS = [
   "error",
   "attempts",
 ];
+
+/**
+ * Columns a tab set up by an older version may lack: read as empty, and
+ * added in place by Set up a new edition. `ticket` = "paid" or "free".
+ */
+const OPTIONAL_COLUMNS = ["ticket"];
+const TICKETS = ["paid", "free"];
 
 /** Must match CERTIFICATE_ROLES on the site (src/lib/certificates/rules.ts). */
 const ROLES = ["attendee", "speaker", "volunteer", "organiser", "partner"];
@@ -43,6 +51,7 @@ function defaultSettings_(edition) {
     ["venue", "Yaoundé", ""],
     ["id_prefix", `DFY${yy}`, "Certificate ids look like DFY26-K7QM-4XHT: this prefix, then a random key."],
     ["template_id", "", "The Google Slides template's ID (from its URL)."],
+    ["template_id_paid", "", "The template for paid tickets (ticket = paid). Empty = template_id for everyone."],
     ["folder_id", "", "Drive folder for the PDFs. Empty = one is created in My Drive."],
     ["site_url", "https://devfest.gdgyaounde.com", "Where certificates are registered and verified. EMPTY = test mode: no registration, no QR code."],
     ["email_subject", `Ton certificat {{event_name}} · Your {{event_name}} certificate`, "Used when a role's subject_* is empty."],
@@ -52,6 +61,8 @@ function defaultSettings_(edition) {
     ["name_max_chars", "26", "Longer names get a smaller font on the certificate."],
     // Per role: the certificate label and line, and the email (Copy.gs).
     ...ROLES.reduce((rows, role) => rows.concat(roleCopySettings_(role)), []),
+    // Paid tickets: their own words where they differ (Copy.gs).
+    ...Object.keys(PAID_COPY_).reduce((rows, role) => rows.concat(paidCopySettings_(role)), []),
   ];
 }
 
@@ -150,6 +161,16 @@ function ensureEditionSheet_(ss, edition) {
     sheet.getRange(1, 1, 1, COLUMNS.length).setValues([COLUMNS]).setFontWeight("bold").setBackground("#1E1E1E").setFontColor("#F0F0F0");
     sheet.setFrozenRows(1);
   }
+  // A tab from an older version: add each missing column right after the
+  // one it follows, so the site's list still pastes in column order.
+  COLUMNS.forEach((name, i) => {
+    const header = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0].map((h) => String(h).trim());
+    if (header.indexOf(name) >= 0) return;
+    const after = i === 0 ? 0 : header.indexOf(COLUMNS[i - 1]) + 1;
+    if (after === 0) sheet.insertColumnBefore(1);
+    else sheet.insertColumnAfter(after);
+    sheet.getRange(1, after + 1).setValue(name).setFontWeight("bold").setBackground("#1E1E1E").setFontColor("#F0F0F0");
+  });
   const map = headerMap_(sheet);
   const rows = Math.max(sheet.getMaxRows() - 1, 1);
 
@@ -164,6 +185,9 @@ function ensureEditionSheet_(ss, edition) {
   sheet
     .getRange(2, map.role + 1, rows, 1)
     .setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(ROLES, true).build());
+  sheet
+    .getRange(2, map.ticket + 1, rows, 1)
+    .setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(TICKETS, true).build());
 
   // Colours follow the VALUE (conditional formatting), so they can't drift.
   const statusRange = sheet.getRange(2, map.status + 1, rows, 1);
@@ -206,7 +230,7 @@ function headerMap_(sheet) {
   header.forEach((h, i) => {
     if (h) map[h] = i;
   });
-  const missing = COLUMNS.filter((c) => map[c] === undefined);
+  const missing = COLUMNS.filter((c) => map[c] === undefined && OPTIONAL_COLUMNS.indexOf(c) < 0);
   if (missing.length) {
     throw new Error(`Tab "${sheet.getName()}" is missing columns: ${missing.join(", ")}. Run Set up a new edition.`);
   }
@@ -237,7 +261,7 @@ function readRows_(sheet) {
   const rows = values.map((v, i) => {
     const row = { _row: i + 2 };
     COLUMNS.forEach((c) => {
-      const cell = v[map[c]];
+      const cell = map[c] === undefined ? "" : v[map[c]];
       row[c] = cell instanceof Date ? cell : String(cell === null || cell === undefined ? "" : cell).trim();
     });
     return row;
