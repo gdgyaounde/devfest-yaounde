@@ -6,14 +6,6 @@
 const TIME_BUDGET_MS = 4.5 * 60 * 1000;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DEFAULT_ROLE_LABELS = {
-  attendee: "Attendee",
-  speaker: "Speaker",
-  volunteer: "Volunteer",
-  organiser: "Organiser",
-  partner: "Partner",
-};
-
 const PLACEHOLDER_RE = /\{\{\s*([a-z0-9_]+)\s*\}\}/gi;
 
 /**
@@ -27,7 +19,7 @@ function placeholderValues_(settings, row) {
     first_name: String(row.full_name).split(/\s+/)[0] || row.full_name,
     detail: row.detail || "",
     // The printed role: ONE label per role, from Settings → role_<role>.
-    role: settings[`role_${role}`] || settings[`role_en_${role}`] || DEFAULT_ROLE_LABELS[role] || role,
+    role: settings[`role_${role}`] || settings[`role_en_${role}`] || (ROLE_COPY_[role] && ROLE_COPY_[role].label) || role,
     certificate_id: row.certificate_id,
     // Test mode (no site_url): no verify link either.
     verify_url: settings.site_url
@@ -44,16 +36,45 @@ function placeholderValues_(settings, row) {
   // The role lines may themselves use placeholders ({{event_name}}, {{detail}}).
   base.role_line_fr = fill_(settings[`line_fr_${role}`] || "", base);
   base.role_line_en = fill_(settings[`line_en_${role}`] || "", base);
+  // The email's words for this role. They may use any placeholder above.
+  ["fr", "en"].forEach((lang) => {
+    base[`email_title_${lang}`] = fill_(wordSetting_(settings, `title_${lang}_${role}`), base);
+    base[`message_${lang}`] = fill_(wordSetting_(settings, `message_${lang}_${role}`), base);
+    base[`ps_${lang}`] = fill_(wordSetting_(settings, `ps_${lang}_${role}`), base);
+  });
   return base;
+}
+
+/**
+ * A role's words from Settings. A key the sheet doesn't have yet (set up
+ * before the script knew it) falls back to the default in Copy.gs; a key
+ * that is there but empty stays empty — that's someone's choice.
+ */
+function wordSetting_(settings, key) {
+  if (key in settings) return settings[key];
+  const row = defaultSettings_(settings.edition).filter((d) => d[0] === key)[0];
+  return row ? row[1] : "";
+}
+
+/** Plain text to email paragraphs: a blank line splits, a single newline breaks. */
+function paragraphsHtml_(text, style) {
+  return String(text)
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p style="${style}">${escapeHtml_(p).replace(/\n/g, "<br>")}</p>`)
+    .join("\n");
 }
 
 /**
  * Replaces every {{name}} (spaces allowed: {{ full_name }}). An UNKNOWN name
  * throws — a certificate must never go out with a literal "{{…}}" on it.
  */
-function fill_(text, values, escape) {
+function fill_(text, values, escape, raw) {
   return String(text).replace(PLACEHOLDER_RE, (_, name) => {
     const key = name.toLowerCase();
+    // Already-built HTML (the email's paragraphs), inserted as is.
+    if (raw && key in raw) return raw[key];
     if (!(key in values)) throw new Error(`Unknown placeholder {{${name}}}`);
     const value = String(values[key]);
     return escape ? escapeHtml_(value) : value;

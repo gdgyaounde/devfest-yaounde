@@ -26,7 +26,7 @@ const context = vm.createContext({
 });
 vm.runInContext(
   files.map((f) => readFileSync(join(DIR, f), "utf8")).join("\n;\n") +
-    "\n;globalThis.__t = { fill_, placeholderValues_, idAllocator_, CERTIFICATE_ID_RE, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
+    "\n;globalThis.__t = { fill_, placeholderValues_, idAllocator_, CERTIFICATE_ID_RE, renderEmail_, wordSetting_, paragraphsHtml_, ROLE_COPY_, escapeHtml_, STATUS, COLUMNS, ROLES, EMAIL_RE, defaultSettings_ };",
   context,
 );
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,7 +67,7 @@ describe("placeholders", () => {
     assert.equal(values.first_name, "Ada");
     assert.equal(values.role, "Speaker");
     assert.equal(values.role_fr, undefined);
-    assert.equal(values.role_line_en, "for speaking at DevFest Yaoundé 2026");
+    assert.equal(values.role_line_en, "for sharing their knowledge and inspiring the community at DevFest Yaoundé 2026");
     assert.equal(
       values.verify_url,
       "https://devfest.gdgyaounde.com/certificates/DFY26-K7QM-4XHT",
@@ -111,6 +111,72 @@ describe("placeholders", () => {
       assert.ok(v.role && v.role !== role, `${role} has a printed label`);
       assert.doesNotMatch(t.fill_(settings.email_subject, v), /\{\{/);
     }
+  });
+});
+
+describe("each role's words", () => {
+  const html = readFileSync(join(DIR, "email.html"), "utf8");
+  const text = readFileSync(join(DIR, "email_text.html"), "utf8");
+
+  for (const role of ["attendee", "speaker", "volunteer", "organiser", "partner"]) {
+    it(`${role}: its own subject, headline, message and P.S., fully filled`, () => {
+      const mail = t.renderEmail_(settings, { ...row, role }, html, text);
+      for (const part of [mail.subject, mail.html, mail.text]) {
+        assert.doesNotMatch(part, /\{\{|\}\}/);
+      }
+      const c = t.ROLE_COPY_[role];
+      assert.ok(mail.subject.includes("Ada") || mail.subject.includes("DevFest"));
+      assert.ok(mail.html.includes(t.escapeHtml_(c.title_fr)), "French headline");
+      assert.ok(mail.html.includes(t.escapeHtml_(c.title_en)), "English headline");
+      // Three paragraphs per language, plus the P.S., as real <p>s.
+      assert.ok((mail.html.match(/<p style="margin:0 0 16px/g) || []).length >= 8);
+      assert.match(mail.html, /font-style:italic[^>]*>P\.S\./);
+      assert.match(mail.text, /\nP\.S\./);
+      // The email speaks to the person, never about them.
+      assert.doesNotMatch(mail.text, /\b(son savoir|their knowledge|pour son engagement)\b/);
+    });
+  }
+
+  it("every role says something different", () => {
+    const titles = t.ROLES.map((r: string) => t.ROLE_COPY_[r].title_en);
+    assert.equal(new Set(titles).size, titles.length);
+  });
+
+  it("partners are addressed as vous, the community as tu", () => {
+    assert.match(t.ROLE_COPY_.partner.message_fr.join(" "), /\bVous\b|\bvous\b/);
+    assert.doesNotMatch(t.ROLE_COPY_.partner.message_fr.join(" "), /\b(tu|ton|ta|tes)\b/i);
+    assert.match(t.ROLE_COPY_.attendee.message_fr.join(" "), /\btu\b/);
+  });
+
+  it("a name can't inject HTML into the paragraphs", () => {
+    const mail = t.renderEmail_(settings, { ...row, full_name: "<b>Ada</b> L" }, html, text);
+    assert.ok(!mail.html.includes("<b>Ada</b>"));
+    assert.ok(mail.html.includes("&lt;b&gt;Ada&lt;/b&gt;"));
+  });
+
+  it("a missing key falls back to the default; an emptied one stays empty", () => {
+    const old = { ...settings };
+    delete old.ps_en_speaker;
+    assert.equal(t.wordSetting_(old, "ps_en_speaker"), t.ROLE_COPY_.speaker.ps_en);
+    const none = { ...settings, ps_en_speaker: "" };
+    assert.equal(t.wordSetting_(none, "ps_en_speaker"), "");
+    const mail = t.renderEmail_(none, row, html, text);
+    assert.ok(!mail.html.includes(t.ROLE_COPY_.speaker.ps_en));
+    assert.doesNotMatch(mail.text, /\n{3,}/);
+  });
+
+  it("a role without its own subject uses email_subject", () => {
+    const plain = { ...settings, subject_speaker: "" };
+    const mail = t.renderEmail_(plain, row, html, text);
+    assert.equal(mail.subject, "Ton certificat DevFest Yaoundé 2026 · Your DevFest Yaoundé 2026 certificate");
+  });
+
+  it("paragraphs: a blank line splits, a newline breaks", () => {
+    assert.equal(
+      t.paragraphsHtml_("a\nb\n\n c ", "x"),
+      '<p style="x">a<br>b</p>\n<p style="x">c</p>',
+    );
+    assert.equal(t.paragraphsHtml_("", "x"), "");
   });
 });
 

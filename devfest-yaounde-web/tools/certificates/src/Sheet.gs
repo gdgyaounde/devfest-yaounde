@@ -45,26 +45,13 @@ function defaultSettings_(edition) {
     ["template_id", "", "The Google Slides template's ID (from its URL)."],
     ["folder_id", "", "Drive folder for the PDFs. Empty = one is created in My Drive."],
     ["site_url", "https://devfest.gdgyaounde.com", "Where certificates are registered and verified. EMPTY = test mode: no registration, no QR code."],
-    ["email_subject", `Ton certificat {{event_name}} · Your {{event_name}} certificate`, ""],
+    ["email_subject", `Ton certificat {{event_name}} · Your {{event_name}} certificate`, "Used when a role's subject_* is empty."],
     ["sender_name", "GDG Yaoundé", "The From name."],
     ["reply_to", "gdgyaounde@gmail.com", "Where replies go."],
     ["daily_cap", "", "Optional: send at most this many a day (testing). Empty = Gmail's quota."],
     ["name_max_chars", "26", "Longer names get a smaller font on the certificate."],
-    ["role_attendee", "Attendee", "What {{role}} prints, for each role. One label, in the language of your template."],
-    ["role_speaker", "Speaker", ""],
-    ["role_volunteer", "Volunteer", ""],
-    ["role_organiser", "Organiser", ""],
-    ["role_partner", "Partner", ""],
-    ["line_fr_attendee", "pour sa participation au {{event_name}}", ""],
-    ["line_en_attendee", "for taking part in {{event_name}}", ""],
-    ["line_fr_speaker", "pour son intervention au {{event_name}}", "{{detail}} holds the talk title."],
-    ["line_en_speaker", "for speaking at {{event_name}}", ""],
-    ["line_fr_volunteer", "pour son engagement bénévole au {{event_name}}", ""],
-    ["line_en_volunteer", "for volunteering at {{event_name}}", ""],
-    ["line_fr_organiser", "pour l'organisation du {{event_name}}", ""],
-    ["line_en_organiser", "for organising {{event_name}}", ""],
-    ["line_fr_partner", "pour son soutien au {{event_name}}", ""],
-    ["line_en_partner", "for supporting {{event_name}}", ""],
+    // Per role: the certificate label and line, and the email (Copy.gs).
+    ...ROLES.reduce((rows, role) => rows.concat(roleCopySettings_(role)), []),
   ];
 }
 
@@ -101,7 +88,12 @@ function ensureSettings_(ss, edition) {
       at = keys.length - 1;
       if (helpCol && d[2]) sheet.getRange(at + 2, helpCol).setValue(d[2]);
     }
-    if (isNew || added) sheet.getRange(at + 2, col).setValue(d[1]);
+    const cell = sheet.getRange(at + 2, col);
+    // The words (role_/line_/subject_/title_/message_/ps_) also come back
+    // when their cell was emptied, so "clear it and run setup again" restores
+    // a default. Never for the rest: an empty site_url means test mode.
+    const words = /^(role|line|subject|title|message|ps)_/.test(d[0]);
+    if (isNew || added || (words && cell.getValue() === "")) cell.setValue(d[1]);
   });
   return sheet;
 }

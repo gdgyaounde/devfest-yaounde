@@ -51,7 +51,7 @@ Or make your own Google Slides deck (landscape) that looks like the final certif
 | `{{full_name}}` | Ada Lovelace. Long names shrink automatically (Settings → `name_max_chars`). |
 | `{{first_name}}` | Ada |
 | `{{role}}` | Speaker: one label per role, set in Settings (`role_attendee`, `role_speaker`, …). Write it in your template's language. |
-| `{{role_line_fr}}` / `{{role_line_en}}` | "pour son intervention au DevFest Yaoundé 2026" (Settings → `line_*`) |
+| `{{role_line_fr}}` / `{{role_line_en}}` | "pour avoir partagé son savoir et inspiré la communauté au DevFest Yaoundé 2026" (Settings → `line_*`) |
 | `{{detail}}` | the talk title (speakers), the team role (organisers), or empty |
 | `{{event_name}}`, `{{event_date_fr}}`, `{{event_date_en}}`, `{{venue}}`, `{{edition}}` | from Settings |
 | `{{certificate_id}}` | DFY26-K7QM-4XHT: the prefix, then a random key |
@@ -62,13 +62,34 @@ An unknown placeholder (a typo like `{{fullname}}`) stops generation with a clea
 
 ---
 
+## The words: one email per role
+
+Each role gets its own email, because each one gave something different: attendees showed up, speakers took the mic, volunteers kept it running, organisers carried it, partners paid for it. The tone is the community's: warm, grateful, a little cheeky. French says "tu", except to partners ("vous").
+
+Every word lives in the edition's **Settings** column, grouped by role, so you reword it there with no code:
+
+| Key (per role) | What it is |
+|---|---|
+| `role_<role>` | the label `{{role}}` prints on the certificate |
+| `line_fr_<role>` / `line_en_<role>` | the "awarded for…" line on the certificate, written about the person ("pour **son** engagement") |
+| `subject_<role>` | the email's subject (empty: `email_subject`) |
+| `title_fr_<role>` / `title_en_<role>` | the big headline at the top of the email |
+| `message_fr_<role>` / `message_en_<role>` | the body, greeting included. A blank line starts a new paragraph (Ctrl+Enter in the cell). It speaks **to** the person ("pour **ton** engagement"). |
+| `ps_fr_<role>` / `ps_en_<role>` | the P.S. under the signature. Empty: no P.S. |
+
+Placeholders work in all of them (`{{first_name}}`, `{{event_name}}`, …). The defaults are in `src/Copy.gs`.
+
+To get a default back, empty its cell and run **Set up a new edition…** with the same year: it refills empty word cells and adds keys the sheet doesn't have yet. It never touches anything else, so an empty `site_url` stays empty.
+
+---
+
 ## Each edition
 
 1. **The list.** Dashboard → Certificates → **Download the list**. It covers checked-in tickets and reservations, volunteers, speakers marked as arrived, and the team. Paste it under the headers of the edition tab.
    - Add the **emails** for speakers and organisers; the site doesn't hold them.
    - Add the **Bevy check-ins** (free passes) from Bevy's attendee export, with full emails and the role `attendee`.
    - One row = one certificate. Someone who spoke AND organised gets two rows.
-2. **Settings column**: fill `event_date_fr`, `event_date_en` and `template_id`. Check the role lines.
+2. **Settings column**: fill `event_date_fr`, `event_date_en` and `template_id`. Read the words for each role (above) and adjust anything that doesn't fit this year.
 3. Menu **1 · Check rows**: missing or invalid emails, duplicates, unknown roles. Fix the rows it flags in the `error` column.
 4. Menu **2 · Generate PDFs**:
    - each row gets a number, is registered on the site, and gets its PDF in Drive (`<folder>/2026/<role>/`);

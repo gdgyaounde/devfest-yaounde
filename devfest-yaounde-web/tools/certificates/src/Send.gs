@@ -188,13 +188,34 @@ function resetSelectedRows() {
 
 /** The subject, HTML and plain text, from the same placeholders. */
 function buildEmail_(settings, row) {
+  return renderEmail_(
+    settings,
+    row,
+    HtmlService.createHtmlOutputFromFile("email").getContent(),
+    HtmlService.createHtmlOutputFromFile("email_text").getContent(),
+  );
+}
+
+const EMAIL_P_STYLE = "margin:0 0 16px;font-size:16px;line-height:1.6;";
+const EMAIL_PS_STYLE = "margin:18px 0 0;font-size:15px;line-height:1.6;font-style:italic;color:#4D4D4D;";
+
+/**
+ * The subject, HTML and text of one person's email. Pure (the templates are
+ * passed in), so it is tested outside Google. The role's own subject wins
+ * over email_subject; the message and P.S. become real paragraphs.
+ */
+function renderEmail_(settings, row, htmlTemplate, textTemplate) {
   const values = placeholderValues_(settings, row);
-  const html = HtmlService.createHtmlOutputFromFile("email").getContent();
-  const text = HtmlService.createHtmlOutputFromFile("email_text").getContent();
+  const raw = {};
+  ["fr", "en"].forEach((lang) => {
+    raw[`message_${lang}`] = paragraphsHtml_(values[`message_${lang}`], EMAIL_P_STYLE);
+    raw[`ps_${lang}`] = paragraphsHtml_(values[`ps_${lang}`], EMAIL_PS_STYLE);
+  });
+  const subject = wordSetting_(settings, `subject_${row.role}`) || settings.email_subject;
   return {
-    subject: fill_(settings.email_subject, values),
-    html: fill_(html, values, true),
-    text: fill_(text, values),
+    subject: fill_(subject, values),
+    html: fill_(htmlTemplate, values, true, raw),
+    text: fill_(textTemplate, values).replace(/\n{3,}/g, "\n\n"),
   };
 }
 
