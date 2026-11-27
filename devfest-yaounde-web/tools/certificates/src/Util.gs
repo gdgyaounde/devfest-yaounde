@@ -37,6 +37,8 @@ function placeholderValues_(settings, row) {
       : "",
     site_url: settings.site_url,
     home_url: (settings.site_url || DEFAULT_SITE_URL).replace(/\/$/, ""),
+    // The speakers' presentations (Settings → slides_url; empty = no link).
+    slides_url: wordSetting_(settings, "slides_url"),
     event_name: settings.event_name,
     event_date_fr: settings.event_date_fr || "",
     event_date_en: settings.event_date_en || "",
@@ -54,6 +56,7 @@ function placeholderValues_(settings, row) {
     base[`ps_${lang}`] = fill_(wordFor_(settings, `ps_${lang}`, row), base);
     base[`story_${lang}`] = fill_(wordFor_(settings, `story_${lang}`, row), base);
     base[`storytime_url_${lang}`] = `${base.home_url}/${lang}/storytime`;
+    base[`slides_${lang}`] = fill_(wordFor_(settings, `slides_${lang}`, row), base);
   });
   return base;
 }

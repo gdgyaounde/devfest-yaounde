@@ -215,6 +215,12 @@ function renderEmail_(settings, row, htmlTemplate, textTemplate) {
     const url = values[`storytime_url_${lang}`];
     raw[`story_${lang}`] = story ? storyHtml_(story, url, STORY_BUTTON[lang]) : "";
     rawText[`story_${lang}`] = story ? `${story}\n${STORY_BUTTON[lang]}${lang === "fr" ? " : " : ": "}${url}` : "";
+    // The speakers' presentations: only with both a link and a sentence.
+    const slides = values.slides_url && values[`slides_${lang}`];
+    raw[`slides_${lang}`] = slides ? slidesHtml_(slides, values.slides_url, SLIDES_BUTTON[lang]) : "";
+    rawText[`slides_${lang}`] = slides
+      ? `${slides}\n${SLIDES_BUTTON[lang]}${lang === "fr" ? " : " : ": "}${values.slides_url}`
+      : "";
   });
   const subject = wordFor_(settings, "subject", row) || settings.email_subject;
   return {
@@ -225,6 +231,17 @@ function renderEmail_(settings, row, htmlTemplate, textTemplate) {
 }
 
 const STORY_BUTTON = { fr: "Laisser mon histoire", en: "Share my story" };
+const SLIDES_BUTTON = { fr: "Voir les présentations", en: "See the slides" };
+
+/** The speakers' presentations: a sentence and an outlined button. */
+function slidesHtml_(text, url, label) {
+  return (
+    paragraphsHtml_(text, "margin:24px 0 12px;font-size:16px;line-height:1.6;") +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="background:#FFFFFF;border:2px solid #1E1E1E;border-radius:999px;">' +
+    `<a href="${escapeHtml_(url)}" style="display:inline-block;padding:10px 24px;font-size:15px;font-weight:700;color:#1E1E1E;text-decoration:none;">${escapeHtml_(label)}</a>` +
+    "</td></tr></table>"
+  );
+}
 
 /** The storytime invitation: a pastel card with the role's words and a button. */
 function storyHtml_(text, url, label) {

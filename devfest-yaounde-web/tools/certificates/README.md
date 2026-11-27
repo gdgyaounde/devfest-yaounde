@@ -77,6 +77,7 @@ Every word lives in the edition's **Settings** column, grouped by role, so you r
 | `message_fr_<role>` / `message_en_<role>` | the body, greeting included. A blank line starts a new paragraph (Ctrl+Enter in the cell). It speaks **to** the person ("pour **ton** engagement"). |
 | `ps_fr_<role>` / `ps_en_<role>` | the P.S. under the signature. Empty: no P.S. |
 | `story_fr_<role>` / `story_en_<role>` | a card inviting them to leave an anonymous story about what DevFest Yaoundé has meant to them over the years, with a button to `/fr/storytime` or `/en/storytime`. Empty: no card. |
+| `slides_fr_<role>` / `slides_en_<role>` | the sentence above the link to the speakers' presentations, with a "See the slides" button to Settings → `slides_url` (a Drive folder shared as anyone with the link). Empty `slides_url`: no link for anyone. |
 
 Placeholders work in all of them (`{{first_name}}`, `{{event_name}}`, …). The defaults are in `src/Copy.gs`.
 

@@ -174,6 +174,29 @@ describe("each role's words", () => {
     assert.doesNotMatch(mail.text, /storytime|\n{3,}/);
   });
 
+  it("links every role to the speakers' presentations", () => {
+    const folder = "https://drive.google.com/drive/folders/1vLXI8O5WWeeouyQ6MWFZ0Nl7SEYftD8n?usp=sharing";
+    for (const role of t.ROLES) {
+      for (const r of [{ ...row, role }, { ...row, role, ticket: "paid" }]) {
+        const mail = t.renderEmail_(settings, r, html, text);
+        assert.ok(mail.html.includes(`href="${t.escapeHtml_(folder)}"`), role);
+        assert.match(mail.html, />Voir les présentations</);
+        assert.match(mail.html, />See the slides</);
+        assert.ok(mail.text.includes(`See the slides: ${folder}`), role);
+        assert.ok(t.ROLE_COPY_[role].slides_en, role);
+      }
+    }
+    // A sheet set up before the link existed still gets it (default).
+    const old = { ...settings };
+    delete old.slides_url;
+    assert.ok(t.renderEmail_(old, row, html, text).text.includes(folder));
+    // Empty slides_url: no sentence, no button.
+    const none = { ...settings, slides_url: "" };
+    const mail = t.renderEmail_(none, row, html, text);
+    assert.doesNotMatch(mail.html + mail.text, /See the slides|Voir les présentations|slides are online/);
+    assert.doesNotMatch(mail.text, /\n{3,}/);
+  });
+
   it("the logo and links point at the site even in test mode", () => {
     const testMode = { ...settings, site_url: "" };
     const mail = t.renderEmail_(testMode, row, html, text);

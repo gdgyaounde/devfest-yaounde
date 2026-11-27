@@ -57,6 +57,7 @@ function defaultSettings_(edition) {
     ["email_subject", `Ton certificat {{event_name}} · Your {{event_name}} certificate`, "Used when a role's subject_* is empty."],
     ["sender_name", "GDG Yaoundé", "The From name."],
     ["reply_to", "gdgyaounde@gmail.com", "Where replies go."],
+    ["slides_url", "https://drive.google.com/drive/folders/1vLXI8O5WWeeouyQ6MWFZ0Nl7SEYftD8n?usp=sharing", "The speakers' presentations, linked in every email (shared as anyone with the link). Empty = no link."],
     ["daily_cap", "", "Optional: send at most this many a day (testing). Empty = Gmail's quota."],
     ["name_max_chars", "26", "Longer names get a smaller font on the certificate."],
     // Per role: the certificate label and line, and the email (Copy.gs).
@@ -100,10 +101,10 @@ function ensureSettings_(ss, edition) {
       if (helpCol && d[2]) sheet.getRange(at + 2, helpCol).setValue(d[2]);
     }
     const cell = sheet.getRange(at + 2, col);
-    // The words (role_/line_/subject_/title_/message_/ps_/story_) also come back
+    // The words (role_/line_/subject_/title_/message_/ps_/story_/slides_<lang>_) also come back
     // when their cell was emptied, so "clear it and run setup again" restores
     // a default. Never for the rest: an empty site_url means test mode.
-    const words = /^(role|line|subject|title|message|ps|story)_/.test(d[0]);
+    const words = /^(role|line|subject|title|message|ps|story)_|^slides_(fr|en)_/.test(d[0]);
     if (isNew || added || (words && cell.getValue() === "")) cell.setValue(d[1]);
   });
   return sheet;
